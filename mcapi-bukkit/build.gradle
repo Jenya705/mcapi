@@ -1,0 +1,37 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '6.0.0'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(16)
+    }
+}
+
+shadowJar {
+    if (project.hasProperty("dir")) {
+        destinationDir(new File((String) project.getProperties().get("dir")))
+    }
+}
+
+repositories {
+    maven {
+        name = 'papermc'
+        url = 'https://papermc.io/repo/repository/maven-public/'
+    }
+    maven {
+        name = 'spring-milestone'
+        url = 'https://repo.spring.io/libs-milestone'
+    }
+    maven {
+        name = 'spring-snapshot'
+        url = 'https://repo.spring.io/libs-snapshot'
+    }
+}
+
+dependencies {
+    implementation project(':mcapi-server-core-java')
+    implementation project(':mcapi-java')
+    compileOnly 'io.papermc.paper:paper-api:1.17-R0.1-SNAPSHOT'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.5.2'
+}

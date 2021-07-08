@@ -1,0 +1,4 @@
+name: mcapi
+version: 1.0
+main: com.github.jenya705.mcapi.MCApiBukkit
+author: Jenya705
