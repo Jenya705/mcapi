@@ -1,28 +1,23 @@
 package com.github.jenya705.mcapi;
 
-import com.github.jenya705.mcapi.object.JavaPlayerWrapper;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.Nullable;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 /**
  * @author Jenya705
  */
+@Service
 public class BukkitServerCore implements JavaServerCore {
 
     @Override
     public JavaPlayer getPlayer(String name) {
-        Player player = Bukkit.getPlayer(name);
-        if (player == null) return null;
-        return new JavaPlayerWrapper(player);
+        return new BukkitPlayerWrapper(Bukkit.getPlayer(name));
     }
 
     @Override
-    public @Nullable JavaPlayer getPlayer(UUID uuid) {
-        Player player = Bukkit.getPlayer(uuid);
-        if (player == null) return null;
-        return new JavaPlayerWrapper(player);
+    public JavaPlayer getPlayer(UUID uniqueId) {
+        return new BukkitPlayerWrapper(Bukkit.getPlayer(uniqueId));
     }
 }
