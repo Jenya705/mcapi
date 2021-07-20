@@ -1,31 +1,33 @@
 package com.github.jenya705.mcapi;
 
-import com.github.jenya705.mcapi.common.CompoundClassLoader;
-import lombok.AccessLevel;
+import com.github.jenya705.mcapi.common.BukkitClassLoader;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.SneakyThrows;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.io.DefaultResourceLoader;
 
 /**
  * @author Jenya705
  */
 @Getter
-@Setter(AccessLevel.PROTECTED)
 public class BukkitServerApplication extends JavaPlugin {
 
-    private ConfigurableApplicationContext context;
     private SpringApplication application;
+    private ConfigurableApplicationContext context;
 
-    @SneakyThrows
     @Override
+    @SneakyThrows
     public void onEnable() {
         Thread.currentThread().setContextClassLoader(
-                new CompoundClassLoader(getClassLoader(), Thread.currentThread().getContextClassLoader())
+                new BukkitClassLoader(
+                        this, getClassLoader(), Thread.currentThread().getContextClassLoader()
+                )
         );
-        setContext(SpringApplication.run(JavaServerApplication.class));
+        application = new SpringApplication(JavaServerApplication.class);
+        application.setResourceLoader(new DefaultResourceLoader(Thread.currentThread().getContextClassLoader()));
+        context = application.run();
     }
 
     @Override

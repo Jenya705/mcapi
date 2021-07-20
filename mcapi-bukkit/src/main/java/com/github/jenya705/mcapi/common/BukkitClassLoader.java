@@ -1,5 +1,8 @@
 package com.github.jenya705.mcapi.common;
 
+import lombok.AllArgsConstructor;
+import org.bukkit.plugin.java.JavaPlugin;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -8,32 +11,19 @@ import java.util.*;
 /**
  * @author Jenya705
  */
-public class CompoundClassLoader extends ClassLoader {
+@AllArgsConstructor
+public class BukkitClassLoader extends ClassLoader {
 
-    private final Collection<ClassLoader> loaders;
+    private final JavaPlugin plugin;
+    private final Collection<ClassLoader> classLoaders;
 
-    /**
-     * Constructs a new CompoundClassLoader.
-     * @param loaders the loaders to iterate over
-     */
-    public CompoundClassLoader(ClassLoader... loaders) {
-        this.loaders = Arrays.asList(loaders);
+    public BukkitClassLoader(JavaPlugin plugin, ClassLoader... classLoaders) {
+        this(plugin, Arrays.asList(classLoaders));
     }
 
-    /**
-     * Constructs a new CompoundClassLoader.
-     * @param loaders the loaders to iterate over
-     */
-    public CompoundClassLoader(Collection<ClassLoader> loaders) {
-        this.loaders = loaders;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public URL getResource(String name) {
-        for (ClassLoader loader : loaders) {
+        for (ClassLoader loader : classLoaders) {
             if (loader != null) {
                 URL resource = loader.getResource(name);
                 if (resource != null) {
@@ -44,12 +34,11 @@ public class CompoundClassLoader extends ClassLoader {
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public InputStream getResourceAsStream(String name) {
-        for (ClassLoader loader : loaders) {
+        InputStream pluginIs = plugin.getResource(name);
+        if (pluginIs != null) return pluginIs;
+        for (ClassLoader loader : classLoaders) {
             if (loader != null) {
                 InputStream is = loader.getResourceAsStream(name);
                 if (is != null) {
@@ -60,13 +49,10 @@ public class CompoundClassLoader extends ClassLoader {
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Enumeration<URL> getResources(String name) throws IOException {
-        List<URL> urls = new ArrayList<URL>();
-        for (ClassLoader loader : loaders) {
+        List<URL> urls = new ArrayList<>();
+        for (ClassLoader loader : classLoaders) {
             if (loader != null) {
                 try {
                     Enumeration<URL> resources = loader.getResources(name);
@@ -82,35 +68,25 @@ public class CompoundClassLoader extends ClassLoader {
         return Collections.enumeration(urls);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Class<?> loadClass(String name) throws ClassNotFoundException {
-        for (ClassLoader loader : loaders) {
+        for (ClassLoader loader : classLoaders) {
             if (loader != null) {
                 try {
                     return loader.loadClass(name);
-                } catch (ClassNotFoundException cnfe) {
-                    // ignoring, but to keep checkstyle happy ("Must have at least one statement."):
-                    cnfe.getMessage();
-                }
+                } catch (ClassNotFoundException ignored) {}
             }
         }
         throw new ClassNotFoundException();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
-        // loader.loadClass(name, resolve) is not visible!
         return loadClass(name);
     }
 
     @Override
     public String toString() {
-        return String.format("CompoundClassloader %s", loaders);
+        return String.format("CompoundClassloader %s", classLoaders);
     }
 }

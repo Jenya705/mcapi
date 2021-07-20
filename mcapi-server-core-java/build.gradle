@@ -7,20 +7,16 @@ targetCompatibility = JavaVersion.VERSION_11
 
 repositories {
     maven {
-        name = 'spring-snapshot'
-        url = 'https://repo.spring.io/libs-snapshot'
-    }
-    maven {
-        name = 'spring-milestone'
-        url = 'https://repo.spring.io/libs-milestone'
+        url = 'https://repository.jboss.org/nexus/content/groups/public/'
     }
 }
 
 dependencies {
     implementation project(':mcapi-java')
+    implementation project(':mcapi-api')
+    implementation 'net.kyori:adventure-text-serializer-gson:4.8.1'
     implementation 'org.springframework.boot:spring-boot-starter-web:2.5.2'
     implementation 'org.springframework.boot:spring-boot-starter-webflux:2.5.2'
-    implementation 'net.kyori:adventure-text-serializer-gson:4.8.1'
-    implementation 'mysql:mysql-connector-java:8.0.25'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.5.2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test:2.5.2'
 }

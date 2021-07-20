@@ -1,5 +1,6 @@
-package com.github.jenya705.mcapi;
+package com.github.jenya705.mcapi.wrapper;
 
+import com.github.jenya705.mcapi.JavaPlayer;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 
