@@ -22,11 +22,9 @@ repositories {
 }
 
 dependencies {
+    implementation project(':mcapi-server-core')
     implementation project(':mcapi-server-core-java')
     implementation project(':mcapi-api')
     implementation project(':mcapi-java')
     compileOnly 'io.papermc.paper:paper-api:1.17-R0.1-SNAPSHOT'
-    implementation 'org.springframework.boot:spring-boot-starter-web:2.5.2'
-    implementation 'org.springframework.boot:spring-boot-starter-webflux:2.5.2'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.5.2'
 }

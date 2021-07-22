@@ -1,17 +1,25 @@
 package com.github.jenya705.mcapi;
 
-import com.github.jenya705.mcapi.wrapper.BukkitPlayerWrapper;
 import org.bukkit.Bukkit;
-import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 /**
+ *
+ * Implementation which methods used to link bukkit server core and server application
+ *
+ * @since 1.0
  * @author Jenya705
  */
-@Service
 public class BukkitServerCore implements JavaServerCore {
 
     @Override
     public JavaPlayer getPlayer(String name) {
-        return new BukkitPlayerWrapper(Bukkit.getPlayer(name));
+        return BukkitPlayerWrapper.of(Bukkit.getPlayer(name));
+    }
+
+    @Override
+    public JavaPlayer getPlayer(UUID uniqueId) {
+        return BukkitPlayerWrapper.of(Bukkit.getPlayer(uniqueId));
     }
 }

@@ -1,7 +1,6 @@
 package com.github.jenya705.mcapi.common;
 
 import lombok.AllArgsConstructor;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,16 +8,19 @@ import java.net.URL;
 import java.util.*;
 
 /**
+ *
+ * A compound class loader represents group of class loaders which work together
+ *
+ * @since 1.0
  * @author Jenya705
  */
 @AllArgsConstructor
-public class BukkitClassLoader extends ClassLoader {
+public class CompoundClassLoader extends ClassLoader{
 
-    private final JavaPlugin plugin;
     private final Collection<ClassLoader> classLoaders;
 
-    public BukkitClassLoader(JavaPlugin plugin, ClassLoader... classLoaders) {
-        this(plugin, Arrays.asList(classLoaders));
+    public CompoundClassLoader(ClassLoader... classLoaders) {
+        this(Arrays.asList(classLoaders));
     }
 
     @Override
@@ -36,8 +38,6 @@ public class BukkitClassLoader extends ClassLoader {
 
     @Override
     public InputStream getResourceAsStream(String name) {
-        InputStream pluginIs = plugin.getResource(name);
-        if (pluginIs != null) return pluginIs;
         for (ClassLoader loader : classLoaders) {
             if (loader != null) {
                 InputStream is = loader.getResourceAsStream(name);
@@ -85,8 +85,4 @@ public class BukkitClassLoader extends ClassLoader {
         return loadClass(name);
     }
 
-    @Override
-    public String toString() {
-        return String.format("CompoundClassloader %s", classLoaders);
-    }
 }

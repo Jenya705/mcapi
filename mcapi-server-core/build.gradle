@@ -2,10 +2,9 @@ sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
 dependencies {
-    implementation project(':mcapi-api')
-    implementation project(':mcapi-server-core')
-    implementation project(':mcapi-java')
-    implementation 'net.kyori:adventure-text-serializer-gson:4.8.1'
+    implementation project(":mcapi-api")
+    implementation "org.eclipse.jetty:jetty-server:11.0.6"
+    implementation "org.eclipse.jetty:jetty-servlet:11.0.6"
     implementation "org.glassfish.jersey.core:jersey-server:3.0.2"
     implementation "org.glassfish.jersey.containers:jersey-container-servlet-core:3.0.2"
     implementation "org.glassfish.jersey.containers:jersey-container-jetty-http:3.0.2"
