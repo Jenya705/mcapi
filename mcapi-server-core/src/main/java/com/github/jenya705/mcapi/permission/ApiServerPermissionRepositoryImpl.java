@@ -46,7 +46,7 @@ public class ApiServerPermissionRepositoryImpl implements ApiServerPermissionRep
             getDatabase().update(
                     "create table if not exists mcapi_permission (\n" +
                             "    name varchar(1024) not null,\n" +
-                            "    token char(59) not null,\n" +
+                            "    token char(85) not null,\n" +
                             "    target varchar(64) default null,\n" +
                             "    enabled boolean\n" +
                             ");"

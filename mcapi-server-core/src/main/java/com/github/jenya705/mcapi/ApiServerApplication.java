@@ -7,6 +7,8 @@ import com.github.jenya705.mcapi.permission.ApiServerPermissionContainer;
 import com.github.jenya705.mcapi.permission.ApiServerPermissionContainerImpl;
 import com.github.jenya705.mcapi.permission.ApiServerPermissionRepository;
 import com.github.jenya705.mcapi.permission.ApiServerPermissionRepositoryImpl;
+import com.github.jenya705.mcapi.token.ApiServerTokenRepository;
+import com.github.jenya705.mcapi.token.ApiServerTokenRepositoryImpl;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,6 +47,9 @@ public class ApiServerApplication {
     private ApiServerPermissionContainer permissionContainer;
     private ApiServerPermissionRepository permissionRepository;
 
+    // Token
+    private ApiServerTokenRepository tokenRepository;
+
     private Server jettyServer;
 
     public ApiServerApplication(ApiServerCore core) {
@@ -54,6 +59,7 @@ public class ApiServerApplication {
         database = new ApiServerDatabaseImpl();
         permissionRepository = new ApiServerPermissionRepositoryImpl();
         permissionContainer = new ApiServerPermissionContainerImpl();
+        tokenRepository = new ApiServerTokenRepositoryImpl();
         classes = new ArrayList<>();
         classes.add(ApiServerPlayerRestController.class);
         classes.add(ApiServerExceptionHandler.class);

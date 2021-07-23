@@ -8,10 +8,9 @@ import java.util.UUID;
  * An api player represents methods for all players (e.g. bedrock and java)
  *
  * @since 1.0
- * @see ApiPlayer
  * @author Jenya705
  */
-public interface ApiPlayer {
+public interface ApiPlayer extends ApiSender {
 
     /**
      *
