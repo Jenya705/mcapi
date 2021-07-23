@@ -1,17 +1,20 @@
 package com.github.jenya705.mcapi;
 
+import com.github.jenya705.mcapi.database.ApiServerDatabase;
+import com.github.jenya705.mcapi.database.ApiServerDatabaseImpl;
 import com.github.jenya705.mcapi.jackson.ApiServerJacksonProvider;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
+import com.github.jenya705.mcapi.permission.ApiServerPermissionContainer;
+import com.github.jenya705.mcapi.permission.ApiServerPermissionContainerImpl;
+import com.github.jenya705.mcapi.permission.ApiServerPermissionRepository;
+import com.github.jenya705.mcapi.permission.ApiServerPermissionRepositoryImpl;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.servlet.ServletContainer;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -24,13 +27,23 @@ import java.util.stream.Collectors;
  * @author Jenya705
  */
 @Getter
+@Setter(AccessLevel.PROTECTED)
 public class ApiServerApplication {
 
     @Getter
     private static ApiServerApplication application;
 
-    private final Collection<Class<?>> classes;
-    private final ApiServerCore core;
+    private Collection<Class<?>> classes;
+
+    // Core
+    private ApiServerCore core;
+
+    // Database
+    private ApiServerDatabase database;
+
+    // Permission
+    private ApiServerPermissionContainer permissionContainer;
+    private ApiServerPermissionRepository permissionRepository;
 
     private Server jettyServer;
 
@@ -38,6 +51,9 @@ public class ApiServerApplication {
         if (application != null) throw new IllegalStateException("Can not instantiate object twice");
         application = this;
         this.core = core;
+        database = new ApiServerDatabaseImpl();
+        permissionRepository = new ApiServerPermissionRepositoryImpl();
+        permissionContainer = new ApiServerPermissionContainerImpl();
         classes = new ArrayList<>();
         classes.add(ApiServerPlayerRestController.class);
         classes.add(ApiServerExceptionHandler.class);

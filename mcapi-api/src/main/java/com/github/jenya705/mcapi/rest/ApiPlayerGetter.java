@@ -13,8 +13,8 @@ import java.util.UUID;
  */
 public interface ApiPlayerGetter {
 
-    ApiPlayer getPlayer(String name);
+    ApiPlayer getPlayer(String name, String token);
 
-    ApiPlayer getPlayer(UUID uniqueId);
+    ApiPlayer getPlayer(UUID uniqueId, String token);
 
 }

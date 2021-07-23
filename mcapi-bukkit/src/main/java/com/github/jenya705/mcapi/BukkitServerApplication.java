@@ -21,10 +21,12 @@ public class BukkitServerApplication extends JavaPlugin {
     @Override
     @SneakyThrows
     public void onEnable() {
+        saveConfig();
         Thread.currentThread().setContextClassLoader(
                 new CompoundClassLoader(getClassLoader(), Thread.currentThread().getContextClassLoader())
         );
-        application = new JavaServerApplication(new BukkitServerCore());
+        application = new JavaServerApplication(new BukkitServerCore(this));
+        saveConfig();
         application.start();
     }
 
@@ -32,6 +34,7 @@ public class BukkitServerApplication extends JavaPlugin {
     @SneakyThrows
     public void onDisable() {
         application.stop();
+        saveConfig();
     }
 
 }

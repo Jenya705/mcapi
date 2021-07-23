@@ -11,8 +11,8 @@ import java.util.UUID;
  */
 public interface ApiPlayerSendMessage {
 
-    void sendMessage(String name, String message);
+    void sendMessage(String name, String message, String token);
 
-    void sendMessage(UUID uniqueId, String message);
+    void sendMessage(UUID uniqueId, String message, String token);
 
 }

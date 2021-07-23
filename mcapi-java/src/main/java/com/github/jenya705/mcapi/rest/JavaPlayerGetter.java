@@ -14,8 +14,8 @@ import java.util.UUID;
 public interface JavaPlayerGetter extends ApiPlayerGetter {
 
     @Override
-    JavaPlayer getPlayer(String name);
+    JavaPlayer getPlayer(String name, String token);
 
     @Override
-    JavaPlayer getPlayer(UUID uniqueId);
+    JavaPlayer getPlayer(UUID uniqueId, String token);
 }

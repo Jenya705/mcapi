@@ -12,17 +12,17 @@ import java.util.UUID;
 public interface JavaPlayerSendMessage extends ApiPlayerSendMessage {
 
     @Override
-    default void sendMessage(String name, String message) {
-        sendMessage(name, Component.text(message));
+    default void sendMessage(String name, String message, String token) {
+        sendMessage(name, Component.text(message), token);
     }
 
     @Override
-    default void sendMessage(UUID uniqueId, String message) {
-        sendMessage(uniqueId, Component.text(message));
+    default void sendMessage(UUID uniqueId, String message, String token) {
+        sendMessage(uniqueId, Component.text(message), token);
     }
 
-    void sendMessage(String name, Component message);
+    void sendMessage(String name, Component message, String token);
 
-    void sendMessage(UUID uniqueId, Component message);
+    void sendMessage(UUID uniqueId, Component message, String token);
 
 }

@@ -15,4 +15,6 @@ public interface ApiServerCore {
 
     ApiPlayer getPlayer(UUID uniqueId);
 
+    ApiServerConfiguration getConfig();
+
 }
