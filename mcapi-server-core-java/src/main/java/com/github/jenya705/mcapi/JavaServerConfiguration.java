@@ -14,4 +14,6 @@ public interface JavaServerConfiguration extends ApiServerConfiguration {
 
     String getCreateTokenSuccess();
 
+    String getSubContainerCommandNotExist();
+
 }

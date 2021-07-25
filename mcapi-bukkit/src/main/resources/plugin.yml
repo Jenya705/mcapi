@@ -2,3 +2,10 @@ name: mcapi
 version: 1.0
 main: com.github.jenya705.mcapi.BukkitServerApplication
 author: Jenya705
+commands:
+  mcapi:
+    permission: mcapi.command
+    usage: /mcapi
+permissions:
+  mcapi.command:
+    default: op

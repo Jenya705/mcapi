@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi;
 
+import com.github.jenya705.mcapi.command.BukkitCommandExecutorWrapper;
 import com.github.jenya705.mcapi.common.CompoundClassLoader;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -26,6 +27,7 @@ public class BukkitServerApplication extends JavaPlugin {
                 new CompoundClassLoader(getClassLoader(), Thread.currentThread().getContextClassLoader())
         );
         application = new JavaServerApplication(new BukkitServerCore(this));
+        getCommand("mcapi").setExecutor(new BukkitCommandExecutorWrapper(application.getMainCommand()));
         saveConfig();
         application.start();
     }

@@ -60,8 +60,8 @@ public class ApiServerTokenRepositoryImpl implements ApiServerTokenRepository {
     @SneakyThrows
     public void save(ApiServerTokenHolderEntity holder) {
         getDatabase().update(
-                "insert into mcapi_token (player_uuid, token) values (?, ?)",
-                holder.getPlayer().toString(), holder.getToken()
+                "insert into mcapi_token (player_uuid, token, name) values (?, ?, ?)",
+                holder.getPlayer().toString(), holder.getToken(), holder.getName()
         );
     }
 

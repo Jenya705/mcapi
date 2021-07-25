@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi;
 
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.github.jenya705.mcapi.command.JavaServerCommandFactory;
 import com.github.jenya705.mcapi.jackson.ApiServerJacksonProvider;
 import com.github.jenya705.mcapi.jackson.JavaServerComponentParser;
 import net.kyori.adventure.text.Component;
@@ -13,7 +14,7 @@ import net.kyori.adventure.text.Component;
 public class JavaServerApplication extends ApiServerApplication {
 
     public JavaServerApplication(JavaServerCore core) {
-        super(core);
+        super(core, new JavaServerCommandFactory());
         SimpleModule module = new SimpleModule();
         module.addSerializer(Component.class, new JavaServerComponentParser.Serializer());
         module.addDeserializer(Component.class, new JavaServerComponentParser.Deserializer());

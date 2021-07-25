@@ -1,5 +1,8 @@
 package com.github.jenya705.mcapi;
 
+import com.github.jenya705.mcapi.command.ApiServerCommandExecutor;
+import com.github.jenya705.mcapi.command.ApiServerCommandFactory;
+import com.github.jenya705.mcapi.command.ApiServerMainCommand;
 import com.github.jenya705.mcapi.database.ApiServerDatabase;
 import com.github.jenya705.mcapi.database.ApiServerDatabaseImpl;
 import com.github.jenya705.mcapi.jackson.ApiServerJacksonProvider;
@@ -50,16 +53,22 @@ public class ApiServerApplication {
     // Token
     private ApiServerTokenRepository tokenRepository;
 
+    // Command
+    private ApiServerCommandFactory commandFactory;
+    private ApiServerCommandExecutor mainCommand;
+
     private Server jettyServer;
 
-    public ApiServerApplication(ApiServerCore core) {
+    public ApiServerApplication(ApiServerCore core, ApiServerCommandFactory commandFactory) {
         if (application != null) throw new IllegalStateException("Can not instantiate object twice");
         application = this;
         this.core = core;
+        this.commandFactory = commandFactory;
         database = new ApiServerDatabaseImpl();
         permissionRepository = new ApiServerPermissionRepositoryImpl();
         permissionContainer = new ApiServerPermissionContainerImpl();
         tokenRepository = new ApiServerTokenRepositoryImpl();
+        mainCommand = new ApiServerMainCommand();
         classes = new ArrayList<>();
         classes.add(ApiServerPlayerRestController.class);
         classes.add(ApiServerExceptionHandler.class);
