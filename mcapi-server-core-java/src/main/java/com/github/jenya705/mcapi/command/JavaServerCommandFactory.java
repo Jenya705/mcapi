@@ -10,7 +10,8 @@ import java.util.function.Supplier;
 public class JavaServerCommandFactory implements ApiServerCommandFactory {
 
     private static final Map<Class<? extends ApiServerCommandExecutor>, Supplier<ApiServerCommandExecutor>> commandInitializers = Map.of(
-            ApiServerCreateTokenCommand.class, JavaServerCreateTokenCommand::new
+            ApiServerCreateTokenCommand.class, JavaServerCreateTokenCommand::new,
+            ApiServerListTokenCommand.class, JavaServerListTokenCommand::new
     );
 
     @Override

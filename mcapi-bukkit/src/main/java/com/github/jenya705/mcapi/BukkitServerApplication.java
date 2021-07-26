@@ -4,6 +4,9 @@ import com.github.jenya705.mcapi.command.BukkitCommandExecutorWrapper;
 import com.github.jenya705.mcapi.common.CompoundClassLoader;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -27,7 +30,7 @@ public class BukkitServerApplication extends JavaPlugin {
                 new CompoundClassLoader(getClassLoader(), Thread.currentThread().getContextClassLoader())
         );
         application = new JavaServerApplication(new BukkitServerCore(this));
-        getCommand("mcapi").setExecutor(new BukkitCommandExecutorWrapper(application.getMainCommand()));
+        registerCommand("mcapi", new BukkitCommandExecutorWrapper(application.getMainCommand()));
         saveConfig();
         application.start();
     }
@@ -37,6 +40,17 @@ public class BukkitServerApplication extends JavaPlugin {
     public void onDisable() {
         application.stop();
         saveConfig();
+    }
+
+    public void registerCommand(String command, Object executor) {
+        PluginCommand pluginCommand = getCommand(command);
+        if (pluginCommand == null) throw new RuntimeException(String.format("Can not register command %s", command));
+        if (executor instanceof CommandExecutor) {
+            pluginCommand.setExecutor((CommandExecutor) executor);
+        }
+        if (executor instanceof TabExecutor) {
+            pluginCommand.setTabCompleter((TabExecutor) executor);
+        }
     }
 
 }

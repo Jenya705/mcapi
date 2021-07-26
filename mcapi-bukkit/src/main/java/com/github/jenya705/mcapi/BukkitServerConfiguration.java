@@ -19,11 +19,14 @@ public class BukkitServerConfiguration implements JavaServerConfiguration {
         putIfNotExists("sql.password", "1");
         putIfNotExists("sql.type", "mysql");
         putIfNotExists("sql.database", "minecraft");
-        putIfNotExists("message.createTokenPlayerNameIsNotGiven", "&cPlayer name is not given");
-        putIfNotExists("message.createTokenPlayerIsNotExist", "&cGiven player name is not belong to any player");
+        putIfNotExists("message.tokenPlayerNameIsNotGiven", "&cPlayer name is not given");
+        putIfNotExists("message.tokenPlayerIsNotExist", "&cGiven player name is not belong to any player");
         putIfNotExists("message.createTokenNameIsNotGiven", "&cToken name is not given");
         putIfNotExists("message.createTokenSuccess", "&aSuccessfully registered token with name %name%:\n");
         putIfNotExists("message.subContainerCommandNotExist", "&eSub command %name% is not exist");
+        putIfNotExists("message.subContainerHelpLayout", "&ePossible variants:\n %commands%");
+        putIfNotExists("message.subContainerHelpDelimiter", ", ");
+        putIfNotExists("message.listTokenLayout", "&b%name% : &e");
     }
 
     @Override
@@ -52,13 +55,13 @@ public class BukkitServerConfiguration implements JavaServerConfiguration {
     }
 
     @Override
-    public String getCreateTokenPlayerNameIsNotGivenMessage() {
-        return translateColorChat(plugin.getConfig().getString("message.createTokenPlayerNameIsNotGiven"));
+    public String getTokenPlayerNameIsNotGivenMessage() {
+        return translateColorChat(plugin.getConfig().getString("message.tokenPlayerNameIsNotGiven"));
     }
 
     @Override
-    public String getCreateTokenPlayerIsNotExistMessage() {
-        return translateColorChat(plugin.getConfig().getString("message.createTokenPlayerIsNotExist"));
+    public String getTokenPlayerIsNotExistMessage() {
+        return translateColorChat(plugin.getConfig().getString("message.tokenPlayerIsNotExist"));
     }
 
     @Override
@@ -67,13 +70,28 @@ public class BukkitServerConfiguration implements JavaServerConfiguration {
     }
 
     @Override
-    public String getCreateTokenSuccess() {
+    public String getCreateTokenSuccessMessage() {
         return translateColorChat(plugin.getConfig().getString("message.createTokenSuccess"));
     }
 
     @Override
-    public String getSubContainerCommandNotExist() {
+    public String getSubContainerCommandNotExistMessage() {
         return translateColorChat(plugin.getConfig().getString("message.subContainerCommandNotExist"));
+    }
+
+    @Override
+    public String getSubContainerHelpLayout() {
+        return translateColorChat(plugin.getConfig().getString("message.subContainerHelpLayout"));
+    }
+
+    @Override
+    public String getSubContainerHelpDelimiter() {
+        return translateColorChat(plugin.getConfig().getString("message.subContainerHelpDelimiter"));
+    }
+
+    @Override
+    public String getListTokenLayout() {
+        return translateColorChat(plugin.getConfig().getString("message.listTokenLayout"));
     }
 
     protected String translateColorChat(String message) {

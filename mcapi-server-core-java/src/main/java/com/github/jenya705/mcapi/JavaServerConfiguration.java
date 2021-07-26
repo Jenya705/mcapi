@@ -6,14 +6,20 @@ package com.github.jenya705.mcapi;
  */
 public interface JavaServerConfiguration extends ApiServerConfiguration {
 
-    String getCreateTokenPlayerNameIsNotGivenMessage();
+    String getTokenPlayerNameIsNotGivenMessage();
 
-    String getCreateTokenPlayerIsNotExistMessage();
+    String getTokenPlayerIsNotExistMessage();
 
     String getCreateTokenNameIsNotGivenMessage();
 
-    String getCreateTokenSuccess();
+    String getCreateTokenSuccessMessage();
 
-    String getSubContainerCommandNotExist();
+    String getListTokenLayout();
+
+    String getSubContainerCommandNotExistMessage();
+
+    String getSubContainerHelpLayout();
+
+    String getSubContainerHelpDelimiter();
 
 }

@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi.common;
 
+import com.github.jenya705.mcapi.command.ApiServerCommandIterator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -11,7 +12,7 @@ import java.util.Iterator;
  */
 @Getter
 @AllArgsConstructor
-public class ArrayIterator<T> implements Iterator<T> {
+public class ArrayIterator<T> implements ApiServerCommandIterator<T> {
 
     private final T[] args;
     private int current;
@@ -23,6 +24,16 @@ public class ArrayIterator<T> implements Iterator<T> {
     @Override
     public boolean hasNext() {
         return args.length > current;
+    }
+
+    @Override
+    public boolean hasNext(int count) {
+        return args.length >= current + count;
+    }
+
+    @Override
+    public T back() {
+        return args[--current];
     }
 
     @Override

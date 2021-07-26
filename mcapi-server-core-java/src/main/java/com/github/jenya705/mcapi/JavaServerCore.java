@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -16,4 +17,10 @@ public interface JavaServerCore extends ApiServerCore {
 
     @Override
     JavaPlayer getPlayer(UUID uniqueId);
+
+    @Override
+    List<? extends JavaPlayer> getPlayers();
+
+    @Override
+    JavaServerConfiguration getConfig();
 }

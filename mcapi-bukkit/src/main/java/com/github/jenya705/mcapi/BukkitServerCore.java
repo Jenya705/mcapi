@@ -3,7 +3,9 @@ package com.github.jenya705.mcapi;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -14,7 +16,7 @@ import java.util.UUID;
  */
 public class BukkitServerCore implements JavaServerCore {
 
-    private final ApiServerConfiguration config;
+    private final JavaServerConfiguration config;
 
     public BukkitServerCore(JavaPlugin plugin) {
         config = new BukkitServerConfiguration(plugin);
@@ -31,7 +33,15 @@ public class BukkitServerCore implements JavaServerCore {
     }
 
     @Override
-    public ApiServerConfiguration getConfig() {
+    public List<? extends JavaPlayer> getPlayers() {
+        return Bukkit.getOnlinePlayers()
+                .stream()
+                .map(BukkitPlayerWrapper::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public JavaServerConfiguration getConfig() {
         return config;
     }
 }

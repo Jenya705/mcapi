@@ -3,10 +3,7 @@ package com.github.jenya705.mcapi.command;
 import com.github.jenya705.mcapi.ApiSender;
 import lombok.Getter;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @since 1.0
@@ -18,7 +15,7 @@ public abstract class ApiServerSubCommandContainer implements ApiServerCommandEx
     private final Map<String, ApiServerCommandExecutor> subCommands = new HashMap<>();
 
     @Override
-    public void execute(ApiSender sender, Iterator<String> args) {
+    public void execute(ApiSender sender, ApiServerCommandIterator<String> args) {
         if (!args.hasNext()) {
             sendHelp(sender);
             return;
@@ -31,6 +28,15 @@ public abstract class ApiServerSubCommandContainer implements ApiServerCommandEx
             return;
         }
         commandExecutor.execute(sender, args);
+    }
+
+    @Override
+    public List<String> possibleVariants(ApiSender sender, ApiServerCommandIterator<String> args) {
+        ApiServerCommandExecutor commandExecutor;
+        if (args.hasNext()) commandExecutor = getSubCommands().getOrDefault(args.next(), null);
+        else commandExecutor = null;
+        if (commandExecutor != null) return commandExecutor.possibleVariants(sender, args);
+        return new ArrayList<>(getSubCommands().keySet());
     }
 
     public abstract void sendSubCommandNotExist(ApiSender sender, String command);

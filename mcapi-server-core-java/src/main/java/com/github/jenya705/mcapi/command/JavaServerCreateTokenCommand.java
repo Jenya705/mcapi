@@ -16,12 +16,12 @@ public class JavaServerCreateTokenCommand extends ApiServerCreateTokenCommand {
 
     @Override
     public void sendMessagePlayerNameIsNotGiven(ApiSender sender) {
-        sender.sendMessage(getConfig().getCreateTokenPlayerNameIsNotGivenMessage());
+        JavaServerTokenCommand.sendMessagePlayerNameIsNotGiven(sender);
     }
 
     @Override
     public void sendMessagePlayerIsNotExist(ApiSender sender) {
-        sender.sendMessage(getConfig().getCreateTokenPlayerIsNotExistMessage());
+        JavaServerTokenCommand.sendMessagePlayerIsNotExist(sender);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class JavaServerCreateTokenCommand extends ApiServerCreateTokenCommand {
             ((JavaPlayer) sender).sendMessage(
                     Component
                             .text(
-                                    getConfig().getCreateTokenSuccess()
+                                    getConfig().getCreateTokenSuccessMessage()
                                             .replaceAll("%name%", name)
                             )
                             .append(Component.text(
@@ -47,6 +47,6 @@ public class JavaServerCreateTokenCommand extends ApiServerCreateTokenCommand {
             );
             return;
         }
-        sender.sendMessage(getConfig().getCreateTokenSuccess().replaceAll("%name%", name) + token);
+        sender.sendMessage(getConfig().getCreateTokenSuccessMessage().replaceAll("%name%", name) + token);
     }
 }

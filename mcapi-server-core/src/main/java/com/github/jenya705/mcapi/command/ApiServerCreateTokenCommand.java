@@ -6,31 +6,20 @@ import com.github.jenya705.mcapi.ApiServerApplication;
 import com.github.jenya705.mcapi.token.ApiServerTokenUtil;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * @since 1.0
  * @author Jenya705
  */
-public abstract class ApiServerCreateTokenCommand implements ApiServerCommandExecutor {
+public abstract class ApiServerCreateTokenCommand extends ApiServerTokenCommand {
 
     @Override
-    public void execute(ApiSender sender, Iterator<String> args) {
-        ApiPlayer player;
-        if (sender instanceof ApiPlayer) {
-            player = (ApiPlayer) sender;
-        }
-        else {
-            if (!args.hasNext()) {
-                sendMessagePlayerNameIsNotGiven(sender);
-                return;
-            }
-            player = ApiServerApplication.getApplication().getCore().getPlayer(args.next());
-            if (player == null) {
-                sendMessagePlayerIsNotExist(sender);
-                return;
-            }
-        }
+    public void execute(ApiSender sender, ApiServerCommandIterator<String> args) {
+        ApiPlayer player = getPlayer(sender, args, 1);
+        if (player == null) return;
         if (!args.hasNext()) {
             sendMessageTokenNameIsNotGiven(sender);
             return;
@@ -40,9 +29,14 @@ public abstract class ApiServerCreateTokenCommand implements ApiServerCommandExe
         sendMessageSuccess(sender, generatedToken, tokenName);
     }
 
-    public abstract void sendMessagePlayerNameIsNotGiven(ApiSender sender);
-
-    public abstract void sendMessagePlayerIsNotExist(ApiSender sender);
+    @Override
+    public List<String> possibleVariants(ApiSender sender, ApiServerCommandIterator<String> args) {
+        return ApiServerApplication.getApplication().getCore()
+                .getPlayers()
+                .stream()
+                .map(ApiPlayer::getName)
+                .collect(Collectors.toList());
+    }
 
     public abstract void sendMessageTokenNameIsNotGiven(ApiSender sender);
 

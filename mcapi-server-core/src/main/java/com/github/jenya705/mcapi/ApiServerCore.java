@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -14,6 +15,8 @@ public interface ApiServerCore {
     ApiPlayer getPlayer(String name);
 
     ApiPlayer getPlayer(UUID uniqueId);
+
+    List<? extends ApiPlayer> getPlayers();
 
     ApiServerConfiguration getConfig();
 

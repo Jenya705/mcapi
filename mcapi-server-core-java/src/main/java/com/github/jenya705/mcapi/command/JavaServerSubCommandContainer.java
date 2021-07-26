@@ -5,7 +5,6 @@ import com.github.jenya705.mcapi.ApiServerApplication;
 import com.github.jenya705.mcapi.JavaServerConfiguration;
 
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @since 1.0
@@ -26,12 +25,15 @@ public class JavaServerSubCommandContainer extends ApiServerSubCommandContainer 
     @Override
     public void sendSubCommandNotExist(ApiSender sender, String command) {
         sender.sendMessage(
-                getConfig().getSubContainerCommandNotExist().replaceAll("%name%", command)
+                getConfig().getSubContainerCommandNotExistMessage().replaceAll("%name%", command)
         );
     }
 
     @Override
     public void sendHelp(ApiSender sender) {
-        sender.sendMessage(String.join(",", getSubCommands().keySet()));
+        sender.sendMessage(
+                getConfig().getSubContainerHelpLayout()
+                        .replaceAll("%commands%", String.join(getConfig().getSubContainerHelpDelimiter(), getSubCommands().keySet()))
+        );
     }
 }

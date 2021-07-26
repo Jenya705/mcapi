@@ -4,6 +4,7 @@ import com.github.jenya705.mcapi.ApiSender;
 import com.github.jenya705.mcapi.ApiServerApplication;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,7 +22,8 @@ public class ApiServerMainCommand implements ApiServerCommandExecutor {
                 Map.of(
                         "token", commandFactory.createSubContainer(
                                 Map.of(
-                                        "create", commandFactory.createCommandInstance(ApiServerCreateTokenCommand.class) // Create
+                                        "create", commandFactory.createCommandInstance(ApiServerCreateTokenCommand.class), // Create
+                                        "list", commandFactory.createCommandInstance(ApiServerListTokenCommand.class)
                                 )
                         ) // Token
                 ) // End
@@ -29,7 +31,12 @@ public class ApiServerMainCommand implements ApiServerCommandExecutor {
     }
 
     @Override
-    public void execute(ApiSender sender, Iterator<String> args) {
+    public void execute(ApiSender sender, ApiServerCommandIterator<String> args) {
         source.execute(sender, args);
+    }
+
+    @Override
+    public List<String> possibleVariants(ApiSender sender, ApiServerCommandIterator<String> args) {
+        return source.possibleVariants(sender, args);
     }
 }
