@@ -19,7 +19,7 @@ public class BukkitServerCore implements JavaServerCore {
     private final JavaServerConfiguration config;
 
     public BukkitServerCore(JavaPlugin plugin) {
-        config = new BukkitServerConfiguration(plugin);
+        config = new DefaultJavaServerConfiguration(new BukkitServerData(plugin.getConfig()));
     }
 
     @Override
