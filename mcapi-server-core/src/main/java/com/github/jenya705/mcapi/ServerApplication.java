@@ -1,7 +1,9 @@
 package com.github.jenya705.mcapi;
 
+import com.github.jenya705.mcapi.module.authorization.AuthorizationModuleImpl;
 import com.github.jenya705.mcapi.module.config.ConfigModuleImpl;
 import com.github.jenya705.mcapi.module.database.DatabaseModuleImpl;
+import com.github.jenya705.mcapi.module.storage.StorageModuleImpl;
 import com.github.jenya705.mcapi.rest.PlayerGetterRest;
 import com.github.jenya705.mcapi.rest.PlayerListRest;
 import com.github.jenya705.mcapi.rest.PlayerPunishmentRest;
@@ -18,10 +20,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Jenya705
@@ -31,6 +30,7 @@ public class ServerApplication {
 
     private final List<Pair<Class<?>, Boolean>> classes = new ArrayList<>();
     private final List<Object> beans = new ArrayList<>();
+    private final Map<Class<?>, Object> cachedBeans = new HashMap<>();
     private boolean initialized = false;
 
     @Getter
@@ -45,7 +45,9 @@ public class ServerApplication {
                 JacksonProvider.class,
                 ServerExceptionMapper.class,
                 ConfigModuleImpl.class,
-                DatabaseModuleImpl.class
+                DatabaseModuleImpl.class,
+                StorageModuleImpl.class,
+                AuthorizationModuleImpl.class
         );
     }
 
@@ -137,12 +139,17 @@ public class ServerApplication {
         initialized = false;
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T getBean(Class<? extends T> clazz) {
         if (!initialized) {
             throw new IllegalStateException("Application is not initialized");
         }
+        if (cachedBeans.containsKey(clazz)) {
+            return (T) cachedBeans.get(clazz);
+        }
         for (Object obj : beans) {
             if (clazz.isAssignableFrom(obj.getClass())) {
+                cachedBeans.put(clazz, obj);
                 return clazz.cast(obj);
             }
         }

@@ -13,4 +13,9 @@ public interface JavaBaseCommon extends BaseCommon {
     default <T> T bean(Class<? extends T> clazz) {
         return java().getBean(clazz);
     }
+
+    @Override
+    default JavaServerCore core() {
+        return (JavaServerCore) java().getCore();
+    }
 }

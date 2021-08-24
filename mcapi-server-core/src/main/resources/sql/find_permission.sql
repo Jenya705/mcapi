@@ -1,0 +1,1 @@
+select * from mcapi_permissions where bot_id = ? and permission = ? and target_most = ? and target_least = ?;

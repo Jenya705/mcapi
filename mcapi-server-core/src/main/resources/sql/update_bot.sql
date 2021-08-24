@@ -1,0 +1,1 @@
+update mcapi_bots set token = ? , owner_most = ? , owner_least = ? where id = ?;

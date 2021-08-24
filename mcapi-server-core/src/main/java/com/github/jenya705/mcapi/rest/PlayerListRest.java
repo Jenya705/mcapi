@@ -3,7 +3,9 @@ package com.github.jenya705.mcapi.rest;
 import com.github.jenya705.mcapi.ApiPlayer;
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.JerseyClass;
+import com.github.jenya705.mcapi.module.authorization.AuthorizationModule;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -21,6 +23,8 @@ import java.util.stream.Collectors;
 @Path("/player/list")
 public class PlayerListRest implements BaseCommon {
 
+    private final AuthorizationModule authorization = bean(AuthorizationModule.class);
+
     @Data
     @AllArgsConstructor(staticName = "of")
     static class PlayerList {
@@ -28,7 +32,10 @@ public class PlayerListRest implements BaseCommon {
     }
 
     @GET
-    public Response getPlayers() {
+    public Response getPlayers(@HeaderParam("Authorization") String authorizationHeader) {
+        authorization
+                .bot(authorizationHeader)
+                .needPermission("user.list");
         return Response
                 .ok()
                 .type(MediaType.APPLICATION_JSON_TYPE)

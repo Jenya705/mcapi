@@ -11,4 +11,6 @@ public interface DatabaseModule {
 
     ResultSet query(String sql, Object... objects);
 
+    DatabaseScriptStorage storage();
+
 }
