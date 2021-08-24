@@ -7,6 +7,7 @@ import com.github.jenya705.mcapi.module.config.ConfigModule;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.sql.*;
 
 /**
@@ -20,18 +21,23 @@ public class DatabaseModuleImpl implements DatabaseModule, BaseCommon {
 
     private Connection connection;
     private DatabaseModuleConfig config;
+    private DatabaseScriptStorage storage;
 
     @OnInitializing
-    public void initialize() throws ClassNotFoundException, SQLException {
+    public void initialize() throws ClassNotFoundException, SQLException, IOException {
         config = new DatabaseModuleConfig(
                 bean(ConfigModule.class)
                         .getConfig()
                         .required("database", new MapConfigData())
         );
-        log.info(String.format("Creating connection with %s", config.getType()));
+        log.info(String.format("Creating connection with %s...", config.getType()));
         loadDriver(config.getType());
         createConnection();
-        log.info(String.format("Done! (Creating connection with %s)", config.getType()));
+        log.info(String.format("Done! (Creating connection with %s...)", config.getType()));
+        log.info("Loading scripts...");
+        storage = new DatabaseScriptStorageImpl(this, config.getType());
+        log.info("Done! (Loading scripts...)");
+        storage.setup();
     }
 
     protected void loadDriver(String type) throws ClassNotFoundException {
@@ -99,5 +105,10 @@ public class DatabaseModuleImpl implements DatabaseModule, BaseCommon {
             }
             return statement.executeQuery();
         }
+    }
+
+    @Override
+    public DatabaseScriptStorage storage() {
+        return storage;
     }
 }

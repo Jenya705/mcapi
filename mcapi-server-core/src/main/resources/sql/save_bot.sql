@@ -1,0 +1,1 @@
+insert into mcapi_bots (token, owner_most, owner_least) values (?, ?, ?);
