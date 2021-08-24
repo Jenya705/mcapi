@@ -1,26 +1,49 @@
 package com.github.jenya705.mcapi;
 
-import java.util.List;
+import com.github.jenya705.mcapi.util.PlayerUtils;
+
+import javax.swing.text.html.Option;
+import java.util.Collection;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
- *
- * Interface which methods used to link java server core and server application
- *
- * @since 1.0
  * @author Jenya705
  */
-public interface JavaServerCore extends ApiServerCore {
+public interface JavaServerCore extends ServerCore {
 
-    @Override
-    JavaPlayer getPlayer(String name);
+    Collection<JavaPlayer> getJavaPlayers();
 
-    @Override
-    JavaPlayer getPlayer(UUID uniqueId);
+    JavaPlayer getJavaPlayer(String name);
 
-    @Override
-    List<? extends JavaPlayer> getPlayers();
+    JavaPlayer getJavaPlayer(UUID uuid);
 
-    @Override
-    JavaServerConfiguration getConfig();
+    default Collection<ApiPlayer> getPlayers() {
+        return getJavaPlayers()
+                .stream()
+                .map((player) -> (ApiPlayer) player)
+                .collect(Collectors.toList());
+    }
+
+    default Optional<JavaPlayer> getOptionalJavaPlayer(String name) {
+        return Optional.ofNullable(getJavaPlayer(name));
+    }
+
+    default Optional<JavaPlayer> getOptionalJavaPlayer(UUID uuid) {
+        return Optional.ofNullable(getJavaPlayer(uuid));
+    }
+
+    default Optional<JavaPlayer> getOptionalJavaPlayerId(String id) {
+        return PlayerUtils.getPlayer(id, this).map(player -> (JavaPlayer) player);
+    }
+
+    default ApiPlayer getPlayer(String name) {
+        return getJavaPlayer(name);
+    }
+
+    default ApiPlayer getPlayer(UUID uuid) {
+        return getJavaPlayer(uuid);
+    }
+
 }
