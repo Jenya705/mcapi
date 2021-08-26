@@ -40,6 +40,11 @@ public class BukkitPlayerWrapper implements JavaPlayer {
     }
 
     @Override
+    public boolean hasPermission(String permission) {
+        return player.hasPermission(permission);
+    }
+
+    @Override
     public void kick(String reason) {
         player.kick(Component.text(reason));
     }

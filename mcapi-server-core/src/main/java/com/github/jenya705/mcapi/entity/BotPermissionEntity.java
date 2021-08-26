@@ -36,7 +36,7 @@ public class BotPermissionEntity {
         List<BotPermissionEntity> result = new ArrayList<>();
         while (resultSet.next()) {
             result.add(new BotPermissionEntity(
-                    resultSet.getLong("bot_id"),
+                    resultSet.getInt("bot_id"),
                     resultSet.getString("permission"),
                     new UUID(
                             resultSet.getLong("target_most"),

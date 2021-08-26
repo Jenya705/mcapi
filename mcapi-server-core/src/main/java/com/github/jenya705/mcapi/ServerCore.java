@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi;
 
+import com.github.jenya705.mcapi.command.CommandExecutor;
 import com.github.jenya705.mcapi.util.PlayerUtils;
 
 import java.io.File;
@@ -13,6 +14,8 @@ import java.util.UUID;
  * @author Jenya705
  */
 public interface ServerCore {
+
+    void addCommand(String name, CommandExecutor executor);
 
     Collection<ApiPlayer> getPlayers();
 

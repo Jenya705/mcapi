@@ -18,6 +18,15 @@ public class StorageModuleImpl implements StorageModule, BaseCommon {
 
     private final Map<String, PermissionEntity> permissions = new HashMap<>();
 
+    public StorageModuleImpl() {
+        addPermission(new PermissionEntity("user.get", false, true));
+        addPermission(new PermissionEntity("user.list", true, true));
+        addPermission(new PermissionEntity("user.has_permission", false, true));
+        addPermission(new PermissionEntity("user.kick", false, false));
+        addPermission(new PermissionEntity("user.ban", false, false));
+        addPermission(new PermissionEntity("user.send_message", false, false));
+    }
+
     @OnStartup(priority = 4)
     @OnDisable(priority = 4)
     public void loadAndSave() throws IOException {

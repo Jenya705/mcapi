@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.module.config;
+package com.github.jenya705.mcapi.stringful;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -8,12 +8,10 @@ import java.lang.annotation.Target;
 /**
  * @author Jenya705
  */
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Value {
+public @interface Index {
 
-    boolean required() default true;
-
-    String key() default "";
+    int value();
 
 }

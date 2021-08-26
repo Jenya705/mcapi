@@ -133,6 +133,7 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
         databaseModule.update(
                 saveBot,
                 botEntity.getToken(),
+                botEntity.getName(),
                 botEntity.getOwner().getMostSignificantBits(),
                 botEntity.getOwner().getLeastSignificantBits()
         );
@@ -156,6 +157,7 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
         databaseModule.update(
                 updateBot,
                 botEntity.getToken(),
+                botEntity.getName(),
                 botEntity.getOwner().getMostSignificantBits(),
                 botEntity.getOwner().getLeastSignificantBits(),
                 botEntity.getId()

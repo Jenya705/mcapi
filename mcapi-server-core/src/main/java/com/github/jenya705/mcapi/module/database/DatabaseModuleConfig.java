@@ -27,7 +27,7 @@ public class DatabaseModuleConfig extends Config {
     private String database = "minecraft";
 
     public DatabaseModuleConfig(ConfigData config) {
-        super(config);
+        load(config);
     }
 
 }

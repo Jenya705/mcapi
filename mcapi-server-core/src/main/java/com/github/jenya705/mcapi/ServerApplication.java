@@ -1,13 +1,11 @@
 package com.github.jenya705.mcapi;
 
 import com.github.jenya705.mcapi.module.authorization.AuthorizationModuleImpl;
+import com.github.jenya705.mcapi.module.command.CommandModule;
 import com.github.jenya705.mcapi.module.config.ConfigModuleImpl;
 import com.github.jenya705.mcapi.module.database.DatabaseModuleImpl;
 import com.github.jenya705.mcapi.module.storage.StorageModuleImpl;
-import com.github.jenya705.mcapi.rest.PlayerGetterRest;
-import com.github.jenya705.mcapi.rest.PlayerListRest;
-import com.github.jenya705.mcapi.rest.PlayerPunishmentRest;
-import com.github.jenya705.mcapi.rest.PlayerSendMessageRest;
+import com.github.jenya705.mcapi.rest.*;
 import com.github.jenya705.mcapi.util.Pair;
 import jakarta.ws.rs.core.UriBuilder;
 import lombok.Getter;
@@ -42,12 +40,14 @@ public class ServerApplication {
                 PlayerGetterRest.class,
                 PlayerListRest.class,
                 PlayerPunishmentRest.class,
+                PlayerPermissionRest.class,
                 JacksonProvider.class,
                 ServerExceptionMapper.class,
                 ConfigModuleImpl.class,
                 DatabaseModuleImpl.class,
                 StorageModuleImpl.class,
-                AuthorizationModuleImpl.class
+                AuthorizationModuleImpl.class,
+                CommandModule.class
         );
     }
 
@@ -150,7 +150,7 @@ public class ServerApplication {
         for (Object obj : beans) {
             if (clazz.isAssignableFrom(obj.getClass())) {
                 cachedBeans.put(clazz, obj);
-                return clazz.cast(obj);
+                return (T) obj;
             }
         }
         return null;

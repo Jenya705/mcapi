@@ -6,13 +6,11 @@ import java.util.UUID;
 /**
  * @author Jenya705
  */
-public interface ApiPlayer {
+public interface ApiPlayer extends ApiCommandSender {
 
     String getName();
 
     UUID getUuid();
-
-    void sendMessage(String message);
 
     void kick(String reason);
 

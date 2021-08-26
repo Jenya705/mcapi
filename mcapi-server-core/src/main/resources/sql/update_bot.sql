@@ -1,1 +1,1 @@
-update mcapi_bots set token = ? , owner_most = ? , owner_least = ? where id = ?;
+update mcapi_bots set token = ? , name = ?, owner_most = ? , owner_least = ? where id = ?;

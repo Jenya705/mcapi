@@ -21,19 +21,21 @@ import java.util.UUID;
 public class BotEntity {
 
     private String token;
+    private String name;
     private UUID owner;
-    private long id;
+    private int id;
 
     public static List<BotEntity> mapResultSet(ResultSet resultSet) throws SQLException {
         List<BotEntity> result = new ArrayList<>();
         while (resultSet.next()) {
             result.add(new BotEntity(
                     resultSet.getString("token"),
+                    resultSet.getString("name"),
                     new UUID(
                             resultSet.getLong("owner_most"),
                             resultSet.getLong("owner_least")
                     ),
-                    resultSet.getLong("id")
+                    resultSet.getInt("id")
             ));
         }
         return result;

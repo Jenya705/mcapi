@@ -22,7 +22,7 @@ public class StorageModuleConfig extends Config {
     private Map<String, Boolean> permissions = new LinkedHashMap<>();
 
     public StorageModuleConfig(ConfigData data) {
-        super(data);
+        load(data);
     }
 
     public Map<String, Object> represent() {

@@ -1,7 +1,10 @@
 package com.github.jenya705.mcapi;
 
+import com.github.jenya705.mcapi.command.CommandExecutor;
 import lombok.Cleanup;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
@@ -31,6 +34,13 @@ public class BukkitServerCore implements JavaServerCore, JavaBaseCommon {
     public void initialize() {
         plugin = bean(JavaPlugin.class);
         plugin.getDataFolder().mkdir();
+    }
+
+    @Override
+    public void addCommand(String name, CommandExecutor executor) {
+        PluginCommand command = plugin.getCommand(name);
+        if (command == null) return;
+        command.setExecutor(new BukkitCommandWrapper(executor));
     }
 
     @Override

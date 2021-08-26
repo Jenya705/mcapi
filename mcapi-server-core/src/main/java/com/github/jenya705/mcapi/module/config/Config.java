@@ -4,6 +4,7 @@ import com.github.jenya705.mcapi.data.ConfigData;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.Optional;
 
 /**
@@ -12,38 +13,51 @@ import java.util.Optional;
 @Slf4j
 public class Config {
 
-    public Config(ConfigData data) {
-        for (Field field : getClass().getDeclaredFields()) {
+    public void load(ConfigData data) {
+        Class<?> current = getClass();
+        while (true) {
+            setFields(this, current, data);
+            if (current.getSuperclass() != null) {
+                current = current.getSuperclass();
+            }
+            else {
+                break;
+            }
+        }
+    }
+
+    public static <T> void setFields(T object, Class<? extends T> clazz, ConfigData data) {
+        for (Field field : clazz.getDeclaredFields()) {
             Value valueAnnotation = field.getDeclaredAnnotation(Value.class);
             if (valueAnnotation == null) continue;
             field.setAccessible(true);
             try {
                 if (valueAnnotation.required()) {
-                    field.set(this, data.requiredObject(
+                    field.set(object, data.requiredObject(
                             parseKey(valueAnnotation.key(), field.getName()),
-                            field.get(this)
+                            field.get(object)
                     ));
                 }
                 else {
                     Optional<Object> objectOptional = data.getObject(
                             parseKey(valueAnnotation.key(), field.getName())
                     );
-                    if (objectOptional.isPresent()) field.set(this, objectOptional.get());
+                    if (objectOptional.isPresent()) field.set(object, objectOptional.get());
                 }
             } catch (IllegalAccessException e) {
-               log.error(
-                       String.format(
-                               "IllegalAccessException in %s with field %s",
-                               getClass().getCanonicalName(),
-                               field.getName()
-                       ), e
-               );
+                log.error(
+                        String.format(
+                                "IllegalAccessException in %s with field %s",
+                                clazz.getCanonicalName(),
+                                field.getName()
+                        ), e
+                );
             }
             field.setAccessible(false);
         }
     }
 
-    protected String parseKey(String key, String fieldName) {
+    protected static String parseKey(String key, String fieldName) {
         return key.isEmpty() ? fieldName : key;
     }
 
