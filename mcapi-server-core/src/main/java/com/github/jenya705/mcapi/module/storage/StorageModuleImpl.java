@@ -70,6 +70,9 @@ public class StorageModuleImpl implements StorageModule, BaseCommon {
 
     @Override
     public void addPermission(PermissionEntity permissionEntity) {
+        if (permissionEntity.getPermission().length() > 256) {
+            throw new IllegalArgumentException("Permission name too long");
+        }
         permissions.put(permissionEntity.getPermission(), permissionEntity);
     }
 }

@@ -40,6 +40,10 @@ public class CreateBotCommand extends AdvancedCommandExecutor<CreateBotArguments
         getPlayer(sender, args.getPlayer())
                 .ifPresentOrElse(
                         (player) -> {
+                            if (args.getName().length() > 64) {
+                                sender.sendMessage(config.getBotNameTooLong());
+                                return;
+                            }
                             String generatedToken = TokenUtils.generateToken();
                             databaseModule
                                     .storage()

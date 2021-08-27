@@ -21,6 +21,9 @@ public class CreateBotConfig extends AdvancedCommandExecutorConfig {
     @Value
     private String playerNotFound = "&cGiven player is not exist nor you are not player";
 
+    @Value
+    private String botNameTooLong = "&cBot name too long, maximum length 64";
+
     public CreateBotConfig(ConfigData data) {
         load(data);
     }
