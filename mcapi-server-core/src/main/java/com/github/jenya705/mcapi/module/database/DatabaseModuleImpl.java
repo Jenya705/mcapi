@@ -5,7 +5,6 @@ import com.github.jenya705.mcapi.OnDisable;
 import com.github.jenya705.mcapi.OnInitializing;
 import com.github.jenya705.mcapi.data.MapConfigData;
 import com.github.jenya705.mcapi.module.config.ConfigModule;
-import lombok.Cleanup;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -88,11 +87,11 @@ public class DatabaseModuleImpl implements DatabaseModule, BaseCommon {
     @SneakyThrows
     public void update(String sql, Object... objects) {
         if (objects.length == 0) {
-            @Cleanup Statement statement = connection.createStatement();
+            Statement statement = connection.createStatement();
             statement.executeUpdate(sql);
         }
         else {
-            @Cleanup PreparedStatement statement = connection.prepareStatement(sql);
+            PreparedStatement statement = connection.prepareStatement(sql);
             for (int i = 0; i < objects.length; ++i) {
                 statement.setObject(i + 1, objects[i]);
             }
@@ -104,11 +103,11 @@ public class DatabaseModuleImpl implements DatabaseModule, BaseCommon {
     @SneakyThrows
     public ResultSet query(String sql, Object... objects) {
         if (objects.length == 0) {
-            @Cleanup Statement statement = connection.createStatement();
+            Statement statement = connection.createStatement();
             return statement.executeQuery(sql);
         }
         else {
-            @Cleanup PreparedStatement statement = connection.prepareStatement(sql);
+            PreparedStatement statement = connection.prepareStatement(sql);
             for (int i = 0; i < objects.length; ++i) {
                 statement.setObject(i + 1, objects[i]);
             }

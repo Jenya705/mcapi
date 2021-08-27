@@ -5,6 +5,29 @@ package com.github.jenya705.mcapi;
  */
 public interface ApiError {
 
+    static ApiError raw(Exception exception) {
+        return new ApiError() {
+            @Override
+            public int getCode() {
+                return exception instanceof ApiError ?
+                        ((ApiError) exception).getCode() : 0;
+            }
+
+            @Override
+            public String getNamespace() {
+                return exception instanceof ApiError ?
+                        ((ApiError) exception).getNamespace() : null;
+            }
+
+            @Override
+            public String getReason() {
+                return exception instanceof ApiError ?
+                        ((ApiError) exception).getReason() :
+                        exception.getMessage();
+            }
+        };
+    }
+
     String defaultNamespace = "mcapi";
 
     int getCode();

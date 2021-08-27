@@ -4,7 +4,6 @@ import com.github.jenya705.mcapi.ApiCommandSender;
 import com.github.jenya705.mcapi.ApiPlayer;
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.command.AdvancedCommandExecutor;
-import com.github.jenya705.mcapi.command.CommandsUtil;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.entity.BotEntity;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
@@ -37,13 +36,13 @@ public class CreateBotCommand extends AdvancedCommandExecutor<CreateBotArguments
 
     @Override
     public void onCommand(ApiCommandSender sender, CreateBotArguments args) {
+        if (args.getName().length() > 64) {
+            sendMessage(sender, config.getBotNameTooLong());
+            return;
+        }
         getPlayer(sender, args.getPlayer())
                 .ifPresentOrElse(
                         (player) -> {
-                            if (args.getName().length() > 64) {
-                                sender.sendMessage(config.getBotNameTooLong());
-                                return;
-                            }
                             String generatedToken = TokenUtils.generateToken();
                             databaseModule
                                     .storage()
@@ -53,12 +52,12 @@ public class CreateBotCommand extends AdvancedCommandExecutor<CreateBotArguments
                                             .owner(player.getUuid())
                                             .build()
                                     );
-                            sender.sendMessage(CommandsUtil.placeholderMessage(
+                            sendMessage(sender,
                                     config.getSuccess(),
                                     "%token%", generatedToken
-                            ));
+                            );
                         },
-                        () -> sender.sendMessage(CommandsUtil.placeholderMessage(config.getPlayerNotFound()))
+                        () -> sendMessage(sender, config.getPlayerNotFound())
                 );
     }
 

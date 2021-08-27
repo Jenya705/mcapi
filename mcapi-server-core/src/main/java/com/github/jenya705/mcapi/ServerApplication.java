@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi;
 
+import com.github.jenya705.mcapi.gateway.GatewayApplication;
 import com.github.jenya705.mcapi.module.authorization.AuthorizationModuleImpl;
 import com.github.jenya705.mcapi.module.command.CommandModule;
 import com.github.jenya705.mcapi.module.config.ConfigModuleImpl;
@@ -11,6 +12,9 @@ import jakarta.ws.rs.core.UriBuilder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.grizzly.http.server.NetworkListener;
+import org.glassfish.grizzly.websockets.WebSocketAddOn;
+import org.glassfish.grizzly.websockets.WebSocketEngine;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 
@@ -19,7 +23,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 
 /**
  * @author Jenya705
@@ -35,6 +38,10 @@ public class ServerApplication {
 
     @Getter
     private ServerCore core;
+    @Getter
+    private GatewayApplication gateway;
+    @Getter
+    private final ServerGateway serverGateway = new ServerGatewayImpl();
 
     private ServerApplication() {
         addClasses(
@@ -43,8 +50,8 @@ public class ServerApplication {
                 PlayerListRest.class,
                 PlayerPunishmentRest.class,
                 PlayerPermissionRest.class,
+                ServerExceptionMapperRest.class,
                 JacksonProvider.class,
-                ServerExceptionMapper.class,
                 ConfigModuleImpl.class,
                 DatabaseModuleImpl.class,
                 StorageModuleImpl.class,
@@ -93,13 +100,19 @@ public class ServerApplication {
         core = getBean(ServerCore.class);
         runMethods(initializingMethods, "initialize");
         runMethods(startupMethods, "startup");
-        runJerseyServer(jerseyClasses);
+        runGrizzlyHttpServer(jerseyClasses);
     }
 
-    protected void runJerseyServer(List<Class<?>> jerseyClasses) {
+    protected void runGrizzlyHttpServer(List<Class<?>> jerseyClasses) {
         URI baseUri = UriBuilder.fromUri("http://localhost").port(8080).build();
         ResourceConfig configuration = new ResourceConfig(jerseyClasses.toArray(new Class<?>[0]));
-        httpServer = GrizzlyHttpServerFactory.createHttpServer(baseUri, configuration);
+        httpServer = GrizzlyHttpServerFactory.createHttpServer(baseUri, configuration, false);
+        WebSocketAddOn webSocketAddOn = new WebSocketAddOn();
+        for (NetworkListener listener: httpServer.getListeners()) {
+            listener.registerAddOn(webSocketAddOn);
+        }
+        gateway = new GatewayApplication();
+        WebSocketEngine.getEngine().register("/", "/gateway", gateway);
         try {
             httpServer.start();
         } catch (IOException e) {

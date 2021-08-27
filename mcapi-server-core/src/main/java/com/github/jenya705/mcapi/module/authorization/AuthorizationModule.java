@@ -8,4 +8,6 @@ import com.github.jenya705.mcapi.entity.AbstractBot;
 public interface AuthorizationModule {
 
     AbstractBot bot(String authorization);
+
+    AbstractBot rawBot(String token);
 }

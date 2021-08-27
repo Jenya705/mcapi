@@ -35,7 +35,12 @@ public class AuthorizationModuleImpl implements AuthorizationModule, BaseCommon 
                 !splitAuthorization[0].equalsIgnoreCase("bot")) {
             throw new AuthorizationFormatException();
         }
-        BotEntity bot = scriptStorage.findBotByToken(splitAuthorization[1]);
+        return rawBot(splitAuthorization[1]);
+    }
+
+    @Override
+    public AbstractBot rawBot(String token) {
+        BotEntity bot = scriptStorage.findBotByToken(token);
         if (bot == null) {
             throw new AuthorizationBadTokenException();
         }

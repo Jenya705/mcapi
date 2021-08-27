@@ -18,6 +18,7 @@ public class BukkitApplication extends JavaPlugin implements JavaBaseCommon {
     @Override
     public void onEnable() {
         java().addClass(BukkitServerCore.class);
+        java().addClass(BukkitServerGateway.class);
         java().addBean(this);
         java().start();
     }
