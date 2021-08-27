@@ -19,16 +19,17 @@ import java.util.List;
 public class BukkitCommandWrapper implements org.bukkit.command.CommandExecutor, org.bukkit.command.TabExecutor {
 
     private final CommandExecutor executor;
+    private final String permission;
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        executor.onCommand(BukkitCommandSenderWrapper.of(sender), new ArrayStringfulIterator(args));
+        executor.onCommand(BukkitCommandSenderWrapper.of(sender), new ArrayStringfulIterator(args), permission);
         return true;
     }
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        List<String> tabs = executor.onTab(BukkitCommandSenderWrapper.of(sender), new ArrayStringfulIterator(args));
+        List<String> tabs = executor.onTab(BukkitCommandSenderWrapper.of(sender), new ArrayStringfulIterator(args), permission);
         return tabs == null ? Collections.emptyList() : tabs;
     }
 }

@@ -14,7 +14,7 @@ public class CommandModule implements BaseCommon {
     @OnStartup
     public void start() {
         log.info("Registering root command...");
-        core().addCommand("mcapi", new RootCommand().get());
+        core().addCommand("mcapi", new RootCommand().get(), "mcapi.command");
         log.info("Done! (Registering root command...)");
     }
 

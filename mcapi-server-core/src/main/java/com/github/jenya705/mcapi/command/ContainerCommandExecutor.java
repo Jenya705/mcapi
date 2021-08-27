@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.command;
 
 import com.github.jenya705.mcapi.ApiCommandSender;
+import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.data.MapConfigData;
 import com.github.jenya705.mcapi.stringful.StringfulIterator;
@@ -15,33 +16,40 @@ import java.util.stream.Collectors;
 /**
  * @author Jenya705
  */
-public class ContainerCommandExecutor implements CommandExecutor {
+public class ContainerCommandExecutor implements CommandExecutor, BaseCommon {
 
     private final Map<String, Object> nodes = new HashMap<>();
+    private final String permission;
 
     private String notPermittedMessage = "&cYou are not permitted to do that";
 
+    public ContainerCommandExecutor(String permission) {
+        this.permission = permission;
+    }
+
     @Override
-    public void onCommand(ApiCommandSender sender, StringfulIterator args) {
+    public void onCommand(ApiCommandSender sender, StringfulIterator args, String permission) {
         Pair<Object, String> pair = walkThrew(args);
+        pair.setRight(permission + "." + pair.getRight());
         if (pair.getLeft() instanceof CommandExecutor) {
             if (!sender.hasPermission(pair.getRight())) {
                 sender.sendMessage(CommandsUtil.placeholderMessage(notPermittedMessage));
                 return;
             }
-            ((CommandExecutor) pair.getLeft()).onCommand(sender, args);
+            ((CommandExecutor) pair.getLeft()).onCommand(sender, args, pair.getRight());
         }
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<String> onTab(ApiCommandSender sender, StringfulIterator args) {
+    public List<String> onTab(ApiCommandSender sender, StringfulIterator args, String permission) {
         Pair<Object, String> pair = walkThrew(args);
+        pair.setRight(permission + "." + pair.getRight());
         if (pair.getLeft() instanceof CommandExecutor) {
             if (!sender.hasPermission(pair.getRight())) {
                 return null;
             }
-            return ((CommandExecutor) pair.getLeft()).onTab(sender, args);
+            return ((CommandExecutor) pair.getLeft()).onTab(sender, args, pair.getRight());
         }
         else {
             List<String> tabs = new ArrayList<>(((Map<String, Object>) pair.getLeft()).keySet());
@@ -73,6 +81,7 @@ public class ContainerCommandExecutor implements CommandExecutor {
     public void setConfig(ConfigData config) {
         notPermittedMessage = config.required("notPermittedMessage", notPermittedMessage);
         setConfig(config, nodes);
+        recalculatePermissions(permission, nodes);
     }
 
     @SuppressWarnings("unchecked")
@@ -87,6 +96,29 @@ public class ContainerCommandExecutor implements CommandExecutor {
                         config.required(entry.getKey(), new MapConfigData()),
                         (Map<String, Object>) entry.getValue()
                 );
+            }
+            else {
+                throw badItemInNodes();
+            }
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void recalculatePermissions(String path, Map<String, Object> node) {
+        for (Map.Entry<String, Object> entry: node.entrySet()) {
+            if (entry.getValue() instanceof CommandExecutor) {
+                String commandPath = path + "." + entry.getKey();
+                core().permission(commandPath, false);
+                AdditionalPermissions additionalPermissionsAnnotation =
+                        entry.getValue().getClass().getAnnotation(AdditionalPermissions.class);
+                if (additionalPermissionsAnnotation != null) {
+                    for (String permission: additionalPermissionsAnnotation.value()) {
+                        core().permission(commandPath + "." + permission, false);
+                    }
+                }
+            }
+            else if (entry.getValue() instanceof Map) {
+                recalculatePermissions(path + "." + entry.getKey(), (Map<String, Object>) entry.getValue());
             }
             else {
                 throw badItemInNodes();

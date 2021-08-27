@@ -11,9 +11,9 @@ import java.util.List;
  */
 public interface CommandExecutor {
 
-    void onCommand(ApiCommandSender sender, StringfulIterator args);
+    void onCommand(ApiCommandSender sender, StringfulIterator args, String permission);
 
-    List<String> onTab(ApiCommandSender sender, StringfulIterator args);
+    List<String> onTab(ApiCommandSender sender, StringfulIterator args, String permission);
 
     void setConfig(ConfigData config);
 

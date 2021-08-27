@@ -31,9 +31,9 @@ public abstract class AdvancedCommandExecutor<T> implements CommandExecutor, Bas
     }
 
     @Override
-    public void onCommand(ApiCommandSender sender, StringfulIterator args) {
+    public void onCommand(ApiCommandSender sender, StringfulIterator args, String permission) {
         parser.create(args)
-                .ifPresent(data -> onCommand(sender, data))
+                .ifPresent(data -> onCommand(sender, data, permission))
                 .ifFailed(error -> {
                     if (error.isNotEnoughArguments()) {
                         sendMessage(sender, config.getNotEnoughArguments());
@@ -46,7 +46,11 @@ public abstract class AdvancedCommandExecutor<T> implements CommandExecutor, Bas
                 });
     }
 
-    public abstract void onCommand(ApiCommandSender sender, T args);
+    public abstract void onCommand(ApiCommandSender sender, T args, String permission);
+
+    public boolean hasPermission(ApiCommandSender sender, String rootPermission, String permission) {
+        return sender.hasPermission(rootPermission + "." + permission);
+    }
 
     public void sendMessage(ApiCommandSender sender, String message, String... placeholders) {
         sender.sendMessage(CommandsUtil.placeholderMessage(message, placeholders));
@@ -63,7 +67,7 @@ public abstract class AdvancedCommandExecutor<T> implements CommandExecutor, Bas
     }
 
     @Override
-    public List<String> onTab(ApiCommandSender sender, StringfulIterator args) {
+    public List<String> onTab(ApiCommandSender sender, StringfulIterator args, String permission) {
         int count = args.countNext();
         if (count > tabs.size()) return null;
         return tabs.get(count - 1).get();

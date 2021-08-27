@@ -5,6 +5,9 @@ import lombok.Cleanup;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
@@ -37,10 +40,37 @@ public class BukkitServerCore implements JavaServerCore, JavaBaseCommon {
     }
 
     @Override
-    public void addCommand(String name, CommandExecutor executor) {
+    public void addCommand(String name, CommandExecutor executor, String permissionName) {
         PluginCommand command = plugin.getCommand(name);
         if (command == null) return;
-        command.setExecutor(new BukkitCommandWrapper(executor));
+        command.setExecutor(new BukkitCommandWrapper(executor, permissionName));
+    }
+
+    @Override
+    public void permission(String name, boolean toggled) {
+        List<String> subPermissions = generatePermissionList(name);
+        PermissionDefault bukkitToggled = toggled ? PermissionDefault.TRUE : PermissionDefault.OP;
+        PluginManager pluginManager = Bukkit.getPluginManager();
+        for (int i = 0; i < subPermissions.size(); ++i) {
+            Permission permission = pluginManager.getPermission(subPermissions.get(i));
+            if (permission == null) {
+                permission = new Permission(subPermissions.get(i), bukkitToggled);
+                pluginManager.addPermission(permission);
+            }
+            for (int j = 0; j < i; ++j) {
+                permission.addParent(subPermissions.get(j) + ".*", true);
+            }
+        }
+    }
+
+    private List<String> generatePermissionList(String name) {
+        List<String> array = new ArrayList<>();
+        int current = 0;
+        while ((current = name.indexOf('.', current + 1)) != -1) {
+            array.add(name.substring(0, current));
+        }
+        array.add(name);
+        return array;
     }
 
     @Override

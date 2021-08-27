@@ -15,7 +15,9 @@ import java.util.UUID;
  */
 public interface ServerCore {
 
-    void addCommand(String name, CommandExecutor executor);
+    void addCommand(String name, CommandExecutor executor, String permissionName);
+
+    void permission(String name, boolean toggled);
 
     Collection<ApiPlayer> getPlayers();
 

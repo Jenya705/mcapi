@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.command.token;
+package com.github.jenya705.mcapi.command.bot;
 
 import com.github.jenya705.mcapi.stringful.Argument;
 import com.github.jenya705.mcapi.stringful.Index;

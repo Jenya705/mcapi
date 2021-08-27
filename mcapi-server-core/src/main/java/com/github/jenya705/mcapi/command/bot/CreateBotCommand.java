@@ -1,8 +1,9 @@
-package com.github.jenya705.mcapi.command.token;
+package com.github.jenya705.mcapi.command.bot;
 
 import com.github.jenya705.mcapi.ApiCommandSender;
 import com.github.jenya705.mcapi.ApiPlayer;
 import com.github.jenya705.mcapi.BaseCommon;
+import com.github.jenya705.mcapi.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.command.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.entity.BotEntity;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 /**
  * @author Jenya705
  */
+@AdditionalPermissions("others")
 public class CreateBotCommand extends AdvancedCommandExecutor<CreateBotArguments> implements BaseCommon {
 
     private CreateBotConfig config;
@@ -35,9 +37,13 @@ public class CreateBotCommand extends AdvancedCommandExecutor<CreateBotArguments
     }
 
     @Override
-    public void onCommand(ApiCommandSender sender, CreateBotArguments args) {
+    public void onCommand(ApiCommandSender sender, CreateBotArguments args, String permission) {
         if (args.getName().length() > 64) {
             sendMessage(sender, config.getBotNameTooLong());
+            return;
+        }
+        if (args.getName() != null && !hasPermission(sender, permission, "others")) {
+            sendMessage(sender, config.getNotPermittedForOthers());
             return;
         }
         getPlayer(sender, args.getPlayer())

@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.command;
 
 import com.github.jenya705.mcapi.BaseCommon;
-import com.github.jenya705.mcapi.command.token.CreateBotCommand;
+import com.github.jenya705.mcapi.command.bot.CreateBotCommand;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.data.MapConfigData;
 import lombok.SneakyThrows;
@@ -16,7 +16,7 @@ public class RootCommand implements Supplier<ContainerCommandExecutor>, BaseComm
     @SneakyThrows
     @Override
     public ContainerCommandExecutor get() {
-        ContainerCommandExecutor container = new ContainerCommandExecutor();
+        ContainerCommandExecutor container = new ContainerCommandExecutor("mcapi.command");
         container
                 .tree()
                 .branch("bot", branch -> branch
