@@ -1,18 +1,21 @@
 package com.github.jenya705.mcapi.command;
 
 import com.github.jenya705.mcapi.ApiCommandSender;
+import com.github.jenya705.mcapi.ApiPlayer;
+import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.stringful.*;
 import lombok.AccessLevel;
 import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
  * @author Jenya705
  */
-public abstract class AdvancedCommandExecutor<T> implements CommandExecutor {
+public abstract class AdvancedCommandExecutor<T> implements CommandExecutor, BaseCommon {
 
     private final List<Supplier<List<String>>> tabs = new ArrayList<>();
     private final StringfulParser<T> parser;
@@ -49,11 +52,21 @@ public abstract class AdvancedCommandExecutor<T> implements CommandExecutor {
         sender.sendMessage(CommandsUtil.placeholderMessage(message, placeholders));
     }
 
+    public Optional<ApiPlayer> getPlayer(ApiCommandSender sender, String name) {
+        if (name == null) {
+            return Optional
+                    .of(sender)
+                    .filter(it -> it instanceof ApiPlayer)
+                    .map(it -> (ApiPlayer) it);
+        }
+        return core().getOptionalPlayerId(name);
+    }
+
     @Override
     public List<String> onTab(ApiCommandSender sender, StringfulIterator args) {
         int count = args.countNext();
-        if (count >= tabs.size()) return null;
-        return tabs.get(count).get();
+        if (count > tabs.size()) return null;
+        return tabs.get(count - 1).get();
     }
 
     public AdvancedCommandExecutor<T> tab(Supplier<List<String>> tabFunction) {

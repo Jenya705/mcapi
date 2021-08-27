@@ -15,14 +15,9 @@ public class Config {
 
     public void load(ConfigData data) {
         Class<?> current = getClass();
-        while (true) {
+        while (current != null) {
             setFields(this, current, data);
-            if (current.getSuperclass() != null) {
-                current = current.getSuperclass();
-            }
-            else {
-                break;
-            }
+            current = current.getSuperclass();
         }
     }
 

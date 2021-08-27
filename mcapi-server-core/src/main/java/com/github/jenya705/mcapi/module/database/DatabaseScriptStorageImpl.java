@@ -53,7 +53,8 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
 
     @Override
     public void setup() {
-        databaseModule.update(setup);
+        String[] splitSetup = setup.split("ANOTHEROPERATION");
+        for (String splitSetupElement: splitSetup) databaseModule.update(splitSetupElement);
     }
 
     @Override

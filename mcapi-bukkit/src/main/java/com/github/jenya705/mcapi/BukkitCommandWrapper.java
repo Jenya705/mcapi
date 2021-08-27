@@ -8,6 +8,8 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -26,6 +28,7 @@ public class BukkitCommandWrapper implements org.bukkit.command.CommandExecutor,
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        return executor.onTab(BukkitCommandSenderWrapper.of(sender), new ArrayStringfulIterator(args));
+        List<String> tabs = executor.onTab(BukkitCommandSenderWrapper.of(sender), new ArrayStringfulIterator(args));
+        return tabs == null ? Collections.emptyList() : tabs;
     }
 }

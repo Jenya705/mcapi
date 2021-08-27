@@ -1,5 +1,5 @@
 create table if not exists mcapi_bots (
-	id integer primary key auto_increment,
+	id integer primary key autoincrement,
 	token char(51) not null,
 	name varchar(64) not null,
 	owner_most bigint not null,
@@ -9,7 +9,7 @@ create table if not exists mcapi_bots (
 
 create table if not exists mcapi_permissions (
 	bot_id integer not null,
-	permission varchar(256) not null,
+	permission varchar(255) not null,
 	target_most bigint not null,
 	target_least bigint not null,
 	toggled boolean not null,

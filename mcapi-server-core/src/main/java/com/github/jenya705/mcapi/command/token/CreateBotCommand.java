@@ -11,7 +11,6 @@ import com.github.jenya705.mcapi.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.util.TokenUtils;
 
 import java.util.Collections;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -38,35 +37,25 @@ public class CreateBotCommand extends AdvancedCommandExecutor<CreateBotArguments
 
     @Override
     public void onCommand(ApiCommandSender sender, CreateBotArguments args) {
-        UUID toRegister = null;
-        if (args.getPlayer() != null) {
-            toRegister = core()
-                    .getOptionalPlayer(args.getPlayer())
-                    .map(ApiPlayer::getUuid)
-                    .orElse(null);
-        }
-        else if (sender instanceof ApiPlayer){
-            toRegister = ((ApiPlayer) sender).getUuid();
-        }
-        if (toRegister == null) {
-            sender.sendMessage(CommandsUtil.placeholderMessage(config.getPlayerNotFound()));
-        }
-        else {
-            String generatedToken = TokenUtils.generateToken();
-            databaseModule
-                    .storage()
-                    .save(BotEntity.builder()
-                            .name(args.getName())
-                            .token(generatedToken)
-                            .owner(toRegister)
-                            .build()
-                    );
-            sender.sendMessage(CommandsUtil.placeholderMessage(
-                    config.getSuccess(),
-                    "%token%", generatedToken
-            ));
-        }
-
+        getPlayer(sender, args.getPlayer())
+                .ifPresentOrElse(
+                        (player) -> {
+                            String generatedToken = TokenUtils.generateToken();
+                            databaseModule
+                                    .storage()
+                                    .save(BotEntity.builder()
+                                            .name(args.getName())
+                                            .token(generatedToken)
+                                            .owner(player.getUuid())
+                                            .build()
+                                    );
+                            sender.sendMessage(CommandsUtil.placeholderMessage(
+                                    config.getSuccess(),
+                                    "%token%", generatedToken
+                            ));
+                        },
+                        () -> sender.sendMessage(CommandsUtil.placeholderMessage(config.getPlayerNotFound()))
+                );
     }
 
     @Override

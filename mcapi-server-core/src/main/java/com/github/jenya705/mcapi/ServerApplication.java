@@ -19,6 +19,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author Jenya705
@@ -30,6 +31,7 @@ public class ServerApplication {
     private final List<Object> beans = new ArrayList<>();
     private final Map<Class<?>, Object> cachedBeans = new HashMap<>();
     private boolean initialized = false;
+    private HttpServer httpServer;
 
     @Getter
     private ServerCore core;
@@ -97,7 +99,7 @@ public class ServerApplication {
     protected void runJerseyServer(List<Class<?>> jerseyClasses) {
         URI baseUri = UriBuilder.fromUri("http://localhost").port(8080).build();
         ResourceConfig configuration = new ResourceConfig(jerseyClasses.toArray(new Class<?>[0]));
-        HttpServer httpServer = GrizzlyHttpServerFactory.createHttpServer(baseUri, configuration);
+        httpServer = GrizzlyHttpServerFactory.createHttpServer(baseUri, configuration);
         try {
             httpServer.start();
         } catch (IOException e) {
@@ -136,6 +138,11 @@ public class ServerApplication {
             }
         }
         runMethods(endMethods, "stop");
+        try {
+            httpServer.shutdown().get();
+        } catch (Exception e) {
+            log.error("Can not disable http server:", e);
+        }
         initialized = false;
     }
 
