@@ -44,7 +44,6 @@ public class ContainerCommandExecutor implements CommandExecutor, BaseCommon {
         else {
             Map<String, Object> node = (Map<String, Object>) pair.getLeft();
             String commandStart = "/" + command + pair.getRight().replaceAll("\\.", " ") + " ";
-            System.out.println(commandStart);
             sender.sendMessage(CommandsUtils
                     .listMessage(
                             config.getHelpLayout(),
