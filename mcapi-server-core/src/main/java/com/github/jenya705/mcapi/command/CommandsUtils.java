@@ -6,9 +6,9 @@ import lombok.experimental.UtilityClass;
  * @author Jenya705
  */
 @UtilityClass
-public class CommandsUtil {
+public class CommandsUtils {
 
-    public static final char colorsChar = '\u00A7';
+    public final char colorsChar = '\u00A7';
 
     public String placeholderMessage(String message, String... placeholders) {
         String messageWithPlaceholders = message

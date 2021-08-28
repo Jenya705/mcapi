@@ -27,4 +27,5 @@ dependencies {
     implementation project(':mcapi-api')
     implementation project(':mcapi-java')
     compileOnly 'io.papermc.paper:paper-api:1.17-R0.1-SNAPSHOT'
+    implementation "net.kyori:adventure-text-minimessage:4.1.0-SNAPSHOT"
 }

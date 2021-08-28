@@ -5,7 +5,6 @@ import com.github.jenya705.mcapi.command.bot.create.CreateBotCommand;
 import com.github.jenya705.mcapi.command.bot.list.ListBotCommand;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.data.GlobalConfigData;
-import com.github.jenya705.mcapi.data.MapConfigData;
 import lombok.SneakyThrows;
 
 import java.util.function.Supplier;

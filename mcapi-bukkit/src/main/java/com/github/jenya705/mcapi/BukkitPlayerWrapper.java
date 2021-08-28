@@ -1,8 +1,6 @@
 package com.github.jenya705.mcapi;
 
-import lombok.AllArgsConstructor;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.ComponentSerializer;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -10,10 +8,14 @@ import java.util.UUID;
 /**
  * @author Jenya705
  */
-@AllArgsConstructor
-public class BukkitPlayerWrapper implements JavaPlayer {
+public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements JavaPlayer {
 
     private final Player player;
+
+    public BukkitPlayerWrapper(Player player) {
+        super(player);
+        this.player = player;
+    }
 
     public static BukkitPlayerWrapper of(Player player) {
         return player == null ? null : new BukkitPlayerWrapper(player);
@@ -30,18 +32,8 @@ public class BukkitPlayerWrapper implements JavaPlayer {
     }
 
     @Override
-    public void sendMessage(String message) {
-        player.sendMessage(message);
-    }
-
-    @Override
     public void sendMessage(Component component) {
         player.sendMessage(component);
-    }
-
-    @Override
-    public boolean hasPermission(String permission) {
-        return player.hasPermission(permission);
     }
 
     @Override

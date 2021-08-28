@@ -4,7 +4,7 @@ import com.github.jenya705.mcapi.ApiCommandSender;
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.command.AdvancedCommandExecutor;
-import com.github.jenya705.mcapi.command.CommandsUtil;
+import com.github.jenya705.mcapi.command.CommandsUtils;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.entity.BotEntity;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
@@ -47,12 +47,16 @@ public class ListBotCommand extends AdvancedCommandExecutor<ListBotArguments> im
                                     "%player_name%", player.getName(),
                                     "%list%", bots
                                             .stream()
-                                            .map(bot -> CommandsUtil.placeholderMessage(
+                                            .map(bot -> CommandsUtils.placeholderMessage(
                                                     config.getListElement(),
                                                     "%name%", bot.getName(),
                                                     "%token%", bot.getToken()
                                             ))
-                                            .collect(Collectors.joining(config.getListDelimiter()))
+                                            .collect(Collectors.joining(
+                                                    CommandsUtils.placeholderMessage(
+                                                            config.getListDelimiter()
+                                                    )
+                                            ))
                             );
                         },
                         () -> sendMessage(sender, config.getPlayerNotFound())

@@ -54,7 +54,7 @@ public abstract class AdvancedCommandExecutor<T> implements CommandExecutor, Bas
     }
 
     public void sendMessage(ApiCommandSender sender, String message, String... placeholders) {
-        sender.sendMessage(CommandsUtil.placeholderMessage(message, placeholders));
+        sender.sendMessage(CommandsUtils.placeholderMessage(message, placeholders));
     }
 
     public Optional<ApiPlayer> getPlayer(ApiCommandSender sender, String name) {

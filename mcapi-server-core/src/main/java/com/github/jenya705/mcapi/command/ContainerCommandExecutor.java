@@ -32,7 +32,7 @@ public class ContainerCommandExecutor implements CommandExecutor, BaseCommon {
         pair.setRight(permission + "." + pair.getRight());
         if (pair.getLeft() instanceof CommandExecutor) {
             if (!sender.hasPermission(pair.getRight())) {
-                sender.sendMessage(CommandsUtil.placeholderMessage(notPermittedMessage));
+                sender.sendMessage(CommandsUtils.placeholderMessage(notPermittedMessage));
                 return;
             }
             ((CommandExecutor) pair.getLeft()).onCommand(sender, args, pair.getRight());

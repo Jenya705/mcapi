@@ -1,6 +1,9 @@
 package com.github.jenya705.mcapi;
 
 import lombok.AllArgsConstructor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -12,7 +15,7 @@ public class BukkitCommandSenderWrapper implements ApiCommandSender {
 
     private final CommandSender sender;
 
-    public static ApiCommandSender of(CommandSender sender) {
+    public static BukkitCommandSenderWrapper of(CommandSender sender) {
         if (sender instanceof Player) {
             return BukkitPlayerWrapper.of((Player) sender);
         }
@@ -21,7 +24,7 @@ public class BukkitCommandSenderWrapper implements ApiCommandSender {
 
     @Override
     public void sendMessage(String message) {
-        sender.sendMessage(message);
+        sender.sendMessage(MiniMessage.get().parse(message));
     }
 
     @Override

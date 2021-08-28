@@ -18,6 +18,7 @@ public class JavaServerApplication {
         addClasses(
                 PlayerSendComponentRest.class
         );
+        setPlatform(ServerPlatform.JAVA);
     }
 
     @Getter

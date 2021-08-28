@@ -11,8 +11,6 @@ import java.util.Optional;
  */
 public class GlobalConfigData extends MapConfigData implements GlobalContainer {
 
-    public static final String globalKey = "__globals__";
-
     @Getter
     private final Map<String, Object> globals;
 

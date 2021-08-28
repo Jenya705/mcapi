@@ -9,6 +9,8 @@ public interface GlobalContainer {
 
     String inheritKey = "__inherit__";
 
+    String globalKey = "__globals__";
+
     GlobalContainer global(String key, Object value);
 
     Optional<Object> global(String key);

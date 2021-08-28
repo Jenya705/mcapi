@@ -10,6 +10,7 @@ import com.github.jenya705.mcapi.rest.*;
 import com.github.jenya705.mcapi.util.Pair;
 import jakarta.ws.rs.core.UriBuilder;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.server.NetworkListener;
@@ -35,6 +36,10 @@ public class ServerApplication {
     private final Map<Class<?>, Object> cachedBeans = new HashMap<>();
     private boolean initialized = false;
     private HttpServer httpServer;
+
+    @Getter
+    @Setter
+    private ServerPlatform platform;
 
     @Getter
     private ServerCore core;

@@ -1,5 +1,8 @@
 package com.github.jenya705.mcapi.module.config;
 
+import com.github.jenya705.mcapi.BaseCommon;
+import com.github.jenya705.mcapi.ServerApplication;
+import com.github.jenya705.mcapi.ServerPlatform;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.data.GlobalContainer;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +36,20 @@ public class Config {
             field.setAccessible(true);
             String key = parseKey(valueAnnotation.key(), field.getName());
             try {
+                Object fieldValue;
+                if (ServerApplication.getApplication().getPlatform() == ServerPlatform.JAVA) {
+                    Java javaAnnotation = field.getAnnotation(Java.class);
+                    if (javaAnnotation == null) {
+                        fieldValue = field.get(object);
+                    }
+                    else {
+                        fieldValue = javaAnnotation.value();
+                        field.set(object, fieldValue);
+                    }
+                }
+                else {
+                    fieldValue = field.get(object);
+                }
                 boolean isGlobal = false;
                 if (globalAnnotation != null) {
                     Optional<Object> obj = data.getObject(key);
@@ -55,12 +72,12 @@ public class Config {
                         field.set(object, obj.get());
                     }
                     else {
-                        globalContainer.global(globalAnnotation.value(), field.get(object));
+                        globalContainer.global(globalAnnotation.value(), fieldValue);
                     }
                 }
                 else if (valueAnnotation.required()) {
                     field.set(object, data.requiredObject(
-                            key, field.get(object)
+                            key, fieldValue
                     ));
                 }
                 else {

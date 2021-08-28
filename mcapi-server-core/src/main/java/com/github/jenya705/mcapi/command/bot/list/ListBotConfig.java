@@ -3,6 +3,7 @@ package com.github.jenya705.mcapi.command.bot.list;
 import com.github.jenya705.mcapi.command.AdvancedCommandExecutorConfig;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.module.config.Global;
+import com.github.jenya705.mcapi.module.config.Java;
 import com.github.jenya705.mcapi.module.config.Value;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,6 +29,7 @@ public class ListBotConfig extends AdvancedCommandExecutorConfig {
 
     @Value
     @Global("botListElementRepresentation")
+    @Java("&7- &9%name% &7- <click:suggest_command:%token%>&e%token%</click>")
     private String listElement = "&7- &9%name% &7- &e%token%";
 
     @Value
