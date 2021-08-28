@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GatewayObject {
+public class GatewayObject<T> {
 
     private String type;
-    private Object object;
+    private T object;
 
 }

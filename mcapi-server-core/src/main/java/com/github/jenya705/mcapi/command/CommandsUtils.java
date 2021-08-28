@@ -2,6 +2,10 @@ package com.github.jenya705.mcapi.command;
 
 import lombok.experimental.UtilityClass;
 
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 /**
  * @author Jenya705
  */
@@ -15,9 +19,19 @@ public class CommandsUtils {
                 .replaceAll("&", Character.toString(colorsChar));
         for (int i = 0; i < placeholders.length; i += 2) {
             messageWithPlaceholders = messageWithPlaceholders
-                    .replaceAll(placeholders[i], placeholders[i+1]);
+                    .replaceAll(placeholders[i], placeholders[i + 1]);
         }
         return messageWithPlaceholders;
     }
 
+    public <T> String listMessage(String layout, String element, String delimiter, List<T> elements, Function<T, String[]> placeholdersGet) {
+        return placeholderMessage(layout,
+                "%list%",
+                elements
+                        .stream()
+                        .map(placeholdersGet)
+                        .map(it -> placeholderMessage(element, it))
+                        .collect(Collectors.joining(placeholderMessage(delimiter)))
+        );
+    }
 }

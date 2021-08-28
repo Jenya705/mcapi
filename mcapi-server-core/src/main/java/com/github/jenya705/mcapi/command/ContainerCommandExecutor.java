@@ -19,23 +19,44 @@ public class ContainerCommandExecutor implements CommandExecutor, BaseCommon {
 
     private final Map<String, Object> nodes = new HashMap<>();
     private final String permission;
+    private final String command;
 
-    private String notPermittedMessage = "&cYou are not permitted to do that";
+    private ContainerCommandConfig config;
 
-    public ContainerCommandExecutor(String permission) {
+    public ContainerCommandExecutor(String permission, String command) {
         this.permission = permission;
+        this.command = command;
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void onCommand(ApiCommandSender sender, StringfulIterator args, String permission) {
         Pair<Object, String> pair = walkThrew(args);
-        pair.setRight(permission + "." + pair.getRight());
+        String fullPermission = permission + pair.getRight();
+        System.out.println(fullPermission);
         if (pair.getLeft() instanceof CommandExecutor) {
-            if (!sender.hasPermission(pair.getRight())) {
-                sender.sendMessage(CommandsUtils.placeholderMessage(notPermittedMessage));
+            if (!sender.hasPermission(fullPermission)) {
+                sender.sendMessage(CommandsUtils.placeholderMessage(config.getNotPermittedMessage()));
                 return;
             }
-            ((CommandExecutor) pair.getLeft()).onCommand(sender, args, pair.getRight());
+            ((CommandExecutor) pair.getLeft()).onCommand(sender, args, fullPermission);
+        }
+        else {
+            Map<String, Object> node = (Map<String, Object>) pair.getLeft();
+            String commandStart = "/" + command + pair.getRight().replaceAll("\\.", " ") + " ";
+            System.out.println(commandStart);
+            sender.sendMessage(CommandsUtils
+                    .listMessage(
+                            config.getHelpLayout(),
+                            config.getHelpElement(),
+                            config.getHelpListDelimiter(),
+                            new ArrayList<>(node.keySet()),
+                            it -> new String[]{
+                                    "%name%", it,
+                                    "%command%", commandStart + it
+                            }
+                    )
+            );
         }
     }
 
@@ -43,7 +64,7 @@ public class ContainerCommandExecutor implements CommandExecutor, BaseCommon {
     @SuppressWarnings("unchecked")
     public List<String> onTab(ApiCommandSender sender, StringfulIterator args, String permission) {
         Pair<Object, String> pair = walkThrew(args);
-        pair.setRight(permission + "." + pair.getRight());
+        pair.setRight(permission + pair.getRight());
         if (pair.getLeft() instanceof CommandExecutor) {
             if (!sender.hasPermission(pair.getRight())) {
                 return null;
@@ -67,7 +88,7 @@ public class ContainerCommandExecutor implements CommandExecutor, BaseCommon {
             if (!args.hasNext()) break;
             String next = args.next();
             if (!current.containsKey(next)) break;
-            path.append(next);
+            path.append(".").append(next);
             Object nextObject = current.get(next);
             if (nextObject instanceof CommandExecutor) return new Pair<>(nextObject, path.toString());
             if (nextObject instanceof Map) current = (Map<String, Object>) nextObject;
@@ -78,14 +99,14 @@ public class ContainerCommandExecutor implements CommandExecutor, BaseCommon {
 
     @Override
     public void setConfig(ConfigData config) {
-        notPermittedMessage = config.required("notPermittedMessage", notPermittedMessage);
+        this.config = new ContainerCommandConfig(config);
         setConfig(config, nodes);
         recalculatePermissions(permission, nodes);
     }
 
     @SuppressWarnings("unchecked")
     protected void setConfig(ConfigData config, Map<String, Object> node) {
-        for (Map.Entry<String, Object> entry: node.entrySet()) {
+        for (Map.Entry<String, Object> entry : node.entrySet()) {
             if (entry.getValue() instanceof CommandExecutor) {
                 ((CommandExecutor) entry.getValue())
                         .setConfig(config.required(entry.getKey()));
@@ -104,14 +125,14 @@ public class ContainerCommandExecutor implements CommandExecutor, BaseCommon {
 
     @SuppressWarnings("unchecked")
     private void recalculatePermissions(String path, Map<String, Object> node) {
-        for (Map.Entry<String, Object> entry: node.entrySet()) {
+        for (Map.Entry<String, Object> entry : node.entrySet()) {
             if (entry.getValue() instanceof CommandExecutor) {
                 String commandPath = path + "." + entry.getKey();
                 core().permission(commandPath, false);
                 AdditionalPermissions additionalPermissionsAnnotation =
                         entry.getValue().getClass().getAnnotation(AdditionalPermissions.class);
                 if (additionalPermissionsAnnotation != null) {
-                    for (String permission: additionalPermissionsAnnotation.value()) {
+                    for (String permission : additionalPermissionsAnnotation.value()) {
                         core().permission(commandPath + "." + permission, false);
                     }
                 }
@@ -134,5 +155,4 @@ public class ContainerCommandExecutor implements CommandExecutor, BaseCommon {
     protected CommandTree tree() {
         return new ContainerCommandTree(nodes);
     }
-
 }

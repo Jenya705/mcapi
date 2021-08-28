@@ -4,14 +4,9 @@ import com.github.jenya705.mcapi.ApiCommandSender;
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.command.AdvancedCommandExecutor;
-import com.github.jenya705.mcapi.command.CommandsUtils;
 import com.github.jenya705.mcapi.data.ConfigData;
-import com.github.jenya705.mcapi.entity.BotEntity;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.util.PlayerUtils;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Jenya705
@@ -37,28 +32,20 @@ public class ListBotCommand extends AdvancedCommandExecutor<ListBotArguments> im
         }
         getPlayer(sender, args.getPlayer())
                 .ifPresentOrElse(
-                        (player) -> {
-                            List<BotEntity> bots =
-                                    databaseModule
-                                            .storage()
-                                            .findBotsByOwner(player.getUuid());
-                            sendMessage(
-                                    sender, config.getListLayout(),
-                                    "%player_name%", player.getName(),
-                                    "%list%", bots
-                                            .stream()
-                                            .map(bot -> CommandsUtils.placeholderMessage(
-                                                    config.getListElement(),
-                                                    "%name%", bot.getName(),
-                                                    "%token%", bot.getToken()
-                                            ))
-                                            .collect(Collectors.joining(
-                                                    CommandsUtils.placeholderMessage(
-                                                            config.getListDelimiter()
-                                                    )
-                                            ))
-                            );
-                        },
+                        (player) ->
+                                sendListMessage(
+                                        sender,
+                                        config.getListLayout(),
+                                        config.getListElement(),
+                                        config.getListDelimiter(),
+                                        databaseModule
+                                                .storage()
+                                                .findBotsByOwner(player.getUuid()),
+                                        bot -> new String[]{
+                                                "%name%", bot.getName(),
+                                                "%token%", bot.getToken()
+                                        }
+                                ),
                         () -> sendMessage(sender, config.getPlayerNotFound())
                 );
     }

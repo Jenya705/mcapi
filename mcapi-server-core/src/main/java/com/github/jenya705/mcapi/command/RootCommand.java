@@ -17,7 +17,7 @@ public class RootCommand implements Supplier<ContainerCommandExecutor>, BaseComm
     @SneakyThrows
     @Override
     public ContainerCommandExecutor get() {
-        ContainerCommandExecutor container = new ContainerCommandExecutor("mcapi.command");
+        ContainerCommandExecutor container = new ContainerCommandExecutor("mcapi.command", "mcapi");
         container
                 .tree()
                 .branch("bot", branch -> branch

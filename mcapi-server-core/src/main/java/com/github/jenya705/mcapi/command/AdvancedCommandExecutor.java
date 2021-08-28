@@ -11,6 +11,7 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -57,6 +58,19 @@ public abstract class AdvancedCommandExecutor<T> implements CommandExecutor, Bas
         sender.sendMessage(CommandsUtils.placeholderMessage(message, placeholders));
     }
 
+    public <E> void sendListMessage(
+            ApiCommandSender sender,
+            String layout,
+            String element,
+            String delimiter,
+            List<E> elements,
+            Function<E, String[]> placeholdersGet
+    ) {
+        sender.sendMessage(CommandsUtils.listMessage(
+                layout, element, delimiter, elements, placeholdersGet
+        ));
+    }
+
     public Optional<ApiPlayer> getPlayer(ApiCommandSender sender, String name) {
         if (name == null) {
             return Optional
@@ -78,5 +92,4 @@ public abstract class AdvancedCommandExecutor<T> implements CommandExecutor, Bas
         tabs.add(tabFunction);
         return this;
     }
-
 }

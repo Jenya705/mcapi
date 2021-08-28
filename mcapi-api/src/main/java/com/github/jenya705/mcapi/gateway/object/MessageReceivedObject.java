@@ -21,8 +21,8 @@ public class MessageReceivedObject {
     private String message;
     private UUID author;
 
-    public static GatewayObject of(String message, ApiPlayer sender) {
-        return new GatewayObject(
+    public static GatewayObject<MessageReceivedObject> of(String message, ApiPlayer sender) {
+        return new GatewayObject<>(
                 type,
                 new MessageReceivedObject(
                         message,

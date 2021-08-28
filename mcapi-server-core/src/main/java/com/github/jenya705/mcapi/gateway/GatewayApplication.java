@@ -40,7 +40,7 @@ public class GatewayApplication extends WebSocketApplication {
         client.onMessage(text);
     }
 
-    public void broadcast(GatewayObject gatewayObject) {
+    public void broadcast(GatewayObject<?> gatewayObject) {
         getWebSockets().forEach(webSocket -> {
             GatewayClientImpl client = parse(webSocket);
             if (client == null || !client.isSubscribed(gatewayObject.getType())) return;
