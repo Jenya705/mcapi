@@ -60,6 +60,8 @@ public interface ConfigData {
                 });
     }
 
+    ConfigData required(String key);
+
     Map<String, Object> represent();
 
     default Map<String, Object> primitiveRepresent() {

@@ -50,6 +50,7 @@ public class ServerApplication {
                 PlayerListRest.class,
                 PlayerPunishmentRest.class,
                 PlayerPermissionRest.class,
+                BotPermissionRest.class,
                 ServerExceptionMapperRest.class,
                 JacksonProvider.class,
                 ConfigModuleImpl.class,

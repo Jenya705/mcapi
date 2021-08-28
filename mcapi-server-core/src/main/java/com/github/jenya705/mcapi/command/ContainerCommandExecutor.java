@@ -3,7 +3,6 @@ package com.github.jenya705.mcapi.command;
 import com.github.jenya705.mcapi.ApiCommandSender;
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.data.ConfigData;
-import com.github.jenya705.mcapi.data.MapConfigData;
 import com.github.jenya705.mcapi.stringful.StringfulIterator;
 import com.github.jenya705.mcapi.util.Pair;
 
@@ -89,11 +88,11 @@ public class ContainerCommandExecutor implements CommandExecutor, BaseCommon {
         for (Map.Entry<String, Object> entry: node.entrySet()) {
             if (entry.getValue() instanceof CommandExecutor) {
                 ((CommandExecutor) entry.getValue())
-                        .setConfig(config.required(entry.getKey(), new MapConfigData()));
+                        .setConfig(config.required(entry.getKey()));
             }
             else if (entry.getValue() instanceof Map) {
                 setConfig(
-                        config.required(entry.getKey(), new MapConfigData()),
+                        config.required(entry.getKey()),
                         (Map<String, Object>) entry.getValue()
                 );
             }

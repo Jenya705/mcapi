@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.module.config;
 
 import com.github.jenya705.mcapi.data.ConfigData;
+import com.github.jenya705.mcapi.data.GlobalContainer;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
@@ -24,19 +25,46 @@ public class Config {
     public static <T> void setFields(T object, Class<? extends T> clazz, ConfigData data) {
         for (Field field : clazz.getDeclaredFields()) {
             Value valueAnnotation = field.getDeclaredAnnotation(Value.class);
+            Global globalAnnotation = null;
+            if (data instanceof GlobalContainer) {
+                globalAnnotation = field.getAnnotation(Global.class);
+            }
             if (valueAnnotation == null) continue;
             field.setAccessible(true);
+            String key = parseKey(valueAnnotation.key(), field.getName());
             try {
-                if (valueAnnotation.required()) {
+                boolean isGlobal = false;
+                if (globalAnnotation != null) {
+                    Optional<Object> obj = data.getObject(key);
+                    if (obj.isEmpty()) {
+                        data.set(key, GlobalContainer.inheritKey);
+                        isGlobal = true;
+                    }
+                    else {
+                        isGlobal = obj
+                                .filter(it -> it instanceof String)
+                                .map(it -> (String) it)
+                                .map(it -> it.equals(GlobalContainer.inheritKey))
+                                .orElse(false);
+                    }
+                }
+                if (isGlobal) {
+                    GlobalContainer globalContainer = (GlobalContainer) data;
+                    Optional<Object> obj = globalContainer.global(globalAnnotation.value());
+                    if (obj.isPresent()) {
+                        field.set(object, obj.get());
+                    }
+                    else {
+                        globalContainer.global(globalAnnotation.value(), field.get(object));
+                    }
+                }
+                else if (valueAnnotation.required()) {
                     field.set(object, data.requiredObject(
-                            parseKey(valueAnnotation.key(), field.getName()),
-                            field.get(object)
+                            key, field.get(object)
                     ));
                 }
                 else {
-                    Optional<Object> objectOptional = data.getObject(
-                            parseKey(valueAnnotation.key(), field.getName())
-                    );
+                    Optional<Object> objectOptional = data.getObject(key);
                     if (objectOptional.isPresent()) field.set(object, objectOptional.get());
                 }
             } catch (IllegalAccessException e) {
@@ -55,5 +83,4 @@ public class Config {
     protected static String parseKey(String key, String fieldName) {
         return key.isEmpty() ? fieldName : key;
     }
-
 }

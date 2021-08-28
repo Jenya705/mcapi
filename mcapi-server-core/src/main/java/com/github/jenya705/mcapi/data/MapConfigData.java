@@ -2,6 +2,7 @@ package com.github.jenya705.mcapi.data;
 
 import lombok.AllArgsConstructor;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -25,29 +26,23 @@ public class MapConfigData implements ConfigData {
 
     @Override
     public Optional<String> getString(String key) {
-        if (data.containsKey(key)) {
-            Object obj = data.get(key);
-            return obj instanceof String ? Optional.of((String) obj) : Optional.empty();
-        }
-        return Optional.empty();
+        return getObject(key)
+                .filter(it -> it instanceof String)
+                .map(it -> (String) it);
     }
 
     @Override
     public Optional<Integer> getInteger(String key) {
-        if (data.containsKey(key)) {
-            Object obj = data.get(key);
-            return obj instanceof Integer ? Optional.of((Integer) obj) : Optional.empty();
-        }
-        return Optional.empty();
+        return getObject(key)
+                .filter(it -> it instanceof Integer)
+                .map(it -> (Integer) it);
     }
 
     @Override
     public Optional<Boolean> getBoolean(String key) {
-        if (data.containsKey(key)) {
-            Object obj = data.get(key);
-            return obj instanceof Boolean ? Optional.of((Boolean) obj) : Optional.empty();
-        }
-        return Optional.empty();
+        return getObject(key)
+                .filter(it -> it instanceof Boolean)
+                .map(it -> (Boolean) it);
     }
 
     @Override
@@ -59,12 +54,17 @@ public class MapConfigData implements ConfigData {
                 return Optional.of((ConfigData) obj);
             }
             else if (obj instanceof Map) {
-                ConfigData directory = new MapConfigData((Map<String, Object>) obj);
+                ConfigData directory = createSelf((Map<String, Object>) obj);
                 set(key, directory);
                 return Optional.of(directory);
             }
         }
         return Optional.empty();
+    }
+
+    @Override
+    public ConfigData required(String key) {
+        return required(key, createSelf(new HashMap<>()));
     }
 
     @Override
@@ -76,4 +76,9 @@ public class MapConfigData implements ConfigData {
     public Map<String, Object> represent() {
         return data;
     }
+
+    public MapConfigData createSelf(Map<String, Object> from) {
+        return new MapConfigData(from);
+    }
+
 }

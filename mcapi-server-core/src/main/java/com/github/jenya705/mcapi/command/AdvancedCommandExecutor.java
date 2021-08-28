@@ -4,6 +4,7 @@ import com.github.jenya705.mcapi.ApiCommandSender;
 import com.github.jenya705.mcapi.ApiPlayer;
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.stringful.*;
+import com.github.jenya705.mcapi.util.PlayerUtils;
 import lombok.AccessLevel;
 import lombok.Setter;
 
@@ -63,13 +64,13 @@ public abstract class AdvancedCommandExecutor<T> implements CommandExecutor, Bas
                     .filter(it -> it instanceof ApiPlayer)
                     .map(it -> (ApiPlayer) it);
         }
-        return core().getOptionalPlayerId(name);
+        return PlayerUtils.getPlayerWithoutException(name, core());
     }
 
     @Override
     public List<String> onTab(ApiCommandSender sender, StringfulIterator args, String permission) {
         int count = args.countNext();
-        if (count > tabs.size()) return null;
+        if (count > tabs.size() || count == 0) return null;
         return tabs.get(count - 1).get();
     }
 
