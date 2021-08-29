@@ -25,6 +25,10 @@ public interface ServerCore {
 
     ApiPlayer getPlayer(UUID uuid);
 
+    ApiOfflinePlayer getOfflinePlayer(String name);
+
+    ApiOfflinePlayer getOfflinePlayer(UUID uuid);
+
     default Optional<ApiPlayer> getOptionalPlayer(String name) {
         return Optional.ofNullable(getPlayer(name));
     }
@@ -35,6 +39,18 @@ public interface ServerCore {
 
     default Optional<ApiPlayer> getOptionalPlayerId(String id) {
         return PlayerUtils.getPlayer(id, this);
+    }
+
+    default Optional<ApiOfflinePlayer> getOptionalOfflinePlayer(String name) {
+        return Optional.ofNullable(getOfflinePlayer(name));
+    }
+
+    default Optional<ApiOfflinePlayer> getOptionalOfflinePlayer(UUID uuid) {
+        return Optional.ofNullable(getOfflinePlayer(uuid));
+    }
+
+    default Optional<ApiOfflinePlayer> getOptionalOfflinePlayerId(String id) {
+        return PlayerUtils.getOfflinePlayer(id, this);
     }
 
     default Object loadFile(String file, FileType type) throws IOException {

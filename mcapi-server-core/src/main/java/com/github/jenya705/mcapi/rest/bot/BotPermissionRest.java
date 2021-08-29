@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.rest;
+package com.github.jenya705.mcapi.rest.bot;
 
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.JerseyClass;
@@ -12,8 +12,6 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.util.UUID;
 
 /**
  * @author Jenya705

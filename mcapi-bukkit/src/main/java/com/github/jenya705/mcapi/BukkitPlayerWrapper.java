@@ -46,4 +46,8 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements J
         player.banPlayer(reason);
     }
 
+    @Override
+    public boolean isOnline() {
+        return player.isOnline();
+    }
 }

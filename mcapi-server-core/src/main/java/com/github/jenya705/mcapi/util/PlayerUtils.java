@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi.util;
 
+import com.github.jenya705.mcapi.ApiOfflinePlayer;
 import com.github.jenya705.mcapi.ApiPlayer;
 import com.github.jenya705.mcapi.ServerCore;
 import com.github.jenya705.mcapi.error.PlayerIdFormatException;
@@ -18,7 +19,7 @@ public class PlayerUtils {
 
     public Optional<ApiPlayer> getPlayer(String name, ServerCore core) {
         Pair<Optional<ApiPlayer>, Boolean> information = getPlayerWithFullInformation(name, core);
-        if (information.getRight()) {
+        if (!information.getRight()) {
             throw new PlayerIdFormatException(name);
         }
         return information.getLeft();
@@ -28,27 +29,59 @@ public class PlayerUtils {
         return getPlayerWithFullInformation(name, core).getLeft();
     }
 
+    public Optional<ApiOfflinePlayer> getOfflinePlayer(String name, ServerCore core) {
+        Pair<Optional<ApiOfflinePlayer>, Boolean> information = getOfflinePlayerWithFullInformation(name, core);
+        if (!information.getRight()) {
+            throw new PlayerIdFormatException(name);
+        }
+        return information.getLeft();
+    }
+
+    public Optional<ApiOfflinePlayer> getOfflinePlayerWithoutException(String name, ServerCore core) {
+        return getOfflinePlayerWithFullInformation(name, core).getLeft();
+    }
+
     private Pair<Optional<ApiPlayer>, Boolean> getPlayerWithFullInformation(String name, ServerCore core) {
-        if (name.length() < 17) {
-            if (name.length() < 3) {
-                return new Pair<>(Optional.empty(), true);
-            }
-            return new Pair<>(core.getOptionalPlayer(name), false);
-        }
-        else if (name.length() == 32) {
-            return new Pair<>(core.getOptionalPlayer(
-                    UUID.fromString(
-                            name.replaceFirst(
-                                    "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5"
-                            )
-                    )
-            ), false);
-        }
-        else if (name.length() == 36) {
-            return new Pair<>(core.getOptionalPlayer(UUID.fromString(name)), false);
+        Object id = parsePlayerId(name);
+        if (id == null) return new Pair<>(Optional.empty(), false);
+        if (id instanceof UUID) {
+            return new Pair<>(core.getOptionalPlayer((UUID) id), true);
         }
         else {
-            return new Pair<>(Optional.empty(), true);
+            return new Pair<>(core.getOptionalPlayer(id.toString()), true);
+        }
+    }
+
+    private Pair<Optional<ApiOfflinePlayer>, Boolean> getOfflinePlayerWithFullInformation(String name, ServerCore core) {
+        Object id = parsePlayerId(name);
+        if (id == null) return new Pair<>(Optional.empty(), false);
+        if (id instanceof UUID) {
+            return new Pair<>(core.getOptionalOfflinePlayer((UUID) id), true);
+        }
+        else {
+            return new Pair<>(core.getOptionalOfflinePlayer(id.toString()), true);
+        }
+    }
+
+    private Object parsePlayerId(String name) {
+        if (name.length() < 17) {
+            if (name.length() < 3) {
+                return null;
+            }
+            return name;
+        }
+        else if (name.length() == 32) {
+            return UUID.fromString(
+                    name.replaceFirst(
+                            "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5"
+                    )
+            );
+        }
+        else if (name.length() == 36) {
+            return UUID.fromString(name);
+        }
+        else {
+            return null;
         }
     }
 
@@ -77,5 +110,4 @@ public class PlayerUtils {
     public Optional<UUID> optionalUuid(String uuid) {
         return Optional.ofNullable(parseUuid(uuid));
     }
-
 }

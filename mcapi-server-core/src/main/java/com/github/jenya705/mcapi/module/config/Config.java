@@ -1,6 +1,5 @@
 package com.github.jenya705.mcapi.module.config;
 
-import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.ServerPlatform;
 import com.github.jenya705.mcapi.data.ConfigData;
@@ -8,7 +7,6 @@ import com.github.jenya705.mcapi.data.GlobalContainer;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.Optional;
 
 /**

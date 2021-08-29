@@ -1,7 +1,6 @@
 package com.github.jenya705.mcapi.command.bot.create;
 
 import com.github.jenya705.mcapi.ApiCommandSender;
-import com.github.jenya705.mcapi.ApiPlayer;
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.command.AdvancedCommandExecutor;
@@ -12,7 +11,6 @@ import com.github.jenya705.mcapi.util.PlayerUtils;
 import com.github.jenya705.mcapi.util.TokenUtils;
 
 import java.util.Collections;
-import java.util.stream.Collectors;
 
 /**
  * @author Jenya705

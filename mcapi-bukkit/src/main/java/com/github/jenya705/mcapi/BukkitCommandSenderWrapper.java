@@ -16,10 +16,7 @@ public class BukkitCommandSenderWrapper implements ApiCommandSender {
     private final CommandSender sender;
 
     public static BukkitCommandSenderWrapper of(CommandSender sender) {
-        if (sender instanceof Player) {
-            return BukkitPlayerWrapper.of((Player) sender);
-        }
-        return new BukkitCommandSenderWrapper(sender);
+        return sender == null ? null : new BukkitCommandSenderWrapper(sender);
     }
 
     @Override

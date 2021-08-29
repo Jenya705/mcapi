@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.rest;
+package com.github.jenya705.mcapi.rest.player;
 
 import com.github.jenya705.mcapi.ApiPlayer;
 import com.github.jenya705.mcapi.BaseCommon;

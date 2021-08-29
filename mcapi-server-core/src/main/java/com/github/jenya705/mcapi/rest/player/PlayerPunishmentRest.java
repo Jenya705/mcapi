@@ -1,14 +1,11 @@
-package com.github.jenya705.mcapi.rest;
+package com.github.jenya705.mcapi.rest.player;
 
 import com.github.jenya705.mcapi.ApiPlayer;
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.JerseyClass;
 import com.github.jenya705.mcapi.error.PlayerNotFoundException;
 import com.github.jenya705.mcapi.module.authorization.AuthorizationModule;
-import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.HeaderParam;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 
 /**
@@ -20,7 +17,7 @@ public class PlayerPunishmentRest implements BaseCommon {
 
     private final AuthorizationModule authorization = bean(AuthorizationModule.class);
 
-    @DELETE
+    @PUT
     @Path("/kick")
     public Response kick(
             @PathParam("name") String name,
@@ -39,7 +36,7 @@ public class PlayerPunishmentRest implements BaseCommon {
                 .build();
     }
 
-    @DELETE
+    @PUT
     @Path("/ban")
     public Response ban(
             @PathParam("name") String name,

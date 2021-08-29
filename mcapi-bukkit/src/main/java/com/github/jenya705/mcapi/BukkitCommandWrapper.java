@@ -23,13 +23,13 @@ public class BukkitCommandWrapper implements org.bukkit.command.CommandExecutor,
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        executor.onCommand(BukkitCommandSenderWrapper.of(sender), new ArrayStringfulIterator(args), permission);
+        executor.onCommand(BukkitWrapper.sender(sender), new ArrayStringfulIterator(args), permission);
         return true;
     }
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        List<String> tabs = executor.onTab(BukkitCommandSenderWrapper.of(sender), new ArrayStringfulIterator(args), permission);
+        List<String> tabs = executor.onTab(BukkitWrapper.sender(sender), new ArrayStringfulIterator(args), permission);
         return tabs == null ? Collections.emptyList() : tabs;
     }
 }

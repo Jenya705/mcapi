@@ -78,18 +78,29 @@ public class BukkitServerCore implements JavaServerCore, JavaBaseCommon {
         return Bukkit
                 .getOnlinePlayers()
                 .stream()
-                .map(BukkitPlayerWrapper::of)
+                .map(BukkitWrapper::player)
                 .collect(Collectors.toList());
     }
 
     @Override
     public JavaPlayer getJavaPlayer(String name) {
-        return BukkitPlayerWrapper.of(Bukkit.getPlayer(name));
+        return BukkitWrapper.player(Bukkit.getPlayer(name));
     }
 
     @Override
     public JavaPlayer getJavaPlayer(UUID uuid) {
-        return BukkitPlayerWrapper.of(Bukkit.getPlayer(uuid));
+        return BukkitWrapper.player(Bukkit.getPlayer(uuid));
+    }
+
+    @Override
+    // TODO Change method to get offline player
+    public ApiOfflinePlayer getOfflinePlayer(String name) {
+        return BukkitWrapper.offlinePlayer(Bukkit.getOfflinePlayer(name));
+    }
+
+    @Override
+    public ApiOfflinePlayer getOfflinePlayer(UUID uuid) {
+        return BukkitWrapper.offlinePlayer(Bukkit.getOfflinePlayer(uuid));
     }
 
     @Override

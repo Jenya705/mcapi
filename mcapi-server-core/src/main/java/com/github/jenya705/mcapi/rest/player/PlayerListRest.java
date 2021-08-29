@@ -1,9 +1,10 @@
-package com.github.jenya705.mcapi.rest;
+package com.github.jenya705.mcapi.rest.player;
 
 import com.github.jenya705.mcapi.ApiPlayer;
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.JerseyClass;
 import com.github.jenya705.mcapi.module.authorization.AuthorizationModule;
+import com.github.jenya705.mcapi.util.RawUtils;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.Path;

@@ -1,6 +1,5 @@
 package com.github.jenya705.mcapi.command;
 
-import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.module.config.Config;
 import com.github.jenya705.mcapi.module.config.Value;
 import lombok.Getter;

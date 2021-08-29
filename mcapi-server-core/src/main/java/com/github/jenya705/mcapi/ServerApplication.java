@@ -6,7 +6,11 @@ import com.github.jenya705.mcapi.module.command.CommandModule;
 import com.github.jenya705.mcapi.module.config.ConfigModuleImpl;
 import com.github.jenya705.mcapi.module.database.DatabaseModuleImpl;
 import com.github.jenya705.mcapi.module.storage.StorageModuleImpl;
-import com.github.jenya705.mcapi.rest.*;
+import com.github.jenya705.mcapi.rest.ServerExceptionMapperRest;
+import com.github.jenya705.mcapi.rest.bot.BotPermissionRest;
+import com.github.jenya705.mcapi.rest.offline.OfflinePlayerGetterRest;
+import com.github.jenya705.mcapi.rest.offline.OfflinePlayerPunishmentRest;
+import com.github.jenya705.mcapi.rest.player.*;
 import com.github.jenya705.mcapi.util.Pair;
 import jakarta.ws.rs.core.UriBuilder;
 import lombok.Getter;
@@ -56,6 +60,8 @@ public class ServerApplication {
                 PlayerPunishmentRest.class,
                 PlayerPermissionRest.class,
                 BotPermissionRest.class,
+                OfflinePlayerGetterRest.class,
+                OfflinePlayerPunishmentRest.class,
                 ServerExceptionMapperRest.class,
                 JacksonProvider.class,
                 ConfigModuleImpl.class,
