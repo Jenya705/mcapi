@@ -40,11 +40,17 @@ public class ListBotCommand extends AdvancedCommandExecutor<ListBotArguments> im
                                         config.getListDelimiter(),
                                         databaseModule
                                                 .storage()
-                                                .findBotsByOwner(player.getUuid()),
+                                                .findBotsPageByOwner(
+                                                        player.getUuid(),
+                                                        args.getPage(),
+                                                        config.getMaxElements()
+                                                ),
                                         bot -> new String[]{
                                                 "%name%", bot.getName(),
                                                 "%token%", bot.getToken()
-                                        }
+                                        },
+                                        "%page%", Integer.toString(args.getPage() + 1),
+                                        "%player_name%", player.getName()
                                 ),
                         () -> sendMessage(sender, config.getPlayerNotFound())
                 );

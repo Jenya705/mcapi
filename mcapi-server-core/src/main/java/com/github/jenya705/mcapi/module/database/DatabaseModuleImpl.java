@@ -36,7 +36,7 @@ public class DatabaseModuleImpl implements DatabaseModule, BaseCommon {
         createConnection();
         log.info(String.format("Done! (Creating connection with %s...)", config.getType()));
         log.info("Loading scripts...");
-        storage = new DatabaseScriptStorageImpl(this, config.getType());
+        storage = DatabaseModuleImpl.of(this, config.getType());
         log.info("Done! (Loading scripts...)");
         storage.setup();
     }
@@ -119,4 +119,14 @@ public class DatabaseModuleImpl implements DatabaseModule, BaseCommon {
     public DatabaseScriptStorage storage() {
         return storage;
     }
+
+    public static DatabaseScriptStorage of(DatabaseModule databaseModule, String sqlType) throws IOException {
+        if (sqlType.equalsIgnoreCase("mysql")) {
+            return new MySqlDatabaseScriptStorage(databaseModule);
+        }
+        else {
+            return new DatabaseScriptStorageImpl(databaseModule, sqlType);
+        }
+    }
+
 }

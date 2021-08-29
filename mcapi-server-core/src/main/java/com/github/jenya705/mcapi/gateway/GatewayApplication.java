@@ -7,6 +7,9 @@ import org.glassfish.grizzly.websockets.WebSocket;
 import org.glassfish.grizzly.websockets.WebSocketApplication;
 import org.glassfish.grizzly.websockets.WebSocketListener;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @author Jenya705
  */
@@ -48,5 +51,13 @@ public class GatewayApplication extends WebSocketApplication {
         });
     }
 
+    public List<GatewayClientImpl> getClients() {
+        return getWebSockets()
+                .stream()
+                .filter(it -> it instanceof GatewayClientImpl)
+                .map(it -> (GatewayClientImpl) it)
+                .filter(client -> client.getCurrentState() == GatewayState.LISTENING && client.getEntity() != null)
+                .collect(Collectors.toList());
+    }
 
 }

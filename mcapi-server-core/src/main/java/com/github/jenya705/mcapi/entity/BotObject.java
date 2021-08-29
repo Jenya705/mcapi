@@ -32,4 +32,8 @@ public class BotObject implements AbstractBot {
         return permissionEntity.isToggled();
     }
 
+    @Override
+    public BotEntity getEntity() {
+        return entity;
+    }
 }

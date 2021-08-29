@@ -10,6 +10,8 @@ import java.util.UUID;
  */
 public interface AbstractBot {
 
+    BotEntity getEntity();
+
     boolean hasPermission(String permission, UUID target);
 
     default boolean hasPermission(String permission) {

@@ -4,6 +4,8 @@ import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.entity.BotEntity;
 import com.github.jenya705.mcapi.entity.BotPermissionEntity;
 import com.github.jenya705.mcapi.util.FileUtils;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.SneakyThrows;
 
 import java.io.File;
@@ -17,6 +19,7 @@ import java.util.UUID;
 /**
  * @author Jenya705
  */
+@Getter(AccessLevel.PROTECTED)
 public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCommon {
 
     private final DatabaseModule databaseModule;
@@ -28,6 +31,7 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
     private final String findBotById;
     private final String findBotByToken;
     private final String findBotsByOwner;
+    private final String findBotsPageByOwner;
     private final String findPermission;
     private final String findPermissionsById;
     private final String saveBot;
@@ -43,6 +47,7 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
         findBotById = loadScript("find_bot_by_id");
         findBotByToken = loadScript("find_bot_by_token");
         findBotsByOwner = loadScript("find_bots_by_owner");
+        findBotsPageByOwner = loadScript("find_page_ordered_bots_by_owner");
         findPermission = loadScript("find_permission");
         findPermissionsById = loadScript("find_permissions_by_id");
         saveBot = loadScript("save_bot");
@@ -89,6 +94,20 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
     @SneakyThrows
     public List<BotEntity> findAllBots() {
         return BotEntity.mapResultSet(databaseModule.query(findAllBots));
+    }
+
+    @Override
+    @SneakyThrows
+    public List<BotEntity> findBotsPageByOwner(UUID owner, int page, int size) {
+        return BotEntity.mapResultSet(
+                databaseModule.query(
+                        findBotsPageByOwner,
+                        owner.getMostSignificantBits(),
+                        owner.getLeastSignificantBits(),
+                        size,
+                        page * size
+                )
+        );
     }
 
     @Override

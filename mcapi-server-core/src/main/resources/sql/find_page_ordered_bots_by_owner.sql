@@ -1,0 +1,1 @@
+select * from mcapi_bots where owner_most = ? and owner_least = ? order by id limit ? offset ?;

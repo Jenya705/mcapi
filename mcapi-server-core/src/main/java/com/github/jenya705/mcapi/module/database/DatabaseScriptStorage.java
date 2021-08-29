@@ -21,6 +21,8 @@ public interface DatabaseScriptStorage {
 
     List<BotEntity> findAllBots();
 
+    List<BotEntity> findBotsPageByOwner(UUID owner, int page, int size);
+
     BotPermissionEntity findPermission(long botId, String permission, UUID target);
 
     List<BotPermissionEntity> findPermissionsById(long botId);

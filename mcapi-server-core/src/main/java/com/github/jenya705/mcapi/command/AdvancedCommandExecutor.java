@@ -64,12 +64,30 @@ public abstract class AdvancedCommandExecutor<T> implements CommandExecutor, Bas
             String element,
             String delimiter,
             List<E> elements,
-            Function<E, String[]> placeholdersGet
+            Function<E, String[]> placeholdersGet,
+            String... layoutPlaceholders
     ) {
         sender.sendMessage(CommandsUtils.listMessage(
-                layout, element, delimiter, elements, placeholdersGet
+                layout, element, delimiter, elements, placeholdersGet, layoutPlaceholders
         ));
     }
+
+    public <E> void sendListMessage(
+            ApiCommandSender sender,
+            String layout,
+            String element,
+            String delimiter,
+            List<E> elements,
+            Function<E, String[]> placeholdersGet,
+            int size,
+            int page,
+            String... layoutPlaceholders
+    ) {
+        sender.sendMessage(CommandsUtils.listMessage(
+                layout, element, delimiter, elements, placeholdersGet, size, page, layoutPlaceholders
+        ));
+    }
+
 
     public Optional<ApiPlayer> getPlayer(ApiCommandSender sender, String name) {
         if (name == null) {

@@ -4,6 +4,7 @@ create table if not exists mcapi_bots (
 	name varchar(64) not null,
 	owner_most bigint not null,
 	owner_least bigint not null,
+	created_date timestamp default current_timestamp,
 	unique(token)
 );
 

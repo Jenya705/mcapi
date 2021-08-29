@@ -25,7 +25,7 @@ public class ListBotConfig extends AdvancedCommandExecutorConfig {
     private String notPermittedForOthers = "&cYou can not see others bots";
 
     @Value
-    private String listLayout = "&eBots of player %player_name%\n%list%\n&eEnd";
+    private String listLayout = "&eBots of player %player_name%\n%list%\n&ePage %page%";
 
     @Value
     @Global("botListElementRepresentation")
@@ -35,6 +35,10 @@ public class ListBotConfig extends AdvancedCommandExecutorConfig {
     @Value
     @Global("listsDelimiter")
     private String listDelimiter = "&r\n";
+
+    @Value
+    @Global("maxElementsInList")
+    private int maxElements = 10;
 
     public ListBotConfig(ConfigData config) {
         load(config);

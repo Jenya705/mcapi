@@ -33,7 +33,6 @@ public class ContainerCommandExecutor implements CommandExecutor, BaseCommon {
     public void onCommand(ApiCommandSender sender, StringfulIterator args, String permission) {
         Pair<Object, String> pair = walkThrew(args);
         String fullPermission = permission + pair.getRight();
-        System.out.println(fullPermission);
         if (pair.getLeft() instanceof CommandExecutor) {
             if (!sender.hasPermission(fullPermission)) {
                 sender.sendMessage(CommandsUtils.placeholderMessage(config.getNotPermittedMessage()));
@@ -71,6 +70,7 @@ public class ContainerCommandExecutor implements CommandExecutor, BaseCommon {
             return ((CommandExecutor) pair.getLeft()).onTab(sender, args, pair.getRight());
         }
         else {
+            if (!args.hasNext()) return null;
             List<String> tabs = new ArrayList<>(((Map<String, Object>) pair.getLeft()).keySet());
             return tabs
                     .stream()
@@ -86,7 +86,10 @@ public class ContainerCommandExecutor implements CommandExecutor, BaseCommon {
         while (true) {
             if (!args.hasNext()) break;
             String next = args.next();
-            if (!current.containsKey(next)) break;
+            if (!current.containsKey(next)) {
+                args.back();
+                break;
+            }
             path.append(".").append(next);
             Object nextObject = current.get(next);
             if (nextObject instanceof CommandExecutor) return new Pair<>(nextObject, path.toString());

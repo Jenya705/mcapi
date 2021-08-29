@@ -34,6 +34,7 @@ public class GatewayClientImpl extends DefaultWebSocket implements BaseCommon, G
     @Delegate
     private AbstractBot bot;
 
+    @Getter
     private final Set<String> subscriptions = new HashSet<>();
 
     public GatewayClientImpl(ProtocolHandler protocolHandler, HttpRequestPacket request, WebSocketListener... listeners) {
@@ -98,4 +99,5 @@ public class GatewayClientImpl extends DefaultWebSocket implements BaseCommon, G
                 .writeValueAsString(obj)
         );
     }
+
 }

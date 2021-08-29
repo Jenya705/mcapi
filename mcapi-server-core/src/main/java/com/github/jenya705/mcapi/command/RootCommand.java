@@ -3,6 +3,8 @@ package com.github.jenya705.mcapi.command;
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.command.bot.create.CreateBotCommand;
 import com.github.jenya705.mcapi.command.bot.list.ListBotCommand;
+import com.github.jenya705.mcapi.command.gateway.connected.ConnectedGatewaysCommand;
+import com.github.jenya705.mcapi.command.gateway.subscriptions.SubscriptionsGatewaysCommand;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.data.GlobalConfigData;
 import lombok.SneakyThrows;
@@ -23,7 +25,12 @@ public class RootCommand implements Supplier<ContainerCommandExecutor>, BaseComm
                 .branch("bot", branch -> branch
                         .leaf("create", new CreateBotCommand())
                         .leaf("list", new ListBotCommand())
-                );
+                )
+                .branch("gateway", branch -> branch
+                        .leaf("connected", new ConnectedGatewaysCommand())
+                        .leaf("subscriptions", new SubscriptionsGatewaysCommand())
+                )
+        ;
         ConfigData configData =
                 new GlobalConfigData(core().loadConfig("commands"));
         container.setConfig(configData);

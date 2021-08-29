@@ -28,6 +28,11 @@ public class ArrayStringfulIterator implements StringfulIterator {
     }
 
     @Override
+    public void back() {
+        if (current > 0) current--;
+    }
+
+    @Override
     public String next() {
         if (!hasNext()) {
             throw new IllegalStateException("Next argument is not exist");
