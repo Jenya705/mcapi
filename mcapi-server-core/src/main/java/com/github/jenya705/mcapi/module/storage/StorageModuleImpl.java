@@ -22,10 +22,10 @@ public class StorageModuleImpl implements StorageModule, BaseCommon {
         addPermission(new PermissionEntity("user.get", false, true));
         addPermission(new PermissionEntity("user.list", true, true));
         addPermission(new PermissionEntity("user.has_permission", false, true));
-        addPermission(new PermissionEntity("user.kick", false, false));
-        addPermission(new PermissionEntity("user.ban", false, false));
-        addPermission(new PermissionEntity("user.send_message", false, false));
         addPermission(new PermissionEntity("gateway.message_received", true, true));
+        addPermissionWithSelectors(new PermissionEntity("user.kick", false, false));
+        addPermissionWithSelectors(new PermissionEntity("user.ban", false, false));
+        addPermissionWithSelectors(new PermissionEntity("user.send_message", false, true));
     }
 
     @OnStartup(priority = 4)
@@ -75,5 +75,12 @@ public class StorageModuleImpl implements StorageModule, BaseCommon {
             throw new IllegalArgumentException("Permission name too long");
         }
         permissions.put(permissionEntity.getPermission(), permissionEntity);
+    }
+
+    @Override
+    public void addPermissionWithSelectors(PermissionEntity permissionEntity) {
+        addPermission(permissionEntity);
+        addPermission(new PermissionEntity(permissionEntity.getPermission() + ".@a", true, permissionEntity.isEnabled()));
+        addPermission(new PermissionEntity(permissionEntity.getPermission() + ".@r", true, permissionEntity.isEnabled()));
     }
 }

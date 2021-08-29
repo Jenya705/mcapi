@@ -23,5 +23,4 @@ public class JavaServerApplication {
 
     @Getter
     private final static JavaServerApplication application = new JavaServerApplication();
-
 }

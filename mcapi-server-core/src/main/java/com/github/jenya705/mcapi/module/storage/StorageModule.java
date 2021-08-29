@@ -13,6 +13,8 @@ public interface StorageModule {
 
     void addPermission(PermissionEntity permissionEntity);
 
+    void addPermissionWithSelectors(PermissionEntity permissionEntity);
+
     default Optional<PermissionEntity> permission(String permission) {
         return Optional.ofNullable(getPermission(permission));
     }

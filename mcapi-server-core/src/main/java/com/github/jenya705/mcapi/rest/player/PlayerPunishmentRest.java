@@ -5,6 +5,7 @@ import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.JerseyClass;
 import com.github.jenya705.mcapi.error.PlayerNotFoundException;
 import com.github.jenya705.mcapi.module.authorization.AuthorizationModule;
+import com.github.jenya705.mcapi.util.Selector;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 
@@ -17,39 +18,43 @@ public class PlayerPunishmentRest implements BaseCommon {
 
     private final AuthorizationModule authorization = bean(AuthorizationModule.class);
 
-    @PUT
+    @POST
     @Path("/kick")
     public Response kick(
             @PathParam("name") String name,
             @HeaderParam("Authorization") String authorizationHeader,
             String reason
     ) {
-        ApiPlayer player = core()
-                .getOptionalPlayerId(name)
-                .orElseThrow(() -> new PlayerNotFoundException(name));
+        Selector<ApiPlayer> selector = core()
+                .getPlayersBySelector(name);
+        if (selector.isEmpty()) {
+            throw new PlayerNotFoundException(name);
+        }
         authorization
                 .bot(authorizationHeader)
-                .needPermission("user.kick", player);
-        player.kick(reason);
+                .needPermission("user.kick" + selector.getPermissionName(), selector.getTarget());
+        selector.forEach(player -> player.kick(reason));
         return Response
                 .ok()
                 .build();
     }
 
-    @PUT
+    @PATCH
     @Path("/ban")
     public Response ban(
             @PathParam("name") String name,
             @HeaderParam("Authorization") String authorizationHeader,
             String reason
     ) {
-        ApiPlayer player = core()
-                .getOptionalPlayerId(name)
-                .orElseThrow(() -> new PlayerNotFoundException(name));
+        Selector<ApiPlayer> selector = core()
+                .getPlayersBySelector(name);
+        if (selector.isEmpty()) {
+            throw new PlayerNotFoundException(name);
+        }
         authorization
                 .bot(authorizationHeader)
-                .needPermission("user.ban", player);
-        player.ban(reason);
+                .needPermission("user.ban" + selector.getPermissionName(), selector.getTarget());
+        selector.forEach(player -> player.ban(reason));
         return Response
                 .ok()
                 .build();

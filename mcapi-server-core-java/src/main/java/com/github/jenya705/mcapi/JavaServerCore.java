@@ -1,6 +1,8 @@
 package com.github.jenya705.mcapi;
 
 import com.github.jenya705.mcapi.util.PlayerUtils;
+import com.github.jenya705.mcapi.util.Selector;
+import com.github.jenya705.mcapi.util.SelectorImpl;
 
 import javax.swing.text.html.Option;
 import java.util.Collection;
@@ -46,4 +48,16 @@ public interface JavaServerCore extends ServerCore {
         return getJavaPlayer(uuid);
     }
 
+    default Selector<JavaPlayer> getJavaPlayersBySelector(String selector) {
+        Selector<ApiPlayer> apiPlayerSelector = PlayerUtils.parseSelector(selector, this);
+        return new SelectorImpl<>(
+                apiPlayerSelector
+                        .stream()
+                        .filter(it -> it instanceof JavaPlayer)
+                        .map(it -> (JavaPlayer) it)
+                        .collect(Collectors.toSet()),
+                apiPlayerSelector.getPermissionName(),
+                apiPlayerSelector.getTarget()
+        );
+    }
 }

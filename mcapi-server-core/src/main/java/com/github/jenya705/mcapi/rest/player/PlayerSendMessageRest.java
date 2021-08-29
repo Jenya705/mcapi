@@ -5,6 +5,7 @@ import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.JerseyClass;
 import com.github.jenya705.mcapi.error.PlayerNotFoundException;
 import com.github.jenya705.mcapi.module.authorization.AuthorizationModule;
+import com.github.jenya705.mcapi.util.Selector;
 import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -26,13 +27,15 @@ public class PlayerSendMessageRest implements BaseCommon {
             @HeaderParam("Authorization") String authorizationHeader,
             String message
     ) {
-        ApiPlayer player = core()
-                .getOptionalPlayerId(name)
-                .orElseThrow(() -> new PlayerNotFoundException(name));
+        Selector<ApiPlayer> selector = core()
+                .getPlayersBySelector(name);
+        if (selector.isEmpty()) {
+            throw new PlayerNotFoundException(name);
+        }
         authorization
                 .bot(authorizationHeader)
-                .needPermission("user.send_message", player);
-        player.sendMessage(message);
+                .needPermission("user.send_message" + selector.getPermissionName(), selector.getTarget());
+        selector.forEach(player -> player.sendMessage(message));
         return Response
                 .ok()
                 .build();

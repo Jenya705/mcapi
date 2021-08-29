@@ -2,13 +2,11 @@ package com.github.jenya705.mcapi;
 
 import com.github.jenya705.mcapi.command.CommandExecutor;
 import com.github.jenya705.mcapi.util.PlayerUtils;
+import com.github.jenya705.mcapi.util.Selector;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author Jenya705
@@ -51,6 +49,10 @@ public interface ServerCore {
 
     default Optional<ApiOfflinePlayer> getOptionalOfflinePlayerId(String id) {
         return PlayerUtils.getOfflinePlayer(id, this);
+    }
+
+    default Selector<ApiPlayer> getPlayersBySelector(String selector) {
+        return PlayerUtils.parseSelector(selector, this);
     }
 
     default Object loadFile(String file, FileType type) throws IOException {

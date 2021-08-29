@@ -17,7 +17,7 @@ public class OfflinePlayerPunishmentRest implements BaseCommon {
 
     private final AuthorizationModule authorizationModule = bean(AuthorizationModule.class);
 
-    @PUT
+    @PATCH
     @Path("/ban")
     public Response ban(@PathParam("name") String name, @HeaderParam("Authorization") String authorization, String reason) {
         ApiOfflinePlayer player = core()

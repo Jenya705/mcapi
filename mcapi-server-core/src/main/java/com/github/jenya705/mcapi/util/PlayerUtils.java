@@ -6,9 +6,7 @@ import com.github.jenya705.mcapi.ServerCore;
 import com.github.jenya705.mcapi.error.PlayerIdFormatException;
 import lombok.experimental.UtilityClass;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -16,6 +14,8 @@ import java.util.stream.Collectors;
  */
 @UtilityClass
 public class PlayerUtils {
+
+    private final Random random = new Random();
 
     public Optional<ApiPlayer> getPlayer(String name, ServerCore core) {
         Pair<Optional<ApiPlayer>, Boolean> information = getPlayerWithFullInformation(name, core);
@@ -105,6 +105,41 @@ public class PlayerUtils {
             return UUID.fromString(uuid);
         }
         return null;
+    }
+
+    public Selector<ApiPlayer> parseSelector(String selector, ServerCore core) {
+        if (core.getPlayers().isEmpty()) return SelectorImpl.empty();
+        Object id = parsePlayerId(selector);
+        if (id == null) {
+            if (selector.equals("@a")) {
+                return new SelectorImpl<>(
+                        core.getPlayers(),
+                        ".@a",
+                        null
+                );
+            }
+            if (selector.equals("@r")) {
+                List<ApiPlayer> apiPlayers = new ArrayList<>(core.getPlayers());
+                return new SelectorImpl<>(
+                        Collections.singletonList(
+                                apiPlayers.get(
+                                        random.nextInt(apiPlayers.size())
+                                )
+                        ),
+                        ".@r",
+                        null
+                );
+            }
+            return SelectorImpl.empty();
+        }
+        if (id instanceof UUID) {
+            ApiPlayer player = core.getPlayer((UUID) id);
+            if (player == null) return SelectorImpl.empty();
+            return new SelectorImpl<>(Collections.singletonList(player), "", player.getUuid());
+        }
+        ApiPlayer player = core.getPlayer(id.toString());
+        if (player == null) return SelectorImpl.empty();
+        return new SelectorImpl<>(Collections.singletonList(player), "", player.getUuid());
     }
 
     public Optional<UUID> optionalUuid(String uuid) {
