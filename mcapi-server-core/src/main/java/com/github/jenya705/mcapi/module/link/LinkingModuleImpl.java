@@ -5,17 +5,24 @@ import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.OnStartup;
 import com.github.jenya705.mcapi.command.CommandsUtils;
 import com.github.jenya705.mcapi.entity.AbstractBot;
+import com.github.jenya705.mcapi.entity.BotPermissionEntity;
 import com.github.jenya705.mcapi.error.LinkRequestExistException;
+import com.github.jenya705.mcapi.error.LinkRequestPermissionNotFoundException;
 import com.github.jenya705.mcapi.form.FormComponent;
 import com.github.jenya705.mcapi.form.FormPlatformProvider;
 import com.github.jenya705.mcapi.form.component.*;
 import com.github.jenya705.mcapi.gateway.object.LinkResponseObject;
 import com.github.jenya705.mcapi.link.LinkRequest;
 import com.github.jenya705.mcapi.module.config.ConfigModule;
+import com.github.jenya705.mcapi.module.database.DatabaseModule;
+import com.github.jenya705.mcapi.module.storage.StorageModule;
+import com.github.jenya705.mcapi.util.ListUtils;
+import com.github.jenya705.mcapi.util.ReactiveUtils;
 import jakarta.ws.rs.core.MultivaluedHashMap;
 import jakarta.ws.rs.core.MultivaluedMap;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Stream;
 
@@ -24,8 +31,13 @@ import java.util.stream.Stream;
  */
 public class LinkingModuleImpl implements LinkingModule, BaseCommon {
 
+    private final ExecutorService async = Executors.newSingleThreadExecutor();
+
     private FormPlatformProvider formProvider;
     private LinkingModuleConfig config;
+    private DatabaseModule databaseModule;
+    private StorageModule storageModule;
+
     private final MultivaluedMap<UUID, LinkObject> links = new MultivaluedHashMap<>();
 
     @OnStartup
@@ -35,17 +47,29 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
                         .getConfig()
                         .required("linking")
         );
+        storageModule = bean(StorageModule.class);
+        databaseModule = bean(DatabaseModule.class);
         formProvider = bean(FormPlatformProvider.class);
     }
 
     @Override
     public void requestLink(AbstractBot bot, ApiPlayer player, LinkRequest request) {
-        if (getPlayerLinks(player)
+        ReactiveUtils.ifTrueThrow(
+                getPlayerLinks(player)
+                        .stream()
+                        .anyMatch(it -> it.getId() == bot.getEntity().getId()),
+                LinkRequestExistException::new
+        );
+        ListUtils.join(
+                request.getRequireRequestPermissions(),
+                request.getOptionalRequestPermissions()
+        )
                 .stream()
-                .anyMatch(it -> it.getId() == bot.getEntity().getId())
-        ) {
-            throw new LinkRequestExistException();
-        }
+                .filter(it -> storageModule.getPermission(it) == null)
+                .findAny()
+                .ifPresent(it -> {
+                    throw new LinkRequestPermissionNotFoundException(it);
+                });
         LinkObject obj;
         links.add(player.getUuid(), obj = new LinkObject(
                 request,
@@ -174,7 +198,7 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
         }
         if (linkObject == null) return;
         LinkObject finalLinkObject = linkObject;
-        Executors.newSingleThreadExecutor().submit(() ->
+        async.submit(() ->
                 app()
                         .getGateway()
                         .getClients()
@@ -193,6 +217,21 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
                                 )
                         ))
         );
+        DatabaseModule.async.submit(() -> {
+            finalLinkObject
+                    .getOptionalPermissions()
+                    .entrySet()
+                    .stream()
+                    .filter(Map.Entry::getValue)
+                    .map(Map.Entry::getKey)
+                    .forEach(it -> savePermission(finalLinkObject, it, player));
+            Arrays.stream(
+                    finalLinkObject
+                            .getRequest()
+                            .getRequireRequestPermissions()
+            )
+                    .forEach(it -> savePermission(finalLinkObject, it, player));
+        });
         player.sendMessage(
                 CommandsUtils.placeholderMessage(
                         enabled ?
@@ -215,5 +254,16 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
 
     private static String getCommand(String command, Object... formats) {
         return linkCommand + " " + String.format(command, formats);
+    }
+
+    private void savePermission(LinkObject linkObject, String permission, ApiPlayer player) {
+        databaseModule
+                .storage()
+                .save(new BotPermissionEntity(
+                        linkObject.getId(),
+                        permission,
+                        player.getUuid(),
+                        true
+                ));
     }
 }

@@ -23,6 +23,7 @@ public class StorageModuleImpl implements StorageModule, BaseCommon {
         addPermission(new PermissionEntity("user.list", true, true));
         addPermission(new PermissionEntity("user.has_permission", false, true));
         addPermission(new PermissionEntity("gateway.message_received", true, true));
+        addPermission(new PermissionEntity("link.request", true, true));
         addPermissionWithSelectors(new PermissionEntity("user.kick", false, false));
         addPermissionWithSelectors(new PermissionEntity("user.ban", false, false));
         addPermissionWithSelectors(new PermissionEntity("user.send_message", false, true));

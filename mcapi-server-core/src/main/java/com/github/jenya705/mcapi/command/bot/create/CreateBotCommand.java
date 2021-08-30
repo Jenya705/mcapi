@@ -11,6 +11,7 @@ import com.github.jenya705.mcapi.util.PlayerUtils;
 import com.github.jenya705.mcapi.util.TokenUtils;
 
 import java.util.Collections;
+import java.util.concurrent.Executors;
 
 /**
  * @author Jenya705
@@ -43,14 +44,16 @@ public class CreateBotCommand extends AdvancedCommandExecutor<CreateBotArguments
                 .ifPresentOrElse(
                         (player) -> {
                             String generatedToken = TokenUtils.generateToken();
-                            databaseModule
-                                    .storage()
-                                    .save(BotEntity.builder()
-                                            .name(args.getName())
-                                            .token(generatedToken)
-                                            .owner(player.getUuid())
-                                            .build()
-                                    );
+                            DatabaseModule.async.submit(() ->
+                                    databaseModule
+                                            .storage()
+                                            .save(BotEntity.builder()
+                                                    .name(args.getName())
+                                                    .token(generatedToken)
+                                                    .owner(player.getUuid())
+                                                    .build()
+                                            )
+                            );
                             sendMessage(sender,
                                     config.getSuccess(),
                                     "%token%", generatedToken
