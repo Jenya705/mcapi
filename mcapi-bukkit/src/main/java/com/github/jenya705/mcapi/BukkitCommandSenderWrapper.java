@@ -11,12 +11,17 @@ import org.bukkit.entity.Player;
  * @author Jenya705
  */
 @AllArgsConstructor
-public class BukkitCommandSenderWrapper implements ApiCommandSender {
+public class BukkitCommandSenderWrapper implements JavaCommandSender {
 
     private final CommandSender sender;
 
     public static BukkitCommandSenderWrapper of(CommandSender sender) {
         return sender == null ? null : new BukkitCommandSenderWrapper(sender);
+    }
+
+    @Override
+    public void sendMessage(Component component) {
+        sender.sendMessage(component);
     }
 
     @Override

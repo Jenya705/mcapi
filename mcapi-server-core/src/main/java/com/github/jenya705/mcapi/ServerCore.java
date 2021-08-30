@@ -6,7 +6,10 @@ import com.github.jenya705.mcapi.util.Selector;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * @author Jenya705

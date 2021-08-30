@@ -29,7 +29,7 @@ public class DatabaseModuleImpl implements DatabaseModule, BaseCommon {
         config = new DatabaseModuleConfig(
                 bean(ConfigModule.class)
                         .getConfig()
-                        .required("database", new MapConfigData())
+                        .required("database")
         );
         log.info(String.format("Creating connection with %s...", config.getType()));
         loadDriver(config.getType());

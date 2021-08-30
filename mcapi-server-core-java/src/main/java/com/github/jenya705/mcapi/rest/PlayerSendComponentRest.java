@@ -43,7 +43,7 @@ public class PlayerSendComponentRest implements JavaBaseCommon {
         Component component = componentSerializer.deserialize(message);
         selector.forEach(player -> player.sendMessage(component));
         return Response
-                .ok()
+                .noContent()
                 .build();
     }
 }

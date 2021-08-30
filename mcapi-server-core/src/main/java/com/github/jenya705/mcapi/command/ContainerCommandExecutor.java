@@ -6,10 +6,7 @@ import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.stringful.StringfulIterator;
 import com.github.jenya705.mcapi.util.Pair;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -70,11 +67,13 @@ public class ContainerCommandExecutor implements CommandExecutor, BaseCommon {
             return ((CommandExecutor) pair.getLeft()).onTab(sender, args, pair.getRight());
         }
         else {
-            if (!args.hasNext()) return null;
-            List<String> tabs = new ArrayList<>(((Map<String, Object>) pair.getLeft()).keySet());
+            if (!args.hasNext() || isGhost(pair.getLeft())) return null;
+            Map<String, Object> node = (Map<String, Object>) pair.getLeft();
+            List<String> tabs = new ArrayList<>(node.keySet());
             return tabs
                     .stream()
                     .filter(it -> sender.hasPermission(pair.getRight() + "." + it))
+                    .filter(it -> !isGhost(node.get(it)))
                     .collect(Collectors.toList());
         }
     }
@@ -85,7 +84,7 @@ public class ContainerCommandExecutor implements CommandExecutor, BaseCommon {
         StringBuilder path = new StringBuilder();
         while (true) {
             if (!args.hasNext()) break;
-            String next = args.next();
+            String next = args.next().toLowerCase(Locale.ROOT);
             if (!current.containsKey(next)) {
                 args.back();
                 break;
@@ -110,6 +109,7 @@ public class ContainerCommandExecutor implements CommandExecutor, BaseCommon {
     protected void setConfig(ConfigData config, Map<String, Object> node) {
         for (Map.Entry<String, Object> entry : node.entrySet()) {
             if (entry.getValue() instanceof CommandExecutor) {
+                if (entry.getValue().getClass().getAnnotation(NoConfig.class) != null) continue;
                 ((CommandExecutor) entry.getValue())
                         .setConfig(config.required(entry.getKey()));
             }
@@ -157,4 +157,9 @@ public class ContainerCommandExecutor implements CommandExecutor, BaseCommon {
     protected CommandTree tree() {
         return new ContainerCommandTree(nodes);
     }
+
+    private boolean isGhost(Object obj) {
+        return obj instanceof GhostBranch && ((GhostBranch) obj).isGhost();
+    }
+
 }

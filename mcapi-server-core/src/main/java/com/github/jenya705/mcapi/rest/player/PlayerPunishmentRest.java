@@ -35,7 +35,7 @@ public class PlayerPunishmentRest implements BaseCommon {
                 .needPermission("user.kick" + selector.getPermissionName(), selector.getTarget());
         selector.forEach(player -> player.kick(reason));
         return Response
-                .ok()
+                .noContent()
                 .build();
     }
 
@@ -56,7 +56,7 @@ public class PlayerPunishmentRest implements BaseCommon {
                 .needPermission("user.ban" + selector.getPermissionName(), selector.getTarget());
         selector.forEach(player -> player.ban(reason));
         return Response
-                .ok()
+                .noContent()
                 .build();
     }
 }

@@ -5,9 +5,11 @@ import com.github.jenya705.mcapi.module.authorization.AuthorizationModuleImpl;
 import com.github.jenya705.mcapi.module.command.CommandModule;
 import com.github.jenya705.mcapi.module.config.ConfigModuleImpl;
 import com.github.jenya705.mcapi.module.database.DatabaseModuleImpl;
+import com.github.jenya705.mcapi.module.link.LinkingModuleImpl;
 import com.github.jenya705.mcapi.module.storage.StorageModuleImpl;
 import com.github.jenya705.mcapi.rest.ServerExceptionMapperRest;
 import com.github.jenya705.mcapi.rest.bot.BotPermissionRest;
+import com.github.jenya705.mcapi.rest.link.LinkRequestRest;
 import com.github.jenya705.mcapi.rest.offline.OfflinePlayerGetterRest;
 import com.github.jenya705.mcapi.rest.offline.OfflinePlayerPunishmentRest;
 import com.github.jenya705.mcapi.rest.player.*;
@@ -62,13 +64,15 @@ public class ServerApplication {
                 BotPermissionRest.class,
                 OfflinePlayerGetterRest.class,
                 OfflinePlayerPunishmentRest.class,
+                LinkRequestRest.class,
                 ServerExceptionMapperRest.class,
                 JacksonProvider.class,
                 ConfigModuleImpl.class,
                 DatabaseModuleImpl.class,
                 StorageModuleImpl.class,
                 AuthorizationModuleImpl.class,
-                CommandModule.class
+                CommandModule.class,
+                LinkingModuleImpl.class
         );
     }
 
@@ -120,7 +124,7 @@ public class ServerApplication {
         ResourceConfig configuration = new ResourceConfig(jerseyClasses.toArray(new Class<?>[0]));
         httpServer = GrizzlyHttpServerFactory.createHttpServer(baseUri, configuration, false);
         WebSocketAddOn webSocketAddOn = new WebSocketAddOn();
-        for (NetworkListener listener: httpServer.getListeners()) {
+        for (NetworkListener listener : httpServer.getListeners()) {
             listener.registerAddOn(webSocketAddOn);
         }
         gateway = new GatewayApplication();
@@ -193,7 +197,7 @@ public class ServerApplication {
     }
 
     public void addClasses(Class<?>... classes) {
-        for (Class<?> clazz: classes) {
+        for (Class<?> clazz : classes) {
             this.classes.add(new Pair<>(clazz, false));
         }
     }

@@ -13,7 +13,7 @@ public class BukkitWrapper {
 
     public ApiCommandSender sender(CommandSender sender) {
         if (sender instanceof Player) {
-            return BukkitPlayerWrapper.of(sender);
+            return BukkitPlayerWrapper.of((Player) sender);
         }
         return BukkitCommandSenderWrapper.of(sender);
     }

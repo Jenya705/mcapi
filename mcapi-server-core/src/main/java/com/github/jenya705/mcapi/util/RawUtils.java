@@ -1,7 +1,6 @@
 package com.github.jenya705.mcapi.util;
 
 import com.github.jenya705.mcapi.ApiCommandSender;
-import com.github.jenya705.mcapi.ApiError;
 import com.github.jenya705.mcapi.ApiOfflinePlayer;
 import com.github.jenya705.mcapi.ApiPlayer;
 import lombok.AllArgsConstructor;

@@ -37,7 +37,7 @@ public class PlayerSendMessageRest implements BaseCommon {
                 .needPermission("user.send_message" + selector.getPermissionName(), selector.getTarget());
         selector.forEach(player -> player.sendMessage(message));
         return Response
-                .ok()
+                .noContent()
                 .build();
     }
 }

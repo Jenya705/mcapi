@@ -5,7 +5,10 @@ import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.JerseyClass;
 import com.github.jenya705.mcapi.error.PlayerNotFoundException;
 import com.github.jenya705.mcapi.module.authorization.AuthorizationModule;
-import jakarta.ws.rs.*;
+import jakarta.ws.rs.HeaderParam;
+import jakarta.ws.rs.PATCH;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Response;
 
 /**
@@ -28,7 +31,7 @@ public class OfflinePlayerPunishmentRest implements BaseCommon {
                 .needPermission("user.ban", player);
         player.ban(reason);
         return Response
-                .ok()
+                .noContent()
                 .build();
     }
 

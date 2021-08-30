@@ -3,6 +3,7 @@ package com.github.jenya705.mcapi.command;
 import lombok.Getter;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -26,13 +27,21 @@ public class ContainerCommandTree implements CommandTree {
     public CommandTree branch(String name, Consumer<CommandTree> treeConsumer) {
         ContainerCommandTree tree = new ContainerCommandTree();
         treeConsumer.accept(tree);
-        node.put(name, tree.getNode());
+        node.put(name.toLowerCase(Locale.ROOT), tree.getNode());
+        return this;
+    }
+
+    @Override
+    public CommandTree ghostBranch(String name, Consumer<CommandTree> treeConsumer) {
+        ContainerCommandTree tree = new ContainerCommandTree();
+        treeConsumer.accept(tree);
+        node.put(name.toLowerCase(Locale.ROOT), new ContainerGhostBranch(true, tree.getNode()));
         return this;
     }
 
     @Override
     public CommandTree leaf(String name, CommandExecutor executor) {
-        node.put(name, executor);
+        node.put(name.toLowerCase(Locale.ROOT), executor);
         return this;
     }
 }

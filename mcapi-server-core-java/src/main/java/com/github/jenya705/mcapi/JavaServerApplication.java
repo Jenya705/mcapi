@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi;
 
+import com.github.jenya705.mcapi.form.JavaFormProvider;
 import com.github.jenya705.mcapi.rest.PlayerSendComponentRest;
 import lombok.Getter;
 import lombok.experimental.Delegate;
@@ -16,7 +17,8 @@ public class JavaServerApplication {
 
     private JavaServerApplication() {
         addClasses(
-                PlayerSendComponentRest.class
+                PlayerSendComponentRest.class,
+                JavaFormProvider.class
         );
         setPlatform(ServerPlatform.JAVA);
     }
