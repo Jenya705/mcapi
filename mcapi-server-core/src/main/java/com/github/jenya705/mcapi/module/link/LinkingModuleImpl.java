@@ -7,6 +7,7 @@ import com.github.jenya705.mcapi.command.CommandsUtils;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.entity.BotPermissionEntity;
 import com.github.jenya705.mcapi.error.LinkRequestExistException;
+import com.github.jenya705.mcapi.error.LinkRequestPermissionIsGlobalException;
 import com.github.jenya705.mcapi.error.LinkRequestPermissionNotFoundException;
 import com.github.jenya705.mcapi.form.FormComponent;
 import com.github.jenya705.mcapi.form.FormPlatformProvider;
@@ -15,6 +16,7 @@ import com.github.jenya705.mcapi.gateway.object.LinkResponseObject;
 import com.github.jenya705.mcapi.link.LinkRequest;
 import com.github.jenya705.mcapi.module.config.ConfigModule;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
+import com.github.jenya705.mcapi.module.localization.LocalizationModule;
 import com.github.jenya705.mcapi.module.storage.StorageModule;
 import com.github.jenya705.mcapi.util.ListUtils;
 import com.github.jenya705.mcapi.util.ReactiveUtils;
@@ -37,6 +39,7 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
     private LinkingModuleConfig config;
     private DatabaseModule databaseModule;
     private StorageModule storageModule;
+    private LocalizationModule localizationModule;
 
     private final MultivaluedMap<UUID, LinkObject> links = new MultivaluedHashMap<>();
 
@@ -47,6 +50,7 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
                         .getConfig()
                         .required("linking")
         );
+        localizationModule = bean(LocalizationModule.class);
         storageModule = bean(StorageModule.class);
         databaseModule = bean(DatabaseModule.class);
         formProvider = bean(FormPlatformProvider.class);
@@ -60,15 +64,23 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
                         .anyMatch(it -> it.getId() == bot.getEntity().getId()),
                 LinkRequestExistException::new
         );
-        ListUtils.join(
+        List<String> joinedList = ListUtils.join(
                 request.getRequireRequestPermissions(),
                 request.getOptionalRequestPermissions()
-        )
+        );
+        joinedList
                 .stream()
                 .filter(it -> storageModule.getPermission(it) == null)
                 .findAny()
                 .ifPresent(it -> {
                     throw new LinkRequestPermissionNotFoundException(it);
+                });
+        joinedList
+                .stream()
+                .filter(it -> storageModule.getPermission(it).isGlobal())
+                .findAny()
+                .ifPresent(it -> {
+                    throw new LinkRequestPermissionIsGlobalException(it);
                 });
         LinkObject obj;
         links.add(player.getUuid(), obj = new LinkObject(
@@ -101,7 +113,7 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
                                                                 config.getContentDelimiter(),
                                                                 Arrays.asList(request.getRequest().getRequireRequestPermissions()),
                                                                 it -> new String[]{
-                                                                        "%permission%", it
+                                                                        "%permission%", localizationModule.getLinkPermissionLocalization(it)
                                                                 },
                                                                 "%bot_name%", request.getBot().getEntity().getName()
                                                         ))
@@ -121,7 +133,10 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
                                                                                 CommandsUtils
                                                                                         .placeholderMessage(
                                                                                                 config.getContentOptionalElement(),
-                                                                                                "%permission%", permissionEntry.getKey()
+                                                                                                "%permission%", localizationModule
+                                                                                                        .getLinkPermissionLocalization(
+                                                                                                                permissionEntry.getKey()
+                                                                                                        )
                                                                                         )
                                                                         ),
                                                                         ButtonComponent.of(

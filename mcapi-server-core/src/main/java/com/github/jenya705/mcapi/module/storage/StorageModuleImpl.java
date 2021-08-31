@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.module.storage;
 
 import com.github.jenya705.mcapi.BaseCommon;
+import com.github.jenya705.mcapi.DefaultPermission;
 import com.github.jenya705.mcapi.OnDisable;
 import com.github.jenya705.mcapi.OnStartup;
 import com.github.jenya705.mcapi.data.MapConfigData;
@@ -19,14 +20,22 @@ public class StorageModuleImpl implements StorageModule, BaseCommon {
     private final Map<String, PermissionEntity> permissions = new HashMap<>();
 
     public StorageModuleImpl() {
-        addPermission(new PermissionEntity("user.get", false, true));
-        addPermission(new PermissionEntity("user.list", true, true));
-        addPermission(new PermissionEntity("user.has_permission", false, true));
-        addPermission(new PermissionEntity("gateway.message_received", true, true));
-        addPermission(new PermissionEntity("link.request", true, true));
-        addPermissionWithSelectors(new PermissionEntity("user.kick", false, false));
-        addPermissionWithSelectors(new PermissionEntity("user.ban", false, false));
-        addPermissionWithSelectors(new PermissionEntity("user.send_message", false, true));
+        for (DefaultPermission defaultPermission: DefaultPermission.values()) {
+            if (defaultPermission.isSelector()) {
+                addPermissionWithSelectors(new PermissionEntity(
+                        defaultPermission.getName(),
+                        defaultPermission.isGlobal(),
+                        defaultPermission.isEnabledDefault()
+                ));
+            }
+            else {
+                addPermission(new PermissionEntity(
+                        defaultPermission.getName(),
+                        defaultPermission.isGlobal(),
+                        defaultPermission.isEnabledDefault()
+                ));
+            }
+        }
     }
 
     @OnStartup(priority = 4)

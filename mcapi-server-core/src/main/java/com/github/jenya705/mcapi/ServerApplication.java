@@ -6,6 +6,7 @@ import com.github.jenya705.mcapi.module.command.CommandModule;
 import com.github.jenya705.mcapi.module.config.ConfigModuleImpl;
 import com.github.jenya705.mcapi.module.database.DatabaseModuleImpl;
 import com.github.jenya705.mcapi.module.link.LinkingModuleImpl;
+import com.github.jenya705.mcapi.module.localization.LocalizationModuleImpl;
 import com.github.jenya705.mcapi.module.storage.StorageModuleImpl;
 import com.github.jenya705.mcapi.rest.ServerExceptionMapperRest;
 import com.github.jenya705.mcapi.rest.bot.BotPermissionRest;
@@ -72,7 +73,8 @@ public class ServerApplication {
                 StorageModuleImpl.class,
                 AuthorizationModuleImpl.class,
                 CommandModule.class,
-                LinkingModuleImpl.class
+                LinkingModuleImpl.class,
+                LocalizationModuleImpl.class
         );
     }
 
