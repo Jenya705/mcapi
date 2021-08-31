@@ -1,0 +1,1 @@
+delete from mcapi_permissions where bot_id = ?;

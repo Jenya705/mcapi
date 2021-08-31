@@ -38,6 +38,8 @@ public interface DatabaseScriptStorage {
 
     List<BotLinkEntity> findLinksByTarget(UUID target);
 
+    void delete(BotEntity botEntity);
+
     void delete(BotLinkEntity linkEntity);
 
     void save(BotPermissionEntity permissionEntity);

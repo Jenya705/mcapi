@@ -1,0 +1,1 @@
+delete from mcapi_bots where id = ?;

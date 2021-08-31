@@ -2,6 +2,7 @@ package com.github.jenya705.mcapi.command;
 
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.command.bot.create.CreateBotCommand;
+import com.github.jenya705.mcapi.command.bot.delete.DeleteBotCommand;
 import com.github.jenya705.mcapi.command.bot.list.ListBotCommand;
 import com.github.jenya705.mcapi.command.gateway.connected.ConnectedGatewaysCommand;
 import com.github.jenya705.mcapi.command.gateway.subscriptions.SubscriptionsGatewaysCommand;
@@ -32,6 +33,7 @@ public class RootCommand implements Supplier<ContainerCommandExecutor>, BaseComm
                 .branch("bot", branch -> branch
                         .leaf("create", new CreateBotCommand())
                         .leaf("list", new ListBotCommand())
+                        .leaf("delete", new DeleteBotCommand())
                 )
                 .branch("gateway", branch -> branch
                         .leaf("connected", new ConnectedGatewaysCommand())

@@ -40,6 +40,9 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
     private final String findLink;
     private final String findLinksByBot;
     private final String findLinksByTarget;
+    private final String deleteLinksByBotId;
+    private final String deletePermissionsByBotId;
+    private final String deleteBot;
     private final String deleteLink;
     private final String saveBot;
     private final String saveLink;
@@ -63,6 +66,9 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
         findLink = loadScript("find_link");
         findLinksByBot = loadScript("find_links_by_bot");
         findLinksByTarget = loadScript("find_links_by_target");
+        deleteLinksByBotId = loadScript("delete_bot_links");
+        deletePermissionsByBotId = loadScript("delete_bot_permissions");
+        deleteBot = loadScript("delete_bot");
         deleteLink = loadScript("delete_link");
         saveBot = loadScript("save_bot");
         saveLink = loadScript("save_link");
@@ -201,6 +207,22 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
                         target.getMostSignificantBits(),
                         target.getLeastSignificantBits()
                 )
+        );
+    }
+
+    @Override
+    public void delete(BotEntity botEntity) {
+        databaseModule.update(
+                deleteBot,
+                botEntity.getId()
+        );
+        databaseModule.update(
+                deleteLinksByBotId,
+                botEntity.getId()
+        );
+        databaseModule.update(
+                deletePermissionsByBotId,
+                botEntity.getId()
         );
     }
 
