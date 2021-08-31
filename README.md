@@ -3,8 +3,10 @@
 
 # Now implemented
 
-- Some web functions: get, list, has permission, send message, kick, ban
+- Some web functions: has bot permission, get offline player, punish offline player, get player, get player list, has player permission, punish player, send message
 
-- Command: create bot
+- Linking bot with player 
+
+- Commands: create bot, bot lists, gateways list, gateways subscriptions 
 
 - Authorization using token
