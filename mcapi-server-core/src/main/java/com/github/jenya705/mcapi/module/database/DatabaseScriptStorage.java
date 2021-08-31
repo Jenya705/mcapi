@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.module.database;
 
 import com.github.jenya705.mcapi.entity.BotEntity;
+import com.github.jenya705.mcapi.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.entity.BotPermissionEntity;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public interface DatabaseScriptStorage {
 
     void setup();
 
-    BotEntity findBotById(long id);
+    BotEntity findBotById(int id);
 
     BotEntity findBotByToken(String token);
 
@@ -27,7 +28,21 @@ public interface DatabaseScriptStorage {
 
     List<BotPermissionEntity> findPermissionsById(long botId);
 
+    List<BotPermissionEntity> findPermissionsByIdAndTarget(long botId, UUID target);
+
+    List<BotLinkEntity> findAllLinks();
+
+    BotLinkEntity findLink(long botId, UUID target);
+
+    List<BotLinkEntity> findLinksById(long botId);
+
+    List<BotLinkEntity> findLinksByTarget(UUID target);
+
+    void delete(BotLinkEntity linkEntity);
+
     void save(BotPermissionEntity permissionEntity);
+
+    void save(BotLinkEntity linkEntity);
 
     void save(BotEntity botEntity);
 

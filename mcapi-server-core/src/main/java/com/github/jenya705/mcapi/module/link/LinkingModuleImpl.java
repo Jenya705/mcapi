@@ -5,6 +5,7 @@ import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.OnStartup;
 import com.github.jenya705.mcapi.command.CommandsUtils;
 import com.github.jenya705.mcapi.entity.AbstractBot;
+import com.github.jenya705.mcapi.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.entity.BotPermissionEntity;
 import com.github.jenya705.mcapi.error.LinkRequestExistException;
 import com.github.jenya705.mcapi.error.LinkRequestPermissionIsGlobalException;
@@ -246,6 +247,12 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
                             .getRequireRequestPermissions()
             )
                     .forEach(it -> savePermission(finalLinkObject, it, player));
+            databaseModule
+                    .storage()
+                    .save(new BotLinkEntity(
+                            finalLinkObject.getId(),
+                            player.getUuid()
+                    ));
         });
         player.sendMessage(
                 CommandsUtils.placeholderMessage(

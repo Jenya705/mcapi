@@ -3,7 +3,6 @@ package com.github.jenya705.mcapi.module.database;
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.OnDisable;
 import com.github.jenya705.mcapi.OnInitializing;
-import com.github.jenya705.mcapi.data.MapConfigData;
 import com.github.jenya705.mcapi.module.config.ConfigModule;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +22,8 @@ public class DatabaseModuleImpl implements DatabaseModule, BaseCommon {
     private Connection connection;
     private DatabaseModuleConfig config;
     private DatabaseScriptStorage storage;
+
+    private final Object block = new Object();
 
     @OnInitializing
     public void initialize() throws ClassNotFoundException, SQLException, IOException {
@@ -86,32 +87,36 @@ public class DatabaseModuleImpl implements DatabaseModule, BaseCommon {
     @Override
     @SneakyThrows
     public void update(String sql, Object... objects) {
-        if (objects.length == 0) {
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(sql);
-        }
-        else {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            for (int i = 0; i < objects.length; ++i) {
-                statement.setObject(i + 1, objects[i]);
+        synchronized (block) {
+            if (objects.length == 0) {
+                Statement statement = connection.createStatement();
+                statement.executeUpdate(sql);
             }
-            statement.executeUpdate();
+            else {
+                PreparedStatement statement = connection.prepareStatement(sql);
+                for (int i = 0; i < objects.length; ++i) {
+                    statement.setObject(i + 1, objects[i]);
+                }
+                statement.executeUpdate();
+            }
         }
     }
 
     @Override
     @SneakyThrows
     public ResultSet query(String sql, Object... objects) {
-        if (objects.length == 0) {
-            Statement statement = connection.createStatement();
-            return statement.executeQuery(sql);
-        }
-        else {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            for (int i = 0; i < objects.length; ++i) {
-                statement.setObject(i + 1, objects[i]);
+        synchronized (block) {
+            if (objects.length == 0) {
+                Statement statement = connection.createStatement();
+                return statement.executeQuery(sql);
             }
-            return statement.executeQuery();
+            else {
+                PreparedStatement statement = connection.prepareStatement(sql);
+                for (int i = 0; i < objects.length; ++i) {
+                    statement.setObject(i + 1, objects[i]);
+                }
+                return statement.executeQuery();
+            }
         }
     }
 

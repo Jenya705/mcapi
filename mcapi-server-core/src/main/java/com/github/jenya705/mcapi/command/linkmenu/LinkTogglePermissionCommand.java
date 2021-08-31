@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.command.link;
+package com.github.jenya705.mcapi.command.linkmenu;
 
 import com.github.jenya705.mcapi.ApiCommandSender;
 import com.github.jenya705.mcapi.ApiPlayer;

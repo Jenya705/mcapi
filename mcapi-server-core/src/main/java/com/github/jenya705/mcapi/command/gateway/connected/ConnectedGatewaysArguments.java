@@ -15,7 +15,7 @@ public class ConnectedGatewaysArguments {
     @Index(0)
     @Argument(required = false)
     public void setPage(int page) {
-        this.page = page - 1;
+        this.page = Math.max(page - 1, 0);
     }
 
 }

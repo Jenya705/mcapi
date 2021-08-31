@@ -11,7 +11,6 @@ import com.github.jenya705.mcapi.util.PlayerUtils;
 import com.github.jenya705.mcapi.util.TokenUtils;
 
 import java.util.Collections;
-import java.util.concurrent.Executors;
 
 /**
  * @author Jenya705

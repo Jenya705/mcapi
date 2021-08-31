@@ -2,6 +2,7 @@ package com.github.jenya705.mcapi.module.database;
 
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.entity.BotEntity;
+import com.github.jenya705.mcapi.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.entity.BotPermissionEntity;
 import com.github.jenya705.mcapi.util.FileUtils;
 import lombok.AccessLevel;
@@ -34,7 +35,14 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
     private final String findBotsPageByOwner;
     private final String findPermission;
     private final String findPermissionsById;
+    private final String findPermissionsByIdAndTarget;
+    private final String findAllLinks;
+    private final String findLink;
+    private final String findLinksByBot;
+    private final String findLinksByTarget;
+    private final String deleteLink;
     private final String saveBot;
+    private final String saveLink;
     private final String savePermission;
     private final String updateBot;
     private final String updatePermission;
@@ -50,7 +58,14 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
         findBotsPageByOwner = loadScript("find_page_ordered_bots_by_owner");
         findPermission = loadScript("find_permission");
         findPermissionsById = loadScript("find_permissions_by_id");
+        findPermissionsByIdAndTarget = loadScript("find_permissions_by_id_and_target");
+        findAllLinks = loadScript("find_all_links");
+        findLink = loadScript("find_link");
+        findLinksByBot = loadScript("find_links_by_bot");
+        findLinksByTarget = loadScript("find_links_by_target");
+        deleteLink = loadScript("delete_link");
         saveBot = loadScript("save_bot");
+        saveLink = loadScript("save_link");
         savePermission = loadScript("save_permission");
         updateBot = loadScript("update_bot");
         updatePermission = loadScript("update_permission");
@@ -64,7 +79,7 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
 
     @Override
     @SneakyThrows
-    public BotEntity findBotById(long id) {
+    public BotEntity findBotById(int id) {
         return parseSingleElement(BotEntity.mapResultSet(
                 databaseModule.query(findBotById, id)
         ));
@@ -136,6 +151,70 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
     }
 
     @Override
+    @SneakyThrows
+    public List<BotPermissionEntity> findPermissionsByIdAndTarget(long botId, UUID target) {
+        return BotPermissionEntity.mapResultSet(
+                databaseModule.query(
+                        findPermissionsByIdAndTarget,
+                        botId,
+                        target.getMostSignificantBits(),
+                        target.getLeastSignificantBits()
+                )
+        );
+    }
+
+    @Override
+    @SneakyThrows
+    public List<BotLinkEntity> findAllLinks() {
+        return BotLinkEntity.mapResultSet(
+                databaseModule.query(findAllLinks)
+        );
+    }
+
+    @Override
+    @SneakyThrows
+    public BotLinkEntity findLink(long botId, UUID target) {
+        return parseSingleElement(BotLinkEntity.mapResultSet(
+                databaseModule.query(
+                        findLink,
+                        botId,
+                        target.getMostSignificantBits(),
+                        target.getLeastSignificantBits()
+                )
+        ));
+    }
+
+    @Override
+    @SneakyThrows
+    public List<BotLinkEntity> findLinksById(long botId) {
+        return BotLinkEntity.mapResultSet(
+                databaseModule.query(findLinksByBot, botId)
+        );
+    }
+
+    @Override
+    @SneakyThrows
+    public List<BotLinkEntity> findLinksByTarget(UUID target) {
+        return BotLinkEntity.mapResultSet(
+                databaseModule.query(
+                        findLinksByTarget,
+                        target.getMostSignificantBits(),
+                        target.getLeastSignificantBits()
+                )
+        );
+    }
+
+    @Override
+    public void delete(BotLinkEntity linkEntity) {
+        databaseModule.update(
+                deleteLink,
+                linkEntity.getBotId(),
+                linkEntity.getTarget().getMostSignificantBits(),
+                linkEntity.getTarget().getLeastSignificantBits()
+        );
+    }
+
+    @Override
     public void save(BotPermissionEntity permissionEntity) {
         UUID realTarget = parseTarget(permissionEntity.getTarget());
         databaseModule.update(
@@ -145,6 +224,16 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
                 realTarget.getMostSignificantBits(),
                 realTarget.getLeastSignificantBits(),
                 permissionEntity.isToggled()
+        );
+    }
+
+    @Override
+    public void save(BotLinkEntity linkEntity) {
+        databaseModule.update(
+                saveLink,
+                linkEntity.getBotId(),
+                linkEntity.getTarget().getMostSignificantBits(),
+                linkEntity.getTarget().getLeastSignificantBits()
         );
     }
 

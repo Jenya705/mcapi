@@ -1,0 +1,1 @@
+insert into mcapi_links(bot_id, target_most, target_least) values (?, ?, ?);

@@ -10,7 +10,7 @@ import com.github.jenya705.mcapi.link.LinkRequest;
  */
 public interface LinkingModule {
 
-    String linkCommand = "/" + RootCommand.name + " link";
+    String linkCommand = "/" + RootCommand.name + " linkMenu";
 
     void requestLink(AbstractBot bot, ApiPlayer player, LinkRequest request);
 

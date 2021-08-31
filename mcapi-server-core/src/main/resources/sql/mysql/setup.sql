@@ -18,3 +18,12 @@ create table if not exists mcapi_permissions (
 	toggled boolean not null,
 	constraint un_mcapi_permissions unique(bot_id, permission, target_most, target_least)
 );
+
+ANOTHEROPERATION
+
+create table if not exists mcapi_links (
+    bot_id int not null,
+    target_most bigint not null,
+    target_least bigint not null,
+    constraint un_mcapi_links unique(bot_id, target_most, target_least)
+);

@@ -1,0 +1,1 @@
+select * from mcapi_links where target_most = ? and target_least = ?;
