@@ -1,10 +1,11 @@
 package com.github.jenya705.mcapi;
 
+import com.github.jenya705.mcapi.entity.AbstractBot;
+import com.github.jenya705.mcapi.util.PlayerSelector;
 import com.github.jenya705.mcapi.util.PlayerUtils;
 import com.github.jenya705.mcapi.util.Selector;
-import com.github.jenya705.mcapi.util.SelectorImpl;
+import com.github.jenya705.mcapi.util.SelectorContainer;
 
-import javax.swing.text.html.Option;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
@@ -48,9 +49,9 @@ public interface JavaServerCore extends ServerCore {
         return getJavaPlayer(uuid);
     }
 
-    default Selector<JavaPlayer> getJavaPlayersBySelector(String selector) {
-        Selector<ApiPlayer> apiPlayerSelector = PlayerUtils.parseSelector(selector, this);
-        return new SelectorImpl<>(
+    default Selector<JavaPlayer> getJavaPlayersBySelector(String selector, AbstractBot bot) {
+        Selector<ApiPlayer> apiPlayerSelector = PlayerSelector.of(selector, this, bot);
+        return new SelectorContainer<>(
                 apiPlayerSelector
                         .stream()
                         .filter(it -> it instanceof JavaPlayer)

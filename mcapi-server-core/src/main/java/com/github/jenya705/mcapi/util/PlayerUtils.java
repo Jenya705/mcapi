@@ -63,7 +63,7 @@ public class PlayerUtils {
         }
     }
 
-    private Object parsePlayerId(String name) {
+    public Object parsePlayerId(String name) {
         if (name.length() < 17) {
             if (name.length() < 3) {
                 return null;
@@ -105,41 +105,6 @@ public class PlayerUtils {
             return UUID.fromString(uuid);
         }
         return null;
-    }
-
-    public Selector<ApiPlayer> parseSelector(String selector, ServerCore core) {
-        if (core.getPlayers().isEmpty()) return SelectorImpl.empty();
-        Object id = parsePlayerId(selector);
-        if (id == null) {
-            if (selector.equals("@a")) {
-                return new SelectorImpl<>(
-                        core.getPlayers(),
-                        ".@a",
-                        null
-                );
-            }
-            if (selector.equals("@r")) {
-                List<ApiPlayer> apiPlayers = new ArrayList<>(core.getPlayers());
-                return new SelectorImpl<>(
-                        Collections.singletonList(
-                                apiPlayers.get(
-                                        random.nextInt(apiPlayers.size())
-                                )
-                        ),
-                        ".@r",
-                        null
-                );
-            }
-            return SelectorImpl.empty();
-        }
-        if (id instanceof UUID) {
-            ApiPlayer player = core.getPlayer((UUID) id);
-            if (player == null) return SelectorImpl.empty();
-            return new SelectorImpl<>(Collections.singletonList(player), "", player.getUuid());
-        }
-        ApiPlayer player = core.getPlayer(id.toString());
-        if (player == null) return SelectorImpl.empty();
-        return new SelectorImpl<>(Collections.singletonList(player), "", player.getUuid());
     }
 
     public Optional<UUID> optionalUuid(String uuid) {

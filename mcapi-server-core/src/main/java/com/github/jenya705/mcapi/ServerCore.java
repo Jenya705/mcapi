@@ -1,6 +1,8 @@
 package com.github.jenya705.mcapi;
 
 import com.github.jenya705.mcapi.command.CommandExecutor;
+import com.github.jenya705.mcapi.entity.AbstractBot;
+import com.github.jenya705.mcapi.util.PlayerSelector;
 import com.github.jenya705.mcapi.util.PlayerUtils;
 import com.github.jenya705.mcapi.util.Selector;
 
@@ -54,8 +56,8 @@ public interface ServerCore {
         return PlayerUtils.getOfflinePlayer(id, this);
     }
 
-    default Selector<ApiPlayer> getPlayersBySelector(String selector) {
-        return PlayerUtils.parseSelector(selector, this);
+    default Selector<ApiPlayer> getPlayersBySelector(String selector, AbstractBot bot) {
+        return PlayerSelector.of(selector, this, bot);
     }
 
     default Object loadFile(String file, FileType type) throws IOException {

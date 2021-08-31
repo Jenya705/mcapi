@@ -4,6 +4,7 @@ import com.github.jenya705.mcapi.module.database.DatabaseScriptStorage;
 import com.github.jenya705.mcapi.module.storage.StorageModule;
 import lombok.AllArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -15,6 +16,11 @@ public class BotObject implements AbstractBot {
     private final BotEntity entity;
     private final DatabaseScriptStorage scriptStorage;
     private final StorageModule storage;
+
+    @Override
+    public List<BotLinkEntity> getLinks() {
+        return scriptStorage.findLinksById(entity.getId());
+    }
 
     @Override
     public boolean hasPermission(String permission, UUID target) {

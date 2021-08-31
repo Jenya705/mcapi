@@ -4,6 +4,7 @@ import com.github.jenya705.mcapi.ApiPlayer;
 import com.github.jenya705.mcapi.JavaBaseCommon;
 import com.github.jenya705.mcapi.JavaPlayer;
 import com.github.jenya705.mcapi.JerseyClass;
+import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.error.PlayerNotFoundException;
 import com.github.jenya705.mcapi.module.authorization.AuthorizationModule;
 import com.github.jenya705.mcapi.util.Selector;
@@ -32,14 +33,13 @@ public class PlayerSendComponentRest implements JavaBaseCommon {
             @HeaderParam("Authorization") String authorizationHeader,
             String message
     ) {
+        AbstractBot bot = authorization.bot(authorizationHeader);
         Selector<JavaPlayer> selector = core()
-                .getJavaPlayersBySelector(name);
+                .getJavaPlayersBySelector(name, bot);
         if (selector.isEmpty()) {
             throw new PlayerNotFoundException(name);
         }
-        authorization
-                .bot(authorizationHeader)
-                .needPermission("user.kick" + selector.getPermissionName(), selector.getTarget());
+        bot.needPermission("user.kick" + selector.getPermissionName(), selector.getTarget());
         Component component = componentSerializer.deserialize(message);
         selector.forEach(player -> player.sendMessage(component));
         return Response

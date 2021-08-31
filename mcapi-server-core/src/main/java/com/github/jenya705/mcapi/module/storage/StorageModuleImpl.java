@@ -92,5 +92,6 @@ public class StorageModuleImpl implements StorageModule, BaseCommon {
         addPermission(permissionEntity);
         addPermission(new PermissionEntity(permissionEntity.getPermission() + ".@a", true, permissionEntity.isEnabled()));
         addPermission(new PermissionEntity(permissionEntity.getPermission() + ".@r", true, permissionEntity.isEnabled()));
+        addPermission(new PermissionEntity(permissionEntity.getPermission() + ".@l", true, permissionEntity.isEnabled()));
     }
 }

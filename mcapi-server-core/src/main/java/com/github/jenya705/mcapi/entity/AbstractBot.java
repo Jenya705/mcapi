@@ -4,6 +4,7 @@ import com.github.jenya705.mcapi.ApiOfflinePlayer;
 import com.github.jenya705.mcapi.ApiPlayer;
 import com.github.jenya705.mcapi.error.BotNotPermittedException;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -12,6 +13,8 @@ import java.util.UUID;
 public interface AbstractBot {
 
     BotEntity getEntity();
+
+    List<BotLinkEntity> getLinks();
 
     boolean hasPermission(String permission, UUID target);
 
