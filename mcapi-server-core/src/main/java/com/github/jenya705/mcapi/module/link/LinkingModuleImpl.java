@@ -281,7 +281,7 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
     private void savePermission(LinkObject linkObject, String permission, ApiPlayer player) {
         databaseModule
                 .storage()
-                .save(new BotPermissionEntity(
+                .upsert(new BotPermissionEntity(
                         linkObject.getId(),
                         permission,
                         player.getUuid(),

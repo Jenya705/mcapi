@@ -22,7 +22,7 @@ public class LinksConfig extends AdvancedCommandExecutorConfig {
 
     @Value
     @Global("linkListElementRepresentation")
-    @Java("&7- &e%name% &7- <click:run_command:/mcapi linkMenu permission %bot_id%>&9[Permissions]</click>")
+    @Java("&7- &e%name% &7- <click:run_command:/mcapi linkMenu permission %bot_id%>&9[Permissions]</click> <click:run_command:/mcapi linkMenu unlink %bot_id%>&c[Unlink]</click>")
     private String listElement = "&7- &e%name%";
 
     @Value

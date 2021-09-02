@@ -43,6 +43,7 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
     private final String findLinksByTarget;
     private final String deleteLinksByBotId;
     private final String deletePermissionsByBotId;
+    private final String deletePermissionsByBotIdAndTarget;
     private final String deleteBot;
     private final String deleteLink;
     private final String saveBot;
@@ -50,6 +51,7 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
     private final String savePermission;
     private final String updateBot;
     private final String updatePermission;
+    private final String upsertPermission;
 
     public DatabaseScriptStorageImpl(DatabaseModule databaseModule, String sqlType) throws IOException {
         this.databaseModule = databaseModule;
@@ -70,6 +72,7 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
         findLinksByTarget = loadScript("find_links_by_target");
         deleteLinksByBotId = loadScript("delete_bot_links");
         deletePermissionsByBotId = loadScript("delete_bot_permissions");
+        deletePermissionsByBotIdAndTarget = loadScript("delete_bot_target_permissions");
         deleteBot = loadScript("delete_bot");
         deleteLink = loadScript("delete_link");
         saveBot = loadScript("save_bot");
@@ -77,6 +80,7 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
         savePermission = loadScript("save_permission");
         updateBot = loadScript("update_bot");
         updatePermission = loadScript("update_permission");
+        upsertPermission = loadScript("upsert_permission");
     }
 
     @Override
@@ -247,6 +251,12 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
                 linkEntity.getTarget().getMostSignificantBits(),
                 linkEntity.getTarget().getLeastSignificantBits()
         );
+        databaseModule.update(
+                deletePermissionsByBotIdAndTarget,
+                linkEntity.getBotId(),
+                linkEntity.getTarget().getMostSignificantBits(),
+                linkEntity.getTarget().getLeastSignificantBits()
+        );
     }
 
     @Override
@@ -305,6 +315,20 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
                 botEntity.getOwner().getMostSignificantBits(),
                 botEntity.getOwner().getLeastSignificantBits(),
                 botEntity.getId()
+        );
+    }
+
+    @Override
+    public void upsert(BotPermissionEntity permissionEntity) {
+        UUID realTarget = parseTarget(permissionEntity.getTarget());
+        databaseModule.update(
+                upsertPermission,
+                permissionEntity.getBotId(),
+                permissionEntity.getPermission(),
+                realTarget.getMostSignificantBits(),
+                realTarget.getLeastSignificantBits(),
+                permissionEntity.isToggled(),
+                permissionEntity.isToggled()
         );
     }
 

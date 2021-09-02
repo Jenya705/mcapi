@@ -55,12 +55,20 @@ public interface DatabaseScriptStorage {
 
     void update(BotEntity botEntity);
 
+    void upsert(BotPermissionEntity permissionEntity);
+
     default boolean isExistBotWithName(String name) {
         return !findBotsByName(name).isEmpty();
     }
 
     default boolean canCreateBot(String name, GlobalConfig globalConfig) {
         return globalConfig.isBotNameUnique() && !isExistBotWithName(name);
+    }
+
+    default boolean isExistPermission(int botId, String permissionName, UUID target) {
+        return findPermission(
+                botId, permissionName, target
+        ) != null;
     }
 
 }

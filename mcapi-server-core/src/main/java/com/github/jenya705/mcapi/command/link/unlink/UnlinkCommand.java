@@ -71,4 +71,5 @@ public class UnlinkCommand extends AdvancedCommandExecutor<UnlinkArguments> impl
         this.config = new UnlinkConfig(config);
         setConfig(this.config);
     }
+
 }

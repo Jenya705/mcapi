@@ -11,6 +11,7 @@ import com.github.jenya705.mcapi.command.link.unlink.UnlinkCommand;
 import com.github.jenya705.mcapi.command.linkmenu.LinkEndCommand;
 import com.github.jenya705.mcapi.command.linkmenu.LinkPermissionCommand;
 import com.github.jenya705.mcapi.command.linkmenu.LinkTogglePermissionCommand;
+import com.github.jenya705.mcapi.command.linkmenu.LinkUnlinkCommand;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.data.GlobalConfigData;
 import lombok.SneakyThrows;
@@ -44,6 +45,7 @@ public class RootCommand implements Supplier<ContainerCommandExecutor>, BaseComm
                         .leaf("end", new LinkEndCommand())
                         .leaf("toggle", new LinkTogglePermissionCommand())
                         .leaf("permission", new LinkPermissionCommand())
+                        .leaf("unlink", new LinkUnlinkCommand())
                 )
                 .leaf("links", new LinksCommand())
                 .leaf("unlink", new UnlinkCommand())
