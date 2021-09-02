@@ -9,4 +9,6 @@ public interface ConfigModule {
 
     ConfigData getConfig();
 
+    GlobalConfig global();
+
 }

@@ -33,6 +33,7 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
     private final String findBotByToken;
     private final String findBotsByOwner;
     private final String findBotsPageByOwner;
+    private final String findBotsByName;
     private final String findPermission;
     private final String findPermissionsById;
     private final String findPermissionsByIdAndTarget;
@@ -59,6 +60,7 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
         findBotByToken = loadScript("find_bot_by_token");
         findBotsByOwner = loadScript("find_bots_by_owner");
         findBotsPageByOwner = loadScript("find_page_ordered_bots_by_owner");
+        findBotsByName = loadScript("find_bots_by_name");
         findPermission = loadScript("find_permission");
         findPermissionsById = loadScript("find_permissions_by_id");
         findPermissionsByIdAndTarget = loadScript("find_permissions_by_id_and_target");
@@ -127,6 +129,17 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
                         owner.getLeastSignificantBits(),
                         size,
                         page * size
+                )
+        );
+    }
+
+    @Override
+    @SneakyThrows
+    public List<BotEntity> findBotsByName(String name) {
+        return BotEntity.mapResultSet(
+                databaseModule.query(
+                        findBotsByName,
+                        name
                 )
         );
     }

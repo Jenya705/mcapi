@@ -15,16 +15,18 @@ import java.io.IOException;
  * @author Jenya705
  */
 @Slf4j
+@Getter
 public class ConfigModuleImpl implements ConfigModule, BaseCommon {
 
-    @Getter
     private ConfigData config;
+    private GlobalConfig global;
 
     @OnInitializing(priority = 1)
     public void initialize() throws IOException {
         log.info("Loading config...");
         config = new MapConfigData(core().loadConfig("config"));
         log.info("Done! (Loading config...)");
+        global = new GlobalConfig(config.required("global"));
     }
 
     @OnDisable(priority = 4)
@@ -33,4 +35,8 @@ public class ConfigModuleImpl implements ConfigModule, BaseCommon {
         core().saveConfig("config", config.primitiveRepresent());
     }
 
+    @Override
+    public GlobalConfig global() {
+        return global;
+    }
 }

@@ -7,6 +7,7 @@ import com.github.jenya705.mcapi.command.bot.list.ListBotCommand;
 import com.github.jenya705.mcapi.command.gateway.connected.ConnectedGatewaysCommand;
 import com.github.jenya705.mcapi.command.gateway.subscriptions.SubscriptionsGatewaysCommand;
 import com.github.jenya705.mcapi.command.link.links.LinksCommand;
+import com.github.jenya705.mcapi.command.link.unlink.UnlinkCommand;
 import com.github.jenya705.mcapi.command.linkmenu.LinkEndCommand;
 import com.github.jenya705.mcapi.command.linkmenu.LinkPermissionCommand;
 import com.github.jenya705.mcapi.command.linkmenu.LinkTogglePermissionCommand;
@@ -45,6 +46,7 @@ public class RootCommand implements Supplier<ContainerCommandExecutor>, BaseComm
                         .leaf("permission", new LinkPermissionCommand())
                 )
                 .leaf("links", new LinksCommand())
+                .leaf("unlink", new UnlinkCommand())
         ;
         ConfigData configData =
                 new GlobalConfigData(core().loadConfig("commands"));

@@ -6,6 +6,8 @@ import com.github.jenya705.mcapi.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.command.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.entity.BotEntity;
+import com.github.jenya705.mcapi.module.config.ConfigModule;
+import com.github.jenya705.mcapi.module.config.GlobalConfig;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.util.PlayerUtils;
 import com.github.jenya705.mcapi.util.TokenUtils;
@@ -20,6 +22,7 @@ public class CreateBotCommand extends AdvancedCommandExecutor<CreateBotArguments
 
     private CreateBotConfig config;
 
+    private final GlobalConfig globalConfig = bean(ConfigModule.class).global();
     private final DatabaseModule databaseModule = bean(DatabaseModule.class);
 
     public CreateBotCommand() {
@@ -41,9 +44,16 @@ public class CreateBotCommand extends AdvancedCommandExecutor<CreateBotArguments
         }
         getPlayer(sender, args.getPlayer())
                 .ifPresentOrElse(
-                        (player) -> {
-                            String generatedToken = TokenUtils.generateToken();
-                            DatabaseModule.async.submit(() ->
+                        (player) ->
+                                DatabaseModule.async.submit(() -> {
+                                    String generatedToken = TokenUtils.generateToken();
+                                    if (!databaseModule
+                                            .storage()
+                                            .canCreateBot(args.getName(), globalConfig)
+                                    ) {
+                                        sendMessage(sender, config.getBotWithNameExist());
+                                        return;
+                                    }
                                     databaseModule
                                             .storage()
                                             .save(BotEntity.builder()
@@ -51,13 +61,12 @@ public class CreateBotCommand extends AdvancedCommandExecutor<CreateBotArguments
                                                     .token(generatedToken)
                                                     .owner(player.getUuid())
                                                     .build()
-                                            )
-                            );
-                            sendMessage(sender,
-                                    config.getSuccess(),
-                                    "%token%", generatedToken
-                            );
-                        },
+                                            );
+                                    sendMessage(sender,
+                                            config.getSuccess(),
+                                            "%token%", generatedToken
+                                    );
+                                }),
                         () -> sendMessage(sender, config.getPlayerNotFound())
                 );
     }

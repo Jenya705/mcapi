@@ -32,6 +32,9 @@ public class CreateBotConfig extends AdvancedCommandExecutorConfig {
     @Value
     private String notPermittedForOthers = "&cYou can not create bots for others";
 
+    @Value
+    private String botWithNameExist = "&cChoose another name, because this used";
+
     public CreateBotConfig(ConfigData data) {
         load(data);
     }
