@@ -7,6 +7,6 @@
 
 - Linking bot with player 
 
-- Commands: create bot, bot lists, gateways list, gateways subscriptions 
+- Commands: create bot, bot lists, gateways list, gateways subscriptions, unlink with bot, delete bot
 
 - Authorization using token
