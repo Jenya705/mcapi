@@ -22,6 +22,11 @@ public interface FormBuilder {
         return this;
     }
 
+    default FormBuilder components(FormComponent... components) {
+        for (FormComponent component: components) component(component);
+        return this;
+    }
+
     default FormBuilder components(String[] components, Map<String, FormComponent> componentsMapping) {
         for (String component: components) {
             FormComponent currentComponent = componentsMapping.getOrDefault(component, null);

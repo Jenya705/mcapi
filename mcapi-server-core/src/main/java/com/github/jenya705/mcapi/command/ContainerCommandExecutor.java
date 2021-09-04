@@ -14,13 +14,18 @@ import java.util.stream.Collectors;
  */
 public class ContainerCommandExecutor implements CommandExecutor, BaseCommon {
 
-    private final Map<String, Object> nodes = new HashMap<>();
+    private final Map<String, Object> nodes;
     private final String permission;
     private final String command;
 
     private ContainerCommandConfig config;
 
     public ContainerCommandExecutor(String permission, String command) {
+        this(new HashMap<>(), permission, command);
+    }
+
+    public ContainerCommandExecutor(Map<String, Object> nodes, String permission, String command) {
+        this.nodes = nodes;
         this.permission = permission;
         this.command = command;
     }

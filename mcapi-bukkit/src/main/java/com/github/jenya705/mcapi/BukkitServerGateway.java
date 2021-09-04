@@ -28,7 +28,7 @@ public class BukkitServerGateway implements BaseCommon, Listener {
 
     @OnStartup
     public void registerSelf() {
-        Bukkit.getPluginManager().registerEvents(this, bean(JavaPlugin.class));
+        Bukkit.getPluginManager().registerEvents(this, bean(BukkitApplication.class));
     }
 
 }

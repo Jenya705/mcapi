@@ -14,11 +14,6 @@ import java.util.function.Function;
  */
 public class StringfulParserImpl<T> implements StringfulParser<T> {
 
-    @FunctionalInterface
-    interface DataValueFunction<T> {
-        void accept(T data, String value) throws Exception;
-    }
-
     public static final Map<Class<?>, Function<String, Object>> typeParsers = new HashMap<>();
 
     static {
@@ -37,8 +32,8 @@ public class StringfulParserImpl<T> implements StringfulParser<T> {
 
     private final Class<? extends T> dataClass;
 
+    private final List<StringfulDataValueFunction<T>> dataValues = new ArrayList<>();
     private Constructor<? extends T> dataConstructor;
-    private List<DataValueFunction<T>> dataValues = new ArrayList<>();
     private int requiredStart = -1;
 
     public StringfulParserImpl(Class<? extends T> dataClass) throws Exception {
@@ -48,7 +43,7 @@ public class StringfulParserImpl<T> implements StringfulParser<T> {
 
     protected void regenerate() throws Exception {
         dataConstructor = dataClass.getConstructor();
-        if (dataValues != null) dataValues.clear();
+        dataValues.clear();
         for (Field field : dataClass.getDeclaredFields()) {
             Argument argumentAnnotation = field.getAnnotation(Argument.class);
             Index indexAnnotation = field.getAnnotation(Index.class);
@@ -76,7 +71,7 @@ public class StringfulParserImpl<T> implements StringfulParser<T> {
         }
     }
 
-    protected void setDataValue(int index, DataValueFunction<T> function) {
+    protected void setDataValue(int index, StringfulDataValueFunction<T> function) {
         for (int i = dataValues.size(); i <= index; ++i) {
             dataValues.add(null);
         }
@@ -85,9 +80,23 @@ public class StringfulParserImpl<T> implements StringfulParser<T> {
 
     @Override
     public StringfulParseResult<T> create(StringfulIterator stringfulIterator) {
+        try {
+            return apply(
+                    stringfulIterator,
+                    dataConstructor.newInstance(),
+                    dataValues,
+                    requiredStart
+            );
+        } catch (Exception e) {
+            return new StringfulParseResultImpl<>(
+                    null, new StringfulParseErrorImpl(e, 0)
+            );
+        }
+    }
+
+    public static <T> StringfulParseResult<T> apply(StringfulIterator stringfulIterator, T generatedData, List<StringfulDataValueFunction<T>> dataValues, int requiredStart) {
         int currentArgument = 0;
         try {
-            T generatedData = dataConstructor.newInstance();
             if (!stringfulIterator.hasNext(requiredStart)) {
                 return new StringfulParseResultImpl<>(
                         null, new StringfulParseErrorImpl(null, -1)
@@ -110,12 +119,12 @@ public class StringfulParserImpl<T> implements StringfulParser<T> {
         }
     }
 
-    protected DataValueFunction<T> generateFieldFunction(Field field) {
+    protected StringfulDataValueFunction<T> generateFieldFunction(Field field) {
         return (data, value) ->
                 field.set(data, typeParsers.get(field.getType()).apply(value));
     }
 
-    protected DataValueFunction<T> generateMethodFunction(Method method) {
+    protected StringfulDataValueFunction<T> generateMethodFunction(Method method) {
         return (data, value) ->
                 method.invoke(typeParsers.get(method.getParameterTypes()[0]).apply(value));
     }

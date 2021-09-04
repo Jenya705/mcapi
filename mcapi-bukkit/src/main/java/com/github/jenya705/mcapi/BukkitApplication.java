@@ -3,14 +3,11 @@ package com.github.jenya705.mcapi;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
-import java.util.stream.Collectors;
 
 /**
  * @author Jenya705

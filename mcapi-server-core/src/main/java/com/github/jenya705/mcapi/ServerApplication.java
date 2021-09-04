@@ -2,7 +2,7 @@ package com.github.jenya705.mcapi;
 
 import com.github.jenya705.mcapi.gateway.GatewayApplication;
 import com.github.jenya705.mcapi.module.authorization.AuthorizationModuleImpl;
-import com.github.jenya705.mcapi.module.command.CommandModule;
+import com.github.jenya705.mcapi.module.command.CommandModuleImpl;
 import com.github.jenya705.mcapi.module.config.ConfigModuleImpl;
 import com.github.jenya705.mcapi.module.database.DatabaseModuleImpl;
 import com.github.jenya705.mcapi.module.link.LinkingModuleImpl;
@@ -62,6 +62,7 @@ public class ServerApplication {
                 PlayerListRest.class,
                 PlayerPunishmentRest.class,
                 PlayerPermissionRest.class,
+                PlayerSendFormRest.class,
                 BotPermissionRest.class,
                 OfflinePlayerGetterRest.class,
                 OfflinePlayerPunishmentRest.class,
@@ -72,7 +73,7 @@ public class ServerApplication {
                 DatabaseModuleImpl.class,
                 StorageModuleImpl.class,
                 AuthorizationModuleImpl.class,
-                CommandModule.class,
+                CommandModuleImpl.class,
                 LinkingModuleImpl.class,
                 LocalizationModuleImpl.class
         );

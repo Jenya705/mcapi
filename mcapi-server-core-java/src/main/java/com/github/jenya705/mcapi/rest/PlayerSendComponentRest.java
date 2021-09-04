@@ -1,6 +1,5 @@
 package com.github.jenya705.mcapi.rest;
 
-import com.github.jenya705.mcapi.ApiPlayer;
 import com.github.jenya705.mcapi.JavaBaseCommon;
 import com.github.jenya705.mcapi.JavaPlayer;
 import com.github.jenya705.mcapi.JerseyClass;

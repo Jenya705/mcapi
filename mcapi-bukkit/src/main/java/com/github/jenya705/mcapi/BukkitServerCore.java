@@ -3,7 +3,6 @@ package com.github.jenya705.mcapi;
 import com.github.jenya705.mcapi.command.CommandExecutor;
 import lombok.Cleanup;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
@@ -35,7 +34,7 @@ public class BukkitServerCore implements JavaServerCore, JavaBaseCommon {
 
     @OnInitializing(priority = 0)
     public void initialize() {
-        plugin = bean(JavaPlugin.class);
+        plugin = bean(BukkitApplication.class);
         plugin.getDataFolder().mkdir();
     }
 
