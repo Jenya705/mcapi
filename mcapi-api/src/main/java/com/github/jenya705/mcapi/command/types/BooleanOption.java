@@ -7,8 +7,8 @@ public class BooleanOption extends AbstractValueOption {
 
     public static final String type = "boolean";
 
-    public BooleanOption(String name, boolean required, Object tab) {
-        super(name, required, tab);
+    public BooleanOption(String name, boolean required, Object tab, boolean onlyFromTab) {
+        super(name, required, tab, onlyFromTab);
     }
 
     @Override

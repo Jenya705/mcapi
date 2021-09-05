@@ -10,8 +10,8 @@ public class StringOption extends AbstractValueOption {
 
     public static final String type = "string";
 
-    public StringOption(String name, boolean required, Object tab) {
-        super(name, required, tab);
+    public StringOption(String name, boolean required, Object tab, boolean onlyFromTab) {
+        super(name, required, tab, onlyFromTab);
     }
 
     @Override

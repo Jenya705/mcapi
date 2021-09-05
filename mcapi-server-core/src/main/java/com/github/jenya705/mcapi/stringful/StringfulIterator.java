@@ -12,4 +12,12 @@ public interface StringfulIterator extends Iterator<String> {
     int countNext();
 
     void back();
+
+    default String[] allNext() {
+        String[] values = new String[countNext()];
+        int i = 0;
+        while (hasNext()) values[i++] = next();
+        return values;
+    }
+
 }

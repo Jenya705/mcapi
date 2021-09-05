@@ -25,7 +25,7 @@ public class CommandCreateRest implements BaseCommon {
     public Response create(@HeaderParam("Authorization") String authorization, ApiCommand command) {
         AbstractBot bot = authorizationModule.bot(authorization);
         bot.needPermission("user.command.create");
-        commandModule.registerCommand(command, bot.getEntity());
+        commandModule.registerCommand(command, bot);
         return Response
                 .noContent()
                 .build();

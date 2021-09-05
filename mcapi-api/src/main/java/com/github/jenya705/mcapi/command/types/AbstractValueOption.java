@@ -14,6 +14,7 @@ public abstract class AbstractValueOption implements ApiCommandValueOption {
     private final String name;
     private final boolean required;
     private final Object tab;
+    private final boolean onlyFromTab;
 
     @Override
     public String getTabFunction() {

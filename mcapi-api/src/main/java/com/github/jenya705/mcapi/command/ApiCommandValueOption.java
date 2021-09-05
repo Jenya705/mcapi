@@ -7,6 +7,8 @@ public interface ApiCommandValueOption extends ApiCommandOption {
 
     boolean isRequired();
 
+    boolean isOnlyFromTab();
+
     String getTabFunction();
 
     String[] getSuggestions();

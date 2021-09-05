@@ -8,17 +8,17 @@ import com.github.jenya705.mcapi.command.CommandExecutor;
 import com.github.jenya705.mcapi.command.NoConfig;
 import com.github.jenya705.mcapi.command.entity.ApiCommandInteractionResponseEntity;
 import com.github.jenya705.mcapi.command.entity.ApiCommandInteractionValueEntity;
-import com.github.jenya705.mcapi.command.types.BooleanOption;
-import com.github.jenya705.mcapi.command.types.IntegerOption;
-import com.github.jenya705.mcapi.command.types.StringOption;
 import com.github.jenya705.mcapi.data.ConfigData;
+import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.gateway.object.CommandInteractionResponseObject;
 import com.github.jenya705.mcapi.stringful.StringfulDataValueFunction;
 import com.github.jenya705.mcapi.stringful.StringfulIterator;
 import com.github.jenya705.mcapi.stringful.StringfulListParser;
 
-import java.util.*;
-import java.util.function.Function;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -27,26 +27,19 @@ import java.util.stream.Collectors;
 @NoConfig
 public class ApiCommandExecutor implements CommandExecutor, BaseCommon {
 
-    private static final Map<String, Function<ApiCommandValueOption, StringfulDataValueFunction<List<Object>>>> dataValues = new HashMap<>();
+    public static final String others = "__others__";
 
-    static {
-        dataValues.put(StringOption.type, option -> List::add);
-        dataValues.put(IntegerOption.type, option -> (list, value) -> {
-            int realValue = Integer.parseInt(value);
-            IntegerOption realOption = (IntegerOption) option;
-            if (realOption.getMin() > realValue && realOption.getMax() < realValue) {
-                throw new IllegalArgumentException("Integer is not in range");
-            }
-            list.add(realValue);
-        });
-        dataValues.put(BooleanOption.type, option -> (list, value) -> list.add(Boolean.parseBoolean(value)));
-    }
-
+    private final CommandModule commandModule;
     private final StringfulListParser parser;
+    private final AbstractBot owner;
     private final List<String> names = new ArrayList<>();
+    private final List<Supplier<List<String>>> tabs;
     private final String path;
 
-    public ApiCommandExecutor(String path, ApiCommandValueOption... valueOptions) {
+    public ApiCommandExecutor(String path, CommandModule commandModule, AbstractBot owner, ApiCommandValueOption... valueOptions) {
+        this.path = path;
+        this.owner = owner;
+        this.commandModule = commandModule;
         int requiredStart = Integer.MAX_VALUE;
         for (int i = 0; i < valueOptions.length; ++i) {
             ApiCommandValueOption option = valueOptions[i];
@@ -56,10 +49,12 @@ public class ApiCommandExecutor implements CommandExecutor, BaseCommon {
         parser = new StringfulListParser(
                 requiredStart,
                 Arrays.stream(valueOptions)
-                        .map(it -> dataValues.get(it.getType()).apply(it))
+                        .map(this::generateStringfulFunction)
                         .collect(Collectors.toList())
         );
-        this.path = path;
+        tabs = Arrays.stream(valueOptions)
+                .map(this::generateTabFunction)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -71,7 +66,7 @@ public class ApiCommandExecutor implements CommandExecutor, BaseCommon {
                                 .broadcast(CommandInteractionResponseObject.of(
                                         new ApiCommandInteractionResponseEntity(
                                                 path,
-                                                parseValues(list, names),
+                                                parseValues(list, names, args.allNext()),
                                                 sender
                                         )
                                 ))
@@ -80,7 +75,8 @@ public class ApiCommandExecutor implements CommandExecutor, BaseCommon {
 
     @Override
     public List<String> onTab(ApiCommandSender sender, StringfulIterator args, String permission) {
-        return null;
+        int countNext = args.countNext();
+        return countNext < tabs.size() ? tabs.get(countNext).get() : null;
     }
 
     @Override
@@ -88,15 +84,35 @@ public class ApiCommandExecutor implements CommandExecutor, BaseCommon {
         /* NOTHING */
     }
 
-    public static ApiCommandInteractionValue[] parseValues(List<Object> values, List<String> names) {
+    public static ApiCommandInteractionValue[] parseValues(List<Object> values, List<String> names, String[] allNext) {
         if (values.size() > names.size()) {
             throw new IllegalArgumentException("Size of values bigger than size of names");
         }
-        ApiCommandInteractionValue[] interactionValues = new ApiCommandInteractionValue[values.size()];
-        for (int i = 0; i < interactionValues.length; ++i) {
+        ApiCommandInteractionValue[] interactionValues = new ApiCommandInteractionValue[values.size() + 1];
+        for (int i = 0; i < interactionValues.length - 1; ++i) {
             interactionValues[i] =
                     new ApiCommandInteractionValueEntity(names.get(i), values.get(i));
         }
+        interactionValues[interactionValues.length - 1] = new ApiCommandInteractionValueEntity(others, allNext);
         return interactionValues;
+    }
+
+    private StringfulDataValueFunction<List<Object>> generateStringfulFunction(ApiCommandValueOption option) {
+        return (list, value) -> {
+            CommandValueOptionParser parser = getParser(option);
+            Object obj = parser.serialize(option, owner, value);
+            if (option.isOnlyFromTab() && !parser.tabs(option, owner).contains(String.valueOf(obj))) {
+                throw new IllegalArgumentException(String.format("Not in tab list %s", obj));
+            }
+            list.add(obj);
+        };
+    }
+
+    private Supplier<List<String>> generateTabFunction(ApiCommandValueOption option) {
+        return () -> getParser(option).tabs(option, owner);
+    }
+
+    private CommandValueOptionParser getParser(ApiCommandValueOption option) {
+        return commandModule.getParser(option.getType());
     }
 }

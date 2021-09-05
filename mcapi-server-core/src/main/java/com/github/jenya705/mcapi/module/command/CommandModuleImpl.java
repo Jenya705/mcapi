@@ -5,6 +5,7 @@ import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.JacksonProvider;
 import com.github.jenya705.mcapi.OnStartup;
 import com.github.jenya705.mcapi.command.*;
+import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.entity.BotEntity;
 import com.github.jenya705.mcapi.error.CommandOptionsAllException;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,8 @@ public class CommandModuleImpl implements CommandModule, BaseCommon {
 
     private static final String permissionFormat = "mcapi.bot.%s.%s";
 
+    private final CommandOptionParserContainer parserContainer = new CommandOptionParserContainer();
+
     @OnStartup
     public void start() {
         log.info("Registering root command...");
@@ -31,10 +34,10 @@ public class CommandModuleImpl implements CommandModule, BaseCommon {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void registerCommand(ApiCommand command, BotEntity owner) {
-        Object endObject = parseOptions(command.getOptions(), command.getName());
+    public void registerCommand(ApiCommand command, AbstractBot owner) {
+        Object endObject = parseOptions(command.getOptions(), command.getName(), owner);
         CommandExecutor commandExecutor = null;
-        String commandPermission = String.format(permissionFormat, owner.getId(), command.getName());
+        String commandPermission = String.format(permissionFormat, owner.getEntity().getId(), command.getName());
         if (endObject instanceof Map) {
             commandExecutor = new ContainerCommandExecutor(
                     (Map<String, Object>) endObject,
@@ -58,7 +61,7 @@ public class CommandModuleImpl implements CommandModule, BaseCommon {
                 .permission(commandPermission, false);
     }
 
-    private Object parseOptions(ApiCommandOption[] options, String path) {
+    private Object parseOptions(ApiCommandOption[] options, String path, AbstractBot owner) {
         ValidateResult validateResult = validateOptions(options);
         if (validateResult == ValidateResult.ALL) {
             throw new CommandOptionsAllException();
@@ -71,7 +74,8 @@ public class CommandModuleImpl implements CommandModule, BaseCommon {
                         option.getName(),
                         parseOptions(
                                 executableOption.getOptions(),
-                                path + " " + option.getName()
+                                path + " " + option.getName(),
+                                owner
                         )
                 );
             }
@@ -79,6 +83,8 @@ public class CommandModuleImpl implements CommandModule, BaseCommon {
         }
         return new ApiCommandExecutor(
                 path,
+                this,
+                owner,
                 Arrays.stream(options)
                         .map(it -> (ApiCommandValueOption) it)
                         .toArray(ApiCommandValueOption[]::new)
@@ -103,9 +109,19 @@ public class CommandModuleImpl implements CommandModule, BaseCommon {
 
     private void registerSerializers() {
         SimpleModule jacksonModule = new SimpleModule();
-        jacksonModule.addDeserializer(ApiCommand.class, new ApiCommandDeserializer());
+        jacksonModule.addDeserializer(ApiCommand.class, new ApiCommandDeserializer(this));
         JacksonProvider
                 .getMapper()
                 .registerModule(jacksonModule);
+    }
+
+    @Override
+    public void addOptionParser(String type, CommandValueOptionParser parser) {
+        parserContainer.addParser(type, parser);
+    }
+
+    @Override
+    public CommandValueOptionParser getParser(String type) {
+        return parserContainer.getParser(type);
     }
 }
