@@ -10,5 +10,4 @@ public interface GatewayClient {
     boolean subscribe(String subscription);
 
     boolean isSubscribed(String subscription);
-
 }

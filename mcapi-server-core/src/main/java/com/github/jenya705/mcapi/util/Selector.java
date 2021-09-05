@@ -30,5 +30,4 @@ public interface Selector<T> {
     default boolean isMulti() {
         return size() > 1;
     }
-
 }

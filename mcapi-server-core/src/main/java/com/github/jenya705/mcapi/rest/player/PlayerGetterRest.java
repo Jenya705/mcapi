@@ -38,5 +38,4 @@ public class PlayerGetterRest implements BaseCommon {
                 .entity(RawUtils.raw(player))
                 .build();
     }
-
 }

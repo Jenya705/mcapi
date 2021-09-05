@@ -20,12 +20,10 @@ public enum DefaultPermission {
     USER_COMMAND_CREATE("user.command.create", true, false, true),
     USER_KICK("user.kick", false, true, false),
     USER_BAN("user.ban", false, true, false),
-    USER_SEND_MESSAGE("user.send_message", false, true, true)
-    ;
+    USER_SEND_MESSAGE("user.send_message", false, true, true);
 
     private final String name;
     private final boolean global;
     private final boolean selector;
     private final boolean enabledDefault;
-
 }

@@ -10,5 +10,4 @@ public interface FormPlatformProvider {
     FormBuilder newBuilder();
 
     void sendMessage(ApiCommandSender sender, Form form);
-
 }

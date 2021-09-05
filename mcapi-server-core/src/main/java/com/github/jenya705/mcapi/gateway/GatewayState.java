@@ -20,7 +20,7 @@ public enum GatewayState {
                         .getMapper()
                         .readValue(jsonData, GatewaySubscribeRequest.class);
                 List<String> failed = new ArrayList<>();
-                for (String subscription: request.getSubscriptions()) {
+                for (String subscription : request.getSubscriptions()) {
                     if (!client.subscribe(subscription)) failed.add(subscription);
                 }
                 GatewaySubscribeResponse response = new GatewaySubscribeResponse(
@@ -36,7 +36,7 @@ public enum GatewayState {
                         .readValue(jsonData, GatewayLoginRequest.class);
                 client.authorization(request.getToken());
                 List<String> failed = new ArrayList<>();
-                for (String subscription: request.getSubscriptions()) {
+                for (String subscription : request.getSubscriptions()) {
                     if (!client.subscribe(subscription)) failed.add(subscription);
                 }
                 GatewayLoginResponse response = new GatewayLoginResponse(
@@ -45,8 +45,7 @@ public enum GatewayState {
                 client.send(response);
                 client.setCurrentState(GatewayState.LISTENING);
             }
-    )
-    ;
+    );
 
     @FunctionalInterface
     interface GatewayStateConsumer {
@@ -54,5 +53,4 @@ public enum GatewayState {
     }
 
     private final GatewayStateConsumer consumer;
-
 }

@@ -14,5 +14,4 @@ public interface ApiOfflinePlayer {
     void ban(String reason);
 
     boolean isOnline();
-
 }

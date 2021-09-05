@@ -23,5 +23,4 @@ public class IntegerOption extends AbstractValueOption {
     public String getType() {
         return type;
     }
-
 }

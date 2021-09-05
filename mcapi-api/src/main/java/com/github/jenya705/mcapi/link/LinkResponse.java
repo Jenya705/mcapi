@@ -6,7 +6,6 @@ package com.github.jenya705.mcapi.link;
 public interface LinkResponse {
 
     /**
-     *
      * If false all others fields not exist
      *
      * @return is linking failed
@@ -14,5 +13,4 @@ public interface LinkResponse {
     boolean isFailed();
 
     String[] getDeclinePermissions();
-
 }

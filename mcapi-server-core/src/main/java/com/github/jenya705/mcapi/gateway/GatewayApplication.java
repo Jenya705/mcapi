@@ -59,5 +59,4 @@ public class GatewayApplication extends WebSocketApplication {
                 .filter(client -> client.getCurrentState() == GatewayState.LISTENING && client.getEntity() != null)
                 .collect(Collectors.toList());
     }
-
 }

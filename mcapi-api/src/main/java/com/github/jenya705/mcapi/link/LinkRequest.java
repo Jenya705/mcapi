@@ -10,5 +10,4 @@ public interface LinkRequest {
     String[] getOptionalRequestPermissions();
 
     String getReason();
-
 }

@@ -14,5 +14,4 @@ public class GatewayObject<T> {
 
     private String type;
     private T object;
-
 }

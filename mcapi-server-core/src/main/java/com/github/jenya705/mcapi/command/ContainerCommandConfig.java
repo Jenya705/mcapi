@@ -35,5 +35,4 @@ public class ContainerCommandConfig extends Config {
     public ContainerCommandConfig(ConfigData configData) {
         load(configData);
     }
-
 }

@@ -9,8 +9,7 @@ import net.kyori.adventure.text.Component;
  */
 @Getter
 @AllArgsConstructor
-public class JavaForm implements Form{
+public class JavaForm implements Form {
 
     private final Component message;
-
 }

@@ -51,5 +51,4 @@ public class CommandsUtils {
                         .collect(Collectors.joining(placeholderMessage(delimiter)));
         return placeholderMessage(layout, fullLayoutPlaceholders);
     }
-
 }

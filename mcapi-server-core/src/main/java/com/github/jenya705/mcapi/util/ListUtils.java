@@ -29,5 +29,4 @@ public class ListUtils {
         }
         return newList;
     }
-
 }

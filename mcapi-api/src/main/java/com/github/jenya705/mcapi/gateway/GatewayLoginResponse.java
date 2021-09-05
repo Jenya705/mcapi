@@ -13,5 +13,4 @@ import lombok.NoArgsConstructor;
 public class GatewayLoginResponse {
 
     private String[] subscriptionsFailed;
-
 }

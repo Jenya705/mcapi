@@ -13,5 +13,4 @@ import java.lang.annotation.Target;
 public @interface AdditionalPermissions {
 
     String[] value();
-
 }

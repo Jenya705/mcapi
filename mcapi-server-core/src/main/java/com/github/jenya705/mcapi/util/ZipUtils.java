@@ -40,5 +40,4 @@ public class ZipUtils {
         outputStream.close();
         return outputStream.toByteArray();
     }
-
 }

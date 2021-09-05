@@ -166,5 +166,4 @@ public class ContainerCommandExecutor implements CommandExecutor, BaseCommon {
     private boolean isGhost(Object obj) {
         return obj instanceof GhostBranch && ((GhostBranch) obj).isGhost();
     }
-
 }

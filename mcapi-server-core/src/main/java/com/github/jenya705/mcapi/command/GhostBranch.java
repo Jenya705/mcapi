@@ -6,5 +6,4 @@ package com.github.jenya705.mcapi.command;
 public interface GhostBranch {
 
     boolean isGhost();
-
 }

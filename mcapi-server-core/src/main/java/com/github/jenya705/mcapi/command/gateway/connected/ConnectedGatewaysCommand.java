@@ -25,7 +25,7 @@ public class ConnectedGatewaysCommand extends AdvancedCommandExecutor<ConnectedG
                 config.getListDelimiter(),
                 app().getGateway().getClients(),
                 client -> new String[]{
-                    "%name%", client.getEntity().getName()
+                        "%name%", client.getEntity().getName()
                 },
                 config.getMaxElements(),
                 args.getPage(),

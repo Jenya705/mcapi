@@ -16,5 +16,4 @@ public interface GlobalContainer {
     Optional<Object> global(String key);
 
     Object requiredGlobal(String key, Object value);
-
 }

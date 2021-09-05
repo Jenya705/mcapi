@@ -17,5 +17,4 @@ public class PermissionEntity {
     private String permission;
     private boolean global;
     private boolean enabled;
-
 }

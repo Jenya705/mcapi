@@ -65,5 +65,4 @@ public class LinkingModuleConfig extends Config {
     public LinkingModuleConfig(ConfigData configData) {
         load(configData);
     }
-
 }

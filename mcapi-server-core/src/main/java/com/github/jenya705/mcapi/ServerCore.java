@@ -85,5 +85,4 @@ public interface ServerCore {
     void saveSpecific(String file, byte[] bytes) throws IOException;
 
     File getPluginFile(String file);
-
 }

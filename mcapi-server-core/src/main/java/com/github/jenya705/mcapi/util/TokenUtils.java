@@ -15,5 +15,4 @@ public class TokenUtils {
         return UUID.randomUUID().toString().replaceAll("-", "") +
                 String.format("%019d", new Date().getTime());
     }
-
 }

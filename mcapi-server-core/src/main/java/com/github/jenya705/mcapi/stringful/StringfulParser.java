@@ -6,5 +6,4 @@ package com.github.jenya705.mcapi.stringful;
 public interface StringfulParser<T> {
 
     StringfulParseResult<T> create(StringfulIterator stringfulIterator);
-
 }

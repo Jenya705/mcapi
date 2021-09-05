@@ -30,5 +30,4 @@ public class StorageModuleConfig extends Config {
                 "permissions", getPermissions()
         );
     }
-
 }

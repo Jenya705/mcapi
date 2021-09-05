@@ -23,7 +23,7 @@ public class LinkObject {
         this.id = id;
         this.bot = bot;
         optionalPermissions = new HashMap<>();
-        for (String optionalPermission: this.request.getOptionalRequestPermissions()) {
+        for (String optionalPermission : this.request.getOptionalRequestPermissions()) {
             optionalPermissions.put(optionalPermission, true);
         }
     }
@@ -37,5 +37,4 @@ public class LinkObject {
         if (!optionalPermissions.containsKey(name)) return;
         optionalPermissions.put(name, !isOptionalPermissionToggled(name));
     }
-
 }

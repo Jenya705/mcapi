@@ -8,5 +8,4 @@ import java.util.Map;
 public interface ApiForm {
 
     Map<String, Object>[] getComponents();
-
 }

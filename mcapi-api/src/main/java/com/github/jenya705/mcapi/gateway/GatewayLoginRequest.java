@@ -14,5 +14,4 @@ public class GatewayLoginRequest {
 
     private String token;
     private String[] subscriptions;
-
 }

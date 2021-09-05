@@ -21,5 +21,4 @@ public class LinksArguments {
     public void setPage(int page) {
         this.page = Math.max(page - 1, 0);
     }
-
 }

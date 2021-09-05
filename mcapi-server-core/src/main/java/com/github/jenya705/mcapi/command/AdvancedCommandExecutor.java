@@ -90,7 +90,6 @@ public abstract class AdvancedCommandExecutor<T> implements CommandExecutor, Bas
         ));
     }
 
-
     public Optional<ApiPlayer> getPlayer(ApiCommandSender sender, String name) {
         if (name == null) {
             return Optional

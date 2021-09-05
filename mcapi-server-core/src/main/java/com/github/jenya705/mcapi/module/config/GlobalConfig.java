@@ -19,5 +19,4 @@ public class GlobalConfig extends Config {
     public GlobalConfig(ConfigData configData) {
         load(configData);
     }
-
 }

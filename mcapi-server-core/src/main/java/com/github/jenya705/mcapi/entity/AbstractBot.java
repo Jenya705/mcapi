@@ -49,5 +49,4 @@ public interface AbstractBot {
     default void needPermission(String permission, ApiOfflinePlayer player) {
         needPermission(permission, player.getUuid());
     }
-
 }

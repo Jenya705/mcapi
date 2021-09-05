@@ -41,5 +41,4 @@ public class SubscriptionsGatewaysConfig extends AdvancedCommandExecutorConfig {
     public SubscriptionsGatewaysConfig(ConfigData configData) {
         load(configData);
     }
-
 }

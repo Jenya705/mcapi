@@ -20,7 +20,7 @@ public class StorageModuleImpl implements StorageModule, BaseCommon {
     private final Map<String, PermissionEntity> permissions = new HashMap<>();
 
     public StorageModuleImpl() {
-        for (DefaultPermission defaultPermission: DefaultPermission.values()) {
+        for (DefaultPermission defaultPermission : DefaultPermission.values()) {
             if (defaultPermission.isSelector()) {
                 addPermissionWithSelectors(new PermissionEntity(
                         defaultPermission.getName(),
@@ -52,7 +52,7 @@ public class StorageModuleImpl implements StorageModule, BaseCommon {
 
     protected void loadPermissions(StorageModuleConfig config) {
         Map<String, Boolean> configPermissions = new LinkedHashMap<>();
-        for (Map.Entry<String, PermissionEntity> permissionEntry: permissions.entrySet()) {
+        for (Map.Entry<String, PermissionEntity> permissionEntry : permissions.entrySet()) {
             if (config.getPermissions().containsKey(permissionEntry.getKey())) {
                 boolean permissionEnabled = config
                         .getPermissions()

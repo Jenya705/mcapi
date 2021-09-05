@@ -18,5 +18,4 @@ public class ApiCommandValueOptionEntity implements ApiCommandValueOption {
     private boolean required;
     private String tabFunction;
     private String[] suggestions;
-
 }

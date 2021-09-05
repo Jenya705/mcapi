@@ -21,5 +21,4 @@ public interface LinkingModule {
     void update(ApiPlayer player, int index);
 
     void end(ApiPlayer player, int index, boolean enabled);
-
 }

@@ -10,5 +10,4 @@ public interface AuthorizationModule {
     AbstractBot bot(String authorization);
 
     AbstractBot rawBot(String token);
-
 }

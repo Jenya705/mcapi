@@ -6,5 +6,4 @@ package com.github.jenya705.mcapi.command;
 public interface ApiCommandExecutableOption extends ApiCommandOption {
 
     ApiCommandOption[] getOptions();
-
 }

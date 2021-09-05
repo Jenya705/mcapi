@@ -80,5 +80,4 @@ public class MapConfigData implements ConfigData {
     public MapConfigData createSelf(Map<String, Object> from) {
         return new MapConfigData(from);
     }
-
 }

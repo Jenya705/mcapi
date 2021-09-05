@@ -16,5 +16,4 @@ public class ApiCommandEntity implements ApiCommand {
 
     private String name;
     private ApiCommandOption[] options;
-
 }

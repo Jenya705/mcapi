@@ -42,5 +42,4 @@ public class RawUtils {
     public ApiCommandSender raw(ApiCommandSender sender) {
         return new RawCommandSender(sender);
     }
-
 }

@@ -133,5 +133,4 @@ public class DatabaseModuleImpl implements DatabaseModule, BaseCommon {
             return new DatabaseScriptStorageImpl(databaseModule, sqlType);
         }
     }
-
 }

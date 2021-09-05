@@ -66,12 +66,11 @@ public interface ConfigData {
 
     default Map<String, Object> primitiveRepresent() {
         Map<String, Object> represent = represent();
-        for (Map.Entry<String, Object> entry: represent.entrySet()) {
+        for (Map.Entry<String, Object> entry : represent.entrySet()) {
             if (entry.getValue() instanceof ConfigData) {
                 represent.put(entry.getKey(), ((ConfigData) entry.getValue()).primitiveRepresent());
             }
         }
         return represent;
     }
-
 }

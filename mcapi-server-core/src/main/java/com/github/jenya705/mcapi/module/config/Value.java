@@ -15,5 +15,4 @@ public @interface Value {
     boolean required() default true;
 
     String key() default "";
-
 }

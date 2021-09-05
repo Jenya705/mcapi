@@ -37,5 +37,4 @@ public class UnlinkConfig extends AdvancedCommandExecutorConfig {
     public UnlinkConfig(ConfigData configData) {
         load(configData);
     }
-
 }

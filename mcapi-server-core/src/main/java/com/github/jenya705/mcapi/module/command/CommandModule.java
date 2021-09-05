@@ -9,5 +9,4 @@ import com.github.jenya705.mcapi.entity.BotEntity;
 public interface CommandModule {
 
     void registerCommand(ApiCommand command, BotEntity owner);
-
 }

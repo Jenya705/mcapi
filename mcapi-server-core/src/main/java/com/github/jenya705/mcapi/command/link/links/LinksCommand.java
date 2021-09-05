@@ -46,7 +46,7 @@ public class LinksCommand extends AdvancedCommandExecutor<LinksArguments> implem
                                         "%player%", player.getName()
                                 )
                         ),
-        () -> sendMessage(sender, config.getPlayerNotFound())
+                        () -> sendMessage(sender, config.getPlayerNotFound())
                 );
     }
 

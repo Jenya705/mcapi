@@ -35,5 +35,4 @@ public interface ApiError {
     String getNamespace();
 
     String getReason();
-
 }

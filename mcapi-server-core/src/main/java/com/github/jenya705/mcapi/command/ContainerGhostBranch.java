@@ -16,5 +16,4 @@ public class ContainerGhostBranch implements GhostBranch, Map<String, Object> {
     private final boolean ghost;
     @Delegate
     private final Map<String, Object> node;
-
 }

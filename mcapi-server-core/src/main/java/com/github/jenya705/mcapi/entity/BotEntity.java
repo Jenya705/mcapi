@@ -40,5 +40,4 @@ public class BotEntity {
         }
         return result;
     }
-
 }

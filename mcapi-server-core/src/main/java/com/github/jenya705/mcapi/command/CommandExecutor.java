@@ -16,5 +16,4 @@ public interface CommandExecutor {
     List<String> onTab(ApiCommandSender sender, StringfulIterator args, String permission);
 
     void setConfig(ConfigData config);
-
 }

@@ -99,5 +99,4 @@ public class GatewayClientImpl extends DefaultWebSocket implements BaseCommon, G
                 .writeValueAsString(obj)
         );
     }
-
 }

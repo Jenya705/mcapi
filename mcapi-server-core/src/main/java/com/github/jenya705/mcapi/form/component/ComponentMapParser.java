@@ -35,5 +35,4 @@ public class ComponentMapParser {
         }
         return formComponentBuilders.get(String.valueOf(obj.get("type"))).apply(obj);
     }
-
 }

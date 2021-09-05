@@ -16,5 +16,4 @@ import java.util.Map;
 public class ApiFormEntity implements ApiForm {
 
     private Map<String, Object>[] components;
-
 }

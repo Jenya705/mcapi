@@ -30,5 +30,4 @@ public class CommandCreateRest implements BaseCommon {
                 .noContent()
                 .build();
     }
-
 }

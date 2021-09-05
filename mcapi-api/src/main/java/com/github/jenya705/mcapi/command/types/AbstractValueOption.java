@@ -24,5 +24,4 @@ public abstract class AbstractValueOption implements ApiCommandValueOption {
     public String[] getSuggestions() {
         return tab instanceof String[] ? (String[]) tab : null;
     }
-
 }

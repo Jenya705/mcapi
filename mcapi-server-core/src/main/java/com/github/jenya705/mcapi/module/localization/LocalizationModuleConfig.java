@@ -30,5 +30,4 @@ public class LocalizationModuleConfig extends Config {
                 "linkPermissions", getLinkPermissions()
         );
     }
-
 }

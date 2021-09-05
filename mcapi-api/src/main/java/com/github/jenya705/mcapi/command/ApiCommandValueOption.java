@@ -10,5 +10,4 @@ public interface ApiCommandValueOption extends ApiCommandOption {
     String getTabFunction();
 
     String[] getSuggestions();
-
 }

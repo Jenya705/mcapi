@@ -6,7 +6,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- *
  * Annotation which says that this method need to execute on initializing
  *
  * @author Jenya705
@@ -16,5 +15,4 @@ import java.lang.annotation.Target;
 public @interface OnInitializing {
 
     int priority() default 2;
-
 }

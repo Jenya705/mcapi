@@ -12,5 +12,4 @@ public interface ApiLocation {
     double getZ();
 
     String getWorld();
-
 }

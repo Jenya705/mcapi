@@ -13,5 +13,4 @@ import lombok.NoArgsConstructor;
 public class GatewaySubscribeResponse {
 
     private String[] failed;
-
 }

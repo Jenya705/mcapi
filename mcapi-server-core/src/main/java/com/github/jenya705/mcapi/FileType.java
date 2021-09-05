@@ -7,5 +7,4 @@ public enum FileType {
 
     CONFIG,
     SPECIFIC
-
 }

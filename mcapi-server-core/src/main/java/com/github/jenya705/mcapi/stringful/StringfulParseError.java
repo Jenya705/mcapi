@@ -12,5 +12,4 @@ public interface StringfulParseError {
     boolean isParsingFailed();
 
     boolean isNotEnoughArguments();
-
 }

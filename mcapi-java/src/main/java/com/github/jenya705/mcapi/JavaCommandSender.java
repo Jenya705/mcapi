@@ -8,5 +8,4 @@ import net.kyori.adventure.text.Component;
 public interface JavaCommandSender extends ApiCommandSender {
 
     void sendMessage(Component component);
-
 }

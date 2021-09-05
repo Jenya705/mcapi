@@ -70,5 +70,4 @@ public interface DatabaseScriptStorage {
                 botId, permissionName, target
         ) != null;
     }
-
 }

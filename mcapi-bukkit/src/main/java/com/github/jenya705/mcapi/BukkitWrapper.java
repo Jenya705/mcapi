@@ -31,7 +31,6 @@ public class BukkitWrapper {
     }
 
     public ApiLocation location(Location location) {
-        return new BukkitLocationWrapper(location);
+        return BukkitLocationWrapper.of(location);
     }
-
 }

@@ -14,5 +14,4 @@ public class LinkResponseEntity implements LinkResponse {
 
     private boolean failed;
     private String[] declinePermissions;
-
 }

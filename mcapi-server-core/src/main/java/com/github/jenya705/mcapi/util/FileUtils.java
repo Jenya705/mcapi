@@ -16,5 +16,4 @@ public class FileUtils {
         inputStream.read(bytes);
         return bytes;
     }
-
 }

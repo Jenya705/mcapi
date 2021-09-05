@@ -29,5 +29,4 @@ public class DeleteBotConfig extends AdvancedCommandExecutorConfig {
     public DeleteBotConfig(ConfigData configData) {
         load(configData);
     }
-
 }

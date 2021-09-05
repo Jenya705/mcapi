@@ -12,5 +12,4 @@ public interface ApiCommandInteractionResponse {
     ApiCommandInteractionValue[] getValues();
 
     ApiCommandSender getSender();
-
 }

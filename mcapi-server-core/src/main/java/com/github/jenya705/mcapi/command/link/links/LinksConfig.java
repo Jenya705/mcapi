@@ -40,5 +40,4 @@ public class LinksConfig extends AdvancedCommandExecutorConfig {
     public LinksConfig(ConfigData configData) {
         load(configData);
     }
-
 }

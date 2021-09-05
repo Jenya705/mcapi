@@ -8,5 +8,4 @@ public interface ApiCommandOption {
     String getName();
 
     String getType();
-
 }

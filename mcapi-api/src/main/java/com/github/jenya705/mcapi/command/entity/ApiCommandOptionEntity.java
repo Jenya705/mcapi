@@ -15,5 +15,4 @@ public class ApiCommandOptionEntity implements ApiCommandOption {
 
     private String name;
     private String type;
-
 }

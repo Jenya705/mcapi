@@ -11,6 +11,10 @@ public class BukkitLocationWrapper implements ApiLocation {
 
     private final Location location;
 
+    public static BukkitLocationWrapper of(Location location) {
+        return location == null ? null : new BukkitLocationWrapper(location);
+    }
+
     @Override
     public double getX() {
         return location.getX();

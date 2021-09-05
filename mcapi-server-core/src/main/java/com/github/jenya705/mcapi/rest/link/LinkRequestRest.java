@@ -36,5 +36,4 @@ public class LinkRequestRest implements BaseCommon {
                 .noContent()
                 .build();
     }
-
 }

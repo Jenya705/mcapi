@@ -34,5 +34,4 @@ public class OfflinePlayerPunishmentRest implements BaseCommon {
                 .noContent()
                 .build();
     }
-
 }

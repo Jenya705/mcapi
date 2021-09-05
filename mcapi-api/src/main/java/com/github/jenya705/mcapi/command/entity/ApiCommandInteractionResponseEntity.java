@@ -18,5 +18,4 @@ public class ApiCommandInteractionResponseEntity implements ApiCommandInteractio
     private String path;
     private ApiCommandInteractionValue[] values;
     private ApiCommandSender sender;
-
 }

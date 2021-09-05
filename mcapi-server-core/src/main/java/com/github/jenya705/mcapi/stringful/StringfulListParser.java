@@ -14,7 +14,7 @@ public class StringfulListParser implements StringfulParser<List<Object>> {
 
     public StringfulListParser(int requiredStart, Class<?>... types) {
         dataValues = new ArrayList<>();
-        for (Class<?> type: types) {
+        for (Class<?> type : types) {
             dataValues.add(generateFunction(
                     StringfulParserImpl.typeParsers.get(type))
             );
@@ -40,5 +40,4 @@ public class StringfulListParser implements StringfulParser<List<Object>> {
     private StringfulDataValueFunction<List<Object>> generateFunction(Function<String, Object> function) {
         return (data, value) -> data.add(function.apply(value));
     }
-
 }

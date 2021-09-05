@@ -16,5 +16,4 @@ public class DeleteBotArguments {
     @Index(1)
     @Argument(required = false)
     private String confirm = "";
-
 }

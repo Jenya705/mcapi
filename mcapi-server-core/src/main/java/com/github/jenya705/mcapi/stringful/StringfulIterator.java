@@ -12,5 +12,4 @@ public interface StringfulIterator extends Iterator<String> {
     int countNext();
 
     void back();
-
 }

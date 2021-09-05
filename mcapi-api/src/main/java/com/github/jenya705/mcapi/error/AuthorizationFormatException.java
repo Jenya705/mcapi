@@ -27,5 +27,4 @@ public class AuthorizationFormatException extends IllegalArgumentException imple
     public String getNamespace() {
         return ApiError.defaultNamespace;
     }
-
 }

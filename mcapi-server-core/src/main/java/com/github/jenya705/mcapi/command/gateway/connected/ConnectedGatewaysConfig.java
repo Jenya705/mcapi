@@ -34,5 +34,4 @@ public class ConnectedGatewaysConfig extends AdvancedCommandExecutorConfig {
     public ConnectedGatewaysConfig(ConfigData configData) {
         load(configData);
     }
-
 }

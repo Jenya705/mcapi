@@ -34,5 +34,4 @@ public class OfflinePlayerGetterRest implements BaseCommon {
                 .entity(RawUtils.raw(player))
                 .build();
     }
-
 }

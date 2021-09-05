@@ -24,5 +24,4 @@ public interface StorageModule {
             addPermission(permissionEntity);
         }
     }
-
 }

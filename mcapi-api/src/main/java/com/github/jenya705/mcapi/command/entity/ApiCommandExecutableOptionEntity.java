@@ -17,5 +17,4 @@ public class ApiCommandExecutableOptionEntity implements ApiCommandExecutableOpt
     private String name;
     private String type;
     private ApiCommandOption[] options;
-
 }

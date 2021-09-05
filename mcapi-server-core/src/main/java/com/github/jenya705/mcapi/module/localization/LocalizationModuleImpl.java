@@ -59,5 +59,4 @@ public class LocalizationModuleImpl implements LocalizationModule, BaseCommon {
             setLinkPermissionLocalization(permissionName, value);
         }
     }
-
 }

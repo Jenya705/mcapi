@@ -43,5 +43,4 @@ public class ListBotConfig extends AdvancedCommandExecutorConfig {
     public ListBotConfig(ConfigData config) {
         load(config);
     }
-
 }

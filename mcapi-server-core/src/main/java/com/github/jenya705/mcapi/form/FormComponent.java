@@ -7,5 +7,4 @@ package com.github.jenya705.mcapi.form;
 public interface FormComponent {
 
     void apply(FormBuilder builder);
-
 }

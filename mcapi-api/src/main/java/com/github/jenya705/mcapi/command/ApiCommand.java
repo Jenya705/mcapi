@@ -8,5 +8,4 @@ public interface ApiCommand {
     String getName();
 
     ApiCommandOption[] getOptions();
-
 }

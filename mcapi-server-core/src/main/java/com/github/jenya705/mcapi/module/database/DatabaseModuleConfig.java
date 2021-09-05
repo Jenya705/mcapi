@@ -29,5 +29,4 @@ public class DatabaseModuleConfig extends Config {
     public DatabaseModuleConfig(ConfigData config) {
         load(config);
     }
-
 }

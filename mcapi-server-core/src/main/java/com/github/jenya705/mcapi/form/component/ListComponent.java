@@ -19,10 +19,10 @@ public class ListComponent implements FormComponent {
 
     public static ListComponent joining(FormComponent[]... components) {
         int len = 0;
-        for (FormComponent[] array: components) len += array.length;
+        for (FormComponent[] array : components) len += array.length;
         FormComponent[] newArray = new FormComponent[len];
         int i = 0;
-        for (FormComponent[] array: components) {
+        for (FormComponent[] array : components) {
             for (FormComponent component : array) {
                 newArray[i++] = component;
             }
@@ -32,6 +32,6 @@ public class ListComponent implements FormComponent {
 
     @Override
     public void apply(FormBuilder builder) {
-        for (FormComponent component: components) builder.component(component);
+        for (FormComponent component : components) builder.component(component);
     }
 }

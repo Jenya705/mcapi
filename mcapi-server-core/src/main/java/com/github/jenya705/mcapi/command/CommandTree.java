@@ -12,5 +12,4 @@ public interface CommandTree {
     CommandTree ghostBranch(String name, Consumer<CommandTree> treeConsumer);
 
     CommandTree leaf(String name, CommandExecutor executor);
-
 }

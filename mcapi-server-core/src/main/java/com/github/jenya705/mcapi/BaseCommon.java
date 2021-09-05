@@ -16,5 +16,4 @@ public interface BaseCommon {
     default ServerCore core() {
         return app().getCore();
     }
-
 }

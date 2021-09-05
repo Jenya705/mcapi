@@ -16,5 +16,4 @@ public class UnlinkArguments {
     @Index(1)
     @Argument(required = false)
     private String player;
-
 }

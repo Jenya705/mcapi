@@ -26,5 +26,4 @@ public interface StringfulParseResult<T> {
         if (isFailed()) function.accept(error());
         return this;
     }
-
 }

@@ -15,5 +15,4 @@ public class ApiCommandInteractionValueEntity implements ApiCommandInteractionVa
 
     private String name;
     private Object value;
-
 }

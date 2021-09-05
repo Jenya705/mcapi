@@ -8,5 +8,4 @@ public interface ApiCommandInteractionValue {
     String getName();
 
     Object getValue();
-
 }
