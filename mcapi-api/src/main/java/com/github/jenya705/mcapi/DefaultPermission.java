@@ -14,7 +14,10 @@ public enum DefaultPermission {
     USER_LIST("user.list", true, false, true),
     USER_HAS_PERMISSION("user.has_permission", false, false, true),
     GATEWAY_MESSAGE_RECEIVED("gateway.message_received", true, false, true),
+    GATEWAY_COMMAND_INTERACTION("gateway.command_interaction_response", true, false, true),
+    GATEWAY_LINK_RESPONSE("gateway.link_response", true, false, true),
     LINK_REQUEST("link.request", true, false, true),
+    USER_COMMAND_CREATE("user.command.create", true, false, true),
     USER_KICK("user.kick", false, true, false),
     USER_BAN("user.ban", false, true, false),
     USER_SEND_MESSAGE("user.send_message", false, true, true)

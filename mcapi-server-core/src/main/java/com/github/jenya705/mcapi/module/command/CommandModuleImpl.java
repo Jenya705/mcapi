@@ -1,6 +1,8 @@
 package com.github.jenya705.mcapi.module.command;
 
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.github.jenya705.mcapi.BaseCommon;
+import com.github.jenya705.mcapi.JacksonProvider;
 import com.github.jenya705.mcapi.OnStartup;
 import com.github.jenya705.mcapi.command.*;
 import com.github.jenya705.mcapi.entity.BotEntity;
@@ -24,6 +26,7 @@ public class CommandModuleImpl implements CommandModule, BaseCommon {
         log.info("Registering root command...");
         core().addCommand(RootCommand.name, new RootCommand().get(), RootCommand.permission);
         log.info("Done! (Registering root command...)");
+        registerSerializers();
     }
 
     @Override
@@ -31,11 +34,12 @@ public class CommandModuleImpl implements CommandModule, BaseCommon {
     public void registerCommand(ApiCommand command, BotEntity owner) {
         Object endObject = parseOptions(command.getOptions(), command.getName());
         CommandExecutor commandExecutor = null;
+        String commandPermission = String.format(permissionFormat, owner.getId(), command.getName());
         if (endObject instanceof Map) {
             commandExecutor = new ContainerCommandExecutor(
                     (Map<String, Object>) endObject,
                     command.getName(),
-                    String.format(permissionFormat, owner.getId(), command.getName())
+                    commandPermission
             );
         }
         else if (endObject instanceof CommandExecutor) {
@@ -48,8 +52,10 @@ public class CommandModuleImpl implements CommandModule, BaseCommon {
                 .addCommand(
                         command.getName(),
                         commandExecutor,
-                        String.format(permissionFormat, owner.getId(), command.getName())
+                        commandPermission
                 );
+        core()
+                .permission(commandPermission, false);
     }
 
     private Object parseOptions(ApiCommandOption[] options, String path) {
@@ -93,5 +99,13 @@ public class CommandModuleImpl implements CommandModule, BaseCommon {
             else if (option instanceof ApiCommandExecutableOption) anySubs = true;
         }
         return anyValues ? (anySubs ? ValidateResult.ALL : ValidateResult.VALUES) : ValidateResult.SUBS;
+    }
+
+    private void registerSerializers() {
+        SimpleModule jacksonModule = new SimpleModule();
+        jacksonModule.addDeserializer(ApiCommand.class, new ApiCommandDeserializer());
+        JacksonProvider
+                .getMapper()
+                .registerModule(jacksonModule);
     }
 }
