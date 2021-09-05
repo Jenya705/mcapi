@@ -5,7 +5,6 @@ import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.JerseyClass;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.error.PlayerNotFoundException;
-import com.github.jenya705.mcapi.form.ApiForm;
 import com.github.jenya705.mcapi.form.Form;
 import com.github.jenya705.mcapi.form.FormComponent;
 import com.github.jenya705.mcapi.form.FormPlatformProvider;

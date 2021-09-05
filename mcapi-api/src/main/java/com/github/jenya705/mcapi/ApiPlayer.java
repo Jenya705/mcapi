@@ -7,4 +7,6 @@ public interface ApiPlayer extends ApiCommandSender, ApiOfflinePlayer {
 
     void kick(String reason);
 
+    ApiLocation getLocation();
+
 }

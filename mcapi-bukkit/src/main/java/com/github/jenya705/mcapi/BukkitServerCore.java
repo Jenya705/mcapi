@@ -40,7 +40,6 @@ public class BukkitServerCore implements JavaServerCore, JavaBaseCommon {
 
     @Override
     public void addCommand(String name, CommandExecutor executor, String permissionName) {
-        System.out.println(name + " " + executor + " " + permissionName);
         PluginCommand command = plugin.getCommand(name);
         if (command == null) return;
         command.setExecutor(new BukkitCommandWrapper(executor, permissionName));

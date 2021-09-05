@@ -50,4 +50,9 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements J
     public boolean isOnline() {
         return player.isOnline();
     }
+
+    @Override
+    public ApiLocation getLocation() {
+        return BukkitWrapper.location(player.getLocation());
+    }
 }

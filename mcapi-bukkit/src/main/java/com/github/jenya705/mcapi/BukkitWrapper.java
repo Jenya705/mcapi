@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi;
 
 import lombok.experimental.UtilityClass;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -27,6 +28,10 @@ public class BukkitWrapper {
 
     public JavaPlayer player(Player player) {
         return BukkitPlayerWrapper.of(player);
+    }
+
+    public ApiLocation location(Location location) {
+        return new BukkitLocationWrapper(location);
     }
 
 }

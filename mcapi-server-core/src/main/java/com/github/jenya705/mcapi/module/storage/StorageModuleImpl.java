@@ -1,11 +1,11 @@
 package com.github.jenya705.mcapi.module.storage;
 
 import com.github.jenya705.mcapi.BaseCommon;
-import com.github.jenya705.mcapi.DefaultPermission;
 import com.github.jenya705.mcapi.OnDisable;
 import com.github.jenya705.mcapi.OnStartup;
 import com.github.jenya705.mcapi.data.MapConfigData;
 import com.github.jenya705.mcapi.entity.PermissionEntity;
+import com.github.jenya705.mcapi.permission.DefaultPermission;
 
 import java.io.IOException;
 import java.util.HashMap;

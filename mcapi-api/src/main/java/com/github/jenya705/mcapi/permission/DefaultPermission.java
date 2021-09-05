@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi;
+package com.github.jenya705.mcapi.permission;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
