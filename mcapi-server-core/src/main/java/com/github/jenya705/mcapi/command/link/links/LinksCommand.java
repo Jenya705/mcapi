@@ -5,6 +5,9 @@ import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.command.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
+import com.github.jenya705.mcapi.util.PlayerUtils;
+
+import java.util.Collections;
 
 /**
  * @author Jenya705
@@ -17,6 +20,11 @@ public class LinksCommand extends AdvancedCommandExecutor<LinksArguments> implem
 
     public LinksCommand() {
         super(LinksArguments.class);
+        this
+                .tab(() -> Collections.singletonList("<page>"))
+                .tab((sender, permission) ->
+                        hasPermission(sender, permission, "others") ? PlayerUtils.playerTabs(core()) : null
+                );
     }
 
     @Override

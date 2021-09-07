@@ -11,6 +11,7 @@ import com.github.jenya705.mcapi.gateway.GatewayClientImpl;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
 
@@ -26,6 +27,9 @@ public class SubscriptionsGatewaysCommand extends AdvancedCommandExecutor<Subscr
 
     public SubscriptionsGatewaysCommand() {
         super(SubscriptionsGatewaysArguments.class);
+        this
+                .tab(() -> Collections.singletonList("<token>"))
+                .tab(() -> Collections.singletonList("<page>"));
     }
 
     @Override

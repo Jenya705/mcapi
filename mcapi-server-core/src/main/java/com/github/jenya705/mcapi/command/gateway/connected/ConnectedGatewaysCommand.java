@@ -5,6 +5,8 @@ import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.command.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.data.ConfigData;
 
+import java.util.Collections;
+
 /**
  * @author Jenya705
  */
@@ -14,6 +16,8 @@ public class ConnectedGatewaysCommand extends AdvancedCommandExecutor<ConnectedG
 
     public ConnectedGatewaysCommand() {
         super(ConnectedGatewaysArguments.class);
+        this
+                .tab(() -> Collections.singletonList("<page>"));
     }
 
     @Override

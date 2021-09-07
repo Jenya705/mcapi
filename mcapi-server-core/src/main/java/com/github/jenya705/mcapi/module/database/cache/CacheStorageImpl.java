@@ -10,7 +10,6 @@ import com.google.common.cache.CacheBuilder;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 
 /**
  * @author Jenya705
@@ -19,6 +18,8 @@ public class CacheStorageImpl implements BaseCommon, CacheStorage {
 
     private final DatabaseModule databaseModule = bean(DatabaseModule.class);
 
+    private final FutureCacheStorage futureCacheStorage;
+
     private final Cache<Integer, BotEntity> botCache;
     private final Cache<Integer, List<BotLinkEntity>> botLinkCache;
     private final Cache<UUID, List<BotLinkEntity>> targetLinkCache;
@@ -26,6 +27,7 @@ public class CacheStorageImpl implements BaseCommon, CacheStorage {
     private final Map<String, Integer> botTokens;
 
     public CacheStorageImpl(CacheConfig config) {
+        futureCacheStorage = new FutureCacheStorageImpl(this, databaseModule);
         botTokens = new ConcurrentHashMap<>();
         botCache = CacheBuilder.newBuilder()
                 .removalListener(notification -> {
@@ -43,6 +45,11 @@ public class CacheStorageImpl implements BaseCommon, CacheStorage {
         permissionCache = CacheBuilder.newBuilder()
                 .maximumSize(config.getPermissionCacheSize())
                 .build();
+    }
+
+    @Override
+    public FutureCacheStorage withFuture() {
+        return futureCacheStorage;
     }
 
     @Override

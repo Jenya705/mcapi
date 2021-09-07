@@ -4,14 +4,14 @@ import com.github.jenya705.mcapi.entity.BotEntity;
 import com.github.jenya705.mcapi.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.entity.BotPermissionEntity;
 
-import java.util.Collection;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author Jenya705
  */
 public interface CacheStorage {
+
+    FutureCacheStorage withFuture();
 
     BotEntity getCachedBot(String token);
 
@@ -44,4 +44,17 @@ public interface CacheStorage {
                 )
                 .orElse(null);
     }
+
+    default Collection<BotLinkEntity> getCachedLinksWithNullSafety(UUID target) {
+        return Objects.requireNonNullElse(getCachedLinks(target), Collections.emptyList());
+    }
+
+    default Collection<BotLinkEntity> getCachedLinksWithNullSafety(int botId) {
+        return Objects.requireNonNullElse(getCachedLinks(botId), Collections.emptyList());
+    }
+
+    default Collection<BotPermissionEntity> getCachedPermissionsWithNullSafety(int botId) {
+        return Objects.requireNonNullElse(getCachedPermissions(botId), Collections.emptyList());
+    }
+
 }

@@ -29,7 +29,9 @@ public class CreateBotCommand extends AdvancedCommandExecutor<CreateBotArguments
         super(CreateBotArguments.class);
         this
                 .tab(() -> Collections.singletonList("<bot_name>"))
-                .tab(() -> PlayerUtils.playerTabs(core()));
+                .tab((sender, permission) ->
+                        hasPermission(sender, permission, "others") ? PlayerUtils.playerTabs(core()) : null
+                );
     }
 
     @Override

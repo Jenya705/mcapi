@@ -8,6 +8,8 @@ import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.util.PlayerUtils;
 
+import java.util.Collections;
+
 /**
  * @author Jenya705
  */
@@ -21,7 +23,10 @@ public class ListBotCommand extends AdvancedCommandExecutor<ListBotArguments> im
     public ListBotCommand() {
         super(ListBotArguments.class);
         this
-                .tab(() -> PlayerUtils.playerTabs(core()));
+                .tab(() -> Collections.singletonList("<page>"))
+                .tab((sender, permission) ->
+                        hasPermission(sender, permission, "others") ? PlayerUtils.playerTabs(core()) : null
+                );
     }
 
     @Override

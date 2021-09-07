@@ -13,6 +13,7 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -21,7 +22,7 @@ import java.util.function.Supplier;
  */
 public abstract class AdvancedCommandExecutor<T> implements CommandExecutor, BaseCommon {
 
-    private final List<Supplier<List<String>>> tabs = new ArrayList<>();
+    private final List<BiFunction<ApiCommandSender, String, List<String>>> tabs = new ArrayList<>();
     private final StringfulParser<T> parser;
     @Setter(AccessLevel.PROTECTED)
     private AdvancedCommandExecutorConfig config;
@@ -104,11 +105,17 @@ public abstract class AdvancedCommandExecutor<T> implements CommandExecutor, Bas
     public List<String> onTab(ApiCommandSender sender, StringfulIterator args, String permission) {
         int count = args.countNext();
         if (count > tabs.size() || count == 0) return null;
-        return tabs.get(count - 1).get();
+        return tabs.get(count - 1).apply(sender, permission);
     }
 
     public AdvancedCommandExecutor<T> tab(Supplier<List<String>> tabFunction) {
+        tabs.add((sender, permission) -> tabFunction.get());
+        return this;
+    }
+
+    public AdvancedCommandExecutor<T> tab(BiFunction<ApiCommandSender, String, List<String>> tabFunction) {
         tabs.add(tabFunction);
         return this;
     }
+
 }
