@@ -11,7 +11,7 @@ import java.util.UUID;
 /**
  * @author Jenya705
  */
-public interface DatabaseScriptStorage {
+public interface DatabaseStorage {
 
     void setup();
 
@@ -27,17 +27,17 @@ public interface DatabaseScriptStorage {
 
     List<BotEntity> findBotsByName(String name);
 
-    BotPermissionEntity findPermission(long botId, String permission, UUID target);
+    BotPermissionEntity findPermission(int botId, String permission, UUID target);
 
-    List<BotPermissionEntity> findPermissionsById(long botId);
+    List<BotPermissionEntity> findPermissionsById(int botId);
 
-    List<BotPermissionEntity> findPermissionsByIdAndTarget(long botId, UUID target);
+    List<BotPermissionEntity> findPermissionsByIdAndTarget(int botId, UUID target);
 
     List<BotLinkEntity> findAllLinks();
 
-    BotLinkEntity findLink(long botId, UUID target);
+    BotLinkEntity findLink(int botId, UUID target);
 
-    List<BotLinkEntity> findLinksById(long botId);
+    List<BotLinkEntity> findLinksById(int botId);
 
     List<BotLinkEntity> findLinksByTarget(UUID target);
 

@@ -25,6 +25,10 @@ public class BotEntity {
     private UUID owner;
     private int id;
 
+    public static BotEntity empty() {
+        return new BotEntity(null, null, null, -1);
+    }
+
     public static List<BotEntity> mapResultSet(ResultSet resultSet) throws SQLException {
         List<BotEntity> result = new ArrayList<>();
         while (resultSet.next()) {
@@ -40,4 +44,9 @@ public class BotEntity {
         }
         return result;
     }
+
+    public boolean isEmpty() {
+        return id == -1;
+    }
+
 }

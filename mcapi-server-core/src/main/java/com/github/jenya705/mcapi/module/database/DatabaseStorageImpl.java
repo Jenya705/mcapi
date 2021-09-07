@@ -4,6 +4,8 @@ import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.entity.BotEntity;
 import com.github.jenya705.mcapi.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.entity.BotPermissionEntity;
+import com.github.jenya705.mcapi.module.database.cache.CacheStorage;
+import com.github.jenya705.mcapi.module.storage.StorageModule;
 import com.github.jenya705.mcapi.util.FileUtils;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,15 +16,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author Jenya705
  */
 @Getter(AccessLevel.PROTECTED)
-public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCommon {
+public class DatabaseStorageImpl implements DatabaseStorage, BaseCommon {
 
+    private final StorageModule storageModule = bean(StorageModule.class);
     private final DatabaseModule databaseModule;
     private final String sqlType;
 
@@ -53,7 +55,7 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
     private final String updatePermission;
     private final String upsertPermission;
 
-    public DatabaseScriptStorageImpl(DatabaseModule databaseModule, String sqlType) throws IOException {
+    public DatabaseStorageImpl(DatabaseModule databaseModule, String sqlType) throws IOException {
         this.databaseModule = databaseModule;
         this.sqlType = sqlType;
         setup = loadScript("setup");
@@ -92,17 +94,27 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
     @Override
     @SneakyThrows
     public BotEntity findBotById(int id) {
-        return parseSingleElement(BotEntity.mapResultSet(
-                databaseModule.query(findBotById, id)
-        ));
+        BotEntity bot = cache().getCachedBot(id);
+        if (bot == null) {
+            bot = parseSingleElement(BotEntity.mapResultSet(
+                    databaseModule.query(findBotById, id)
+            ));
+            cache().cache(Objects.requireNonNullElseGet(bot, BotEntity::empty));
+        }
+        return bot;
     }
 
     @Override
     @SneakyThrows
     public BotEntity findBotByToken(String token) {
-        return parseSingleElement(BotEntity.mapResultSet(
-                databaseModule.query(findBotByToken, token)
-        ));
+        BotEntity bot = cache().getCachedBot(token);
+        if (bot == null) {
+            bot = parseSingleElement(BotEntity.mapResultSet(
+                    databaseModule.query(findBotByToken, token)
+            ));
+            cache().cache(Objects.requireNonNullElseGet(bot, BotEntity::empty));
+        }
+        return bot;
     }
 
     @Override
@@ -150,32 +162,50 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
 
     @Override
     @SneakyThrows
-    public BotPermissionEntity findPermission(long botId, String permission, UUID target) {
+    public BotPermissionEntity findPermission(int botId, String permission, UUID target) {
         UUID realTarget = parseTarget(target);
-        return parseSingleElement(
-                BotPermissionEntity.mapResultSet(
-                        databaseModule.query(
-                                findPermission,
-                                botId,
-                                permission,
-                                realTarget.getMostSignificantBits(),
-                                realTarget.getLeastSignificantBits()
-                        )
-                )
-        );
+        BotPermissionEntity permissionEntity =
+                cache().getPermission(botId, permission, target);
+        if (permissionEntity == null) {
+            permissionEntity = parseSingleElement(
+                    BotPermissionEntity.mapResultSet(
+                            databaseModule.query(
+                                    findPermission,
+                                    botId,
+                                    permission,
+                                    realTarget.getMostSignificantBits(),
+                                    realTarget.getLeastSignificantBits()
+                            )
+                    )
+            );
+            cache().cache(Objects.requireNonNullElseGet(permissionEntity, () ->
+                    new BotPermissionEntity(
+                            botId,
+                            permission,
+                            target,
+                            storageModule.getPermission(permission).isEnabled()
+                    )
+            ));
+        }
+        return permissionEntity;
     }
 
     @Override
     @SneakyThrows
-    public List<BotPermissionEntity> findPermissionsById(long botId) {
-        return BotPermissionEntity.mapResultSet(
-                databaseModule.query(findPermissionsById, botId)
-        );
+    public List<BotPermissionEntity> findPermissionsById(int botId) {
+        Collection<BotPermissionEntity> permissions = cache().getCachedPermissions(botId);
+        if (permissions == null) {
+            permissions = BotPermissionEntity.mapResultSet(
+                    databaseModule.query(findPermissionsById, botId)
+            );
+            permissions.forEach(it -> cache().cache(it));
+        }
+        return parseCollection(permissions);
     }
 
     @Override
     @SneakyThrows
-    public List<BotPermissionEntity> findPermissionsByIdAndTarget(long botId, UUID target) {
+    public List<BotPermissionEntity> findPermissionsByIdAndTarget(int botId, UUID target) {
         return BotPermissionEntity.mapResultSet(
                 databaseModule.query(
                         findPermissionsByIdAndTarget,
@@ -196,39 +226,74 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
 
     @Override
     @SneakyThrows
-    public BotLinkEntity findLink(long botId, UUID target) {
-        return parseSingleElement(BotLinkEntity.mapResultSet(
-                databaseModule.query(
-                        findLink,
-                        botId,
-                        target.getMostSignificantBits(),
-                        target.getLeastSignificantBits()
-                )
-        ));
+    public BotLinkEntity findLink(int botId, UUID target) {
+        BotLinkEntity link = cache()
+                .getCachedLinks(botId)
+                .stream()
+                .filter(it -> it.getTarget().equals(target))
+                .findAny()
+                .orElseGet(() ->
+                        cache()
+                                .getCachedLinks(target)
+                                .stream()
+                                .filter(it -> it.getBotId() == botId)
+                                .findAny()
+                                .orElse(null)
+                );
+        if (link == null) {
+            link = parseSingleElement(BotLinkEntity.mapResultSet(
+                    databaseModule.query(
+                            findLink,
+                            botId,
+                            target.getMostSignificantBits(),
+                            target.getLeastSignificantBits()
+                    )
+            ));
+            cache().cache(link);
+        }
+        return link;
     }
 
     @Override
     @SneakyThrows
-    public List<BotLinkEntity> findLinksById(long botId) {
-        return BotLinkEntity.mapResultSet(
-                databaseModule.query(findLinksByBot, botId)
-        );
+    public List<BotLinkEntity> findLinksById(int botId) {
+        Collection<BotLinkEntity> links = cache().getCachedLinks(botId);
+        if (links == null) {
+            links = BotLinkEntity.mapResultSet(
+                    databaseModule.query(findLinksByBot, botId)
+            );
+            links.forEach(it -> cache().cache(it));
+        }
+        return parseCollection(links);
     }
 
     @Override
     @SneakyThrows
     public List<BotLinkEntity> findLinksByTarget(UUID target) {
-        return BotLinkEntity.mapResultSet(
-                databaseModule.query(
-                        findLinksByTarget,
-                        target.getMostSignificantBits(),
-                        target.getLeastSignificantBits()
-                )
-        );
+        Collection<BotLinkEntity> links = cache().getCachedLinks(target);
+        if (links == null) {
+            links = BotLinkEntity.mapResultSet(
+                    databaseModule.query(
+                            findLinksByTarget,
+                            target.getMostSignificantBits(),
+                            target.getLeastSignificantBits()
+                    )
+            );
+            links.forEach(it -> cache().cache(it));
+        }
+        return parseCollection(links);
     }
 
     @Override
     public void delete(BotEntity botEntity) {
+        cache()
+                .getCachedLinks(botEntity.getId())
+                .forEach(it -> cache().unCache(it));
+        cache()
+                .getCachedPermissions(botEntity.getId())
+                .forEach(it -> cache().unCache(it));
+        cache()
+                .unCache(botEntity);
         databaseModule.update(
                 deleteBot,
                 botEntity.getId()
@@ -245,6 +310,13 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
 
     @Override
     public void delete(BotLinkEntity linkEntity) {
+        cache()
+                .getCachedPermissions(linkEntity.getBotId())
+                .stream()
+                .filter(it -> it.getTarget().equals(linkEntity.getTarget()))
+                .forEach(it -> cache().unCache(it));
+        cache()
+                .unCache(linkEntity);
         databaseModule.update(
                 deleteLink,
                 linkEntity.getBotId(),
@@ -270,6 +342,7 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
                 realTarget.getLeastSignificantBits(),
                 permissionEntity.isToggled()
         );
+        cache().cache(permissionEntity);
     }
 
     @Override
@@ -280,6 +353,7 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
                 linkEntity.getTarget().getMostSignificantBits(),
                 linkEntity.getTarget().getLeastSignificantBits()
         );
+        cache().cache(linkEntity);
     }
 
     @Override
@@ -291,6 +365,7 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
                 botEntity.getOwner().getMostSignificantBits(),
                 botEntity.getOwner().getLeastSignificantBits()
         );
+        cache().cache(botEntity);
     }
 
     @Override
@@ -304,6 +379,7 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
                 realTarget.getMostSignificantBits(),
                 realTarget.getLeastSignificantBits()
         );
+        cache().cache(permissionEntity);
     }
 
     @Override
@@ -316,6 +392,7 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
                 botEntity.getOwner().getLeastSignificantBits(),
                 botEntity.getId()
         );
+        cache().cache(botEntity);
     }
 
     @Override
@@ -330,6 +407,7 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
                 permissionEntity.isToggled(),
                 permissionEntity.isToggled()
         );
+        cache().cache(permissionEntity);
     }
 
     protected String loadScript(String fileName) throws IOException {
@@ -375,5 +453,15 @@ public class DatabaseScriptStorageImpl implements DatabaseScriptStorage, BaseCom
 
     protected UUID parseTarget(UUID target) {
         return target == null ? BotPermissionEntity.identityTarget : target;
+    }
+
+    protected CacheStorage cache() {
+        return databaseModule.cache();
+    }
+
+    protected <T> List<T> parseCollection(Collection<T> collection) {
+        return collection instanceof List ?
+                (List<T>) collection :
+                new ArrayList<>(collection);
     }
 }

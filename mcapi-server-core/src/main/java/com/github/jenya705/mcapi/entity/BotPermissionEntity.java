@@ -20,12 +20,12 @@ public class BotPermissionEntity {
 
     public static final UUID identityTarget = new UUID(0, 0);
 
-    private long botId;
+    private int botId;
     private String permission;
     private UUID target;
     private boolean toggled;
 
-    public BotPermissionEntity(long botId, String permission, UUID target, boolean toggled) {
+    public BotPermissionEntity(int botId, String permission, UUID target, boolean toggled) {
         this.botId = botId;
         this.permission = permission;
         this.target = target.equals(identityTarget) ? null : target;

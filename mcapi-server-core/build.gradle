@@ -16,4 +16,5 @@ dependencies {
     implementation 'mysql:mysql-connector-java:8.0.26'
     implementation 'org.xerial:sqlite-jdbc:3.36.0.1'
     implementation 'jakarta.servlet:jakarta.servlet-api:5.0.0'
+    implementation 'com.google.guava:guava:30.1.1-jre'
 }

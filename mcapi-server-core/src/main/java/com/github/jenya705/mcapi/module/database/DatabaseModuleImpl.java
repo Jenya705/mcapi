@@ -3,7 +3,11 @@ package com.github.jenya705.mcapi.module.database;
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.OnDisable;
 import com.github.jenya705.mcapi.OnInitializing;
+import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.module.config.ConfigModule;
+import com.github.jenya705.mcapi.module.database.cache.CacheConfig;
+import com.github.jenya705.mcapi.module.database.cache.CacheStorage;
+import com.github.jenya705.mcapi.module.database.cache.CacheStorageImpl;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,16 +25,23 @@ public class DatabaseModuleImpl implements DatabaseModule, BaseCommon {
 
     private Connection connection;
     private DatabaseModuleConfig config;
-    private DatabaseScriptStorage storage;
+    private DatabaseStorage storage;
+    private CacheStorage cache;
 
     private final Object block = new Object();
 
     @OnInitializing
     public void initialize() throws ClassNotFoundException, SQLException, IOException {
-        config = new DatabaseModuleConfig(
+        ConfigData configData =
                 bean(ConfigModule.class)
                         .getConfig()
-                        .required("database")
+                        .required("database");
+        config = new DatabaseModuleConfig(configData);
+        cache = new CacheStorageImpl(
+                new CacheConfig(
+                        configData
+                                .required("cache")
+                )
         );
         log.info(String.format("Creating connection with %s...", config.getType()));
         loadDriver(config.getType());
@@ -121,16 +132,21 @@ public class DatabaseModuleImpl implements DatabaseModule, BaseCommon {
     }
 
     @Override
-    public DatabaseScriptStorage storage() {
+    public DatabaseStorage storage() {
         return storage;
     }
 
-    public static DatabaseScriptStorage of(DatabaseModule databaseModule, String sqlType) throws IOException {
+    @Override
+    public CacheStorage cache() {
+        return cache;
+    }
+
+    public static DatabaseStorage of(DatabaseModule databaseModule, String sqlType) throws IOException {
         if (sqlType.equalsIgnoreCase("mysql")) {
-            return new MySqlDatabaseScriptStorage(databaseModule);
+            return new MySqlDatabaseStorage(databaseModule);
         }
         else {
-            return new DatabaseScriptStorageImpl(databaseModule, sqlType);
+            return new DatabaseStorageImpl(databaseModule, sqlType);
         }
     }
 }

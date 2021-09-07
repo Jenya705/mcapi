@@ -10,9 +10,9 @@ import java.util.UUID;
 /**
  * @author Jenya705
  */
-public class MySqlDatabaseScriptStorage extends DatabaseScriptStorageImpl {
+public class MySqlDatabaseStorage extends DatabaseStorageImpl {
 
-    public MySqlDatabaseScriptStorage(DatabaseModule databaseModule) throws IOException {
+    public MySqlDatabaseStorage(DatabaseModule databaseModule) throws IOException {
         super(databaseModule, "mysql");
     }
 

@@ -8,7 +8,7 @@ import com.github.jenya705.mcapi.entity.BotObject;
 import com.github.jenya705.mcapi.error.AuthorizationBadTokenException;
 import com.github.jenya705.mcapi.error.AuthorizationFormatException;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
-import com.github.jenya705.mcapi.module.database.DatabaseScriptStorage;
+import com.github.jenya705.mcapi.module.database.DatabaseStorage;
 import com.github.jenya705.mcapi.module.storage.StorageModule;
 
 /**
@@ -16,7 +16,7 @@ import com.github.jenya705.mcapi.module.storage.StorageModule;
  */
 public class AuthorizationModuleImpl implements AuthorizationModule, BaseCommon {
 
-    private DatabaseScriptStorage scriptStorage;
+    private DatabaseStorage scriptStorage;
     private StorageModule storage;
 
     @OnStartup
