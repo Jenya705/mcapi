@@ -5,6 +5,7 @@ import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.stringful.StringfulIterator;
 import com.github.jenya705.mcapi.util.Pair;
+import lombok.Getter;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -14,7 +15,9 @@ import java.util.stream.Collectors;
  */
 public class ContainerCommandExecutor implements CommandExecutor, BaseCommon {
 
+    @Getter
     private final Map<String, Object> nodes;
+
     private final String permission;
     private final String command;
 
@@ -130,6 +133,10 @@ public class ContainerCommandExecutor implements CommandExecutor, BaseCommon {
         }
     }
 
+    public void recalculatePermissions() {
+        recalculatePermissions(permission, nodes);
+    }
+
     @SuppressWarnings("unchecked")
     private void recalculatePermissions(String path, Map<String, Object> node) {
         for (Map.Entry<String, Object> entry : node.entrySet()) {
@@ -159,7 +166,7 @@ public class ContainerCommandExecutor implements CommandExecutor, BaseCommon {
         );
     }
 
-    protected CommandTree tree() {
+    public CommandTree tree() {
         return new ContainerCommandTree(nodes);
     }
 

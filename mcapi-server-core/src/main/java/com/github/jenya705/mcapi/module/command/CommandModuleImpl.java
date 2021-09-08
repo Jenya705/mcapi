@@ -6,12 +6,12 @@ import com.github.jenya705.mcapi.JacksonProvider;
 import com.github.jenya705.mcapi.OnStartup;
 import com.github.jenya705.mcapi.command.*;
 import com.github.jenya705.mcapi.entity.AbstractBot;
-import com.github.jenya705.mcapi.entity.BotEntity;
 import com.github.jenya705.mcapi.error.CommandOptionsAllException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -20,9 +20,10 @@ import java.util.Map;
 @Slf4j
 public class CommandModuleImpl implements CommandModule, BaseCommon {
 
-    private static final String permissionFormat = "mcapi.bot.%s.%s";
+    private static final String permissionFormat = "mcapi.bot.%s";
 
     private final CommandOptionParserContainer parserContainer = new CommandOptionParserContainer();
+    private final Map<Integer, ContainerCommandExecutor> botCommands = new HashMap<>();
 
     @OnStartup
     public void start() {
@@ -33,32 +34,28 @@ public class CommandModuleImpl implements CommandModule, BaseCommon {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void registerCommand(ApiCommand command, AbstractBot owner) {
         Object endObject = parseOptions(command.getOptions(), command.getName(), owner);
-        CommandExecutor commandExecutor = null;
-        String commandPermission = String.format(permissionFormat, owner.getEntity().getId(), command.getName());
-        if (endObject instanceof Map) {
-            commandExecutor = new ContainerCommandExecutor(
-                    (Map<String, Object>) endObject,
-                    command.getName(),
-                    commandPermission
-            );
-        }
-        else if (endObject instanceof CommandExecutor) {
-            commandExecutor = (CommandExecutor) endObject;
-        }
-        if (commandExecutor == null) {
+        if (!(endObject instanceof Map) && !(endObject instanceof CommandExecutor)) {
             throw new IllegalArgumentException("CommandExecutor is null on the end");
         }
-        core()
-                .addCommand(
-                        command.getName(),
-                        commandExecutor,
-                        commandPermission
-                );
-        core()
-                .permission(commandPermission, false);
+        ContainerCommandExecutor botCommand;
+        if (botCommands.containsKey(owner.getEntity().getId())) {
+            botCommand = botCommands.get(owner.getEntity().getId());
+        }
+        else {
+            String globalCommandPermission =
+                    String.format(permissionFormat, owner.getEntity().getId());
+            botCommand = new ContainerCommandExecutor(
+                    owner.getEntity().getName(), globalCommandPermission
+            );
+            core().addCommand(owner.getEntity().getName(), botCommand, globalCommandPermission);
+            botCommands.put(owner.getEntity().getId(), botCommand);
+        }
+        botCommand
+                .getNodes()
+                .put(command.getName().toLowerCase(Locale.ROOT), endObject);
+        botCommand.recalculatePermissions();
     }
 
     private Object parseOptions(ApiCommandOption[] options, String path, AbstractBot owner) {
