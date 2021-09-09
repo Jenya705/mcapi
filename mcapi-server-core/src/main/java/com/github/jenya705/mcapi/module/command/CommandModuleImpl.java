@@ -6,6 +6,7 @@ import com.github.jenya705.mcapi.JacksonProvider;
 import com.github.jenya705.mcapi.OnStartup;
 import com.github.jenya705.mcapi.command.*;
 import com.github.jenya705.mcapi.entity.AbstractBot;
+import com.github.jenya705.mcapi.error.CommandNameFormatException;
 import com.github.jenya705.mcapi.error.CommandOptionsAllException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,6 +14,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Jenya705
@@ -21,6 +24,7 @@ import java.util.Map;
 public class CommandModuleImpl implements CommandModule, BaseCommon {
 
     private static final String permissionFormat = "mcapi.bot.%s";
+    private static final Pattern commandNamePattern = Pattern.compile("[a-zA-Z0-9_]*");
 
     private final CommandOptionParserContainer parserContainer = new CommandOptionParserContainer();
     private final Map<Integer, ContainerCommandExecutor> botCommands = new HashMap<>();
@@ -36,6 +40,7 @@ public class CommandModuleImpl implements CommandModule, BaseCommon {
     @Override
     public void registerCommand(ApiCommand command, AbstractBot owner) {
         Object endObject = parseOptions(command.getOptions(), command.getName(), owner);
+        validateCommandName(command.getName());
         if (!(endObject instanceof Map) && !(endObject instanceof CommandExecutor)) {
             throw new IllegalArgumentException("CommandExecutor is null on the end");
         }
@@ -98,6 +103,7 @@ public class CommandModuleImpl implements CommandModule, BaseCommon {
         boolean anyValues = false;
         boolean anySubs = false;
         for (ApiCommandOption option : options) {
+            validateCommandName(option.getName());
             if (option instanceof ApiCommandValueOption) anyValues = true;
             else if (option instanceof ApiCommandExecutableOption) anySubs = true;
         }
@@ -121,4 +127,16 @@ public class CommandModuleImpl implements CommandModule, BaseCommon {
     public CommandValueOptionParser getParser(String type) {
         return parserContainer.getParser(type);
     }
+
+    private static boolean isCommandNameRight(String commandName) {
+        Matcher matcher = commandNamePattern.matcher(commandName);
+        return matcher.find() && matcher.end() == commandName.length();
+    }
+
+    private static void validateCommandName(String commandName) {
+        if (!isCommandNameRight(commandName)) {
+            throw new CommandNameFormatException(commandNamePattern.pattern());
+        }
+    }
+
 }
