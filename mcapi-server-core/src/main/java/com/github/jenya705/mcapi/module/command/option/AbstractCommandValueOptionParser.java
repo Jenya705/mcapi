@@ -6,7 +6,10 @@ import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.module.command.CommandValueOptionParser;
 import com.github.jenya705.mcapi.util.IteratorUtils;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 

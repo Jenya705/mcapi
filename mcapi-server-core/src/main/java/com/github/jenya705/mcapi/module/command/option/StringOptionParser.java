@@ -5,8 +5,6 @@ import com.github.jenya705.mcapi.command.ApiCommandValueOption;
 import com.github.jenya705.mcapi.command.types.StringOption;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 
-import java.util.List;
-
 /**
  * @author Jenya705
  */
