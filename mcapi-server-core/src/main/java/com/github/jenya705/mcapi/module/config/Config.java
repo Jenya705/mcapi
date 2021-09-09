@@ -58,7 +58,6 @@ public class Config {
                     else {
                         isGlobal = obj
                                 .filter(it -> it instanceof String)
-                                .map(it -> (String) it)
                                 .map(it -> it.equals(GlobalContainer.inheritKey))
                                 .orElse(false);
                     }

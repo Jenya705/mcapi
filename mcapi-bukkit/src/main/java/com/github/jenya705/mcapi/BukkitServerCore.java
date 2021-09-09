@@ -4,6 +4,7 @@ import com.github.jenya705.mcapi.command.CommandExecutor;
 import lombok.Cleanup;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
@@ -43,6 +44,7 @@ public class BukkitServerCore implements JavaServerCore, JavaBaseCommon {
         PluginCommand command = plugin.getCommand(name);
         if (command == null) return;
         command.setExecutor(new BukkitCommandWrapper(executor, permissionName));
+        Bukkit.getOnlinePlayers().forEach(Player::updateCommands);
     }
 
     @Override

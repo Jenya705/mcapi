@@ -33,6 +33,10 @@ public class ContainerCommandExecutor implements CommandExecutor, BaseCommon {
         this.command = command;
     }
 
+    public void withConfig(ContainerCommandConfig config) {
+        this.config = config;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public void onCommand(ApiCommandSender sender, StringfulIterator args, String permission) {

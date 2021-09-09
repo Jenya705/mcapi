@@ -6,6 +6,7 @@ import com.github.jenya705.mcapi.module.config.Global;
 import com.github.jenya705.mcapi.module.config.Java;
 import com.github.jenya705.mcapi.module.config.Value;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -15,6 +16,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 public class ContainerCommandConfig extends Config {
 
     @Value

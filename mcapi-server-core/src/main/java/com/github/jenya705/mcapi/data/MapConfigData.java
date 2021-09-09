@@ -21,7 +21,9 @@ public class MapConfigData implements ConfigData {
 
     @Override
     public Optional<Object> getObject(String key) {
-        return data.containsKey(key) ? Optional.of(data.get(key)) : Optional.empty();
+        return data.containsKey(key) ?
+                Optional.of(data.get(key)) :
+                Optional.empty();
     }
 
     @Override

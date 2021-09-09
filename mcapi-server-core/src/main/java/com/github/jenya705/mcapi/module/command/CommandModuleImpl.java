@@ -8,6 +8,7 @@ import com.github.jenya705.mcapi.command.*;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.error.CommandNameFormatException;
 import com.github.jenya705.mcapi.error.CommandOptionsAllException;
+import com.github.jenya705.mcapi.module.config.ConfigModule;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
@@ -26,6 +27,8 @@ public class CommandModuleImpl implements CommandModule, BaseCommon {
     private static final String permissionFormat = "mcapi.bot.%s";
     private static final Pattern commandNamePattern = Pattern.compile("[a-zA-Z0-9_]*");
 
+    private ContainerCommandConfig containerCommandConfig;
+
     private final CommandOptionParserContainer parserContainer = new CommandOptionParserContainer();
     private final Map<Integer, ContainerCommandExecutor> botCommands = new HashMap<>();
 
@@ -35,6 +38,11 @@ public class CommandModuleImpl implements CommandModule, BaseCommon {
         core().addCommand(RootCommand.name, new RootCommand().get(), RootCommand.permission);
         log.info("Done! (Registering root command...)");
         registerSerializers();
+        containerCommandConfig = new ContainerCommandConfig(
+                bean(ConfigModule.class)
+                        .getConfig()
+                        .required("customCommands")
+        );
     }
 
     @Override
@@ -54,6 +62,7 @@ public class CommandModuleImpl implements CommandModule, BaseCommon {
             botCommand = new ContainerCommandExecutor(
                     owner.getEntity().getName(), globalCommandPermission
             );
+            botCommand.withConfig(containerCommandConfig);
             core().addCommand(owner.getEntity().getName(), botCommand, globalCommandPermission);
             botCommands.put(owner.getEntity().getId(), botCommand);
         }
@@ -138,5 +147,4 @@ public class CommandModuleImpl implements CommandModule, BaseCommon {
             throw new CommandNameFormatException(commandNamePattern.pattern());
         }
     }
-
 }
