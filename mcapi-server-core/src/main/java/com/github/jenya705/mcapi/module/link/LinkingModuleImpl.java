@@ -9,6 +9,7 @@ import com.github.jenya705.mcapi.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.entity.BotPermissionEntity;
 import com.github.jenya705.mcapi.error.LinkRequestExistException;
 import com.github.jenya705.mcapi.error.LinkRequestPermissionIsGlobalException;
+import com.github.jenya705.mcapi.error.LinkRequestPermissionNotFoundException;
 import com.github.jenya705.mcapi.form.FormComponent;
 import com.github.jenya705.mcapi.form.FormPlatformProvider;
 import com.github.jenya705.mcapi.form.component.*;
@@ -70,7 +71,14 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
         );
         joinedList
                 .stream()
-                .filter(it -> storageModule.getPermission(it).isGlobal() || storageModule.getPermission(it) == null)
+                .filter(it -> storageModule.getPermission(it) == null)
+                .findAny()
+                .ifPresent(it -> {
+                    throw new LinkRequestPermissionNotFoundException(it);
+                });
+        joinedList
+                .stream()
+                .filter(it -> storageModule.getPermission(it).isGlobal())
                 .findAny()
                 .ifPresent(it -> {
                     throw new LinkRequestPermissionIsGlobalException(it);
