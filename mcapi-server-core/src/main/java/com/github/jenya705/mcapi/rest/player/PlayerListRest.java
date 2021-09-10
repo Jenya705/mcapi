@@ -3,6 +3,7 @@ package com.github.jenya705.mcapi.rest.player;
 import com.github.jenya705.mcapi.ApiPlayer;
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.JerseyClass;
+import com.github.jenya705.mcapi.entity.PlayerListEntity;
 import com.github.jenya705.mcapi.module.authorization.AuthorizationModule;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
@@ -25,12 +26,6 @@ public class PlayerListRest implements BaseCommon {
 
     private final AuthorizationModule authorization = bean(AuthorizationModule.class);
 
-    @Data
-    @AllArgsConstructor(staticName = "of")
-    static class PlayerList {
-        private Collection<UUID> uuids;
-    }
-
     @GET
     public Response getPlayers(@HeaderParam("Authorization") String authorizationHeader) {
         authorization
@@ -39,7 +34,7 @@ public class PlayerListRest implements BaseCommon {
         return Response
                 .ok()
                 .type(MediaType.APPLICATION_JSON_TYPE)
-                .entity(PlayerList.of(
+                .entity(PlayerListEntity.of(
                         core()
                                 .getPlayers()
                                 .stream()

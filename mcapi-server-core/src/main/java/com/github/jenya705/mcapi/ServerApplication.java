@@ -9,6 +9,7 @@ import com.github.jenya705.mcapi.module.link.LinkingModuleImpl;
 import com.github.jenya705.mcapi.module.localization.LocalizationModuleImpl;
 import com.github.jenya705.mcapi.module.storage.StorageModuleImpl;
 import com.github.jenya705.mcapi.rest.ServerExceptionMapperRest;
+import com.github.jenya705.mcapi.rest.bot.BotLinkedRest;
 import com.github.jenya705.mcapi.rest.bot.BotPermissionRest;
 import com.github.jenya705.mcapi.rest.command.CommandCreateRest;
 import com.github.jenya705.mcapi.rest.link.LinkRequestRest;
@@ -65,6 +66,7 @@ public class ServerApplication {
                 PlayerPermissionRest.class,
                 PlayerSendFormRest.class,
                 BotPermissionRest.class,
+                BotLinkedRest.class,
                 OfflinePlayerGetterRest.class,
                 OfflinePlayerPunishmentRest.class,
                 LinkRequestRest.class,
