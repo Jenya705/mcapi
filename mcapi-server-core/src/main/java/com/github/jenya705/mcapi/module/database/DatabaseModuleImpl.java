@@ -8,6 +8,9 @@ import com.github.jenya705.mcapi.module.config.ConfigModule;
 import com.github.jenya705.mcapi.module.database.cache.CacheConfig;
 import com.github.jenya705.mcapi.module.database.cache.CacheStorage;
 import com.github.jenya705.mcapi.module.database.cache.CacheStorageImpl;
+import com.github.jenya705.mcapi.module.database.safe.CacheDatabaseGetter;
+import com.github.jenya705.mcapi.module.database.safe.DatabaseGetter;
+import com.github.jenya705.mcapi.module.database.safe.StorageDatabaseGetter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,6 +30,10 @@ public class DatabaseModuleImpl implements DatabaseModule, BaseCommon {
     private DatabaseModuleConfig config;
     private DatabaseStorage storage;
     private CacheStorage cache;
+
+    private DatabaseGetter safeSync;
+    private DatabaseGetter safeSyncWithFuture;
+    private DatabaseGetter safeAsync;
 
     private final Object block = new Object();
 
@@ -51,6 +58,9 @@ public class DatabaseModuleImpl implements DatabaseModule, BaseCommon {
         storage = DatabaseModuleImpl.of(this, config.getType());
         log.info("Done! (Loading scripts...)");
         storage.setup();
+        safeAsync = new StorageDatabaseGetter(storage);
+        safeSync = new CacheDatabaseGetter(cache);
+        safeSyncWithFuture = new CacheDatabaseGetter(cache.withFuture());
     }
 
     protected void loadDriver(String type) throws ClassNotFoundException {
@@ -148,5 +158,20 @@ public class DatabaseModuleImpl implements DatabaseModule, BaseCommon {
         else {
             return new DatabaseStorageImpl(databaseModule, sqlType);
         }
+    }
+
+    @Override
+    public DatabaseGetter safeSync() {
+        return safeSync;
+    }
+
+    @Override
+    public DatabaseGetter safeSyncWithFuture() {
+        return safeSyncWithFuture;
+    }
+
+    @Override
+    public DatabaseGetter safeAsync() {
+        return safeAsync;
     }
 }

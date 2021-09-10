@@ -1,8 +1,12 @@
-package com.github.jenya705.mcapi.command;
+package com.github.jenya705.mcapi.command.advanced;
 
 import com.github.jenya705.mcapi.ApiCommandSender;
 import com.github.jenya705.mcapi.ApiPlayer;
 import com.github.jenya705.mcapi.BaseCommon;
+import com.github.jenya705.mcapi.command.CommandExecutor;
+import com.github.jenya705.mcapi.command.CommandTab;
+import com.github.jenya705.mcapi.command.CommandsUtils;
+import com.github.jenya705.mcapi.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.stringful.StringfulIterator;
 import com.github.jenya705.mcapi.stringful.StringfulParser;
 import com.github.jenya705.mcapi.stringful.StringfulParserImpl;
@@ -22,7 +26,8 @@ import java.util.function.Supplier;
  */
 public abstract class AdvancedCommandExecutor<T> implements CommandExecutor, BaseCommon {
 
-    private final List<BiFunction<ApiCommandSender, String, List<String>>> tabs = new ArrayList<>();
+    private final DatabaseModule databaseModule = bean(DatabaseModule.class);
+    private final List<TabFunction> tabs = new ArrayList<>();
     private final StringfulParser<T> parser;
     @Setter(AccessLevel.PROTECTED)
     private AdvancedCommandExecutorConfig config;
@@ -102,20 +107,56 @@ public abstract class AdvancedCommandExecutor<T> implements CommandExecutor, Bas
     }
 
     @Override
-    public List<String> onTab(ApiCommandSender sender, StringfulIterator args, String permission) {
+    public List<CommandTab> onTab(ApiCommandSender sender, StringfulIterator args, String permission) {
+        return allTab(sender, args, permission, false);
+    }
+
+    @Override
+    public List<CommandTab> asyncTab(ApiCommandSender sender, StringfulIterator args, String permission) {
+        return allTab(sender, args, permission, true);
+    }
+
+    private List<CommandTab> allTab(ApiCommandSender sender, StringfulIterator args, String permission, boolean async) {
         int count = args.countNext();
         if (count > tabs.size() || count == 0) return null;
-        return tabs.get(count - 1).apply(sender, permission);
+        return tabs.get(count - 1).apply(sender, permission, async);
     }
 
     public AdvancedCommandExecutor<T> tab(Supplier<List<String>> tabFunction) {
-        tabs.add((sender, permission) -> tabFunction.get());
+        tabs.add(DefaultTabFunction.syncOldFunction(tabFunction));
         return this;
     }
 
     public AdvancedCommandExecutor<T> tab(BiFunction<ApiCommandSender, String, List<String>> tabFunction) {
+        tabs.add(DefaultTabFunction.syncOldFunction(tabFunction));
+        return this;
+    }
+
+    public AdvancedCommandExecutor<T> tooltipTab(Supplier<List<CommandTab>> tabFunction) {
+        tabs.add(DefaultTabFunction.syncFunction(tabFunction));
+        return this;
+    }
+
+    public AdvancedCommandExecutor<T> tooltipTab(BiFunction<ApiCommandSender, String, List<CommandTab>> tabFunction) {
+        tabs.add(DefaultTabFunction.syncFunction(tabFunction));
+        return this;
+    }
+
+    public AdvancedCommandExecutor<T> tab(TabFunction tabFunction) {
         tabs.add(tabFunction);
         return this;
     }
 
+    public AdvancedCommandExecutor<T> databaseTab(DatabaseTabFunction databaseTabFunction, boolean withFuture) {
+        tabs.add(
+                DefaultTabFunction.databaseFunction(
+                        databaseTabFunction,
+                        withFuture ?
+                                databaseModule.safeSyncWithFuture() :
+                                databaseModule.safeSync(),
+                        databaseModule.safeAsync()
+                )
+        );
+        return this;
+    }
 }

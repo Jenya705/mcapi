@@ -1,5 +1,7 @@
 package com.github.jenya705.mcapi;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
@@ -12,14 +14,32 @@ import java.lang.reflect.Constructor;
 /**
  * @author Jenya705
  */
+@Getter
+@Setter
 public class BukkitApplication extends JavaPlugin implements JavaBaseCommon {
+
+    private boolean asyncTab;
 
     @Override
     public void onEnable() {
         java().addClass(BukkitServerCore.class);
         java().addClass(BukkitServerGateway.class);
+        paperFeatures();
         java().addBean(this);
         java().start();
+    }
+
+    private void paperFeatures() {
+        ifClassExistsAddClass("com.destroystokyo.paper.event.server.AsyncTabCompleteEvent", PaperAsyncTabListener.class);
+    }
+
+    private void ifClassExistsAddClass(String className, Class<?> clazzToAdd) {
+        try {
+            Class.forName(className);
+            java().addClass(clazzToAdd);
+        } catch (ClassNotFoundException e) {
+            // IGNORED
+        }
     }
 
     @Override

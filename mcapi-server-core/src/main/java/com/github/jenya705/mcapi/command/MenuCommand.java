@@ -23,7 +23,7 @@ public abstract class MenuCommand implements CommandExecutor {
     public abstract void menuCommand(ApiCommandSender sender, StringfulIterator args, String permission) throws Exception;
 
     @Override
-    public List<String> onTab(ApiCommandSender sender, StringfulIterator args, String permission) {
+    public List<CommandTab> onTab(ApiCommandSender sender, StringfulIterator args, String permission) {
         return null;
     }
 

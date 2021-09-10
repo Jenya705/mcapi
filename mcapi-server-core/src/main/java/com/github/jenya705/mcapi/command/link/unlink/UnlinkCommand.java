@@ -4,7 +4,8 @@ import com.github.jenya705.mcapi.ApiCommandSender;
 import com.github.jenya705.mcapi.ApiPlayer;
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.command.AdditionalPermissions;
-import com.github.jenya705.mcapi.command.AdvancedCommandExecutor;
+import com.github.jenya705.mcapi.command.CommandTab;
+import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.entity.BotEntity;
 import com.github.jenya705.mcapi.entity.BotLinkEntity;
@@ -31,29 +32,25 @@ public class UnlinkCommand extends AdvancedCommandExecutor<UnlinkArguments> impl
     public UnlinkCommand() {
         super(UnlinkArguments.class);
         this
-                .tab((sender, permission) ->
+                .databaseTab((sender, permission, databaseGetter) ->
                         Optional.of(sender)
                                 .map(it -> it instanceof ApiPlayer ? (ApiPlayer) it : null)
-                                .map(it -> databaseModule
-                                        .cache()
-                                        .withFuture()
-                                        .getCachedLinksAndCacheBotsWithNullSafety(it.getUuid())
+                                .map(it -> databaseGetter
+                                        .getLinks(it.getUuid())
                                         .stream()
                                         .map(bot ->
                                                 Optional.ofNullable(
-                                                        databaseModule
-                                                                .cache()
-                                                                .withFuture()
-                                                                .getCachedBot(bot.getBotId())
+                                                        databaseGetter
+                                                                .getBot(bot.getBotId())
                                                 )
-                                                        .map(BotEntity::getName)
+                                                        .map(safeBot -> CommandTab.of(safeBot.getName()))
                                                         .orElse(null)
                                         )
                                         .filter(Objects::nonNull)
                                         .collect(Collectors.toList())
 
                                 )
-                                .orElse(null)
+                                .orElse(null), true
                 )
                 .tab((sender, permission) ->
                         hasPermission(sender, permission, "others") ? PlayerUtils.playerTabs(core()) : null

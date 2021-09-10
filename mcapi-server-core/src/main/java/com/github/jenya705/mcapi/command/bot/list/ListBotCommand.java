@@ -3,7 +3,7 @@ package com.github.jenya705.mcapi.command.bot.list;
 import com.github.jenya705.mcapi.ApiCommandSender;
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.command.AdditionalPermissions;
-import com.github.jenya705.mcapi.command.AdvancedCommandExecutor;
+import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.util.PlayerUtils;

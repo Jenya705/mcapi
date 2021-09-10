@@ -2,10 +2,7 @@ package com.github.jenya705.mcapi.module.command;
 
 import com.github.jenya705.mcapi.ApiCommandSender;
 import com.github.jenya705.mcapi.BaseCommon;
-import com.github.jenya705.mcapi.command.ApiCommandInteractionValue;
-import com.github.jenya705.mcapi.command.ApiCommandValueOption;
-import com.github.jenya705.mcapi.command.CommandExecutor;
-import com.github.jenya705.mcapi.command.NoConfig;
+import com.github.jenya705.mcapi.command.*;
 import com.github.jenya705.mcapi.command.entity.ApiCommandInteractionResponseEntity;
 import com.github.jenya705.mcapi.command.entity.ApiCommandInteractionValueEntity;
 import com.github.jenya705.mcapi.data.ConfigData;
@@ -74,9 +71,16 @@ public class ApiCommandExecutor implements CommandExecutor, BaseCommon {
     }
 
     @Override
-    public List<String> onTab(ApiCommandSender sender, StringfulIterator args, String permission) {
+    public List<CommandTab> onTab(ApiCommandSender sender, StringfulIterator args, String permission) {
         int countNext = args.countNext();
-        return countNext < tabs.size() ? tabs.get(countNext).get() : null;
+        return countNext < tabs.size() ?
+                tabs
+                        .get(countNext)
+                        .get()
+                        .stream()
+                        .map(CommandTab::of)
+                        .collect(Collectors.toList()) :
+                null;
     }
 
     @Override

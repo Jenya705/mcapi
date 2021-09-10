@@ -2,7 +2,7 @@ package com.github.jenya705.mcapi.command.gateway.connected;
 
 import com.github.jenya705.mcapi.ApiCommandSender;
 import com.github.jenya705.mcapi.BaseCommon;
-import com.github.jenya705.mcapi.command.AdvancedCommandExecutor;
+import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.data.ConfigData;
 
 import java.util.Collections;

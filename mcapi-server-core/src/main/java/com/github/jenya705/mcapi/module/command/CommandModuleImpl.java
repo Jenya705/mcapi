@@ -47,8 +47,8 @@ public class CommandModuleImpl implements CommandModule, BaseCommon {
 
     @Override
     public void registerCommand(ApiCommand command, AbstractBot owner) {
-        Object endObject = parseOptions(command.getOptions(), command.getName(), owner);
         validateCommandName(command.getName());
+        Object endObject = parseOptions(command.getOptions(), command.getName(), owner);
         if (!(endObject instanceof Map) && !(endObject instanceof CommandExecutor)) {
             throw new IllegalArgumentException("CommandExecutor is null on the end");
         }

@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.module.database;
 
 import com.github.jenya705.mcapi.module.database.cache.CacheStorage;
+import com.github.jenya705.mcapi.module.database.safe.DatabaseGetter;
 
 import java.sql.ResultSet;
 import java.util.concurrent.ExecutorService;
@@ -20,5 +21,11 @@ public interface DatabaseModule {
     DatabaseStorage storage();
 
     CacheStorage cache();
+
+    DatabaseGetter safeSync();
+
+    DatabaseGetter safeSyncWithFuture();
+
+    DatabaseGetter safeAsync();
 
 }

@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.command.link.unlink;
 
-import com.github.jenya705.mcapi.command.AdvancedCommandExecutorConfig;
+import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutorConfig;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.module.config.Global;
 import com.github.jenya705.mcapi.module.config.Value;

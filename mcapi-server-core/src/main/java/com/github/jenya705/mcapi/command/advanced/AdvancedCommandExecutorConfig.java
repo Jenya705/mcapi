@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.command;
+package com.github.jenya705.mcapi.command.advanced;
 
 import com.github.jenya705.mcapi.module.config.Config;
 import com.github.jenya705.mcapi.module.config.Global;

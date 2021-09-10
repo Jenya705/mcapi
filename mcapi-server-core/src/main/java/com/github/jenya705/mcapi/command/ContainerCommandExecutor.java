@@ -69,7 +69,7 @@ public class ContainerCommandExecutor implements CommandExecutor, BaseCommon {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<String> onTab(ApiCommandSender sender, StringfulIterator args, String permission) {
+    public List<CommandTab> onTab(ApiCommandSender sender, StringfulIterator args, String permission) {
         Pair<Object, String> pair = walkThrew(args);
         pair.setRight(permission + pair.getRight());
         if (pair.getLeft() instanceof CommandExecutor) {
@@ -84,8 +84,9 @@ public class ContainerCommandExecutor implements CommandExecutor, BaseCommon {
             List<String> tabs = new ArrayList<>(node.keySet());
             return tabs
                     .stream()
-                    .filter(it -> sender.hasPermission(pair.getRight() + "." + it))
-                    .filter(it -> !isGhost(node.get(it)))
+                    .map(CommandTab::of)
+                    .filter(it -> sender.hasPermission(pair.getRight() + "." + it.getName()))
+                    .filter(it -> !isGhost(node.get(it.getName())))
                     .collect(Collectors.toList());
         }
     }

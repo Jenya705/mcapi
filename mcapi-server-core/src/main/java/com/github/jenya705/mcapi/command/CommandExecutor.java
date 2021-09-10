@@ -13,7 +13,11 @@ public interface CommandExecutor {
 
     void onCommand(ApiCommandSender sender, StringfulIterator args, String permission);
 
-    List<String> onTab(ApiCommandSender sender, StringfulIterator args, String permission);
+    List<CommandTab> onTab(ApiCommandSender sender, StringfulIterator args, String permission);
 
     void setConfig(ConfigData config);
+
+    default List<CommandTab> asyncTab(ApiCommandSender sender, StringfulIterator args, String permission) {
+        return onTab(sender, args, permission);
+    }
 }

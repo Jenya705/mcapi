@@ -12,6 +12,11 @@ public class ArrayStringfulIterator implements StringfulIterator {
         this.array = array;
     }
 
+    public ArrayStringfulIterator(String[] array, int startWith) {
+        this(array);
+        this.current = startWith;
+    }
+
     @Override
     public boolean hasNext(int count) {
         return current + count - 1 < array.length;
