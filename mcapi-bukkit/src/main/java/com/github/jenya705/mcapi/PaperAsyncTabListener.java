@@ -69,7 +69,8 @@ public class PaperAsyncTabListener implements Listener, BaseCommon {
             currentIndex++;
             lastIndex = currentIndex;
         }
-        if (str.endsWith(" ")) list.add(" ");
+        if (!str.endsWith(" ")) list.add(str.substring(lastIndex));
+        else list.add(" ");
         return list.toArray(String[]::new);
     }
 

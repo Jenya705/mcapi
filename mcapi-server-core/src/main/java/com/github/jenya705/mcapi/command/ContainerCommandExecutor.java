@@ -8,6 +8,8 @@ import com.github.jenya705.mcapi.util.Pair;
 import lombok.Getter;
 
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -68,15 +70,24 @@ public class ContainerCommandExecutor implements CommandExecutor, BaseCommon {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public List<CommandTab> onTab(ApiCommandSender sender, StringfulIterator args, String permission) {
+        return tab(sender, args, permission, executor -> executor.onTab(sender, args, permission));
+    }
+
+    @Override
+    public List<CommandTab> asyncTab(ApiCommandSender sender, StringfulIterator args, String permission) {
+        return tab(sender, args, permission, executor -> executor.asyncTab(sender, args, permission));
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<CommandTab> tab(ApiCommandSender sender, StringfulIterator args, String permission, Function<CommandExecutor, List<CommandTab>> tab) {
         Pair<Object, String> pair = walkThrew(args);
         pair.setRight(permission + pair.getRight());
         if (pair.getLeft() instanceof CommandExecutor) {
             if (!sender.hasPermission(pair.getRight())) {
                 return null;
             }
-            return ((CommandExecutor) pair.getLeft()).onTab(sender, args, pair.getRight());
+            return tab.apply((CommandExecutor) pair.getLeft());
         }
         else {
             if (!args.hasNext() || isGhost(pair.getLeft())) return null;

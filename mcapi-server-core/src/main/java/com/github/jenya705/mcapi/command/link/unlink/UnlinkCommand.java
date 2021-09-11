@@ -7,7 +7,6 @@ import com.github.jenya705.mcapi.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.command.CommandTab;
 import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.data.ConfigData;
-import com.github.jenya705.mcapi.entity.BotEntity;
 import com.github.jenya705.mcapi.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.module.config.ConfigModule;
 import com.github.jenya705.mcapi.module.config.GlobalConfig;
@@ -48,7 +47,6 @@ public class UnlinkCommand extends AdvancedCommandExecutor<UnlinkArguments> impl
                                         )
                                         .filter(Objects::nonNull)
                                         .collect(Collectors.toList())
-
                                 )
                                 .orElse(null), true
                 )

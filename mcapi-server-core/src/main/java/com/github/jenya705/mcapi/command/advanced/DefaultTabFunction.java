@@ -34,8 +34,8 @@ public class DefaultTabFunction {
 
     public TabFunction databaseFunction(DatabaseTabFunction databaseTabFunction, DatabaseGetter safeSync, DatabaseGetter safeAsync) {
         return (sender, permission, async) -> async ?
-                databaseTabFunction.tab(sender, permission, safeAsync) :
-                databaseTabFunction.tab(sender, permission, safeSync);
+                    databaseTabFunction.tab(sender, permission, safeAsync) :
+                    databaseTabFunction.tab(sender, permission, safeSync);
     }
 
     private List<CommandTab> parseOld(List<String> oldTab) {

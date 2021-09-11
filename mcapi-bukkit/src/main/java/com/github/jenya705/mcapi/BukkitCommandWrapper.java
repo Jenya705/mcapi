@@ -5,6 +5,7 @@ import com.github.jenya705.mcapi.command.CommandTab;
 import com.github.jenya705.mcapi.stringful.ArrayStringfulIterator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
  */
 @Getter
 @AllArgsConstructor
-public class BukkitCommandWrapper implements org.bukkit.command.CommandExecutor, org.bukkit.command.TabExecutor, BaseCommon {
+public class BukkitCommandWrapper implements org.bukkit.command.CommandExecutor, org.bukkit.command.TabCompleter, BaseCommon {
 
     private final BukkitApplication plugin = bean(BukkitApplication.class);
     private final CommandExecutor executor;
@@ -33,7 +34,7 @@ public class BukkitCommandWrapper implements org.bukkit.command.CommandExecutor,
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        if (plugin.isAsyncTab()) return null;
+        if (plugin.isAsyncTab()) return Collections.emptyList();
         List<CommandTab> tabs = executor.onTab(BukkitWrapper.sender(sender), new ArrayStringfulIterator(args), permission);
         return tabs == null ?
                 Collections.emptyList() :
