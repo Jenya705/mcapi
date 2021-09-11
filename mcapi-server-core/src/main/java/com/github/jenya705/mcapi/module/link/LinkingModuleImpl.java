@@ -15,6 +15,7 @@ import com.github.jenya705.mcapi.form.FormComponent;
 import com.github.jenya705.mcapi.form.FormPlatformProvider;
 import com.github.jenya705.mcapi.form.component.*;
 import com.github.jenya705.mcapi.gateway.object.LinkResponseObject;
+import com.github.jenya705.mcapi.gateway.object.UnlinkResponseObject;
 import com.github.jenya705.mcapi.link.LinkRequest;
 import com.github.jenya705.mcapi.module.command.CommandModule;
 import com.github.jenya705.mcapi.module.config.ConfigModule;
@@ -177,6 +178,28 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
     }
 
     @Override
+    public void unlink(int id, ApiPlayer player) {
+        DatabaseModule.async.submit(() -> {
+            BotLinkEntity link = databaseModule
+                    .storage()
+                    .findLink(id, player.getUuid());
+            if (link == null) return;
+            databaseModule
+                    .storage()
+                    .delete(link);
+            async.submit(() ->
+                    app()
+                            .getGateway()
+                            .getClients()
+                            .stream()
+                            .filter(it -> it.getEntity().getId() == id)
+                            .filter(it -> it.isSubscribed(UnlinkResponseObject.type))
+                            .forEach(it -> it.send(UnlinkResponseObject.of(player)))
+            );
+        });
+    }
+
+    @Override
     public boolean isExists(ApiPlayer player, int index, String permission) {
         return getPlayerLinks(player)
                 .stream()
@@ -215,6 +238,7 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
                         .getClients()
                         .stream()
                         .filter(client -> client.getEntity().getId() == finalLinkObject.getId())
+                        .filter(client -> client.isSubscribed(LinkResponseObject.type))
                         .forEach(client -> client.send(
                                 LinkResponseObject.of(
                                         !enabled,

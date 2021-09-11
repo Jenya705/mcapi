@@ -19,7 +19,7 @@ public class LinkResponseObject {
         private final boolean failed;
     }
 
-    public static final String type = "link_response";
+    public static final String type = "link";
 
     public static GatewayObject<?> of(boolean isFailed, String[] declinePermissions) {
         return new GatewayObject<>(

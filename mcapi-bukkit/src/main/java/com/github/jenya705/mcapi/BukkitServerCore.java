@@ -42,8 +42,8 @@ public class BukkitServerCore implements JavaServerCore, JavaBaseCommon {
         permissionManagerHook = bean(PermissionManagerHook.class);
         if (permissionManagerHook == null) {
             plugin.getLogger().severe(
-                    "Permission manager not found. " +
-                            "Maybe you are not using LuckPerms or did not download Vault. " +
+                    "Permission manager can not be found. " +
+                            "Maybe you are not using LuckPerms or did not download Vault, or did not download permission plugin for Vault. " +
                             "Because of that, bot commands can not be given to player on the linking state"
             );
         }

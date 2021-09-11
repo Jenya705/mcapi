@@ -7,10 +7,12 @@ import com.github.jenya705.mcapi.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.command.CommandTab;
 import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.data.ConfigData;
+import com.github.jenya705.mcapi.entity.BotEntity;
 import com.github.jenya705.mcapi.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.module.config.ConfigModule;
 import com.github.jenya705.mcapi.module.config.GlobalConfig;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
+import com.github.jenya705.mcapi.module.link.LinkingModule;
 import com.github.jenya705.mcapi.util.PlayerUtils;
 
 import java.util.Objects;
@@ -27,6 +29,7 @@ public class UnlinkCommand extends AdvancedCommandExecutor<UnlinkArguments> impl
 
     private final DatabaseModule databaseModule = bean(DatabaseModule.class);
     private final GlobalConfig globalConfig = bean(ConfigModule.class).global();
+    private final LinkingModule linkingModule = bean(LinkingModule.class);
 
     public UnlinkCommand() {
         super(UnlinkArguments.class);
@@ -72,24 +75,23 @@ public class UnlinkCommand extends AdvancedCommandExecutor<UnlinkArguments> impl
                                 sendMessage(sender, config.getNotLinked());
                                 return;
                             }
+                            BotEntity botEntity =
+                                    databaseModule
+                                            .storage()
+                                            .findBotsByName(args.getBotName())
+                                            .get(0);
                             BotLinkEntity linkEntity =
                                     databaseModule
                                             .storage()
                                             .findLink(
-                                                    databaseModule
-                                                            .storage()
-                                                            .findBotsByName(args.getBotName())
-                                                            .get(0)
-                                                            .getId(),
+                                                    botEntity.getId(),
                                                     player.getUuid()
                                             );
                             if (linkEntity == null) {
                                 sendMessage(sender, config.getNotLinked());
                                 return;
                             }
-                            databaseModule
-                                    .storage()
-                                    .delete(linkEntity);
+                            linkingModule.unlink(botEntity, player);
                             sendMessage(sender, config.getSuccess());
                         }),
                         () -> sendMessage(sender, config.getPlayerNotFound())

@@ -10,6 +10,7 @@ import com.github.jenya705.mcapi.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.module.config.Config;
 import com.github.jenya705.mcapi.module.config.Value;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
+import com.github.jenya705.mcapi.module.link.LinkingModule;
 import com.github.jenya705.mcapi.stringful.StringfulIterator;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,7 +35,7 @@ public class LinkUnlinkCommand extends MenuCommand implements BaseCommon {
 
     private CommandConfig config;
 
-    private final DatabaseModule databaseModule = bean(DatabaseModule.class);
+    private final LinkingModule linkingModule = bean(LinkingModule.class);
 
     @Override
     public void menuCommand(ApiCommandSender sender, StringfulIterator args, String permission) throws Exception {
@@ -43,14 +44,8 @@ public class LinkUnlinkCommand extends MenuCommand implements BaseCommon {
         }
         ApiPlayer player = (ApiPlayer) sender;
         int botId = Integer.parseInt(args.next());
-        DatabaseModule.async.submit(() -> {
-            databaseModule
-                    .storage()
-                    .delete(new BotLinkEntity(
-                            botId, player.getUuid()
-                    ));
-            player.sendMessage(CommandsUtils.placeholderMessage(config.getSuccess()));
-        });
+        linkingModule.unlink(botId, player);
+        player.sendMessage(CommandsUtils.placeholderMessage(config.getSuccess()));
     }
 
     @Override

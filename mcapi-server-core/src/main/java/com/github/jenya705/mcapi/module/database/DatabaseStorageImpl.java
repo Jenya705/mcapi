@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Jenya705
@@ -310,11 +311,14 @@ public class DatabaseStorageImpl implements DatabaseStorage, BaseCommon {
 
     @Override
     public void delete(BotLinkEntity linkEntity) {
-        cache()
-                .getCachedPermissions(linkEntity.getBotId())
+        for (BotPermissionEntity permissionEntity : cache()
+                .getCachedPermissionsWithNullSafety(linkEntity.getBotId())
                 .stream()
-                .filter(it -> it.getTarget().equals(linkEntity.getTarget()))
-                .forEach(it -> cache().unCache(it));
+                .filter(it -> Objects.equals(it.getTarget(), linkEntity.getTarget()))
+                .collect(Collectors.toList())
+        ) {
+            cache().unCache(permissionEntity);
+        }
         cache()
                 .unCache(linkEntity);
         databaseModule.update(

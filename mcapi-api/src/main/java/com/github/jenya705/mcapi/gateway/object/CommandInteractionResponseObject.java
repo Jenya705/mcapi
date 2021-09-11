@@ -8,7 +8,7 @@ import com.github.jenya705.mcapi.gateway.GatewayObject;
  */
 public class CommandInteractionResponseObject {
 
-    public static final String type = "command_interaction_response";
+    public static final String type = "command_interaction";
 
     public static GatewayObject<ApiCommandInteractionResponse> of(ApiCommandInteractionResponse response) {
         return new GatewayObject<>(
