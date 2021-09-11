@@ -7,6 +7,7 @@ import com.github.jenya705.mcapi.command.CommandsUtils;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.entity.BotPermissionEntity;
+import com.github.jenya705.mcapi.error.BotCommandNotExistException;
 import com.github.jenya705.mcapi.error.LinkRequestExistException;
 import com.github.jenya705.mcapi.error.LinkRequestPermissionIsGlobalException;
 import com.github.jenya705.mcapi.error.LinkRequestPermissionNotFoundException;
@@ -15,6 +16,7 @@ import com.github.jenya705.mcapi.form.FormPlatformProvider;
 import com.github.jenya705.mcapi.form.component.*;
 import com.github.jenya705.mcapi.gateway.object.LinkResponseObject;
 import com.github.jenya705.mcapi.link.LinkRequest;
+import com.github.jenya705.mcapi.module.command.CommandModule;
 import com.github.jenya705.mcapi.module.config.ConfigModule;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.module.localization.LocalizationModule;
@@ -36,11 +38,13 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
 
     private final ExecutorService async = Executors.newSingleThreadExecutor();
 
-    private FormPlatformProvider formProvider;
     private LinkingModuleConfig config;
+
+    private FormPlatformProvider formProvider;
     private DatabaseModule databaseModule;
     private StorageModule storageModule;
     private LocalizationModule localizationModule;
+    private CommandModule commandModule;
 
     private final MultivaluedMap<UUID, LinkObject> links = new MultivaluedHashMap<>();
 
@@ -55,40 +59,17 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
         storageModule = bean(StorageModule.class);
         databaseModule = bean(DatabaseModule.class);
         formProvider = bean(FormPlatformProvider.class);
+        commandModule = bean(CommandModule.class);
     }
 
     @Override
     public void requestLink(AbstractBot bot, ApiPlayer player, LinkRequest request) {
-        ReactiveUtils.ifTrueThrow(
-                getPlayerLinks(player)
-                        .stream()
-                        .anyMatch(it -> it.getId() == bot.getEntity().getId()),
-                LinkRequestExistException::new
-        );
-        List<String> joinedList = ListUtils.join(
-                request.getRequireRequestPermissions(),
-                request.getOptionalRequestPermissions()
-        );
-        joinedList
-                .stream()
-                .filter(it -> storageModule.getPermission(it) == null)
-                .findAny()
-                .ifPresent(it -> {
-                    throw new LinkRequestPermissionNotFoundException(it);
-                });
-        joinedList
-                .stream()
-                .filter(it -> storageModule.getPermission(it).isGlobal())
-                .findAny()
-                .ifPresent(it -> {
-                    throw new LinkRequestPermissionIsGlobalException(it);
-                });
-        LinkObject obj;
-        links.add(player.getUuid(), obj = new LinkObject(
-                request,
-                bot,
+        validateLinkRequest(bot, player, request);
+        LinkObject obj = new LinkObject(
+                request, bot,
                 bot.getEntity().getId()
-        ));
+        );
+        links.add(player.getUuid(), obj);
         sendMessage(player, obj);
     }
 
@@ -155,7 +136,21 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
                                                                         )
                                                                 )
                                                         )
-                                                        .toArray(FormComponent[]::new)
+                                                        .toArray(FormComponent[]::new),
+                                                new FormComponent[]{
+                                                        ContentComponent.of(CommandsUtils.listMessage(
+                                                                config.getContentMinecraftCommandLayout(),
+                                                                config.getContentMinecraftCommandElement(),
+                                                                config.getContentDelimiter(),
+                                                                Arrays.asList(request.getRequest().getMinecraftRequestCommands()),
+                                                                it -> new String[]{
+                                                                        "%command%",
+                                                                        String.format(
+                                                                                "%s %s", request.getBot().getEntity().getName(), it
+                                                                        )
+                                                                }
+                                                        ))
+                                                }
                                         ),
                                         "accept", ButtonComponent.of(
                                                 CommandsUtils.placeholderMessage(
@@ -261,6 +256,53 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
                                 config.getDisabledEnd()
                 )
         );
+        core()
+                .givePermission(
+                        player,
+                        true,
+                        Arrays
+                                .stream(linkObject.getRequest().getMinecraftRequestCommands())
+                                .map(it -> String.format(
+                                        CommandModule.permissionFormat,
+                                        finalLinkObject.getBot().getEntity().getId()
+                                        ) + "." + it.replaceAll(" ", ".")
+                                )
+                                .toArray(String[]::new)
+                );
+    }
+
+    private void validateLinkRequest(AbstractBot bot, ApiPlayer player, LinkRequest request) {
+        ReactiveUtils.ifTrueThrow(
+                getPlayerLinks(player)
+                        .stream()
+                        .anyMatch(it -> it.getId() == bot.getEntity().getId()),
+                LinkRequestExistException::new
+        );
+        List<String> joinedList = ListUtils.join(
+                request.getRequireRequestPermissions(),
+                request.getOptionalRequestPermissions()
+        );
+        joinedList
+                .stream()
+                .filter(it -> storageModule.getPermission(it) == null)
+                .findAny()
+                .ifPresent(it -> {
+                    throw new LinkRequestPermissionNotFoundException(it);
+                });
+        joinedList
+                .stream()
+                .filter(it -> storageModule.getPermission(it).isGlobal())
+                .findAny()
+                .ifPresent(it -> {
+                    throw new LinkRequestPermissionIsGlobalException(it);
+                });
+        Arrays
+                .stream(request.getMinecraftRequestCommands())
+                .filter(it -> commandModule.getBotCommandExecutor(bot, it) == null)
+                .findAny()
+                .ifPresent(it -> {
+                    throw new BotCommandNotExistException(it);
+                });
     }
 
     private List<LinkObject> getPlayerLinks(ApiPlayer player) {

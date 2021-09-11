@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi;
 
 import com.github.jenya705.mcapi.command.CommandExecutor;
+import com.github.jenya705.mcapi.permission.PermissionManagerHook;
 import lombok.Cleanup;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
@@ -32,11 +33,20 @@ public class BukkitServerCore implements JavaServerCore, JavaBaseCommon {
     }
 
     private JavaPlugin plugin;
+    private PermissionManagerHook permissionManagerHook;
 
     @OnInitializing(priority = 0)
     public void initialize() {
         plugin = bean(BukkitApplication.class);
         plugin.getDataFolder().mkdir();
+        permissionManagerHook = bean(PermissionManagerHook.class);
+        if (permissionManagerHook == null) {
+            plugin.getLogger().severe(
+                    "Permission manager not found. " +
+                            "Maybe you are not using LuckPerms or did not download Vault. " +
+                            "Because of that, bot commands can not be given to player on the linking state"
+            );
+        }
     }
 
     @Override
@@ -62,6 +72,12 @@ public class BukkitServerCore implements JavaServerCore, JavaBaseCommon {
                 permission.addParent(subPermissions.get(j) + ".*", true);
             }
         }
+    }
+
+    @Override
+    public void givePermission(ApiPlayer player, boolean toggled, String... permissions) {
+        if (permissionManagerHook == null) return;
+        permissionManagerHook.givePermission(player, toggled, permissions);
     }
 
     private List<String> generatePermissionList(String name) {

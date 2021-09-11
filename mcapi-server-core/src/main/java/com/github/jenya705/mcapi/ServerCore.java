@@ -22,6 +22,8 @@ public interface ServerCore {
 
     void permission(String name, boolean toggled);
 
+    void givePermission(ApiPlayer player, boolean toggled, String... permissions);
+
     Collection<ApiPlayer> getPlayers();
 
     ApiPlayer getPlayer(String name);

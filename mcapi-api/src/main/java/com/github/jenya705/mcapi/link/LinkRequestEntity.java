@@ -14,5 +14,5 @@ public class LinkRequestEntity implements LinkRequest {
 
     private String[] requireRequestPermissions;
     private String[] optionalRequestPermissions;
-    private String reason;
+    private String[] minecraftRequestCommands;
 }

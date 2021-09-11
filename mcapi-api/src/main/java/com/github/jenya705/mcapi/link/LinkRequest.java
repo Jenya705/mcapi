@@ -9,5 +9,6 @@ public interface LinkRequest {
 
     String[] getOptionalRequestPermissions();
 
-    String getReason();
+    String[] getMinecraftRequestCommands();
+
 }

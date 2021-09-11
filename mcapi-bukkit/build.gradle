@@ -19,6 +19,10 @@ repositories {
         name = 'papermc'
         url = 'https://papermc.io/repo/repository/maven-public/'
     }
+    maven {
+        name = 'jitpack'
+        url = 'https://jitpack.io'
+    }
 }
 
 dependencies {
@@ -28,4 +32,6 @@ dependencies {
     implementation project(':mcapi-java')
     compileOnly 'io.papermc.paper:paper-api:1.17-R0.1-SNAPSHOT'
     implementation "net.kyori:adventure-text-minimessage:4.1.0-SNAPSHOT"
+    compileOnly "net.luckperms:api:5.3"
+    compileOnly "com.github.MilkBowl:VaultAPI:1.7"
 }

@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.module.command;
 
 import com.github.jenya705.mcapi.command.ApiCommand;
+import com.github.jenya705.mcapi.command.CommandExecutor;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 
 /**
@@ -8,10 +9,14 @@ import com.github.jenya705.mcapi.entity.AbstractBot;
  */
 public interface CommandModule {
 
+    String permissionFormat = "mcapi.bot.%s";
+
     void registerCommand(ApiCommand command, AbstractBot owner);
 
     void addOptionParser(String type, CommandValueOptionParser parser);
 
     CommandValueOptionParser getParser(String type);
+
+    CommandExecutor getBotCommandExecutor(AbstractBot bot, String command);
 
 }

@@ -38,6 +38,13 @@ public class LinkingModuleConfig extends Config {
     private String contentOptionalElement = "&7- &e%permission% &7- ";
 
     @Value
+    private String contentMinecraftCommandLayout = "\n&eAnd give access to commands\n%list%";
+
+    @Value
+    @Global("contentMinecraftCommandListElementRepresentation")
+    private String contentMinecraftCommandElement = "&7- &eAccess to %command%";
+
+    @Value
     private String contentOptionalToggleTrue = "&a&nEnable";
 
     @Value

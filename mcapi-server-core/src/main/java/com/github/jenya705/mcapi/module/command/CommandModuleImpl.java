@@ -9,6 +9,8 @@ import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.error.CommandNameFormatException;
 import com.github.jenya705.mcapi.error.CommandOptionsAllException;
 import com.github.jenya705.mcapi.module.config.ConfigModule;
+import com.github.jenya705.mcapi.stringful.ArrayStringfulIterator;
+import com.github.jenya705.mcapi.stringful.StringfulIterator;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
@@ -24,7 +26,6 @@ import java.util.regex.Pattern;
 @Slf4j
 public class CommandModuleImpl implements CommandModule, BaseCommon {
 
-    private static final String permissionFormat = "mcapi.bot.%s";
     private static final Pattern commandNamePattern = Pattern.compile("[a-zA-Z0-9_]*");
 
     private ContainerCommandConfig containerCommandConfig;
@@ -135,6 +136,32 @@ public class CommandModuleImpl implements CommandModule, BaseCommon {
     @Override
     public CommandValueOptionParser getParser(String type) {
         return parserContainer.getParser(type);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public CommandExecutor getBotCommandExecutor(AbstractBot bot, String command) {
+        ContainerCommandExecutor botCommandExecutor = botCommands
+                .getOrDefault(bot.getEntity().getId(), null);
+        if (botCommandExecutor == null) return null;
+        Map<String, Object> currentNode = botCommandExecutor.getNodes();
+        StringfulIterator iterator = new ArrayStringfulIterator(command.split(" "));
+        while (iterator.hasNext()) {
+            String next = iterator.next();
+            Object nodeObject = currentNode.getOrDefault(next, null);
+            if (nodeObject == null) return null;
+            if (nodeObject instanceof CommandExecutor) {
+                if (iterator.hasNext()) return null;
+                return (CommandExecutor) nodeObject;
+            }
+            if (nodeObject instanceof Map) {
+                currentNode = (Map<String, Object>) nodeObject;
+            }
+            else {
+                throw new IllegalStateException("Bad node");
+            }
+        }
+        return null;
     }
 
     private static boolean isCommandNameRight(String commandName) {
