@@ -202,7 +202,7 @@ public class DatabaseStorageImpl implements DatabaseStorage, BaseCommon {
             );
             permissions.forEach(it -> cache().cache(it));
         }
-        return parseCollection(permissions);
+        return castCollection(permissions);
     }
 
     @Override
@@ -266,7 +266,7 @@ public class DatabaseStorageImpl implements DatabaseStorage, BaseCommon {
             );
             links.forEach(it -> cache().cache(it));
         }
-        return parseCollection(links);
+        return castCollection(links);
     }
 
     @Override
@@ -283,7 +283,7 @@ public class DatabaseStorageImpl implements DatabaseStorage, BaseCommon {
             );
             links.forEach(it -> cache().cache(it));
         }
-        return parseCollection(links);
+        return castCollection(links);
     }
 
     @Override
@@ -464,7 +464,7 @@ public class DatabaseStorageImpl implements DatabaseStorage, BaseCommon {
         return databaseModule.cache();
     }
 
-    protected <T> List<T> parseCollection(Collection<T> collection) {
+    protected <T> List<T> castCollection(Collection<T> collection) {
         return collection instanceof List ?
                 (List<T>) collection :
                 new ArrayList<>(collection);
