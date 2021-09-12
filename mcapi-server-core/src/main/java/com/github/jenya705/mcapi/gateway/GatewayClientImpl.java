@@ -77,6 +77,7 @@ public class GatewayClientImpl extends DefaultWebSocket implements BaseCommon, G
         try {
             currentState.getConsumer().accept(this, text);
         } catch (Exception e) {
+            e.printStackTrace();
             send(ApiError.raw(e));
         }
     }

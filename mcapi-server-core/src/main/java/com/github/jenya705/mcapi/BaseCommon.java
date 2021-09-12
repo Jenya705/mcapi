@@ -1,5 +1,7 @@
 package com.github.jenya705.mcapi;
 
+import com.github.jenya705.mcapi.gateway.GatewayApplication;
+
 /**
  * @author Jenya705
  */
@@ -16,4 +18,9 @@ public interface BaseCommon {
     default ServerCore core() {
         return app().getCore();
     }
+
+    default GatewayApplication gateway() {
+        return app().getGateway();
+    }
+
 }

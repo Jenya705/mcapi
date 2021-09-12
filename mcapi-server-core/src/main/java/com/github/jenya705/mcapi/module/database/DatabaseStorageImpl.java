@@ -164,6 +164,7 @@ public class DatabaseStorageImpl implements DatabaseStorage, BaseCommon {
     @Override
     @SneakyThrows
     public BotPermissionEntity findPermission(int botId, String permission, UUID target) {
+        if (storageModule.getPermission(permission) == null) return null;
         UUID realTarget = parseTarget(target);
         BotPermissionEntity permissionEntity =
                 cache().getPermission(botId, permission, target);

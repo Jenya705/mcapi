@@ -17,6 +17,8 @@ public enum DefaultPermission {
     GATEWAY_COMMAND("gateway.command_interaction", true, false, true),
     GATEWAY_LINK("gateway.link", true, false, true),
     GATEWAY_UNLINK("gateway.unlink", true, false, true),
+    GATEWAY_JOIN("gateway.join", true, false, true),
+    GATEWAY_QUIT("gateway.quit", true, false, true),
     LINK_REQUEST("link.request", true, false, true),
     USER_COMMAND_CREATE("user.command.create", true, false, true),
     USER_KICK("user.kick", false, true, false),

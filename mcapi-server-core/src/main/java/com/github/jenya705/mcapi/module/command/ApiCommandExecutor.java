@@ -7,7 +7,7 @@ import com.github.jenya705.mcapi.command.entity.ApiCommandInteractionResponseEnt
 import com.github.jenya705.mcapi.command.entity.ApiCommandInteractionValueEntity;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.entity.AbstractBot;
-import com.github.jenya705.mcapi.gateway.object.CommandInteractionResponseObject;
+import com.github.jenya705.mcapi.event.GatewayCommandInteractionEvent;
 import com.github.jenya705.mcapi.stringful.StringfulDataValueFunction;
 import com.github.jenya705.mcapi.stringful.StringfulIterator;
 import com.github.jenya705.mcapi.stringful.StringfulListParser;
@@ -58,9 +58,8 @@ public class ApiCommandExecutor implements CommandExecutor, BaseCommon {
     public void onCommand(ApiCommandSender sender, StringfulIterator args, String permission) {
         parser.create(args)
                 .ifPresent(list ->
-                        app()
-                                .getGateway()
-                                .broadcast(CommandInteractionResponseObject.of(
+                        gateway()
+                                .broadcast(GatewayCommandInteractionEvent.of(
                                         new ApiCommandInteractionResponseEntity(
                                                 path,
                                                 parseValues(list, names, args.allNext()),

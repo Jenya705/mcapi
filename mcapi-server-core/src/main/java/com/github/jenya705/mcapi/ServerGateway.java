@@ -6,4 +6,9 @@ package com.github.jenya705.mcapi;
 public interface ServerGateway {
 
     void receiveMessage(ApiPlayer player, String message);
+
+    void join(ApiPlayer player);
+
+    void quit(ApiOfflinePlayer player);
+
 }

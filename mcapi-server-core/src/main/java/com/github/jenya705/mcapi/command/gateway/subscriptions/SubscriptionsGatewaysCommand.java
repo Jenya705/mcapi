@@ -43,8 +43,7 @@ public class SubscriptionsGatewaysCommand extends AdvancedCommandExecutor<Subscr
             return;
         }
         Set<String> subscriptions =
-                app()
-                        .getGateway()
+                gateway()
                         .getClients()
                         .stream()
                         .filter(it -> it.getEntity().getId() == bot.getId())

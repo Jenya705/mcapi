@@ -1,8 +1,7 @@
-package com.github.jenya705.mcapi.gateway.object;
+package com.github.jenya705.mcapi.event;
 
 import com.github.jenya705.mcapi.gateway.GatewayObject;
-import com.github.jenya705.mcapi.link.LinkResponseEntity;
-import lombok.AccessLevel;
+import com.github.jenya705.mcapi.ApiLinkResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,14 +9,19 @@ import lombok.NoArgsConstructor;
 /**
  * @author Jenya705
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class LinkResponseObject {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class GatewayLinkEvent implements ApiLinkResponse {
 
     @Data
     @AllArgsConstructor
     public static class ShortLinkResponse {
         private final boolean failed;
     }
+
+    private boolean failed;
+    private String[] declinePermissions = {};
 
     public static final String type = "link";
 
@@ -26,7 +30,7 @@ public class LinkResponseObject {
                 type,
                 isFailed ?
                         new ShortLinkResponse(true) :
-                        LinkResponseEntity.of(false, declinePermissions)
+                        new GatewayLinkEvent(false, declinePermissions)
         );
     }
 }

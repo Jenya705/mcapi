@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi.link;
 
+import com.github.jenya705.mcapi.ApiLinkRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "of")
-public class LinkRequestEntity implements LinkRequest {
+public class ApiLinkRequestEntity implements ApiLinkRequest {
 
     private String[] requireRequestPermissions;
     private String[] optionalRequestPermissions;

@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.gateway.object;
+package com.github.jenya705.mcapi.event;
 
 import com.github.jenya705.mcapi.command.ApiCommandInteractionResponse;
 import com.github.jenya705.mcapi.gateway.GatewayObject;
@@ -6,7 +6,7 @@ import com.github.jenya705.mcapi.gateway.GatewayObject;
 /**
  * @author Jenya705
  */
-public class CommandInteractionResponseObject {
+public class GatewayCommandInteractionEvent {
 
     public static final String type = "command_interaction";
 

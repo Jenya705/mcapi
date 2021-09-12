@@ -14,9 +14,9 @@ import com.github.jenya705.mcapi.error.LinkRequestPermissionNotFoundException;
 import com.github.jenya705.mcapi.form.FormComponent;
 import com.github.jenya705.mcapi.form.FormPlatformProvider;
 import com.github.jenya705.mcapi.form.component.*;
-import com.github.jenya705.mcapi.gateway.object.LinkResponseObject;
-import com.github.jenya705.mcapi.gateway.object.UnlinkResponseObject;
-import com.github.jenya705.mcapi.link.LinkRequest;
+import com.github.jenya705.mcapi.event.GatewayLinkEvent;
+import com.github.jenya705.mcapi.event.GatewayUnlinkEvent;
+import com.github.jenya705.mcapi.ApiLinkRequest;
 import com.github.jenya705.mcapi.module.command.CommandModule;
 import com.github.jenya705.mcapi.module.config.ConfigModule;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
@@ -64,7 +64,7 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
     }
 
     @Override
-    public void requestLink(AbstractBot bot, ApiPlayer player, LinkRequest request) {
+    public void requestLink(AbstractBot bot, ApiPlayer player, ApiLinkRequest request) {
         validateLinkRequest(bot, player, request);
         LinkObject obj = new LinkObject(
                 request, bot,
@@ -188,13 +188,12 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
                     .storage()
                     .delete(link);
             async.submit(() ->
-                    app()
-                            .getGateway()
+                    gateway()
                             .getClients()
                             .stream()
                             .filter(it -> it.getEntity().getId() == id)
-                            .filter(it -> it.isSubscribed(UnlinkResponseObject.type))
-                            .forEach(it -> it.send(UnlinkResponseObject.of(player)))
+                            .filter(it -> it.isSubscribed(GatewayUnlinkEvent.type))
+                            .forEach(it -> it.send(GatewayUnlinkEvent.of(player)))
             );
         });
     }
@@ -233,14 +232,13 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
         if (linkObject == null) return;
         LinkObject finalLinkObject = linkObject;
         async.submit(() ->
-                app()
-                        .getGateway()
+                gateway()
                         .getClients()
                         .stream()
                         .filter(client -> client.getEntity().getId() == finalLinkObject.getId())
-                        .filter(client -> client.isSubscribed(LinkResponseObject.type))
+                        .filter(client -> client.isSubscribed(GatewayLinkEvent.type))
                         .forEach(client -> client.send(
-                                LinkResponseObject.of(
+                                GatewayLinkEvent.of(
                                         !enabled,
                                         finalLinkObject
                                                 .getOptionalPermissions()
@@ -295,7 +293,7 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
                 );
     }
 
-    private void validateLinkRequest(AbstractBot bot, ApiPlayer player, LinkRequest request) {
+    private void validateLinkRequest(AbstractBot bot, ApiPlayer player, ApiLinkRequest request) {
         ReactiveUtils.ifTrueThrow(
                 getPlayerLinks(player)
                         .stream()

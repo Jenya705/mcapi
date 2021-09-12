@@ -1,9 +1,9 @@
-package com.github.jenya705.mcapi.link;
+package com.github.jenya705.mcapi;
 
 /**
  * @author Jenya705
  */
-public interface LinkResponse {
+public interface ApiLinkResponse {
 
     /**
      * If false all others fields not exist
