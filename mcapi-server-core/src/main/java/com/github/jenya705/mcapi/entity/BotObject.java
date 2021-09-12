@@ -25,7 +25,7 @@ public class BotObject implements AbstractBot {
     @Override
     public boolean hasPermission(String permission, UUID target) {
         BotPermissionEntity permissionEntity =
-                scriptStorage.zfindPermission(entity.getId(), permission, target);
+                scriptStorage.findPermission(entity.getId(), permission, target);
         if (permissionEntity == null) {
             if (target == null || target.equals(BotPermissionEntity.identityTarget)) {
                 PermissionEntity storagePermission = storage.getPermission(permission);
