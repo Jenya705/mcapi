@@ -5,4 +5,5 @@ include 'mcapi-lib'
 include 'mcapi-server-core-java'
 include 'mcapi-api'
 include 'mcapi-server-core'
+include 'mcapi-rest'
 
