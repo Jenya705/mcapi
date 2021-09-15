@@ -4,6 +4,8 @@ Web Api for your minecraft server
 
 # Now implemented
 
+- Bukkit platform
+
 - Some web functions: has bot permission, get offline player, punish offline player, get player, get player list, has
   player permission, punish player, send message
 
