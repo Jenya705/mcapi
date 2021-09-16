@@ -10,5 +10,4 @@ public interface ApiLinkRequest {
     String[] getOptionalRequestPermissions();
 
     String[] getMinecraftRequestCommands();
-
 }

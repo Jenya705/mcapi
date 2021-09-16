@@ -14,10 +14,12 @@ import lombok.NoArgsConstructor;
 public class RestCommandSender {
 
     private String type;
+    private String name;
 
     public static RestCommandSender from(ApiCommandSender sender) {
         return new RestCommandSender(
-
+                sender.getType(),
+                sender.getName()
         );
     }
 

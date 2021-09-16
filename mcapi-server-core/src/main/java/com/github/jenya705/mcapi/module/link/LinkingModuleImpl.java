@@ -7,6 +7,11 @@ import com.github.jenya705.mcapi.command.CommandsUtils;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.entity.BotPermissionEntity;
+import com.github.jenya705.mcapi.entity.RestLinkRequest;
+import com.github.jenya705.mcapi.entity.api.event.EntityLinkEvent;
+import com.github.jenya705.mcapi.entity.api.event.EntityUnlinkEvent;
+import com.github.jenya705.mcapi.entity.event.RestLinkEvent;
+import com.github.jenya705.mcapi.entity.event.RestUnlinkEvent;
 import com.github.jenya705.mcapi.error.BotCommandNotExistException;
 import com.github.jenya705.mcapi.error.LinkRequestExistException;
 import com.github.jenya705.mcapi.error.LinkRequestPermissionIsGlobalException;
@@ -14,8 +19,8 @@ import com.github.jenya705.mcapi.error.LinkRequestPermissionNotFoundException;
 import com.github.jenya705.mcapi.form.FormComponent;
 import com.github.jenya705.mcapi.form.FormPlatformProvider;
 import com.github.jenya705.mcapi.form.component.*;
-import com.github.jenya705.mcapi.event.GatewayLinkEvent;
-import com.github.jenya705.mcapi.event.GatewayUnlinkEvent;
+import com.github.jenya705.mcapi.event.LinkEvent;
+import com.github.jenya705.mcapi.event.UnlinkEvent;
 import com.github.jenya705.mcapi.ApiLinkRequest;
 import com.github.jenya705.mcapi.module.command.CommandModule;
 import com.github.jenya705.mcapi.module.config.ConfigModule;
@@ -64,7 +69,7 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
     }
 
     @Override
-    public void requestLink(AbstractBot bot, ApiPlayer player, ApiLinkRequest request) {
+    public void requestLink(AbstractBot bot, ApiPlayer player, RestLinkRequest request) {
         validateLinkRequest(bot, player, request);
         LinkObject obj = new LinkObject(
                 request, bot,
@@ -192,8 +197,8 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
                             .getClients()
                             .stream()
                             .filter(it -> it.getEntity().getId() == id)
-                            .filter(it -> it.isSubscribed(GatewayUnlinkEvent.type))
-                            .forEach(it -> it.send(GatewayUnlinkEvent.of(player)))
+                            .filter(it -> it.isSubscribed(RestUnlinkEvent.type))
+                            .forEach(it -> it.send(new EntityUnlinkEvent(player).rest()))
             );
         });
     }
@@ -236,10 +241,11 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
                         .getClients()
                         .stream()
                         .filter(client -> client.getEntity().getId() == finalLinkObject.getId())
-                        .filter(client -> client.isSubscribed(GatewayLinkEvent.type))
+                        .filter(client -> client.isSubscribed(RestLinkEvent.type))
                         .forEach(client -> client.send(
-                                GatewayLinkEvent.of(
+                                new EntityLinkEvent(
                                         !enabled,
+                                        player,
                                         finalLinkObject
                                                 .getOptionalPermissions()
                                                 .entrySet()
@@ -247,7 +253,7 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
                                                 .filter(it -> !it.getValue())
                                                 .map(Map.Entry::getKey)
                                                 .toArray(String[]::new)
-                                )
+                                ).rest()
                         ))
         );
         DatabaseModule.async.submit(() -> {
@@ -293,7 +299,7 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
                 );
     }
 
-    private void validateLinkRequest(AbstractBot bot, ApiPlayer player, ApiLinkRequest request) {
+    private void validateLinkRequest(AbstractBot bot, ApiPlayer player, RestLinkRequest request) {
         ReactiveUtils.ifTrueThrow(
                 getPlayerLinks(player)
                         .stream()

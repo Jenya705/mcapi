@@ -4,8 +4,8 @@ import com.github.jenya705.mcapi.ApiPlayer;
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.JerseyClass;
 import com.github.jenya705.mcapi.entity.AbstractBot;
+import com.github.jenya705.mcapi.entity.RestLinkRequest;
 import com.github.jenya705.mcapi.error.PlayerNotFoundException;
-import com.github.jenya705.mcapi.link.ApiLinkRequestEntity;
 import com.github.jenya705.mcapi.module.authorization.AuthorizationModule;
 import com.github.jenya705.mcapi.module.link.LinkingModule;
 import jakarta.ws.rs.HeaderParam;
@@ -25,7 +25,7 @@ public class LinkRequestRest implements BaseCommon {
     private final LinkingModule linkingModule = bean(LinkingModule.class);
 
     @POST
-    public Response linkRequest(@PathParam("name") String name, @HeaderParam("Authorization") String authorization, ApiLinkRequestEntity requestEntity) {
+    public Response linkRequest(@PathParam("name") String name, @HeaderParam("Authorization") String authorization, RestLinkRequest requestEntity) {
         ApiPlayer player = core()
                 .getOptionalPlayerId(name)
                 .orElseThrow(() -> new PlayerNotFoundException(name));

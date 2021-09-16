@@ -2,6 +2,7 @@ package com.github.jenya705.mcapi.module.link;
 
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.ApiLinkRequest;
+import com.github.jenya705.mcapi.entity.RestLinkRequest;
 import lombok.Data;
 
 import java.util.HashMap;
@@ -14,11 +15,11 @@ import java.util.Map;
 public class LinkObject {
 
     private final int id;
-    private final ApiLinkRequest request;
+    private final RestLinkRequest request;
     private final Map<String, Boolean> optionalPermissions;
     private final AbstractBot bot;
 
-    public LinkObject(ApiLinkRequest request, AbstractBot bot, int id) {
+    public LinkObject(RestLinkRequest request, AbstractBot bot, int id) {
         this.request = request;
         this.id = id;
         this.bot = bot;

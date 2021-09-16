@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
 
 /**
  * @author Jenya705
@@ -15,6 +17,20 @@ public class BukkitCommandSenderWrapper implements JavaCommandSender {
 
     public static BukkitCommandSenderWrapper of(CommandSender sender) {
         return sender == null ? null : new BukkitCommandSenderWrapper(sender);
+    }
+
+    @Override
+    public String getType() {
+        if (sender instanceof ConsoleCommandSender)
+            return "console";
+        if (sender instanceof Player)
+            return "player";
+        return "undefined";
+    }
+
+    @Override
+    public String getName() {
+        return sender instanceof ConsoleCommandSender ? "@c" : sender.getName();
     }
 
     @Override

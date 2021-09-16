@@ -1,8 +1,14 @@
 package com.github.jenya705.mcapi;
 
-import com.github.jenya705.mcapi.event.GatewayJoinEvent;
-import com.github.jenya705.mcapi.event.GatewayMessageEvent;
-import com.github.jenya705.mcapi.event.GatewayQuitEvent;
+import com.github.jenya705.mcapi.entity.api.event.EntityJoinEvent;
+import com.github.jenya705.mcapi.entity.api.event.EntityMessageEvent;
+import com.github.jenya705.mcapi.entity.api.event.EntityQuitEvent;
+import com.github.jenya705.mcapi.entity.event.RestJoinEvent;
+import com.github.jenya705.mcapi.entity.event.RestMessageEvent;
+import com.github.jenya705.mcapi.entity.event.RestQuitEvent;
+import com.github.jenya705.mcapi.event.JoinEvent;
+import com.github.jenya705.mcapi.event.MessageEvent;
+import com.github.jenya705.mcapi.event.QuitEvent;
 
 /**
  * @author Jenya705
@@ -12,18 +18,18 @@ public class ServerGatewayImpl implements ServerGateway, BaseCommon {
     @Override
     public void receiveMessage(ApiPlayer player, String message) {
         gateway()
-                .broadcast(GatewayMessageEvent.of(message, player));
+                .broadcast(new EntityMessageEvent(message, player).rest(), RestMessageEvent.type);
     }
 
     @Override
     public void join(ApiPlayer player) {
         gateway()
-                .broadcast(GatewayJoinEvent.of(player));
+                .broadcast(new EntityJoinEvent(player).rest(), RestJoinEvent.type);
     }
 
     @Override
     public void quit(ApiOfflinePlayer player) {
         gateway()
-                .broadcast(GatewayQuitEvent.of(player));
+                .broadcast(new EntityQuitEvent(player).rest(), RestQuitEvent.type);
     }
 }

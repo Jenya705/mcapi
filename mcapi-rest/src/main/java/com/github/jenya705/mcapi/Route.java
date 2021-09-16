@@ -22,10 +22,6 @@ public class Route {
         return Route.of(HttpMethod.PUT, url);
     }
 
-    public static Route patch(String url) {
-        return Route.of(HttpMethod.PATCH, url);
-    }
-
     public static Route delete(String url) {
         return Route.of(HttpMethod.DELETE, url);
     }

@@ -3,11 +3,11 @@ package com.github.jenya705.mcapi.module.command;
 import com.github.jenya705.mcapi.ApiCommandSender;
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.command.*;
-import com.github.jenya705.mcapi.command.entity.ApiCommandInteractionResponseEntity;
-import com.github.jenya705.mcapi.command.entity.ApiCommandInteractionValueEntity;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.entity.AbstractBot;
-import com.github.jenya705.mcapi.event.GatewayCommandInteractionEvent;
+import com.github.jenya705.mcapi.entity.api.command.EntityCommandInteractionValue;
+import com.github.jenya705.mcapi.entity.api.event.EntityCommandInteractionEvent;
+import com.github.jenya705.mcapi.entity.event.RestCommandInteractionEvent;
 import com.github.jenya705.mcapi.stringful.StringfulDataValueFunction;
 import com.github.jenya705.mcapi.stringful.StringfulIterator;
 import com.github.jenya705.mcapi.stringful.StringfulListParser;
@@ -59,13 +59,14 @@ public class ApiCommandExecutor implements CommandExecutor, BaseCommon {
         parser.create(args)
                 .ifPresent(list ->
                         gateway()
-                                .broadcast(GatewayCommandInteractionEvent.of(
-                                        new ApiCommandInteractionResponseEntity(
+                                .broadcast(
+                                        new EntityCommandInteractionEvent(
                                                 path,
-                                                parseValues(list, names, args.allNext()),
-                                                sender
-                                        )
-                                ))
+                                                sender,
+                                                parseValues(list, names, args.allNext())
+                                        ).rest(),
+                                        RestCommandInteractionEvent.type
+                                )
                 );
     }
 
@@ -91,12 +92,12 @@ public class ApiCommandExecutor implements CommandExecutor, BaseCommon {
         if (values.size() > names.size()) {
             throw new IllegalArgumentException("Size of values bigger than size of names");
         }
-        ApiCommandInteractionValue[] interactionValues = new ApiCommandInteractionValue[values.size() + 1];
+        ApiCommandInteractionValue[] interactionValues = new EntityCommandInteractionValue[values.size() + 1];
         for (int i = 0; i < interactionValues.length - 1; ++i) {
             interactionValues[i] =
-                    new ApiCommandInteractionValueEntity(names.get(i), values.get(i));
+                    new EntityCommandInteractionValue(names.get(i), values.get(i));
         }
-        interactionValues[interactionValues.length - 1] = new ApiCommandInteractionValueEntity(others, allNext);
+        interactionValues[interactionValues.length - 1] = new EntityCommandInteractionValue(others, allNext);
         return interactionValues;
     }
 

@@ -5,6 +5,7 @@ import com.github.jenya705.mcapi.command.RootCommand;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.entity.BotEntity;
 import com.github.jenya705.mcapi.ApiLinkRequest;
+import com.github.jenya705.mcapi.entity.RestLinkRequest;
 
 /**
  * @author Jenya705
@@ -13,7 +14,7 @@ public interface LinkingModule {
 
     String linkCommand = "/" + RootCommand.name + " linkMenu";
 
-    void requestLink(AbstractBot bot, ApiPlayer player, ApiLinkRequest request);
+    void requestLink(AbstractBot bot, ApiPlayer player, RestLinkRequest request);
 
     void unlink(int id, ApiPlayer player);
 

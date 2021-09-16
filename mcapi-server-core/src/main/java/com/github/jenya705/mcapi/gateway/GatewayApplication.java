@@ -43,11 +43,11 @@ public class GatewayApplication extends WebSocketApplication {
         client.onMessage(text);
     }
 
-    public void broadcast(GatewayObject<?> gatewayObject) {
+    public void broadcast(Object object, String type) {
         getWebSockets().forEach(webSocket -> {
             GatewayClientImpl client = parse(webSocket);
-            if (client == null || !client.isSubscribed(gatewayObject.getType())) return;
-            client.send(gatewayObject);
+            if (client == null || !client.isSubscribed(type)) return;
+            client.send(object);
         });
     }
 

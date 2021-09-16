@@ -25,15 +25,4 @@ public class RestError {
         );
     }
 
-    public static RestError from(Throwable ex) {
-        if (ex instanceof ApiError) {
-            return RestError.from((ApiError) ex);
-        }
-        return new RestError(
-                0,
-                null,
-                ex.getMessage()
-        );
-    }
-
 }

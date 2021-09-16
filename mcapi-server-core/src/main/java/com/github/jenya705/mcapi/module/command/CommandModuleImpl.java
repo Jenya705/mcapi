@@ -6,6 +6,8 @@ import com.github.jenya705.mcapi.JacksonProvider;
 import com.github.jenya705.mcapi.OnStartup;
 import com.github.jenya705.mcapi.command.*;
 import com.github.jenya705.mcapi.entity.AbstractBot;
+import com.github.jenya705.mcapi.entity.command.RestCommand;
+import com.github.jenya705.mcapi.entity.command.RestCommandOption;
 import com.github.jenya705.mcapi.error.CommandNameFormatException;
 import com.github.jenya705.mcapi.error.CommandOptionsAllException;
 import com.github.jenya705.mcapi.module.config.ConfigModule;
@@ -38,7 +40,6 @@ public class CommandModuleImpl implements CommandModule, BaseCommon {
         log.info("Registering root command...");
         core().addCommand(RootCommand.name, new RootCommand().get(), RootCommand.permission);
         log.info("Done! (Registering root command...)");
-        registerSerializers();
         containerCommandConfig = new ContainerCommandConfig(
                 bean(ConfigModule.class)
                         .getConfig()
@@ -114,18 +115,11 @@ public class CommandModuleImpl implements CommandModule, BaseCommon {
         boolean anySubs = false;
         for (ApiCommandOption option : options) {
             validateCommandName(option.getName());
+            if (anySubs && anyValues) break;
             if (option instanceof ApiCommandValueOption) anyValues = true;
             else if (option instanceof ApiCommandExecutableOption) anySubs = true;
         }
         return anyValues ? (anySubs ? ValidateResult.ALL : ValidateResult.VALUES) : ValidateResult.SUBS;
-    }
-
-    private void registerSerializers() {
-        SimpleModule jacksonModule = new SimpleModule();
-        jacksonModule.addDeserializer(ApiCommand.class, new ApiCommandDeserializer(this));
-        JacksonProvider
-                .getMapper()
-                .registerModule(jacksonModule);
     }
 
     @Override
