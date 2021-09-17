@@ -18,5 +18,5 @@ dependencies {
     implementation 'org.xerial:sqlite-jdbc:3.36.0.1'
     implementation 'jakarta.servlet:jakarta.servlet-api:5.0.0'
     implementation 'com.google.guava:guava:30.1.1-jre'
-    implementation 'io.netty:netty-all:4.1.68.Final'
+    implementation "io.projectreactor.netty:reactor-netty-http:1.0.11"
 }
