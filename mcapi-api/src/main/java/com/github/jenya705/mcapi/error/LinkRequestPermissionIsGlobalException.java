@@ -9,9 +9,15 @@ public class LinkRequestPermissionIsGlobalException extends IllegalArgumentExcep
 
     private static final int code = 9;
     private static final String format = "Permission %s is global";
+    private static final int status = 400;
 
     public LinkRequestPermissionIsGlobalException(String permissionName) {
         super(String.format(format, permissionName));
+    }
+
+    @Override
+    public int getStatusCode() {
+        return status;
     }
 
     @Override

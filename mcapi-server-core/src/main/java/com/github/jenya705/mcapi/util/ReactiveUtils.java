@@ -22,4 +22,9 @@ public class ReactiveUtils {
     public void ifTrueThrow(boolean obj, Supplier<RuntimeException> exceptionSupplier) {
         if (obj) throw exceptionSupplier.get();
     }
+
+    public void runtimeException(Throwable e) {
+        throw new RuntimeException(e);
+    }
+
 }

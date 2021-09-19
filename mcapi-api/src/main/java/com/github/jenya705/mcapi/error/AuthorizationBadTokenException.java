@@ -8,9 +8,15 @@ import com.github.jenya705.mcapi.ApiError;
 public class AuthorizationBadTokenException extends IllegalArgumentException implements ApiError {
 
     private static final int code = 4;
+    private static final int status = 401;
 
     public AuthorizationBadTokenException() {
         super("Bad token");
+    }
+
+    @Override
+    public int getStatusCode() {
+        return status;
     }
 
     @Override

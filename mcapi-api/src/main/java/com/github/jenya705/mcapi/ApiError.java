@@ -8,6 +8,12 @@ public interface ApiError {
     static ApiError raw(Exception exception) {
         return new ApiError() {
             @Override
+            public int getStatusCode() {
+                return exception instanceof ApiError ?
+                        ((ApiError) exception).getStatusCode() : 500;
+            }
+
+            @Override
             public int getCode() {
                 return exception instanceof ApiError ?
                         ((ApiError) exception).getCode() : 0;
@@ -29,6 +35,8 @@ public interface ApiError {
     }
 
     String defaultNamespace = "mcapi";
+
+    int getStatusCode();
 
     int getCode();
 

@@ -8,9 +8,15 @@ import com.github.jenya705.mcapi.ApiError;
 public class CommandOptionsAllException extends IllegalArgumentException implements ApiError {
 
     private static final int code = 10;
+    private static final int status = 400;
 
     public CommandOptionsAllException() {
         super("Options of command is combined (please insert sub commands or values)");
+    }
+
+    @Override
+    public int getStatusCode() {
+        return status;
     }
 
     @Override

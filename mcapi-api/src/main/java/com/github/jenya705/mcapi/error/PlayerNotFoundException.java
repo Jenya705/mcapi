@@ -9,9 +9,15 @@ public class PlayerNotFoundException extends IllegalArgumentException implements
 
     private static final int code = 1;
     private static final String format = "Player %s is not found";
+    private static final int status = 404;
 
     public PlayerNotFoundException(String name) {
         super(String.format(format, name));
+    }
+
+    @Override
+    public int getStatusCode() {
+        return status;
     }
 
     @Override

@@ -27,6 +27,6 @@ public class Route {
     }
 
     private final HttpMethod method;
-    private final String url;
+    private final String uri;
 
 }

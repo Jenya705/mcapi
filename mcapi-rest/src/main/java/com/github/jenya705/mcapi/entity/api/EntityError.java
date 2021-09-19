@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EntityError implements ApiError {
 
+    private int statusCode;
     private int code;
     private String namespace;
     private String reason;

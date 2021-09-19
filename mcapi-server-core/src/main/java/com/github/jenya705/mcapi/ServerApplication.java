@@ -7,7 +7,9 @@ import com.github.jenya705.mcapi.module.config.ConfigModuleImpl;
 import com.github.jenya705.mcapi.module.database.DatabaseModuleImpl;
 import com.github.jenya705.mcapi.module.link.LinkingModuleImpl;
 import com.github.jenya705.mcapi.module.localization.LocalizationModuleImpl;
+import com.github.jenya705.mcapi.module.mapper.MapperImpl;
 import com.github.jenya705.mcapi.module.storage.StorageModuleImpl;
+import com.github.jenya705.mcapi.module.web.reactor.ReactorServer;
 import com.github.jenya705.mcapi.rest.ServerExceptionMapperRest;
 import com.github.jenya705.mcapi.rest.bot.BotLinkedRest;
 import com.github.jenya705.mcapi.rest.bot.BotPermissionRest;
@@ -30,6 +32,7 @@ import org.glassfish.jersey.server.ResourceConfig;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.*;
@@ -43,8 +46,10 @@ public class ServerApplication {
     private final List<Pair<Class<?>, Boolean>> classes = new ArrayList<>();
     private final List<Object> beans = new ArrayList<>();
     private final Map<Class<?>, Object> cachedBeans = new HashMap<>();
+
     private boolean initialized = false;
     private HttpServer httpServer;
+    private boolean enabled = true;
 
     @Getter
     @Setter
@@ -79,7 +84,9 @@ public class ServerApplication {
                 AuthorizationModuleImpl.class,
                 CommandModuleImpl.class,
                 LinkingModuleImpl.class,
-                LocalizationModuleImpl.class
+                LocalizationModuleImpl.class,
+                MapperImpl.class,
+                ReactorServer.class
         );
     }
 
@@ -116,13 +123,42 @@ public class ServerApplication {
                 beans.add(thisObject);
             } catch (Exception e) {
                 log.error(String.format("Can not initialize bean %s, disabling:", clazz.getCanonicalName()), e);
+                disable();
                 return;
             }
         }
         initialized = true;
+        for (Object obj : beans) {
+            for (Field field : obj.getClass().getDeclaredFields()) {
+                if (field.getAnnotation(Inject.class) == null) continue;
+                Object toInject = getBean(field.getType());
+                if (toInject == null) {
+                    log.error(String.format(
+                            "Failed to inject %s bean to %s class in %s field",
+                            field.getType().getCanonicalName(),
+                            obj.getClass().getCanonicalName(),
+                            field.getName()
+                    ));
+                    continue;
+                }
+                try {
+                    field.setAccessible(true);
+                    field.set(obj, toInject);
+                } catch (Exception e) {
+                    log.error(String.format(
+                            "Failed to inject %s bean to %s class in %s field because of exception:",
+                            field.getType().getCanonicalName(),
+                            obj.getClass().getCanonicalName(),
+                            field.getName()
+                    ), e);
+                }
+            }
+        }
         core = getBean(ServerCore.class);
-        runMethods(initializingMethods, "initialize");
-        runMethods(startupMethods, "startup");
+        runMethods(initializingMethods, "initialize", true);
+        if (!enabled) return;
+        runMethods(startupMethods, "startup", true);
+        if (!enabled) return;
         runGrizzlyHttpServer(jerseyClasses);
     }
 
@@ -143,24 +179,28 @@ public class ServerApplication {
         }
     }
 
-    protected void runMethods(List<Set<Pair<Object, Method>>> methods, String procedureName) {
+    protected void runMethods(List<Set<Pair<Object, Method>>> methods, String procedureName, boolean onFailedDisable) {
         for (Set<Pair<Object, Method>> methodsPriority : methods) {
             for (Pair<Object, Method> methodPair : methodsPriority) {
                 try {
                     methodPair.getRight().invoke(methodPair.getLeft());
-                } catch (Exception e) {
+                } catch (Throwable e) {
                     log.error(String.format(
                             "Can not %s bean object %s:",
                             procedureName,
                             methodPair.getLeft().getClass().getCanonicalName()
                     ), e);
+                    if (onFailedDisable) {
+                        log.error("Because creating of this object throw Exception, so disabling application as said");
+                        disable();
+                    }
                 }
             }
         }
     }
 
     public void stop() {
-        if (!initialized) return;
+        if (!initialized || !enabled) return;
         List<Set<Pair<Object, Method>>> endMethods = new ArrayList<>(5);
         for (int i = 0; i < 5; ++i) {
             endMethods.add(new HashSet<>());
@@ -173,7 +213,7 @@ public class ServerApplication {
                 }
             }
         }
-        runMethods(endMethods, "stop");
+        runMethods(endMethods, "stop", false);
         try {
             httpServer.shutdown().get();
         } catch (Exception e) {
@@ -215,5 +255,10 @@ public class ServerApplication {
 
     public void addBean(Object obj) {
         beans.add(obj);
+    }
+
+    private void disable() {
+        enabled = false;
+        core.disable();
     }
 }

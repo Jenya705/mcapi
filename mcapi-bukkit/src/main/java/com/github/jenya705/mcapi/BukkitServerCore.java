@@ -154,4 +154,9 @@ public class BukkitServerCore implements JavaServerCore, JavaBaseCommon {
     public File getPluginFile(String file) {
         return new File(plugin.getDataFolder(), file);
     }
+
+    @Override
+    public void disable() {
+        Bukkit.getPluginManager().disablePlugin(plugin);
+    }
 }

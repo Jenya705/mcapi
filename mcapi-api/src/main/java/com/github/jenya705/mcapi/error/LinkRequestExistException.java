@@ -8,9 +8,15 @@ import com.github.jenya705.mcapi.ApiError;
 public class LinkRequestExistException extends IllegalStateException implements ApiError {
 
     private static final int code = 7;
+    private static final int status = 403;
 
     public LinkRequestExistException() {
         super("Link request exist");
+    }
+
+    @Override
+    public int getStatusCode() {
+        return status;
     }
 
     @Override

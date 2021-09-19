@@ -9,9 +9,15 @@ public class BotNotPermittedException extends IllegalStateException implements A
 
     private static final int code = 5;
     private static final String format = "You do not permitted to do that, permission: %s";
+    private static final int status = 403;
 
     public BotNotPermittedException(String permission) {
         super(String.format(format, permission));
+    }
+
+    @Override
+    public int getStatusCode() {
+        return status;
     }
 
     @Override

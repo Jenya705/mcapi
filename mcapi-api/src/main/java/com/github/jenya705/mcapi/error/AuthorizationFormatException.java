@@ -8,9 +8,15 @@ import com.github.jenya705.mcapi.ApiError;
 public class AuthorizationFormatException extends IllegalArgumentException implements ApiError {
 
     private static final int code = 3;
+    private static final int status = 401;
 
     public AuthorizationFormatException() {
         super("Bad format");
+    }
+
+    @Override
+    public int getStatusCode() {
+        return status;
     }
 
     @Override

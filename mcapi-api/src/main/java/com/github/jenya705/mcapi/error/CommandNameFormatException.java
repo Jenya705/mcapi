@@ -7,11 +7,17 @@ import com.github.jenya705.mcapi.ApiError;
  */
 public class CommandNameFormatException extends IllegalArgumentException implements ApiError {
 
-    public static final int code = 11;
-    public static final String format = "Command name or option name is not matches %s pattern";
+    private static final int code = 11;
+    private static final String format = "Command name or option name is not matches %s pattern";
+    private static final int status = 400;
 
     public CommandNameFormatException(String pattern) {
         super(String.format(format, pattern));
+    }
+
+    @Override
+    public int getStatusCode() {
+        return status;
     }
 
     @Override
