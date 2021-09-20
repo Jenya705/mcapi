@@ -15,7 +15,40 @@ import java.util.Map;
 public class MapperImpl implements Mapper {
 
     private final ObjectMapper json = new ObjectMapper();
-    private final Map<Class<?>, RawDeserializer<?>> paramDeserializers = new HashMap<>();
+    private final Map<Class<?>, RawDeserializer<?>> rawDeserializers = new HashMap<>();
+
+    private static boolean booleanParse(String s) {
+        if (s.equalsIgnoreCase("true")) return true;
+        if (s.equalsIgnoreCase("false")) return false;
+        throw new IllegalArgumentException("String is not true or false");
+    }
+
+    private static char charParse(String s) {
+        if (s.length() == 1) return s.charAt(0);
+        throw new IllegalArgumentException("String length is not 1");
+    }
+
+    public MapperImpl() {
+        this
+                .rawDeserializer(byte.class, Byte::parseByte)
+                .rawDeserializer(short.class, Short::parseShort)
+                .rawDeserializer(int.class, Integer::parseInt)
+                .rawDeserializer(long.class, Long::parseLong)
+                .rawDeserializer(float.class, Float::parseFloat)
+                .rawDeserializer(double.class, Double::parseDouble)
+                .rawDeserializer(boolean.class, MapperImpl::booleanParse)
+                .rawDeserializer(char.class, MapperImpl::charParse)
+                .rawDeserializer(Byte.class, Byte::valueOf)
+                .rawDeserializer(Short.class, Short::valueOf)
+                .rawDeserializer(Integer.class, Integer::valueOf)
+                .rawDeserializer(Long.class, Long::valueOf)
+                .rawDeserializer(Float.class, Float::valueOf)
+                .rawDeserializer(Double.class, Double::valueOf)
+                .rawDeserializer(Boolean.class, MapperImpl::booleanParse)
+                .rawDeserializer(Character.class, MapperImpl::charParse)
+                .rawDeserializer(String.class, s -> s)
+        ;
+    }
 
     @Override
     @SneakyThrows
@@ -32,13 +65,12 @@ public class MapperImpl implements Mapper {
     @Override
     @SuppressWarnings("unchecked")
     public <T> T fromRaw(String param, Class<? extends T> clazz) {
-        if (clazz == String.class) return (T) param;
-        return (T) paramDeserializers.get(clazz).deserialize(param);
+        return (T) rawDeserializers.get(clazz).deserialize(param);
     }
 
     @Override
     public <T> Mapper rawDeserializer(Class<? extends T> clazz, RawDeserializer<T> deserializer) {
-        paramDeserializers.put(clazz, deserializer);
+        rawDeserializers.put(clazz, deserializer);
         return this;
     }
 

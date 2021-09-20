@@ -9,4 +9,9 @@ public interface WebServer {
 
     void addHandler(Route route, RouteHandler handler);
 
+    default WebServer handler(Route route, RouteHandler handler) {
+        addHandler(route, handler);
+        return this;
+    }
+
 }

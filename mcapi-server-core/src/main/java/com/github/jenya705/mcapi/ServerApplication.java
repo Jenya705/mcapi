@@ -8,6 +8,9 @@ import com.github.jenya705.mcapi.module.database.DatabaseModuleImpl;
 import com.github.jenya705.mcapi.module.link.LinkingModuleImpl;
 import com.github.jenya705.mcapi.module.localization.LocalizationModuleImpl;
 import com.github.jenya705.mcapi.module.mapper.MapperImpl;
+import com.github.jenya705.mcapi.module.rest.GetPlayerRouteHandler;
+import com.github.jenya705.mcapi.module.rest.RestModule;
+import com.github.jenya705.mcapi.module.selector.ServerSelectorProvider;
 import com.github.jenya705.mcapi.module.storage.StorageModuleImpl;
 import com.github.jenya705.mcapi.module.web.reactor.ReactorServer;
 import com.github.jenya705.mcapi.rest.ServerExceptionMapperRest;
@@ -86,7 +89,10 @@ public class ServerApplication {
                 LinkingModuleImpl.class,
                 LocalizationModuleImpl.class,
                 MapperImpl.class,
-                ReactorServer.class
+                ReactorServer.class,
+                RestModule.class,
+                ServerSelectorProvider.class,
+                GetPlayerRouteHandler.class
         );
     }
 
@@ -130,7 +136,7 @@ public class ServerApplication {
         initialized = true;
         for (Object obj : beans) {
             for (Field field : obj.getClass().getDeclaredFields()) {
-                if (field.getAnnotation(Inject.class) == null) continue;
+                if (field.getAnnotation(Bean.class) == null) continue;
                 Object toInject = getBean(field.getType());
                 if (toInject == null) {
                     log.error(String.format(

@@ -26,7 +26,7 @@ public class ReactorServer implements WebServer, BaseCommon {
 
     private final List<Pair<Route, RouteHandler>> routeImplementations = new ArrayList<>();
 
-    @Inject
+    @Bean
     @Getter
     private Mapper mapper;
 
@@ -72,6 +72,7 @@ public class ReactorServer implements WebServer, BaseCommon {
                             try {
                                 routeImplementation.getRight().handle(localRequest, localResponse);
                             } catch (Throwable e) {
+                                e.printStackTrace();
                                 ApiError error;
                                 if (e instanceof Exception) {
                                     error = ApiError.raw((Exception) e);

@@ -1,15 +1,11 @@
 package com.github.jenya705.mcapi;
 
-import java.util.UUID;
-
 /**
  * @author Jenya705
  */
-public interface ApiOfflinePlayer {
+public interface ApiOfflinePlayer extends ApiUUID {
 
     String getName();
-
-    UUID getUuid();
 
     void ban(String reason);
 
