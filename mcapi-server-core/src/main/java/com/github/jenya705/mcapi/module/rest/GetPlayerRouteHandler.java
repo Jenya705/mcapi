@@ -5,11 +5,11 @@ import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.OnStartup;
 import com.github.jenya705.mcapi.Routes;
 import com.github.jenya705.mcapi.entity.AbstractBot;
-import com.github.jenya705.mcapi.error.PlayerNotFoundException;
 import com.github.jenya705.mcapi.module.web.Request;
 import com.github.jenya705.mcapi.module.web.Response;
 import com.github.jenya705.mcapi.module.web.RouteHandler;
 import com.github.jenya705.mcapi.module.web.WebServer;
+import com.github.jenya705.mcapi.util.ReactiveUtils;
 
 /**
  * @author Jenya705
@@ -23,17 +23,13 @@ public class GetPlayerRouteHandler implements RouteHandler, BaseCommon {
 
     @Override
     public void handle(Request request, Response response) {
-        String id = request.param("id").block();
-        ApiPlayer player =
-                core()
-                        .getOptionalPlayerId(id)
-                        .orElseThrow(() -> new PlayerNotFoundException(id));
+        ApiPlayer player = request
+                .param("id", ApiPlayer.class)
+                .orElseThrow(ReactiveUtils::unknownException);
         request
                 .header("Authorization", AbstractBot.class)
-                .block()
+                .orElseThrow(ReactiveUtils::unknownException)
                 .needPermission("user.get", player);
-        response
-                .status(200)
-                .body(player);
+        response.ok(player);
     }
 }

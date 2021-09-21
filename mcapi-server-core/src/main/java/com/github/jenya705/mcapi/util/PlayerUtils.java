@@ -67,6 +67,7 @@ public class PlayerUtils {
     }
 
     public Object parsePlayerId(String name) {
+        if (name == null) return null;
         if (name.length() < 17) {
             if (name.length() < 3) {
                 return null;

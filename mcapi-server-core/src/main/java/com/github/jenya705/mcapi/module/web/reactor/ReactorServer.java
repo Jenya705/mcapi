@@ -10,13 +10,14 @@ import com.github.jenya705.mcapi.util.ReactiveUtils;
 import com.github.jenya705.mcapi.util.ReactorUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.reactivestreams.Publisher;
+import reactor.core.publisher.Mono;
 import reactor.netty.DisposableServer;
-import reactor.netty.http.server.HttpPredicateUtils;
-import reactor.netty.http.server.HttpServer;
-import reactor.netty.http.server.HttpServerRoutes;
+import reactor.netty.http.server.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
 
 /**
  * @author Jenya705
@@ -66,34 +67,55 @@ public class ReactorServer implements WebServer, BaseCommon {
         routes
                 .route(
                         HttpPredicateUtils.predicate(routeImplementation.getLeft()),
-                        (request, response) -> {
-                            ReactorRequest localRequest = new ReactorRequest(this, request);
-                            ReactorResponse localResponse = new ReactorResponse(response);
-                            try {
-                                routeImplementation.getRight().handle(localRequest, localResponse);
-                            } catch (Throwable e) {
-                                e.printStackTrace();
-                                ApiError error;
-                                if (e instanceof Exception) {
-                                    error = ApiError.raw((Exception) e);
-                                }
-                                else {
-                                    error = new EntityError(
-                                            500,
-                                            0,
-                                            null,
-                                            "Bad"
-                                    );
-                                }
-                                localResponse
-                                        .status(error.getStatusCode())
-                                        .body(error);
-                            }
-                            return response
-                                    .sendString(ReactorUtils.mono(() ->
-                                            mapper.asJson(localResponse.getBody())
-                                    ));
-                        }
+                        routeImplementation.getLeft().getMethod().isWithBody() ?
+                                routeWithBody(routeImplementation.getRight()) :
+                                routeWithoutBody(routeImplementation.getRight())
                 );
+    }
+
+    private BiFunction<HttpServerRequest, HttpServerResponse, Publisher<Void>> routeWithBody(RouteHandler handler) {
+        return (request, response) ->
+                response.sendString(
+                        request
+                                .receive()
+                                .aggregate()
+                                .asString()
+                                .map(body -> executeHandler(request, response, handler, body))
+                );
+    }
+
+    private BiFunction<HttpServerRequest, HttpServerResponse, Publisher<Void>> routeWithoutBody(RouteHandler handler) {
+        return (request, response) ->
+                response.sendString(
+                        ReactorUtils.mono(() ->
+                                executeHandler(request, response, handler, null)
+                        )
+                );
+    }
+
+    private String executeHandler(HttpServerRequest request, HttpServerResponse response, RouteHandler handler, String body) {
+        ReactorRequest localRequest = new ReactorRequest(this, request, body);
+        ReactorResponse localResponse = new ReactorResponse(response);
+        try {
+            handler.handle(localRequest, localResponse);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            ApiError error;
+            if (e instanceof Exception) {
+                error = ApiError.raw((Exception) e);
+            }
+            else {
+                error = new EntityError(
+                        500,
+                        0,
+                        null,
+                        "Bad"
+                );
+            }
+            localResponse
+                    .status(error.getStatusCode())
+                    .body(error);
+        }
+        return mapper.asJson(localResponse.getBody());
     }
 }

@@ -10,12 +10,13 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum HttpMethod {
 
-    POST("POST"),
-    GET("GET"),
-    PUT("PUT"),
-    DELETE("DELETE"),
-    PATCH("PATCH");
+    POST("POST", true),
+    GET("GET", false),
+    PUT("PUT", true),
+    DELETE("DELETE", true),
+    PATCH("PATCH", true);
 
     private final String name;
+    private final boolean withBody;
 
 }

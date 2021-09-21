@@ -10,6 +10,7 @@ import com.github.jenya705.mcapi.module.localization.LocalizationModuleImpl;
 import com.github.jenya705.mcapi.module.mapper.MapperImpl;
 import com.github.jenya705.mcapi.module.rest.GetPlayerRouteHandler;
 import com.github.jenya705.mcapi.module.rest.RestModule;
+import com.github.jenya705.mcapi.module.rest.SendMessageRouteHandler;
 import com.github.jenya705.mcapi.module.selector.ServerSelectorProvider;
 import com.github.jenya705.mcapi.module.storage.StorageModuleImpl;
 import com.github.jenya705.mcapi.module.web.reactor.ReactorServer;
@@ -92,7 +93,8 @@ public class ServerApplication {
                 ReactorServer.class,
                 RestModule.class,
                 ServerSelectorProvider.class,
-                GetPlayerRouteHandler.class
+                GetPlayerRouteHandler.class,
+                SendMessageRouteHandler.class
         );
     }
 

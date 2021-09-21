@@ -27,4 +27,6 @@ public class ReactiveUtils {
         throw new RuntimeException(e);
     }
 
+    public RuntimeException unknownException() { return new RuntimeException("Unknown exception"); }
+
 }

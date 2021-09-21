@@ -4,6 +4,7 @@ import com.github.jenya705.mcapi.ApiOfflinePlayer;
 import com.github.jenya705.mcapi.ApiPlayer;
 import com.github.jenya705.mcapi.ApiUUID;
 import com.github.jenya705.mcapi.error.BotNotPermittedException;
+import com.github.jenya705.mcapi.util.Selector;
 
 import java.util.List;
 import java.util.UUID;
@@ -31,6 +32,10 @@ public interface AbstractBot {
         return hasPermission(permission, player.getUuid());
     }
 
+    default boolean hasPermission(String permission, Selector<?> selector) {
+        return hasPermission(permission + selector.getPermissionName(), selector.getTarget());
+    }
+
     default void needPermission(String permission) {
         if (!hasPermission(permission)) {
             throw new BotNotPermittedException(permission);
@@ -45,4 +50,9 @@ public interface AbstractBot {
 
     default void needPermission(String permission, ApiUUID uuid) {
         needPermission(permission, uuid.getUuid());
-    }}
+    }
+
+    default void needPermission(String permission, Selector<?> selector) {
+        needPermission(permission + selector.getPermissionName(), selector.getTarget());
+    }
+}
