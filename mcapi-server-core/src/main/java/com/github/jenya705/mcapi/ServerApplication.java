@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi;
 
-import com.github.jenya705.mcapi.gateway.GatewayApplication;
+import com.github.jenya705.mcapi.module.web.gateway.Gateway;
 import com.github.jenya705.mcapi.module.authorization.AuthorizationModuleImpl;
 import com.github.jenya705.mcapi.module.command.CommandModuleImpl;
 import com.github.jenya705.mcapi.module.config.ConfigModuleImpl;
@@ -14,23 +14,12 @@ import com.github.jenya705.mcapi.module.rest.SendMessageRouteHandler;
 import com.github.jenya705.mcapi.module.selector.ServerSelectorProvider;
 import com.github.jenya705.mcapi.module.storage.StorageModuleImpl;
 import com.github.jenya705.mcapi.module.web.reactor.ReactorServer;
-import com.github.jenya705.mcapi.rest.ServerExceptionMapperRest;
-import com.github.jenya705.mcapi.rest.bot.BotLinkedRest;
-import com.github.jenya705.mcapi.rest.bot.BotPermissionRest;
-import com.github.jenya705.mcapi.rest.command.CommandCreateRest;
-import com.github.jenya705.mcapi.rest.link.LinkRequestRest;
-import com.github.jenya705.mcapi.rest.offline.OfflinePlayerGetterRest;
-import com.github.jenya705.mcapi.rest.offline.OfflinePlayerPunishmentRest;
-import com.github.jenya705.mcapi.rest.player.*;
 import com.github.jenya705.mcapi.util.Pair;
 import jakarta.ws.rs.core.UriBuilder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.glassfish.grizzly.http.server.HttpServer;
-import org.glassfish.grizzly.http.server.NetworkListener;
-import org.glassfish.grizzly.websockets.WebSocketAddOn;
-import org.glassfish.grizzly.websockets.WebSocketEngine;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 
@@ -47,7 +36,7 @@ import java.util.*;
 @Slf4j
 public class ServerApplication {
 
-    private final List<Pair<Class<?>, Boolean>> classes = new ArrayList<>();
+    private final List<Class<?>> classes = new ArrayList<>();
     private final List<Object> beans = new ArrayList<>();
     private final Map<Class<?>, Object> cachedBeans = new HashMap<>();
 
@@ -62,25 +51,12 @@ public class ServerApplication {
     @Getter
     private ServerCore core;
     @Getter
-    private GatewayApplication gateway;
+    private Gateway gateway;
     @Getter
     private final ServerGateway serverGateway = new ServerGatewayImpl();
 
-    private ServerApplication() {
+    public ServerApplication() {
         addClasses(
-                PlayerSendMessageRest.class,
-                PlayerGetterRest.class,
-                PlayerListRest.class,
-                PlayerPunishmentRest.class,
-                PlayerPermissionRest.class,
-                PlayerSendFormRest.class,
-                BotPermissionRest.class,
-                BotLinkedRest.class,
-                OfflinePlayerGetterRest.class,
-                OfflinePlayerPunishmentRest.class,
-                LinkRequestRest.class,
-                CommandCreateRest.class,
-                ServerExceptionMapperRest.class,
                 JacksonProvider.class,
                 ConfigModuleImpl.class,
                 DatabaseModuleImpl.class,
@@ -98,23 +74,14 @@ public class ServerApplication {
         );
     }
 
-    @Getter
-    private static final ServerApplication application = new ServerApplication();
-
     public void start() {
-        List<Class<?>> jerseyClasses = new ArrayList<>();
         List<Set<Pair<Object, Method>>> initializingMethods = new ArrayList<>(5);
         List<Set<Pair<Object, Method>>> startupMethods = new ArrayList<>(5);
         for (int i = 0; i < 5; ++i) {
             initializingMethods.add(new HashSet<>());
             startupMethods.add(new HashSet<>());
         }
-        for (Pair<Class<?>, Boolean> pair : classes) {
-            Class<?> clazz = pair.getLeft();
-            if (pair.getRight() || clazz.getAnnotation(JerseyClass.class) != null) {
-                jerseyClasses.add(clazz);
-                continue;
-            }
+        for (Class<?> clazz : classes) {
             try {
                 Constructor<?> clazzConstructor = clazz.getConstructor();
                 Object thisObject = clazzConstructor.newInstance();
@@ -135,51 +102,61 @@ public class ServerApplication {
                 return;
             }
         }
+        addBean(this);
         initialized = true;
-        for (Object obj : beans) {
-            for (Field field : obj.getClass().getDeclaredFields()) {
-                if (field.getAnnotation(Bean.class) == null) continue;
-                Object toInject = getBean(field.getType());
-                if (toInject == null) {
-                    log.error(String.format(
-                            "Failed to inject %s bean to %s class in %s field",
-                            field.getType().getCanonicalName(),
-                            obj.getClass().getCanonicalName(),
-                            field.getName()
-                    ));
-                    continue;
-                }
-                try {
-                    field.setAccessible(true);
-                    field.set(obj, toInject);
-                } catch (Exception e) {
-                    log.error(String.format(
-                            "Failed to inject %s bean to %s class in %s field because of exception:",
-                            field.getType().getCanonicalName(),
-                            obj.getClass().getCanonicalName(),
-                            field.getName()
-                    ), e);
-                }
-            }
-        }
+        injectBeans();
         core = getBean(ServerCore.class);
+        gateway = getBean(Gateway.class);
         runMethods(initializingMethods, "initialize", true);
         if (!enabled) return;
         runMethods(startupMethods, "startup", true);
-        if (!enabled) return;
-        runGrizzlyHttpServer(jerseyClasses);
+    }
+
+    protected void injectBeans() {
+        for (Object obj : beans) {
+            injectBeansInObject(obj);
+        }
+    }
+
+    public void injectBeansInObject(Object obj) {
+        Class<?> currentObjClass = obj.getClass();
+        while (currentObjClass != null) {
+            injectBeans(obj, currentObjClass);
+            currentObjClass = currentObjClass.getSuperclass();
+        }
+    }
+
+    protected void injectBeans(Object obj, Class<?> objClass) {
+        for (Field field : objClass.getDeclaredFields()) {
+            if (field.getAnnotation(Bean.class) == null) continue;
+            Object toInject = getBean(field.getType());
+            if (toInject == null) {
+                log.error(String.format(
+                        "Failed to inject %s bean to %s class in %s field",
+                        field.getType().getCanonicalName(),
+                        obj.getClass().getCanonicalName(),
+                        field.getName()
+                ));
+                continue;
+            }
+            try {
+                field.setAccessible(true);
+                field.set(obj, toInject);
+            } catch (Exception e) {
+                log.error(String.format(
+                        "Failed to inject %s bean to %s class in %s field because of exception:",
+                        field.getType().getCanonicalName(),
+                        obj.getClass().getCanonicalName(),
+                        field.getName()
+                ), e);
+            }
+        }
     }
 
     protected void runGrizzlyHttpServer(List<Class<?>> jerseyClasses) {
         URI baseUri = UriBuilder.fromUri("http://localhost").port(8080).build();
         ResourceConfig configuration = new ResourceConfig(jerseyClasses.toArray(new Class<?>[0]));
         httpServer = GrizzlyHttpServerFactory.createHttpServer(baseUri, configuration, false);
-        WebSocketAddOn webSocketAddOn = new WebSocketAddOn();
-        for (NetworkListener listener : httpServer.getListeners()) {
-            listener.registerAddOn(webSocketAddOn);
-        }
-        gateway = new GatewayApplication();
-        WebSocketEngine.getEngine().register("/", "/gateway", gateway);
         try {
             httpServer.start();
         } catch (IOException e) {
@@ -199,8 +176,9 @@ public class ServerApplication {
                             methodPair.getLeft().getClass().getCanonicalName()
                     ), e);
                     if (onFailedDisable) {
-                        log.error("Because creating of this object throw Exception, so disabling application as said");
+                        log.error("Because this object throw Exception, so disabling application as said");
                         disable();
+                        return;
                     }
                 }
             }
@@ -248,17 +226,13 @@ public class ServerApplication {
     }
 
     public void addClass(Class<?> clazz) {
-        classes.add(new Pair<>(clazz, false));
+        classes.add(clazz);
     }
 
     public void addClasses(Class<?>... classes) {
         for (Class<?> clazz : classes) {
-            this.classes.add(new Pair<>(clazz, false));
+            addClass(clazz);
         }
-    }
-
-    public void addJerseyClass(Class<?> clazz) {
-        classes.add(new Pair<>(clazz, true));
     }
 
     public void addBean(Object obj) {

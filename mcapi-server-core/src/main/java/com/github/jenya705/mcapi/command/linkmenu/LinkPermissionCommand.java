@@ -1,8 +1,6 @@
 package com.github.jenya705.mcapi.command.linkmenu;
 
-import com.github.jenya705.mcapi.ApiCommandSender;
-import com.github.jenya705.mcapi.ApiPlayer;
-import com.github.jenya705.mcapi.BaseCommon;
+import com.github.jenya705.mcapi.*;
 import com.github.jenya705.mcapi.command.CommandsUtils;
 import com.github.jenya705.mcapi.command.MenuCommand;
 import com.github.jenya705.mcapi.data.ConfigData;
@@ -42,9 +40,23 @@ public class LinkPermissionCommand extends MenuCommand implements BaseCommon {
         }
     }
 
-    private final DatabaseModule databaseModule = bean(DatabaseModule.class);
-    private final LocalizationModule localizationModule = bean(LocalizationModule.class);
+    @Bean
+    private DatabaseModule databaseModule;
+    @Bean
+    private LocalizationModule localizationModule;
     private CommandConfig config;
+
+    private final ServerApplication application;
+
+    @Override
+    public ServerApplication app() {
+        return application;
+    }
+
+    public LinkPermissionCommand(ServerApplication application) {
+        this.application = application;
+        autoBeans();
+    }
 
     @Override
     public void menuCommand(ApiCommandSender sender, StringfulIterator args, String permission) throws Exception {

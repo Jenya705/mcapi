@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.module.database;
 
-import com.github.jenya705.mcapi.BaseCommon;
+import com.github.jenya705.mcapi.AbstractApplicationModule;
 import com.github.jenya705.mcapi.OnDisable;
 import com.github.jenya705.mcapi.OnInitializing;
 import com.github.jenya705.mcapi.data.ConfigData;
@@ -21,7 +21,7 @@ import java.sql.*;
  * @author Jenya705
  */
 @Slf4j
-public class DatabaseModuleImpl implements DatabaseModule, BaseCommon {
+public class DatabaseModuleImpl extends AbstractApplicationModule implements DatabaseModule {
 
     private static final String urlFormat = "jdbc:%s://%s/%s";
     private static final String sqliteUrlFormat = "jdbc:sqlite://%s";
@@ -45,6 +45,7 @@ public class DatabaseModuleImpl implements DatabaseModule, BaseCommon {
                         .required("database");
         config = new DatabaseModuleConfig(configData);
         cache = new CacheStorageImpl(
+                app(),
                 new CacheConfig(
                         configData
                                 .required("cache")
@@ -55,7 +56,7 @@ public class DatabaseModuleImpl implements DatabaseModule, BaseCommon {
         createConnection();
         log.info(String.format("Done! (Creating connection with %s...)", config.getType()));
         log.info("Loading scripts...");
-        storage = DatabaseModuleImpl.of(this, config.getType());
+        storage = createStorage(config.getType());
         log.info("Done! (Loading scripts...)");
         storage.setup();
         safeAsync = new StorageDatabaseGetter(storage);
@@ -151,12 +152,12 @@ public class DatabaseModuleImpl implements DatabaseModule, BaseCommon {
         return cache;
     }
 
-    public static DatabaseStorage of(DatabaseModule databaseModule, String sqlType) throws IOException {
+    public DatabaseStorage createStorage(String sqlType) throws IOException {
         if (sqlType.equalsIgnoreCase("mysql")) {
-            return new MySqlDatabaseStorage(databaseModule);
+            return new MySqlDatabaseStorage(app(), this);
         }
         else {
-            return new DatabaseStorageImpl(databaseModule, sqlType);
+            return new DatabaseStorageImpl(app(), this, sqlType);
         }
     }
 

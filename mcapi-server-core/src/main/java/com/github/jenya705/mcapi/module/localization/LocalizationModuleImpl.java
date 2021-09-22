@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi.module.localization;
 
+import com.github.jenya705.mcapi.AbstractApplicationModule;
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.OnDisable;
 import com.github.jenya705.mcapi.OnInitializing;
@@ -9,7 +10,7 @@ import lombok.SneakyThrows;
 /**
  * @author Jenya705
  */
-public class LocalizationModuleImpl implements LocalizationModule, BaseCommon {
+public class LocalizationModuleImpl extends AbstractApplicationModule implements LocalizationModule {
 
     private LocalizationModuleConfig config;
 
@@ -34,7 +35,8 @@ public class LocalizationModuleImpl implements LocalizationModule, BaseCommon {
     private void load() {
         config = new LocalizationModuleConfig(
                 new MapConfigData(
-                        core().loadConfig("localization")
+                        core().loadConfig("localization"),
+                        app().getPlatform()
                 )
         );
     }

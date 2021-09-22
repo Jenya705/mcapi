@@ -3,6 +3,7 @@ package com.github.jenya705.mcapi.command.linkmenu;
 import com.github.jenya705.mcapi.ApiCommandSender;
 import com.github.jenya705.mcapi.ApiPlayer;
 import com.github.jenya705.mcapi.BaseCommon;
+import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.CommandsUtils;
 import com.github.jenya705.mcapi.command.MenuCommand;
 import com.github.jenya705.mcapi.data.ConfigData;
@@ -34,8 +35,19 @@ public class LinkUnlinkCommand extends MenuCommand implements BaseCommon {
     }
 
     private CommandConfig config;
+    private LinkingModule linkingModule;
 
-    private final LinkingModule linkingModule = bean(LinkingModule.class);
+    private final ServerApplication application;
+
+    @Override
+    public ServerApplication app() {
+        return application;
+    }
+
+    public LinkUnlinkCommand(ServerApplication application) {
+        this.application = application;
+        autoBeans();
+    }
 
     @Override
     public void menuCommand(ApiCommandSender sender, StringfulIterator args, String permission) throws Exception {

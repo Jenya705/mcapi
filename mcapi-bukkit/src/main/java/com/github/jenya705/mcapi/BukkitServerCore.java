@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 /**
  * @author Jenya705
  */
-public class BukkitServerCore implements JavaServerCore, JavaBaseCommon {
+public class BukkitServerCore extends AbstractJavaApplicationModule implements JavaServerCore {
 
     private static final Yaml yaml = generateYaml();
 
@@ -32,7 +32,7 @@ public class BukkitServerCore implements JavaServerCore, JavaBaseCommon {
         return new Yaml(dumperOptions);
     }
 
-    private JavaPlugin plugin;
+    private BukkitApplication plugin;
     private PermissionManagerHook permissionManagerHook;
 
     @OnInitializing(priority = 0)
@@ -53,7 +53,7 @@ public class BukkitServerCore implements JavaServerCore, JavaBaseCommon {
     public void addCommand(String name, CommandExecutor executor, String permissionName) {
         PluginCommand command = plugin.getCommand(name);
         if (command == null) return;
-        command.setExecutor(new BukkitCommandWrapper(executor, permissionName));
+        command.setExecutor(new BukkitCommandWrapper(plugin, executor, permissionName));
         Bukkit.getOnlinePlayers().forEach(Player::updateCommands);
     }
 

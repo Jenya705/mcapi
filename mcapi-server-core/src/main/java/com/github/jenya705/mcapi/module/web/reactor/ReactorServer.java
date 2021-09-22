@@ -11,7 +11,6 @@ import com.github.jenya705.mcapi.util.ReactorUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.reactivestreams.Publisher;
-import reactor.core.publisher.Mono;
 import reactor.netty.DisposableServer;
 import reactor.netty.http.server.*;
 
@@ -23,7 +22,7 @@ import java.util.function.BiFunction;
  * @author Jenya705
  */
 @Slf4j
-public class ReactorServer implements WebServer, BaseCommon {
+public class ReactorServer extends AbstractApplicationModule implements WebServer {
 
     private final List<Pair<Route, RouteHandler>> routeImplementations = new ArrayList<>();
 

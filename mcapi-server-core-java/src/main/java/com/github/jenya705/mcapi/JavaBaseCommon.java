@@ -5,17 +5,10 @@ package com.github.jenya705.mcapi;
  */
 public interface JavaBaseCommon extends BaseCommon {
 
-    default JavaServerApplication java() {
-        return JavaServerApplication.getApplication();
-    }
-
-    @Override
-    default <T> T bean(Class<? extends T> clazz) {
-        return java().getBean(clazz);
-    }
+    JavaServerApplication app();
 
     @Override
     default JavaServerCore core() {
-        return (JavaServerCore) java().getCore();
+        return (JavaServerCore) app().getCore();
     }
 }

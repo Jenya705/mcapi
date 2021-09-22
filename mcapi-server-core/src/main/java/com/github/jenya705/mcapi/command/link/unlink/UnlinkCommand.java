@@ -3,6 +3,7 @@ package com.github.jenya705.mcapi.command.link.unlink;
 import com.github.jenya705.mcapi.ApiCommandSender;
 import com.github.jenya705.mcapi.ApiPlayer;
 import com.github.jenya705.mcapi.BaseCommon;
+import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.command.CommandTab;
 import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutor;
@@ -23,7 +24,7 @@ import java.util.stream.Collectors;
  * @author Jenya705
  */
 @AdditionalPermissions("others")
-public class UnlinkCommand extends AdvancedCommandExecutor<UnlinkArguments> implements BaseCommon {
+public class UnlinkCommand extends AdvancedCommandExecutor<UnlinkArguments> {
 
     private UnlinkConfig config;
 
@@ -31,8 +32,8 @@ public class UnlinkCommand extends AdvancedCommandExecutor<UnlinkArguments> impl
     private final GlobalConfig globalConfig = bean(ConfigModule.class).global();
     private final LinkingModule linkingModule = bean(LinkingModule.class);
 
-    public UnlinkCommand() {
-        super(UnlinkArguments.class);
+    public UnlinkCommand(ServerApplication application) {
+        super(application, UnlinkArguments.class);
         this
                 .databaseTab((sender, permission, databaseGetter) ->
                         Optional.of(sender)

@@ -1,8 +1,6 @@
 package com.github.jenya705.mcapi.module.link;
 
-import com.github.jenya705.mcapi.ApiPlayer;
-import com.github.jenya705.mcapi.BaseCommon;
-import com.github.jenya705.mcapi.OnStartup;
+import com.github.jenya705.mcapi.*;
 import com.github.jenya705.mcapi.command.CommandsUtils;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.entity.BotLinkEntity;
@@ -21,7 +19,6 @@ import com.github.jenya705.mcapi.form.FormPlatformProvider;
 import com.github.jenya705.mcapi.form.component.*;
 import com.github.jenya705.mcapi.event.LinkEvent;
 import com.github.jenya705.mcapi.event.UnlinkEvent;
-import com.github.jenya705.mcapi.ApiLinkRequest;
 import com.github.jenya705.mcapi.module.command.CommandModule;
 import com.github.jenya705.mcapi.module.config.ConfigModule;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
@@ -40,16 +37,21 @@ import java.util.stream.Stream;
 /**
  * @author Jenya705
  */
-public class LinkingModuleImpl implements LinkingModule, BaseCommon {
+public class LinkingModuleImpl extends AbstractApplicationModule implements LinkingModule {
 
     private final ExecutorService async = Executors.newSingleThreadExecutor();
 
     private LinkingModuleConfig config;
 
+    @Bean
     private FormPlatformProvider formProvider;
+    @Bean
     private DatabaseModule databaseModule;
+    @Bean
     private StorageModule storageModule;
+    @Bean
     private LocalizationModule localizationModule;
+    @Bean
     private CommandModule commandModule;
 
     private final MultivaluedMap<UUID, LinkObject> links = new MultivaluedHashMap<>();
@@ -61,11 +63,6 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
                         .getConfig()
                         .required("linking")
         );
-        localizationModule = bean(LocalizationModule.class);
-        storageModule = bean(StorageModule.class);
-        databaseModule = bean(DatabaseModule.class);
-        formProvider = bean(FormPlatformProvider.class);
-        commandModule = bean(CommandModule.class);
     }
 
     @Override
@@ -196,7 +193,7 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
                     gateway()
                             .getClients()
                             .stream()
-                            .filter(it -> it.getEntity().getId() == id)
+                            .filter(it -> it.getOwner().getEntity().getId() == id)
                             .filter(it -> it.isSubscribed(RestUnlinkEvent.type))
                             .forEach(it -> it.send(new EntityUnlinkEvent(player).rest()))
             );
@@ -240,7 +237,7 @@ public class LinkingModuleImpl implements LinkingModule, BaseCommon {
                 gateway()
                         .getClients()
                         .stream()
-                        .filter(client -> client.getEntity().getId() == finalLinkObject.getId())
+                        .filter(client -> client.getOwner().getEntity().getId() == finalLinkObject.getId())
                         .filter(client -> client.isSubscribed(RestLinkEvent.type))
                         .forEach(client -> client.send(
                                 new EntityLinkEvent(

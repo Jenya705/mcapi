@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi.data;
 
+import com.github.jenya705.mcapi.ServerPlatform;
 import lombok.Getter;
 
 import java.util.HashMap;
@@ -17,6 +18,15 @@ public class GlobalConfigData extends MapConfigData implements GlobalContainer {
     public GlobalConfigData(Map<String, Object> data, Map<String, Object> globals) {
         super(data);
         this.globals = globals;
+    }
+
+    public GlobalConfigData(Map<String, Object> data, Map<String, Object> globals, ServerPlatform platform) {
+        super(data, platform);
+        this.globals = globals;
+    }
+
+    public GlobalConfigData(Map<String, Object> data, ServerPlatform platform) {
+        this(data, new HashMap<>(), platform);
     }
 
     @SuppressWarnings("unchecked")
@@ -52,7 +62,7 @@ public class GlobalConfigData extends MapConfigData implements GlobalContainer {
 
     @Override
     public MapConfigData createSelf(Map<String, Object> from) {
-        return new GlobalConfigData(from, globals);
+        return new GlobalConfigData(from, globals, getPlatform());
     }
 
     @Override

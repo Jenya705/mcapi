@@ -2,6 +2,7 @@ package com.github.jenya705.mcapi.command.link.links;
 
 import com.github.jenya705.mcapi.ApiCommandSender;
 import com.github.jenya705.mcapi.BaseCommon;
+import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
@@ -12,14 +13,14 @@ import java.util.Collections;
 /**
  * @author Jenya705
  */
-public class LinksCommand extends AdvancedCommandExecutor<LinksArguments> implements BaseCommon {
+public class LinksCommand extends AdvancedCommandExecutor<LinksArguments> {
 
     private LinksConfig config;
 
     private final DatabaseModule databaseModule = bean(DatabaseModule.class);
 
-    public LinksCommand() {
-        super(LinksArguments.class);
+    public LinksCommand(ServerApplication application) {
+        super(application, LinksArguments.class);
         this
                 .tab(() -> Collections.singletonList("<page>"))
                 .tab((sender, permission) ->

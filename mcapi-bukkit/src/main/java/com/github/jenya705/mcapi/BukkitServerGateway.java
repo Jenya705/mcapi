@@ -16,7 +16,7 @@ import java.util.Arrays;
 /**
  * @author Jenya705
  */
-public class BukkitServerGateway implements BaseCommon, Listener {
+public class BukkitServerGateway extends AbstractApplicationModule implements Listener {
 
     private ServerGateway serverGateway() {
         return app().getServerGateway();

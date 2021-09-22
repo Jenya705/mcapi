@@ -4,6 +4,7 @@ import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.ServerPlatform;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.data.GlobalContainer;
+import com.github.jenya705.mcapi.data.PlatformContainer;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
@@ -35,7 +36,8 @@ public class Config {
             String key = parseKey(valueAnnotation.key(), field.getName());
             try {
                 Object fieldValue;
-                if (ServerApplication.getApplication().getPlatform() == ServerPlatform.JAVA) {
+                ServerPlatform platform = getPlatform(data);
+                if (platform == ServerPlatform.JAVA) {
                     Java javaAnnotation = field.getAnnotation(Java.class);
                     if (javaAnnotation == null) {
                         fieldValue = field.get(object);
@@ -92,6 +94,13 @@ public class Config {
             }
             field.setAccessible(false);
         }
+    }
+
+    protected static ServerPlatform getPlatform(ConfigData data) {
+        if (data instanceof PlatformContainer) {
+            return ((PlatformContainer) data).getPlatform();
+        }
+        return ServerPlatform.OTHER;
     }
 
     protected static String parseKey(String key, String fieldName) {

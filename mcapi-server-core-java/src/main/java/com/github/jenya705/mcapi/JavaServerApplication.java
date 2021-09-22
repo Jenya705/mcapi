@@ -1,28 +1,20 @@
 package com.github.jenya705.mcapi;
 
 import com.github.jenya705.mcapi.form.JavaFormProvider;
-import com.github.jenya705.mcapi.rest.PlayerSendComponentRest;
 import lombok.Getter;
 import lombok.experimental.Delegate;
 
 /**
  * @author Jenya705
  */
-public class JavaServerApplication {
+public class JavaServerApplication extends ServerApplication {
 
-    @Delegate
-    protected ServerApplication getDefaultApplication() {
-        return ServerApplication.getApplication();
-    }
-
-    private JavaServerApplication() {
+    public JavaServerApplication() {
+        super();
         addClasses(
-                PlayerSendComponentRest.class,
                 JavaFormProvider.class
         );
         setPlatform(ServerPlatform.JAVA);
     }
 
-    @Getter
-    private final static JavaServerApplication application = new JavaServerApplication();
 }

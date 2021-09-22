@@ -2,31 +2,31 @@ package com.github.jenya705.mcapi.command.gateway.subscriptions;
 
 import com.github.jenya705.mcapi.ApiCommandSender;
 import com.github.jenya705.mcapi.ApiPlayer;
-import com.github.jenya705.mcapi.BaseCommon;
+import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.entity.BotEntity;
-import com.github.jenya705.mcapi.gateway.GatewayClientImpl;
+import com.github.jenya705.mcapi.module.web.gateway.GatewayClient;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.Set;
 import java.util.UUID;
 
 /**
  * @author Jenya705
  */
 @AdditionalPermissions("others")
-public class SubscriptionsGatewaysCommand extends AdvancedCommandExecutor<SubscriptionsGatewaysArguments> implements BaseCommon {
+public class SubscriptionsGatewaysCommand extends AdvancedCommandExecutor<SubscriptionsGatewaysArguments> {
 
     private final DatabaseModule databaseModule = bean(DatabaseModule.class);
 
     private SubscriptionsGatewaysConfig config;
 
-    public SubscriptionsGatewaysCommand() {
-        super(SubscriptionsGatewaysArguments.class);
+    public SubscriptionsGatewaysCommand(ServerApplication application) {
+        super(application, SubscriptionsGatewaysArguments.class);
         this
                 .tab(() -> Collections.singletonList("<token>"))
                 .tab(() -> Collections.singletonList("<page>"));
@@ -42,13 +42,13 @@ public class SubscriptionsGatewaysCommand extends AdvancedCommandExecutor<Subscr
             sendMessage(sender, config.getNotPermitted());
             return;
         }
-        Set<String> subscriptions =
+        Collection<String> subscriptions =
                 gateway()
                         .getClients()
                         .stream()
-                        .filter(it -> it.getEntity().getId() == bot.getId())
+                        .filter(it -> it.getOwner().getEntity().getId() == bot.getId())
                         .findFirst()
-                        .map(GatewayClientImpl::getSubscriptions)
+                        .map(GatewayClient::getSubscriptions)
                         .orElse(null);
         if (subscriptions == null) {
             sendMessage(sender, config.getBotIsNotConnected());

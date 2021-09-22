@@ -14,7 +14,7 @@ import com.github.jenya705.mcapi.util.Selector;
 /**
  * @author Jenya705
  */
-public class SendMessageRouteHandler implements RouteHandler, BaseCommon {
+public class SendMessageRouteHandler extends AbstractApplicationModule implements RouteHandler {
 
     @Bean
     private SelectorProvider selectorProvider;

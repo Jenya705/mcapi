@@ -1,9 +1,6 @@
 package com.github.jenya705.mcapi.module.rest;
 
-import com.github.jenya705.mcapi.ApiPlayer;
-import com.github.jenya705.mcapi.BaseCommon;
-import com.github.jenya705.mcapi.OnStartup;
-import com.github.jenya705.mcapi.Routes;
+import com.github.jenya705.mcapi.*;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.module.web.Request;
 import com.github.jenya705.mcapi.module.web.Response;
@@ -14,7 +11,7 @@ import com.github.jenya705.mcapi.util.ReactiveUtils;
 /**
  * @author Jenya705
  */
-public class GetPlayerRouteHandler implements RouteHandler, BaseCommon {
+public class GetPlayerRouteHandler extends AbstractApplicationModule implements RouteHandler {
 
     @OnStartup
     public void start() {

@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi.module.command;
 
+import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.types.BooleanOption;
 import com.github.jenya705.mcapi.command.types.IntegerOption;
 import com.github.jenya705.mcapi.command.types.PlayerOption;
@@ -19,12 +20,12 @@ public class CommandOptionParserContainer {
 
     private final Map<String, CommandValueOptionParser> parsers;
 
-    public CommandOptionParserContainer() {
+    public CommandOptionParserContainer(ServerApplication application) {
         parsers = new HashMap<>();
         parsers.put(BooleanOption.type, new BooleanOptionParser());
         parsers.put(IntegerOption.type, new IntegerOptionParser());
         parsers.put(StringOption.type, new StringOptionParser());
-        parsers.put(PlayerOption.type, new PlayerOptionParser());
+        parsers.put(PlayerOption.type, new PlayerOptionParser(application));
     }
 
     public CommandValueOptionParser getParser(String type) {

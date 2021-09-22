@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.module.database;
 
-import com.github.jenya705.mcapi.BaseCommon;
+import com.github.jenya705.mcapi.AbstractApplicationModule;
+import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.entity.BotEntity;
 import com.github.jenya705.mcapi.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.entity.BotPermissionEntity;
@@ -23,9 +24,9 @@ import java.util.stream.Collectors;
  * @author Jenya705
  */
 @Getter(AccessLevel.PROTECTED)
-public class DatabaseStorageImpl implements DatabaseStorage, BaseCommon {
+public class DatabaseStorageImpl extends AbstractApplicationModule implements DatabaseStorage {
 
-    private final StorageModule storageModule = bean(StorageModule.class);
+    private final StorageModule storageModule;
     private final DatabaseModule databaseModule;
     private final String sqlType;
 
@@ -56,7 +57,9 @@ public class DatabaseStorageImpl implements DatabaseStorage, BaseCommon {
     private final String updatePermission;
     private final String upsertPermission;
 
-    public DatabaseStorageImpl(DatabaseModule databaseModule, String sqlType) throws IOException {
+    public DatabaseStorageImpl(ServerApplication application, DatabaseModule databaseModule, String sqlType) throws IOException {
+        super(application);
+        storageModule = bean(StorageModule.class);
         this.databaseModule = databaseModule;
         this.sqlType = sqlType;
         setup = loadScript("setup");

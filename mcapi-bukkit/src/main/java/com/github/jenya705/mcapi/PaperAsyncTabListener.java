@@ -18,8 +18,9 @@ import java.util.stream.Collectors;
 /**
  * @author Jenya705
  */
-public class PaperAsyncTabListener implements Listener, BaseCommon {
+public class PaperAsyncTabListener extends AbstractApplicationModule implements Listener {
 
+    @Bean
     private BukkitApplication plugin;
 
     @EventHandler
@@ -76,7 +77,6 @@ public class PaperAsyncTabListener implements Listener, BaseCommon {
 
     @OnStartup
     public void registerSelf() {
-        plugin = bean(BukkitApplication.class);
         Bukkit.getPluginManager().registerEvents(this, plugin);
         plugin.setAsyncTab(true);
     }

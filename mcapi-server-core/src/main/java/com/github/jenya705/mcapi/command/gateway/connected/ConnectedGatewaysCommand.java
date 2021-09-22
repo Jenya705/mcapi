@@ -2,6 +2,7 @@ package com.github.jenya705.mcapi.command.gateway.connected;
 
 import com.github.jenya705.mcapi.ApiCommandSender;
 import com.github.jenya705.mcapi.BaseCommon;
+import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.data.ConfigData;
 
@@ -10,12 +11,12 @@ import java.util.Collections;
 /**
  * @author Jenya705
  */
-public class ConnectedGatewaysCommand extends AdvancedCommandExecutor<ConnectedGatewaysArguments> implements BaseCommon {
+public class ConnectedGatewaysCommand extends AdvancedCommandExecutor<ConnectedGatewaysArguments> {
 
     private ConnectedGatewaysConfig config;
 
-    public ConnectedGatewaysCommand() {
-        super(ConnectedGatewaysArguments.class);
+    public ConnectedGatewaysCommand(ServerApplication application) {
+        super(application, ConnectedGatewaysArguments.class);
         this
                 .tab(() -> Collections.singletonList("<page>"));
     }
@@ -29,7 +30,7 @@ public class ConnectedGatewaysCommand extends AdvancedCommandExecutor<ConnectedG
                 config.getListDelimiter(),
                 gateway().getClients(),
                 client -> new String[]{
-                        "%name%", client.getEntity().getName()
+                        "%name%", client.getOwner().getEntity().getName()
                 },
                 config.getMaxElements(),
                 args.getPage(),

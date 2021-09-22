@@ -1,7 +1,9 @@
 package com.github.jenya705.mcapi.command;
 
+import com.github.jenya705.mcapi.AbstractApplicationModule;
 import com.github.jenya705.mcapi.ApiCommandSender;
 import com.github.jenya705.mcapi.BaseCommon;
+import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.stringful.StringfulIterator;
 import com.github.jenya705.mcapi.util.Pair;
@@ -15,7 +17,7 @@ import java.util.stream.Collectors;
 /**
  * @author Jenya705
  */
-public class ContainerCommandExecutor implements CommandExecutor, BaseCommon {
+public class ContainerCommandExecutor extends AbstractApplicationModule implements CommandExecutor {
 
     @Getter
     private final Map<String, Object> nodes;
@@ -25,11 +27,12 @@ public class ContainerCommandExecutor implements CommandExecutor, BaseCommon {
 
     private ContainerCommandConfig config;
 
-    public ContainerCommandExecutor(String permission, String command) {
-        this(new HashMap<>(), permission, command);
+    public ContainerCommandExecutor(ServerApplication application, String permission, String command) {
+        this(application, new HashMap<>(), permission, command);
     }
 
-    public ContainerCommandExecutor(Map<String, Object> nodes, String permission, String command) {
+    public ContainerCommandExecutor(ServerApplication application, Map<String, Object> nodes, String permission, String command) {
+        super(application);
         this.nodes = nodes;
         this.permission = permission;
         this.command = command;

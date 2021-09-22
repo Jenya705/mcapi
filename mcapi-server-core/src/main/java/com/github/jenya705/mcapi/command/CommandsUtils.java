@@ -3,6 +3,7 @@ package com.github.jenya705.mcapi.command;
 import lombok.experimental.UtilityClass;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -25,7 +26,7 @@ public class CommandsUtils {
         return messageWithPlaceholders;
     }
 
-    public <T> String listMessage(String layout, String element, String delimiter, List<T> elements, Function<T, String[]> placeholdersGet, String... layoutPlaceholders) {
+    public <T> String listMessage(String layout, String element, String delimiter, Collection<T> elements, Function<T, String[]> placeholdersGet, String... layoutPlaceholders) {
         return listMessage(layout, element, delimiter, elements, placeholdersGet, elements.size(), 0, layoutPlaceholders);
     }
 
@@ -33,7 +34,7 @@ public class CommandsUtils {
             String layout,
             String element,
             String delimiter,
-            List<T> elements,
+            Collection<T> elements,
             Function<T, String[]> placeholdersGet,
             int size,
             int page,

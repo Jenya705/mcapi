@@ -1,7 +1,9 @@
 package com.github.jenya705.mcapi.module.command;
 
+import com.github.jenya705.mcapi.AbstractApplicationModule;
 import com.github.jenya705.mcapi.ApiCommandSender;
 import com.github.jenya705.mcapi.BaseCommon;
+import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.*;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.entity.AbstractBot;
@@ -22,7 +24,7 @@ import java.util.stream.Collectors;
  * @author Jenya705
  */
 @NoConfig
-public class ApiCommandExecutor implements CommandExecutor, BaseCommon {
+public class ApiCommandExecutor extends AbstractApplicationModule implements CommandExecutor {
 
     public static final String others = "__others__";
 
@@ -33,7 +35,8 @@ public class ApiCommandExecutor implements CommandExecutor, BaseCommon {
     private final List<Supplier<List<String>>> tabs;
     private final String path;
 
-    public ApiCommandExecutor(String path, CommandModule commandModule, AbstractBot owner, ApiCommandValueOption... valueOptions) {
+    public ApiCommandExecutor(ServerApplication application, String path, CommandModule commandModule, AbstractBot owner, ApiCommandValueOption... valueOptions) {
+        super(application);
         this.path = path;
         this.owner = owner;
         this.commandModule = commandModule;

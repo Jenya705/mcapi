@@ -1,6 +1,8 @@
 package com.github.jenya705.mcapi.module.database.cache;
 
+import com.github.jenya705.mcapi.AbstractApplicationModule;
 import com.github.jenya705.mcapi.BaseCommon;
+import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.entity.BotEntity;
 import com.github.jenya705.mcapi.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.entity.BotPermissionEntity;
@@ -14,9 +16,9 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author Jenya705
  */
-public class CacheStorageImpl implements BaseCommon, CacheStorage {
+public class CacheStorageImpl extends AbstractApplicationModule implements CacheStorage {
 
-    private final DatabaseModule databaseModule = bean(DatabaseModule.class);
+    private final DatabaseModule databaseModule;
 
     private final FutureCacheStorage futureCacheStorage;
 
@@ -26,7 +28,9 @@ public class CacheStorageImpl implements BaseCommon, CacheStorage {
     private final Cache<Integer, List<BotPermissionEntity>> permissionCache;
     private final Map<String, Integer> botTokens;
 
-    public CacheStorageImpl(CacheConfig config) {
+    public CacheStorageImpl(ServerApplication application, CacheConfig config) {
+        super(application);
+        databaseModule = bean(DatabaseModule.class);
         futureCacheStorage = new FutureCacheStorageImpl(this, databaseModule);
         botTokens = new ConcurrentHashMap<>();
         botCache = CacheBuilder.newBuilder()

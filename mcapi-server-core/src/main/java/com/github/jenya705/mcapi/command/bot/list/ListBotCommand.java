@@ -2,6 +2,7 @@ package com.github.jenya705.mcapi.command.bot.list;
 
 import com.github.jenya705.mcapi.ApiCommandSender;
 import com.github.jenya705.mcapi.BaseCommon;
+import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.data.ConfigData;
@@ -14,14 +15,14 @@ import java.util.Collections;
  * @author Jenya705
  */
 @AdditionalPermissions("others")
-public class ListBotCommand extends AdvancedCommandExecutor<ListBotArguments> implements BaseCommon {
+public class ListBotCommand extends AdvancedCommandExecutor<ListBotArguments> {
 
     private ListBotConfig config;
 
     private final DatabaseModule databaseModule = bean(DatabaseModule.class);
 
-    public ListBotCommand() {
-        super(ListBotArguments.class);
+    public ListBotCommand(ServerApplication application) {
+        super(application, ListBotArguments.class);
         this
                 .tab(() -> Collections.singletonList("<page>"))
                 .tab((sender, permission) ->

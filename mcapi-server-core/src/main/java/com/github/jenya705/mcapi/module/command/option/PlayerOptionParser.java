@@ -3,6 +3,7 @@ package com.github.jenya705.mcapi.module.command.option;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.jenya705.mcapi.ApiOfflinePlayer;
 import com.github.jenya705.mcapi.BaseCommon;
+import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.ApiCommandValueOption;
 import com.github.jenya705.mcapi.command.types.PlayerOption;
 import com.github.jenya705.mcapi.entity.AbstractBot;
@@ -17,7 +18,15 @@ import java.util.stream.Collectors;
  */
 public class PlayerOptionParser extends AbstractCommandValueOptionParser implements BaseCommon {
 
-    public PlayerOptionParser() {
+    private final ServerApplication application;
+
+    @Override
+    public ServerApplication app() {
+        return application;
+    }
+
+    public PlayerOptionParser(ServerApplication application) {
+        this.application = application;
         this
                 .tab(tabDefault, (option, bot) -> {
                     PlayerOption realOption = (PlayerOption) option;

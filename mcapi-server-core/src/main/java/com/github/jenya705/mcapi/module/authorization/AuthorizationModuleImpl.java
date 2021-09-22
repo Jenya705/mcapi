@@ -1,6 +1,8 @@
 package com.github.jenya705.mcapi.module.authorization;
 
+import com.github.jenya705.mcapi.AbstractApplicationModule;
 import com.github.jenya705.mcapi.BaseCommon;
+import com.github.jenya705.mcapi.Bean;
 import com.github.jenya705.mcapi.OnStartup;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.entity.BotEntity;
@@ -14,16 +16,13 @@ import com.github.jenya705.mcapi.module.storage.StorageModule;
 /**
  * @author Jenya705
  */
-public class AuthorizationModuleImpl implements AuthorizationModule, BaseCommon {
+public class AuthorizationModuleImpl extends AbstractApplicationModule implements AuthorizationModule {
 
+    @Bean
     private DatabaseStorage scriptStorage;
-    private StorageModule storage;
 
-    @OnStartup
-    public void start() {
-        scriptStorage = bean(DatabaseModule.class).storage();
-        storage = bean(StorageModule.class);
-    }
+    @Bean
+    private StorageModule storage;
 
     @Override
     public AbstractBot bot(String authorization) {

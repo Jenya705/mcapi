@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi.module.storage;
 
+import com.github.jenya705.mcapi.AbstractApplicationModule;
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.OnDisable;
 import com.github.jenya705.mcapi.OnStartup;
@@ -15,7 +16,7 @@ import java.util.Map;
 /**
  * @author Jenya705
  */
-public class StorageModuleImpl implements StorageModule, BaseCommon {
+public class StorageModuleImpl extends AbstractApplicationModule implements StorageModule {
 
     private final Map<String, PermissionEntity> permissions = new HashMap<>();
 
@@ -43,7 +44,8 @@ public class StorageModuleImpl implements StorageModule, BaseCommon {
     public void loadAndSave() throws IOException {
         StorageModuleConfig config = new StorageModuleConfig(
                 new MapConfigData(
-                        core().loadConfig("storage")
+                        core().loadConfig("storage"),
+                        app().getPlatform()
                 )
         );
         loadPermissions(config);

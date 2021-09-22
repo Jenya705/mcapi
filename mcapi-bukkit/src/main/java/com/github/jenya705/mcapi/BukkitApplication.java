@@ -20,18 +20,21 @@ import java.lang.reflect.Constructor;
  */
 @Getter
 @Setter
-public class BukkitApplication extends JavaPlugin implements JavaBaseCommon {
+public class BukkitApplication extends JavaPlugin {
 
     private boolean asyncTab;
 
+    private JavaServerApplication application;
+
     @Override
     public void onEnable() {
-        java().addClass(BukkitServerCore.class);
-        java().addClass(BukkitServerGateway.class);
+        application = new JavaServerApplication();
+        application.addClass(BukkitServerCore.class);
+        application.addClass(BukkitServerGateway.class);
         paperFeatures();
         permissionManager();
-        java().addBean(this);
-        java().start();
+        application.addBean(this);
+        application.start();
     }
 
     private void permissionManager() {
@@ -43,7 +46,7 @@ public class BukkitApplication extends JavaPlugin implements JavaBaseCommon {
                     if (getServer().getServicesManager().getRegistration(Permission.class) == null) {
                         return false;
                     }
-                    java().addClass(VaultPermissionHook.class);
+                    application.addClass(VaultPermissionHook.class);
                     return true;
                 });
     }
@@ -55,7 +58,7 @@ public class BukkitApplication extends JavaPlugin implements JavaBaseCommon {
     private FailureOperation ifClassExistsAddClass(String className, Class<?> clazzToAdd) {
         try {
             Class.forName(className);
-            java().addClass(clazzToAdd);
+            application.addClass(clazzToAdd);
         } catch (ClassNotFoundException e) {
             return FailureOperation.failed();
         }
@@ -64,7 +67,7 @@ public class BukkitApplication extends JavaPlugin implements JavaBaseCommon {
 
     @Override
     public void onDisable() {
-        java().stop();
+        application.stop();
     }
 
     @Override

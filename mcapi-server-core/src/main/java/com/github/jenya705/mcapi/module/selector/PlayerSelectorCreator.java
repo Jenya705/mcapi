@@ -2,6 +2,7 @@ package com.github.jenya705.mcapi.module.selector;
 
 import com.github.jenya705.mcapi.ApiPlayer;
 import com.github.jenya705.mcapi.BaseCommon;
+import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.error.PlayerNotFoundException;
@@ -23,7 +24,15 @@ public class PlayerSelectorCreator extends MapSelectorCreator<ApiPlayer, PlayerS
         private final AbstractBot bot;
     }
 
-    private PlayerSelectorCreator() {
+    private final ServerApplication application;
+
+    @Override
+    public ServerApplication app() {
+        return application;
+    }
+
+    public PlayerSelectorCreator(ServerApplication application) {
+        this.application = application;
         this
                 .uuidDirect((data, id) ->
                         core()
@@ -54,12 +63,6 @@ public class PlayerSelectorCreator extends MapSelectorCreator<ApiPlayer, PlayerS
                                 )
                                 .orElseGet(Collections::emptyList)
                 );
-    }
-
-    public static final PlayerSelectorCreator singleton = new PlayerSelectorCreator();
-
-    public static PlayerSelectorCreator get() {
-        return singleton;
     }
 
 }

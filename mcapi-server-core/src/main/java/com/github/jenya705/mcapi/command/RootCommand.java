@@ -1,6 +1,8 @@
 package com.github.jenya705.mcapi.command;
 
+import com.github.jenya705.mcapi.AbstractApplicationModule;
 import com.github.jenya705.mcapi.BaseCommon;
+import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.bot.create.CreateBotCommand;
 import com.github.jenya705.mcapi.command.bot.delete.DeleteBotCommand;
 import com.github.jenya705.mcapi.command.bot.list.ListBotCommand;
@@ -21,34 +23,38 @@ import java.util.function.Supplier;
 /**
  * @author Jenya705
  */
-public class RootCommand implements Supplier<ContainerCommandExecutor>, BaseCommon {
+public class RootCommand extends AbstractApplicationModule implements Supplier<ContainerCommandExecutor> {
 
     public static final String name = "mcapi";
     public static final String permission = "mcapi.command";
 
+    public RootCommand(ServerApplication application) {
+        super(application);
+    }
+
     @SneakyThrows
     @Override
     public ContainerCommandExecutor get() {
-        ContainerCommandExecutor container = new ContainerCommandExecutor("mcapi.command", "mcapi");
+        ContainerCommandExecutor container = new ContainerCommandExecutor(app(), "mcapi.command", "mcapi");
         container
                 .tree()
                 .branch("bot", branch -> branch
-                        .leaf("create", new CreateBotCommand())
-                        .leaf("list", new ListBotCommand())
-                        .leaf("delete", new DeleteBotCommand())
+                        .leaf("create", new CreateBotCommand(app()))
+                        .leaf("list", new ListBotCommand(app()))
+                        .leaf("delete", new DeleteBotCommand(app()))
                 )
                 .branch("gateway", branch -> branch
-                        .leaf("connected", new ConnectedGatewaysCommand())
-                        .leaf("subscriptions", new SubscriptionsGatewaysCommand())
+                        .leaf("connected", new ConnectedGatewaysCommand(app()))
+                        .leaf("subscriptions", new SubscriptionsGatewaysCommand(app()))
                 )
                 .ghostBranch("linkMenu", branch -> branch
-                        .leaf("end", new LinkEndCommand())
-                        .leaf("toggle", new LinkTogglePermissionCommand())
-                        .leaf("permission", new LinkPermissionCommand())
-                        .leaf("unlink", new LinkUnlinkCommand())
+                        .leaf("end", new LinkEndCommand(app()))
+                        .leaf("toggle", new LinkTogglePermissionCommand(app()))
+                        .leaf("permission", new LinkPermissionCommand(app()))
+                        .leaf("unlink", new LinkUnlinkCommand(app()))
                 )
-                .leaf("links", new LinksCommand())
-                .leaf("unlink", new UnlinkCommand())
+                .leaf("links", new LinksCommand(app()))
+                .leaf("unlink", new UnlinkCommand(app()))
         ;
         ConfigData configData =
                 new GlobalConfigData(core().loadConfig("commands"));

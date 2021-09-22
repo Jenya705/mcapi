@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.module.selector;
 
 import com.github.jenya705.mcapi.BaseCommon;
+import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.entity.BotObject;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
@@ -14,7 +15,7 @@ import java.util.Optional;
 /**
  * @author Jenya705
  */
-public class BotSelectorCreator extends MapSelectorCreator<AbstractBot, BotSelectorCreator.Data> implements BaseCommon {
+public class BotSelectorCreator extends MapSelectorCreator<AbstractBot, BotSelectorCreator.Data> {
 
     @lombok.Data
     @AllArgsConstructor
@@ -22,10 +23,12 @@ public class BotSelectorCreator extends MapSelectorCreator<AbstractBot, BotSelec
         private AbstractBot bot;
     }
 
-    private final DatabaseModule databaseModule = bean(DatabaseModule.class);
-    private final StorageModule storageModule = bean(StorageModule.class);
+    private final DatabaseModule databaseModule;
+    private final StorageModule storageModule;
 
-    public BotSelectorCreator() {
+    public BotSelectorCreator(ServerApplication application) {
+        databaseModule = application.getBean(DatabaseModule.class);
+        storageModule = application.getBean(StorageModule.class);
         this
                 .direct(
                         (data, token) ->

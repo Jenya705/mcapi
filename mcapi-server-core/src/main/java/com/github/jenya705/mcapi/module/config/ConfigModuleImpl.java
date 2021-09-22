@@ -1,9 +1,6 @@
 package com.github.jenya705.mcapi.module.config;
 
-import com.github.jenya705.mcapi.BaseCommon;
-import com.github.jenya705.mcapi.OnDisable;
-import com.github.jenya705.mcapi.OnInitializing;
-import com.github.jenya705.mcapi.OnStartup;
+import com.github.jenya705.mcapi.*;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.data.MapConfigData;
 import lombok.Getter;
@@ -16,7 +13,7 @@ import java.io.IOException;
  */
 @Slf4j
 @Getter
-public class ConfigModuleImpl implements ConfigModule, BaseCommon {
+public class ConfigModuleImpl extends AbstractApplicationModule implements ConfigModule {
 
     private ConfigData config;
     private GlobalConfig global;
@@ -24,7 +21,7 @@ public class ConfigModuleImpl implements ConfigModule, BaseCommon {
     @OnInitializing(priority = 1)
     public void initialize() throws IOException {
         log.info("Loading config...");
-        config = new MapConfigData(core().loadConfig("config"));
+        config = new MapConfigData(core().loadConfig("config"), app().getPlatform());
         log.info("Done! (Loading config...)");
         global = new GlobalConfig(config.required("global"));
     }

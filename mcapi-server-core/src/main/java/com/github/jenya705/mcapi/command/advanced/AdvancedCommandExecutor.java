@@ -1,8 +1,6 @@
 package com.github.jenya705.mcapi.command.advanced;
 
-import com.github.jenya705.mcapi.ApiCommandSender;
-import com.github.jenya705.mcapi.ApiPlayer;
-import com.github.jenya705.mcapi.BaseCommon;
+import com.github.jenya705.mcapi.*;
 import com.github.jenya705.mcapi.command.CommandExecutor;
 import com.github.jenya705.mcapi.command.CommandTab;
 import com.github.jenya705.mcapi.command.CommandsUtils;
@@ -15,6 +13,7 @@ import lombok.AccessLevel;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -24,15 +23,17 @@ import java.util.function.Supplier;
 /**
  * @author Jenya705
  */
-public abstract class AdvancedCommandExecutor<T> implements CommandExecutor, BaseCommon {
+public abstract class AdvancedCommandExecutor<T> extends AbstractApplicationModule implements CommandExecutor {
 
-    private final DatabaseModule databaseModule = bean(DatabaseModule.class);
+    private final DatabaseModule databaseModule;
     private final List<TabFunction> tabs = new ArrayList<>();
     private final StringfulParser<T> parser;
     @Setter(AccessLevel.PROTECTED)
     private AdvancedCommandExecutorConfig config;
 
-    public AdvancedCommandExecutor(Class<? extends T> argsClass) {
+    public AdvancedCommandExecutor(ServerApplication application, Class<? extends T> argsClass) {
+        super(application);
+        databaseModule = bean(DatabaseModule.class);
         try {
             parser = new StringfulParserImpl<>(argsClass);
         } catch (Exception e) {
@@ -71,7 +72,7 @@ public abstract class AdvancedCommandExecutor<T> implements CommandExecutor, Bas
             String layout,
             String element,
             String delimiter,
-            List<E> elements,
+            Collection<E> elements,
             Function<E, String[]> placeholdersGet,
             String... layoutPlaceholders
     ) {
@@ -85,7 +86,7 @@ public abstract class AdvancedCommandExecutor<T> implements CommandExecutor, Bas
             String layout,
             String element,
             String delimiter,
-            List<E> elements,
+            Collection<E> elements,
             Function<E, String[]> placeholdersGet,
             int size,
             int page,

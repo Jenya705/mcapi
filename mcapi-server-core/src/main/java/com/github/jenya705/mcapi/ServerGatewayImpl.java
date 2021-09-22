@@ -13,7 +13,7 @@ import com.github.jenya705.mcapi.event.QuitEvent;
 /**
  * @author Jenya705
  */
-public class ServerGatewayImpl implements ServerGateway, BaseCommon {
+public class ServerGatewayImpl extends AbstractApplicationModule implements ServerGateway {
 
     @Override
     public void receiveMessage(ApiPlayer player, String message) {

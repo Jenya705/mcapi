@@ -20,9 +20,9 @@ import java.util.stream.Collectors;
  */
 @Getter
 @AllArgsConstructor
-public class BukkitCommandWrapper implements org.bukkit.command.CommandExecutor, org.bukkit.command.TabCompleter, BaseCommon {
+public class BukkitCommandWrapper implements org.bukkit.command.CommandExecutor, org.bukkit.command.TabCompleter {
 
-    private final BukkitApplication plugin = bean(BukkitApplication.class);
+    private final BukkitApplication plugin;
     private final CommandExecutor executor;
     private final String permission;
 

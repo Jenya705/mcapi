@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.module.command;
 
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.github.jenya705.mcapi.AbstractApplicationModule;
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.JacksonProvider;
 import com.github.jenya705.mcapi.OnStartup;
@@ -26,19 +27,19 @@ import java.util.regex.Pattern;
  * @author Jenya705
  */
 @Slf4j
-public class CommandModuleImpl implements CommandModule, BaseCommon {
+public class CommandModuleImpl extends AbstractApplicationModule implements CommandModule {
 
     private static final Pattern commandNamePattern = Pattern.compile("[a-zA-Z0-9_]*");
 
     private ContainerCommandConfig containerCommandConfig;
 
-    private final CommandOptionParserContainer parserContainer = new CommandOptionParserContainer();
+    private final CommandOptionParserContainer parserContainer = new CommandOptionParserContainer(app());
     private final Map<Integer, ContainerCommandExecutor> botCommands = new HashMap<>();
 
     @OnStartup
     public void start() {
         log.info("Registering root command...");
-        core().addCommand(RootCommand.name, new RootCommand().get(), RootCommand.permission);
+        core().addCommand(RootCommand.name, new RootCommand(app()).get(), RootCommand.permission);
         log.info("Done! (Registering root command...)");
         containerCommandConfig = new ContainerCommandConfig(
                 bean(ConfigModule.class)
@@ -62,7 +63,7 @@ public class CommandModuleImpl implements CommandModule, BaseCommon {
             String globalCommandPermission =
                     String.format(permissionFormat, owner.getEntity().getId());
             botCommand = new ContainerCommandExecutor(
-                    owner.getEntity().getName(), globalCommandPermission
+                    app(), owner.getEntity().getName(), globalCommandPermission
             );
             botCommand.withConfig(containerCommandConfig);
             core().addCommand(owner.getEntity().getName(), botCommand, globalCommandPermission);
@@ -95,6 +96,7 @@ public class CommandModuleImpl implements CommandModule, BaseCommon {
             return newNode;
         }
         return new ApiCommandExecutor(
+                app(),
                 path,
                 this,
                 owner,

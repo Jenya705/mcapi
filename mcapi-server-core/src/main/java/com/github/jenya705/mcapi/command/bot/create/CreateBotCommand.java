@@ -2,6 +2,7 @@ package com.github.jenya705.mcapi.command.bot.create;
 
 import com.github.jenya705.mcapi.ApiCommandSender;
 import com.github.jenya705.mcapi.BaseCommon;
+import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.data.ConfigData;
@@ -18,15 +19,15 @@ import java.util.Collections;
  * @author Jenya705
  */
 @AdditionalPermissions("others")
-public class CreateBotCommand extends AdvancedCommandExecutor<CreateBotArguments> implements BaseCommon {
+public class CreateBotCommand extends AdvancedCommandExecutor<CreateBotArguments> {
 
     private CreateBotConfig config;
 
     private final GlobalConfig globalConfig = bean(ConfigModule.class).global();
     private final DatabaseModule databaseModule = bean(DatabaseModule.class);
 
-    public CreateBotCommand() {
-        super(CreateBotArguments.class);
+    public CreateBotCommand(ServerApplication application) {
+        super(application, CreateBotArguments.class);
         this
                 .tab(() -> Collections.singletonList("<bot_name>"))
                 .tab((sender, permission) ->
