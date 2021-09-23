@@ -8,6 +8,7 @@ import com.github.jenya705.mcapi.module.web.WebServer;
 import com.github.jenya705.mcapi.util.Pair;
 import com.github.jenya705.mcapi.util.ReactiveUtils;
 import com.github.jenya705.mcapi.util.ReactorUtils;
+import com.github.jenya705.mcapi.util.ZipUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.reactivestreams.Publisher;
@@ -39,11 +40,30 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
         server = HttpServer
                 .create()
                 .port(8081)
-                .route(routes ->
-                        routeImplementations.forEach(routeImplementation ->
-                                route(routeImplementation, routes)
-                        )
-                );
+                .route(routes -> {
+                    routeImplementations.forEach(routeImplementation ->
+                            route(routeImplementation, routes)
+                    );
+//                    routes
+//                            .ws("/ws", (websocketInbound, websocketOutbound) -> {
+//                                System.out.println(websocketInbound.toString());
+//                                return websocketOutbound
+//                                        .sendByteArray(
+//                                                websocketInbound
+//                                                        .receive()
+//                                                        .retain()
+//                                                        .asByteArray()
+//                                                        .map(ZipUtils::decompressSneaky)
+//                                                        .map(String::new)
+//                                                        .map(str -> {
+//                                                            System.out.println(str);
+//                                                            return str;
+//                                                        })
+//                                                        .map(str -> ZipUtils.compressSneaky(str.getBytes()))
+//                                                        .doOnError(e -> e.printStackTrace())
+//                                        );
+//                            });
+                });
         nettyServer = server
                 .bind()
                 .doOnError(ReactiveUtils::runtimeException)

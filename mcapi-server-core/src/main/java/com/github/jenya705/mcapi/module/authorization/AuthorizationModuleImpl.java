@@ -1,16 +1,13 @@
 package com.github.jenya705.mcapi.module.authorization;
 
 import com.github.jenya705.mcapi.AbstractApplicationModule;
-import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.Bean;
-import com.github.jenya705.mcapi.OnStartup;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.entity.BotEntity;
 import com.github.jenya705.mcapi.entity.BotObject;
 import com.github.jenya705.mcapi.error.AuthorizationBadTokenException;
 import com.github.jenya705.mcapi.error.AuthorizationFormatException;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
-import com.github.jenya705.mcapi.module.database.DatabaseStorage;
 import com.github.jenya705.mcapi.module.storage.StorageModule;
 
 /**
@@ -19,7 +16,7 @@ import com.github.jenya705.mcapi.module.storage.StorageModule;
 public class AuthorizationModuleImpl extends AbstractApplicationModule implements AuthorizationModule {
 
     @Bean
-    private DatabaseStorage scriptStorage;
+    private DatabaseModule databaseModule;
 
     @Bean
     private StorageModule storage;
@@ -39,10 +36,10 @@ public class AuthorizationModuleImpl extends AbstractApplicationModule implement
 
     @Override
     public AbstractBot rawBot(String token) {
-        BotEntity bot = scriptStorage.findBotByToken(token);
+        BotEntity bot = databaseModule.storage().findBotByToken(token);
         if (bot == null) {
             throw new AuthorizationBadTokenException();
         }
-        return new BotObject(bot, scriptStorage, storage);
+        return new BotObject(bot, databaseModule.storage(), storage);
     }
 }

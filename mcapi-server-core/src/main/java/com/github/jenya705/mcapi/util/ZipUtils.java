@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi.util;
 
+import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
 import java.io.ByteArrayOutputStream;
@@ -40,4 +41,15 @@ public class ZipUtils {
         outputStream.close();
         return outputStream.toByteArray();
     }
+
+    @SneakyThrows
+    public byte[] compressSneaky(byte[] data) {
+        return compress(data);
+    }
+
+    @SneakyThrows
+    public byte[] decompressSneaky(byte[] data) {
+        return decompress(data);
+    }
+
 }
