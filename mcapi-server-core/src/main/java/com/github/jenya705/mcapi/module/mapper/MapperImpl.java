@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.github.jenya705.mcapi.ApiError;
+import com.github.jenya705.mcapi.entity.RestError;
+import com.github.jenya705.mcapi.entity.api.EntityError;
 import lombok.SneakyThrows;
 
 import java.util.HashMap;
@@ -14,8 +17,11 @@ import java.util.Map;
  */
 public class MapperImpl implements Mapper {
 
+    private static final ApiError defaultError = new EntityError(0, 500, null, "Some bad happened");
+
     private final ObjectMapper json = new ObjectMapper();
     private final Map<Class<?>, RawDeserializer<?>> rawDeserializers = new HashMap<>();
+    private final Map<Class<?>, ThrowableParser> throwableParsers = new HashMap<>();
 
     private static boolean booleanParse(String s) {
         if (s.equalsIgnoreCase("true")) return true;
@@ -63,6 +69,17 @@ public class MapperImpl implements Mapper {
     }
 
     @Override
+    public ApiError asApiError(Throwable throwable) {
+        if (throwableParsers.containsKey(throwable.getClass())) {
+            return throwableParsers.get(throwable.getClass()).parse(throwable);
+        }
+        if (throwable instanceof Exception) {
+            return ApiError.raw((Exception) throwable);
+        }
+        return defaultError;
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public <T> T fromRaw(String param, Class<? extends T> clazz) {
         return (T) rawDeserializers.get(clazz).deserialize(param);
@@ -87,6 +104,12 @@ public class MapperImpl implements Mapper {
         SimpleModule module = new SimpleModule();
         module.addSerializer(clazz, serializer);
         json.registerModule(module);
+        return this;
+    }
+
+    @Override
+    public <T> Mapper throwableParser(Class<? extends T> clazz, ThrowableParser throwableParser) {
+        throwableParsers.put(clazz, throwableParser);
         return this;
     }
 }

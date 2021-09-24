@@ -5,6 +5,9 @@ import com.github.jenya705.mcapi.entity.api.EntityError;
 import com.github.jenya705.mcapi.module.mapper.Mapper;
 import com.github.jenya705.mcapi.module.web.RouteHandler;
 import com.github.jenya705.mcapi.module.web.WebServer;
+import com.github.jenya705.mcapi.module.web.websocket.WebSocketConnection;
+import com.github.jenya705.mcapi.module.web.websocket.WebSocketMessage;
+import com.github.jenya705.mcapi.module.web.websocket.WebSocketRouteHandler;
 import com.github.jenya705.mcapi.util.Pair;
 import com.github.jenya705.mcapi.util.ReactiveUtils;
 import com.github.jenya705.mcapi.util.ReactorUtils;
@@ -12,11 +15,16 @@ import com.github.jenya705.mcapi.util.ZipUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.reactivestreams.Publisher;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.netty.DisposableServer;
 import reactor.netty.http.server.*;
+import reactor.netty.http.websocket.WebsocketInbound;
+import reactor.netty.http.websocket.WebsocketOutbound;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.BiFunction;
 
 /**
@@ -26,6 +34,7 @@ import java.util.function.BiFunction;
 public class ReactorServer extends AbstractApplicationModule implements WebServer {
 
     private final List<Pair<Route, RouteHandler>> routeImplementations = new ArrayList<>();
+    private final List<Pair<String, WebSocketRouteHandler>> webSocketRouteImplementations = new ArrayList<>();
 
     @Bean
     @Getter
@@ -37,6 +46,29 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
     @OnStartup(priority = 4)
     public void start() {
         log.info("Starting web server...");
+        addWebSocketHandler("/ws", new WebSocketRouteHandler() {
+            @Override
+            public void onConnect(WebSocketConnection connection) {
+                connection.send("Hi!!!");
+            }
+
+            @Override
+            public Object onMessage(WebSocketConnection connection, WebSocketMessage message) {
+                System.out.println(message.get());
+                connection.send("Hi!!!");
+                return null;
+            }
+
+            @Override
+            public void onClose(WebSocketConnection connection) {
+                System.out.println("close");
+            }
+
+            @Override
+            public void onError(WebSocketConnection connection, Throwable throwable) {
+                throwable.printStackTrace();
+            }
+        });
         server = HttpServer
                 .create()
                 .port(8081)
@@ -44,25 +76,9 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
                     routeImplementations.forEach(routeImplementation ->
                             route(routeImplementation, routes)
                     );
-//                    routes
-//                            .ws("/ws", (websocketInbound, websocketOutbound) -> {
-//                                System.out.println(websocketInbound.toString());
-//                                return websocketOutbound
-//                                        .sendByteArray(
-//                                                websocketInbound
-//                                                        .receive()
-//                                                        .retain()
-//                                                        .asByteArray()
-//                                                        .map(ZipUtils::decompressSneaky)
-//                                                        .map(String::new)
-//                                                        .map(str -> {
-//                                                            System.out.println(str);
-//                                                            return str;
-//                                                        })
-//                                                        .map(str -> ZipUtils.compressSneaky(str.getBytes()))
-//                                                        .doOnError(e -> e.printStackTrace())
-//                                        );
-//                            });
+                    webSocketRouteImplementations.forEach(webSocketRouteImplementation ->
+                            webSocketRoute(webSocketRouteImplementation, routes)
+                    );
                 });
         nettyServer = server
                 .bind()
@@ -78,6 +94,17 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
         if (server != null) {
             server.route(routes ->
                     route(routeImplementation, routes)
+            );
+        }
+    }
+
+    @Override
+    public void addWebSocketHandler(String uri, WebSocketRouteHandler handler) {
+        Pair<String, WebSocketRouteHandler> webSocketRouteImplementation = new Pair<>(uri, handler);
+        webSocketRouteImplementations.add(webSocketRouteImplementation);
+        if (server != null) {
+            server.route(routes ->
+                    webSocketRoute(webSocketRouteImplementation, routes)
             );
         }
     }
@@ -136,5 +163,53 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
                     .body(error);
         }
         return mapper.asJson(localResponse.getBody());
+    }
+
+    private void webSocketRoute(Pair<String, WebSocketRouteHandler> webSocketRouteImplementation, HttpServerRoutes routes) {
+        routes
+                .ws(
+                        webSocketRouteImplementation.getLeft(),
+                        (in, out) -> executeWebSocketHandler(
+                                in, out,
+                                webSocketRouteImplementation.getRight()
+                        )
+                );
+    }
+
+    private Publisher<Void> executeWebSocketHandler(WebsocketInbound inbound, WebsocketOutbound outbound, WebSocketRouteHandler handler) {
+        ReactorWebSocketConnection connection = new ReactorWebSocketConnection(inbound, outbound, this);
+        handler.onConnect(connection);
+        inbound
+                .receiveCloseStatus()
+                .subscribe(closeStatus -> handler.onClose(connection));
+        return outbound.sendByteArray(
+                Flux
+                        .create(sink -> {
+                            connection.setSendFunction(sink::next);
+                            inbound
+                                    .receive()
+                                    .asByteArray()
+                                    .map(ZipUtils::decompressSneaky)
+                                    .map(String::new)
+                                    .map(message ->
+                                            Objects.requireNonNullElse(
+                                                    handler.onMessage(
+                                                            connection,
+                                                            new ReactorWebSocketMessage(message, this)
+                                                    ),
+                                                    "ok"
+                                            )
+                                    )
+                                    .doOnError(e -> handler.onError(connection, e))
+                                    .onErrorResume(e -> Mono.just(mapper.asApiError(e)))
+                                    .map(mapper::asJson)
+                                    .subscribe(sink::next);
+                        })
+                        .map(Object::toString)
+                        .map(String::getBytes)
+                        .map(ZipUtils::compressSneaky)
+                        .doOnError(e -> handler.onError(connection, e))
+                        .doOnError(e -> outbound.sendClose())
+        );
     }
 }

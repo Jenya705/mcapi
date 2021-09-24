@@ -5,9 +5,12 @@ package com.github.jenya705.mcapi.module.web.websocket;
  */
 public interface WebSocketRouteHandler {
 
-    void connection(WebSocketConnection connection);
+    Object onMessage(WebSocketConnection connection, WebSocketMessage message);
 
-    void message(WebSocketConnection connection, WebSocketMessage message);
+    default void onConnect(WebSocketConnection connection) { }
 
-    void close(WebSocketConnection connection);
+    default void onClose(WebSocketConnection connection) { }
+
+    default void onError(WebSocketConnection connection, Throwable throwable) { }
+
 }

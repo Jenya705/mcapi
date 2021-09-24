@@ -29,4 +29,9 @@ public class ReactiveUtils {
 
     public RuntimeException unknownException() { return new RuntimeException("Unknown exception"); }
 
+    public void needRuntimeException(Throwable e) {
+        if (e instanceof RuntimeException) throw (RuntimeException) e;
+        throw new RuntimeException(e);
+    }
+
 }
