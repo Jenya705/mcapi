@@ -2,26 +2,26 @@ package com.github.jenya705.mcapi.module.web.reactor;
 
 import com.github.jenya705.mcapi.module.web.websocket.WebSocketConnection;
 import lombok.AllArgsConstructor;
-import lombok.Setter;
+import lombok.Getter;
+import reactor.core.publisher.FluxSink;
 import reactor.netty.http.websocket.WebsocketInbound;
 import reactor.netty.http.websocket.WebsocketOutbound;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 /**
  * @author Jenya705
  */
-@AllArgsConstructor
 public class ReactorWebSocketConnection implements WebSocketConnection {
 
     private final WebsocketInbound inbound;
     private final WebsocketOutbound outbound;
     private final ReactorServer server;
 
-    private Consumer<String> sendFunction;
+    @Getter
+    private FluxSink<String> sink;
 
     private final List<String> toSend = new ArrayList<>();
 
@@ -47,17 +47,22 @@ public class ReactorWebSocketConnection implements WebSocketConnection {
 
     @Override
     public void send(Object obj) {
-        if (sendFunction != null) {
-            sendFunction.accept(server.getMapper().asJson(obj));
+        if (sink != null) {
+            sink.next(server.getMapper().asJson(obj));
         }
         else {
             toSend.add(server.getMapper().asJson(obj));
         }
     }
 
-    public void setSendFunction(Consumer<String> sendFunction) {
-        this.sendFunction = sendFunction;
-        toSend.forEach(str -> this.sendFunction.accept(str));
+    @Override
+    public int hashCode() {
+        return inbound.hashCode();
+    }
+
+    public synchronized void setSink(FluxSink<String> sink) {
+        this.sink = sink;
+        toSend.forEach(str -> this.sink.next(str));
         toSend.clear();
     }
 }

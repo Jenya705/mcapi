@@ -13,7 +13,7 @@ public enum DefaultPermission {
     USER_GET("user.get", false, false, true),
     USER_LIST("user.list", true, false, true),
     USER_HAS_PERMISSION("user.has_permission", false, false, true),
-    GATEWAY_MESSAGE_RECEIVED("gateway.message_received", true, false, true),
+    GATEWAY_MESSAGE("gateway.message", true, false, true),
     GATEWAY_COMMAND("gateway.command_interaction", true, false, true),
     GATEWAY_LINK("gateway.link", true, false, true),
     GATEWAY_UNLINK("gateway.unlink", true, false, true),

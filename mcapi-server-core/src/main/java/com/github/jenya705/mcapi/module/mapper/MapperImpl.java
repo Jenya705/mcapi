@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.github.jenya705.mcapi.ApiError;
 import com.github.jenya705.mcapi.entity.RestError;
 import com.github.jenya705.mcapi.entity.api.EntityError;
+import com.github.jenya705.mcapi.util.CacheClassMap;
 import lombok.SneakyThrows;
 
 import java.util.HashMap;
@@ -20,8 +21,8 @@ public class MapperImpl implements Mapper {
     private static final ApiError defaultError = new EntityError(0, 500, null, "Some bad happened");
 
     private final ObjectMapper json = new ObjectMapper();
-    private final Map<Class<?>, RawDeserializer<?>> rawDeserializers = new HashMap<>();
-    private final Map<Class<?>, ThrowableParser> throwableParsers = new HashMap<>();
+    private final Map<Class<?>, RawDeserializer<?>> rawDeserializers = new CacheClassMap<>();
+    private final Map<Class<?>, ThrowableParser> throwableParsers = new CacheClassMap<>();
 
     private static boolean booleanParse(String s) {
         if (s.equalsIgnoreCase("true")) return true;
@@ -112,4 +113,5 @@ public class MapperImpl implements Mapper {
         throwableParsers.put(clazz, throwableParser);
         return this;
     }
+
 }

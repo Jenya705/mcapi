@@ -9,6 +9,6 @@ public interface Gateway {
 
     void broadcast(Object obj, String type);
 
-    Collection<GatewayClient> getClients();
+    Collection<? extends GatewayClient> getClients();
 
 }

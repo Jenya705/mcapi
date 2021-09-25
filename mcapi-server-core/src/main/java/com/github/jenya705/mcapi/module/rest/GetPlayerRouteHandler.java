@@ -2,6 +2,7 @@ package com.github.jenya705.mcapi.module.rest;
 
 import com.github.jenya705.mcapi.*;
 import com.github.jenya705.mcapi.entity.AbstractBot;
+import com.github.jenya705.mcapi.error.AuthorizationBadTokenException;
 import com.github.jenya705.mcapi.module.web.Request;
 import com.github.jenya705.mcapi.module.web.Response;
 import com.github.jenya705.mcapi.module.web.RouteHandler;
@@ -25,7 +26,7 @@ public class GetPlayerRouteHandler extends AbstractApplicationModule implements 
                 .orElseThrow(ReactiveUtils::unknownException);
         request
                 .header("Authorization", AbstractBot.class)
-                .orElseThrow(ReactiveUtils::unknownException)
+                .orElseThrow(AuthorizationBadTokenException::new)
                 .needPermission("user.get", player);
         response.ok(player);
     }

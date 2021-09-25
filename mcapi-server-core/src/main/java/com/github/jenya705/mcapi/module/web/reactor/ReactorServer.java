@@ -46,29 +46,6 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
     @OnStartup(priority = 4)
     public void start() {
         log.info("Starting web server...");
-        addWebSocketHandler("/ws", new WebSocketRouteHandler() {
-            @Override
-            public void onConnect(WebSocketConnection connection) {
-                connection.send("Hi!!!");
-            }
-
-            @Override
-            public Object onMessage(WebSocketConnection connection, WebSocketMessage message) {
-                System.out.println(message.get());
-                connection.send("Hi!!!");
-                return null;
-            }
-
-            @Override
-            public void onClose(WebSocketConnection connection) {
-                System.out.println("close");
-            }
-
-            @Override
-            public void onError(WebSocketConnection connection, Throwable throwable) {
-                throwable.printStackTrace();
-            }
-        });
         server = HttpServer
                 .create()
                 .port(8081)
@@ -145,19 +122,7 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
         try {
             handler.handle(localRequest, localResponse);
         } catch (Throwable e) {
-            e.printStackTrace();
-            ApiError error;
-            if (e instanceof Exception) {
-                error = ApiError.raw((Exception) e);
-            }
-            else {
-                error = new EntityError(
-                        500,
-                        0,
-                        null,
-                        "Bad"
-                );
-            }
+            ApiError error = mapper.asApiError(e);
             localResponse
                     .status(error.getStatusCode())
                     .body(error);
@@ -181,11 +146,16 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
         handler.onConnect(connection);
         inbound
                 .receiveCloseStatus()
-                .subscribe(closeStatus -> handler.onClose(connection));
+                .subscribe(closeStatus -> {
+                    handler.onClose(connection);
+                    if (connection.getSink() != null) {
+                        connection.getSink().complete();
+                    }
+                });
         return outbound.sendByteArray(
                 Flux
-                        .create(sink -> {
-                            connection.setSendFunction(sink::next);
+                        .<String>create(sink -> {
+                            connection.setSink(sink);
                             inbound
                                     .receive()
                                     .asByteArray()
@@ -197,15 +167,15 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
                                                             connection,
                                                             new ReactorWebSocketMessage(message, this)
                                                     ),
-                                                    "ok"
+                                                    ""
                                             )
                                     )
                                     .doOnError(e -> handler.onError(connection, e))
                                     .onErrorResume(e -> Mono.just(mapper.asApiError(e)))
                                     .map(mapper::asJson)
+                                    .filter(String::isEmpty)
                                     .subscribe(sink::next);
                         })
-                        .map(Object::toString)
                         .map(String::getBytes)
                         .map(ZipUtils::compressSneaky)
                         .doOnError(e -> handler.onError(connection, e))

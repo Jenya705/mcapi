@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi;
 
+import com.github.jenya705.mcapi.module.web.gateway.DefaultGateway;
 import com.github.jenya705.mcapi.module.web.gateway.Gateway;
 import com.github.jenya705.mcapi.module.authorization.AuthorizationModuleImpl;
 import com.github.jenya705.mcapi.module.command.CommandModuleImpl;
@@ -49,11 +50,14 @@ public class ServerApplication {
     private ServerPlatform platform;
 
     @Getter
+    @Bean
     private ServerCore core;
     @Getter
+    @Bean
     private Gateway gateway;
     @Getter
-    private final ServerGateway serverGateway = new ServerGatewayImpl();
+    @Bean
+    private ServerGateway serverGateway;
 
     public ServerApplication() {
         addClasses(
@@ -70,7 +74,9 @@ public class ServerApplication {
                 RestModule.class,
                 ServerSelectorProvider.class,
                 GetPlayerRouteHandler.class,
-                SendMessageRouteHandler.class
+                SendMessageRouteHandler.class,
+                DefaultGateway.class,
+                ServerGatewayImpl.class
         );
     }
 
@@ -105,8 +111,7 @@ public class ServerApplication {
         addBean(this);
         initialized = true;
         injectBeans();
-        core = getBean(ServerCore.class);
-        gateway = getBean(Gateway.class);
+        injectBeansInObject(this);
         runMethods(initializingMethods, "initialize", true);
         if (!enabled) return;
         runMethods(startupMethods, "startup", true);
