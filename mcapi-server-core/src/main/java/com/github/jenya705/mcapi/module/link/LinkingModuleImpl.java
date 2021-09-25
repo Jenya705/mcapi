@@ -1,6 +1,9 @@
 package com.github.jenya705.mcapi.module.link;
 
-import com.github.jenya705.mcapi.*;
+import com.github.jenya705.mcapi.AbstractApplicationModule;
+import com.github.jenya705.mcapi.ApiPlayer;
+import com.github.jenya705.mcapi.Bean;
+import com.github.jenya705.mcapi.OnStartup;
 import com.github.jenya705.mcapi.command.CommandsUtils;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.entity.BotLinkEntity;
@@ -17,17 +20,15 @@ import com.github.jenya705.mcapi.error.LinkRequestPermissionNotFoundException;
 import com.github.jenya705.mcapi.form.FormComponent;
 import com.github.jenya705.mcapi.form.FormPlatformProvider;
 import com.github.jenya705.mcapi.form.component.*;
-import com.github.jenya705.mcapi.event.LinkEvent;
-import com.github.jenya705.mcapi.event.UnlinkEvent;
 import com.github.jenya705.mcapi.module.command.CommandModule;
 import com.github.jenya705.mcapi.module.config.ConfigModule;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.module.localization.LocalizationModule;
 import com.github.jenya705.mcapi.module.storage.StorageModule;
 import com.github.jenya705.mcapi.util.ListUtils;
+import com.github.jenya705.mcapi.util.MultivaluedMap;
+import com.github.jenya705.mcapi.util.MultivaluedMapImpl;
 import com.github.jenya705.mcapi.util.ReactiveUtils;
-import jakarta.ws.rs.core.MultivaluedHashMap;
-import jakarta.ws.rs.core.MultivaluedMap;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -54,7 +55,7 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
     @Bean
     private CommandModule commandModule;
 
-    private final MultivaluedMap<UUID, LinkObject> links = new MultivaluedHashMap<>();
+    private final MultivaluedMap<UUID, LinkObject> links = new MultivaluedMapImpl<>(new HashMap<>());
 
     @OnStartup
     public void start() {

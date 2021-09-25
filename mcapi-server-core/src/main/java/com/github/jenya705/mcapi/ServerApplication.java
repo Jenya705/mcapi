@@ -95,7 +95,7 @@ public class ServerApplication {
                             startupMethods.get(onStartup.priority()).add(new Pair<>(thisObject, method));
                         }
                     }
-                    currentClass = clazz.getSuperclass();
+                    currentClass = currentClass.getSuperclass();
                 }
                 beans.add(thisObject);
             } catch (Exception e) {

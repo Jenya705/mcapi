@@ -1,15 +1,15 @@
 package com.github.jenya705.mcapi.util;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
 /**
  * @author Jenya705
  */
-public interface MultivaluedMap<T, V> extends Map<T, Collection<V>> {
+public interface MultivaluedMap<T, V> extends Map<T, List<V>> {
 
-    static <T, V> MultivaluedMap<T, V> of(Map<T, Collection<V>> map) {
+    static <T, V> MultivaluedMap<T, V> of(Map<T, List<V>> map) {
         return new MultivaluedMapImpl<>(map);
     }
 
