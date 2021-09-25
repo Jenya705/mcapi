@@ -31,13 +31,13 @@ import java.util.function.BiFunction;
  * @author Jenya705
  */
 @Slf4j
+@Getter
 public class ReactorServer extends AbstractApplicationModule implements WebServer {
 
     private final List<Pair<Route, RouteHandler>> routeImplementations = new ArrayList<>();
     private final List<Pair<String, WebSocketRouteHandler>> webSocketRouteImplementations = new ArrayList<>();
 
     @Bean
-    @Getter
     private Mapper mapper;
 
     private HttpServer server;

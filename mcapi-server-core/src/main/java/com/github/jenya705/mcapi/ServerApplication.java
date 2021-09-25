@@ -1,7 +1,5 @@
 package com.github.jenya705.mcapi;
 
-import com.github.jenya705.mcapi.module.web.gateway.DefaultGateway;
-import com.github.jenya705.mcapi.module.web.gateway.Gateway;
 import com.github.jenya705.mcapi.module.authorization.AuthorizationModuleImpl;
 import com.github.jenya705.mcapi.module.command.CommandModuleImpl;
 import com.github.jenya705.mcapi.module.config.ConfigModuleImpl;
@@ -9,26 +7,22 @@ import com.github.jenya705.mcapi.module.database.DatabaseModuleImpl;
 import com.github.jenya705.mcapi.module.link.LinkingModuleImpl;
 import com.github.jenya705.mcapi.module.localization.LocalizationModuleImpl;
 import com.github.jenya705.mcapi.module.mapper.MapperImpl;
-import com.github.jenya705.mcapi.module.rest.GetPlayerRouteHandler;
 import com.github.jenya705.mcapi.module.rest.RestModule;
-import com.github.jenya705.mcapi.module.rest.SendMessageRouteHandler;
+import com.github.jenya705.mcapi.module.rest.route.GetPlayerRouteHandler;
+import com.github.jenya705.mcapi.module.rest.route.SendMessageRouteHandler;
 import com.github.jenya705.mcapi.module.selector.ServerSelectorProvider;
 import com.github.jenya705.mcapi.module.storage.StorageModuleImpl;
+import com.github.jenya705.mcapi.module.web.gateway.DefaultGateway;
+import com.github.jenya705.mcapi.module.web.gateway.Gateway;
 import com.github.jenya705.mcapi.module.web.reactor.ReactorServer;
 import com.github.jenya705.mcapi.util.Pair;
-import jakarta.ws.rs.core.UriBuilder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.glassfish.grizzly.http.server.HttpServer;
-import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
-import org.glassfish.jersey.server.ResourceConfig;
 
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.net.URI;
 import java.util.*;
 
 /**
@@ -42,7 +36,6 @@ public class ServerApplication {
     private final Map<Class<?>, Object> cachedBeans = new HashMap<>();
 
     private boolean initialized = false;
-    private HttpServer httpServer;
     private boolean enabled = true;
 
     @Getter
@@ -61,7 +54,6 @@ public class ServerApplication {
 
     public ServerApplication() {
         addClasses(
-                JacksonProvider.class,
                 ConfigModuleImpl.class,
                 DatabaseModuleImpl.class,
                 StorageModuleImpl.class,
@@ -91,15 +83,19 @@ public class ServerApplication {
             try {
                 Constructor<?> clazzConstructor = clazz.getConstructor();
                 Object thisObject = clazzConstructor.newInstance();
-                for (Method method : clazz.getMethods()) {
-                    OnInitializing onInitializing = method.getAnnotation(OnInitializing.class);
-                    if (onInitializing != null) {
-                        initializingMethods.get(onInitializing.priority()).add(new Pair<>(thisObject, method));
+                Class<?> currentClass = clazz;
+                while (currentClass != null) {
+                    for (Method method : currentClass.getMethods()) {
+                        OnInitializing onInitializing = method.getAnnotation(OnInitializing.class);
+                        if (onInitializing != null) {
+                            initializingMethods.get(onInitializing.priority()).add(new Pair<>(thisObject, method));
+                        }
+                        OnStartup onStartup = method.getAnnotation(OnStartup.class);
+                        if (onStartup != null) {
+                            startupMethods.get(onStartup.priority()).add(new Pair<>(thisObject, method));
+                        }
                     }
-                    OnStartup onStartup = method.getAnnotation(OnStartup.class);
-                    if (onStartup != null) {
-                        startupMethods.get(onStartup.priority()).add(new Pair<>(thisObject, method));
-                    }
+                    currentClass = clazz.getSuperclass();
                 }
                 beans.add(thisObject);
             } catch (Exception e) {
@@ -158,17 +154,6 @@ public class ServerApplication {
         }
     }
 
-    protected void runGrizzlyHttpServer(List<Class<?>> jerseyClasses) {
-        URI baseUri = UriBuilder.fromUri("http://localhost").port(8080).build();
-        ResourceConfig configuration = new ResourceConfig(jerseyClasses.toArray(new Class<?>[0]));
-        httpServer = GrizzlyHttpServerFactory.createHttpServer(baseUri, configuration, false);
-        try {
-            httpServer.start();
-        } catch (IOException e) {
-            log.error("Can not start http server:", e);
-        }
-    }
-
     protected void runMethods(List<Set<Pair<Object, Method>>> methods, String procedureName, boolean onFailedDisable) {
         for (Set<Pair<Object, Method>> methodsPriority : methods) {
             for (Pair<Object, Method> methodPair : methodsPriority) {
@@ -197,19 +182,18 @@ public class ServerApplication {
             endMethods.add(new HashSet<>());
         }
         for (Object obj : beans) {
-            for (Method method : obj.getClass().getMethods()) {
-                OnDisable onDisable = method.getAnnotation(OnDisable.class);
-                if (onDisable != null) {
-                    endMethods.get(onDisable.priority()).add(new Pair<>(obj, method));
+            Class<?> currentClass = obj.getClass();
+            while (currentClass != null) {
+                for (Method method : currentClass.getMethods()) {
+                    OnDisable onDisable = method.getAnnotation(OnDisable.class);
+                    if (onDisable != null) {
+                        endMethods.get(onDisable.priority()).add(new Pair<>(obj, method));
+                    }
                 }
+                currentClass = currentClass.getSuperclass();
             }
         }
         runMethods(endMethods, "stop", false);
-        try {
-            httpServer.shutdown().get();
-        } catch (Exception e) {
-            log.error("Can not disable http server:", e);
-        }
         initialized = false;
     }
 

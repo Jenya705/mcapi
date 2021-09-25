@@ -10,6 +10,8 @@ public class Routes {
 
     public final Route PLAYER = Route.get("/player/{id}");
 
+    public final Route PLAYER_LOCATION = Route.get("/player/{id}/location");
+
     public final Route SEND_MESSAGE = Route.post("/player/{selector}/send");
 
     public final Route SEND_FORM = Route.post("/player/{selector}/send/form");

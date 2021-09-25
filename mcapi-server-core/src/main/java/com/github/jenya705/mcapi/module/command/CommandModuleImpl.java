@@ -1,14 +1,9 @@
 package com.github.jenya705.mcapi.module.command;
 
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.github.jenya705.mcapi.AbstractApplicationModule;
-import com.github.jenya705.mcapi.BaseCommon;
-import com.github.jenya705.mcapi.JacksonProvider;
 import com.github.jenya705.mcapi.OnStartup;
 import com.github.jenya705.mcapi.command.*;
 import com.github.jenya705.mcapi.entity.AbstractBot;
-import com.github.jenya705.mcapi.entity.command.RestCommand;
-import com.github.jenya705.mcapi.entity.command.RestCommandOption;
 import com.github.jenya705.mcapi.error.CommandNameFormatException;
 import com.github.jenya705.mcapi.error.CommandOptionsAllException;
 import com.github.jenya705.mcapi.module.config.ConfigModule;

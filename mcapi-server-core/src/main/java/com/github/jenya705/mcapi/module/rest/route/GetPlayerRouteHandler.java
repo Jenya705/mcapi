@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.module.rest;
+package com.github.jenya705.mcapi.module.rest.route;
 
 import com.github.jenya705.mcapi.*;
 import com.github.jenya705.mcapi.entity.AbstractBot;
