@@ -1,7 +1,6 @@
 package com.github.jenya705.mcapi.command.link.links;
 
 import com.github.jenya705.mcapi.ApiCommandSender;
-import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.data.ConfigData;

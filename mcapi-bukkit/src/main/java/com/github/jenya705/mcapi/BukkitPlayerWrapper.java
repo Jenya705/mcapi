@@ -38,12 +38,12 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements J
 
     @Override
     public void kick(String reason) {
-        player.kick(Component.text(reason));
+        BukkitUtils.notAsyncTask(() -> player.kick(Component.text(reason)));
     }
 
     @Override
     public void ban(String reason) {
-        player.banPlayer(reason);
+        BukkitUtils.notAsyncTask(() -> player.banPlayer(reason));
     }
 
     @Override

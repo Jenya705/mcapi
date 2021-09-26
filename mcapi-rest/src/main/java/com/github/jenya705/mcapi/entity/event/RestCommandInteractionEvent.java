@@ -1,6 +1,5 @@
 package com.github.jenya705.mcapi.entity.event;
 
-import com.github.jenya705.mcapi.ApiCommandSender;
 import com.github.jenya705.mcapi.entity.RestCommandSender;
 import com.github.jenya705.mcapi.entity.command.RestCommandInteractionValue;
 import com.github.jenya705.mcapi.event.CommandInteractionEvent;

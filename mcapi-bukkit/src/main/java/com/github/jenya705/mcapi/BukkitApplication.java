@@ -28,6 +28,7 @@ public class BukkitApplication extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        BukkitUtils.setPlugin(this);
         application = new JavaServerApplication();
         application.addClass(BukkitServerCore.class);
         application.addClass(BukkitServerGateway.class);

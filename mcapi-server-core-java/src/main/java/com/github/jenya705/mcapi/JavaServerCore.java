@@ -1,43 +1,35 @@
 package com.github.jenya705.mcapi;
 
-import com.github.jenya705.mcapi.entity.AbstractBot;
-import com.github.jenya705.mcapi.util.PlayerSelector;
 import com.github.jenya705.mcapi.util.PlayerUtils;
-import com.github.jenya705.mcapi.util.Selector;
-import com.github.jenya705.mcapi.util.SelectorContainer;
 
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * @author Jenya705
  */
 public interface JavaServerCore extends ServerCore {
 
-    Collection<JavaPlayer> getJavaPlayers();
+    Collection<? extends JavaPlayer> getJavaPlayers();
 
     JavaPlayer getJavaPlayer(String name);
 
     JavaPlayer getJavaPlayer(UUID uuid);
 
-    default Collection<ApiPlayer> getPlayers() {
-        return getJavaPlayers()
-                .stream()
-                .map((player) -> (ApiPlayer) player)
-                .collect(Collectors.toList());
+    default Collection<? extends ApiPlayer> getPlayers() {
+        return getJavaPlayers();
     }
 
-    default Optional<JavaPlayer> getOptionalJavaPlayer(String name) {
+    default Optional<? extends JavaPlayer> getOptionalJavaPlayer(String name) {
         return Optional.ofNullable(getJavaPlayer(name));
     }
 
-    default Optional<JavaPlayer> getOptionalJavaPlayer(UUID uuid) {
+    default Optional<? extends JavaPlayer> getOptionalJavaPlayer(UUID uuid) {
         return Optional.ofNullable(getJavaPlayer(uuid));
     }
 
-    default Optional<JavaPlayer> getOptionalJavaPlayerId(String id) {
+    default Optional<? extends JavaPlayer> getOptionalJavaPlayerId(String id) {
         return PlayerUtils.getPlayer(id, this).map(player -> (JavaPlayer) player);
     }
 
@@ -49,16 +41,4 @@ public interface JavaServerCore extends ServerCore {
         return getJavaPlayer(uuid);
     }
 
-    default Selector<JavaPlayer> getJavaPlayersBySelector(String selector, AbstractBot bot) {
-        Selector<ApiPlayer> apiPlayerSelector = PlayerSelector.of(selector, this, bot);
-        return new SelectorContainer<>(
-                apiPlayerSelector
-                        .stream()
-                        .filter(it -> it instanceof JavaPlayer)
-                        .map(it -> (JavaPlayer) it)
-                        .collect(Collectors.toSet()),
-                apiPlayerSelector.getPermissionName(),
-                apiPlayerSelector.getTarget()
-        );
-    }
 }

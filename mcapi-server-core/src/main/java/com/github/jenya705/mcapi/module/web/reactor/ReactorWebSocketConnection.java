@@ -1,7 +1,6 @@
 package com.github.jenya705.mcapi.module.web.reactor;
 
 import com.github.jenya705.mcapi.module.web.websocket.WebSocketConnection;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import reactor.core.publisher.FluxSink;
 import reactor.netty.http.websocket.WebsocketInbound;

@@ -10,11 +10,11 @@ import java.util.function.Consumer;
  */
 public interface MessageDeserializer {
 
-    default void addMessageType(String type, Class<? extends SendMessage> messageClass) {
+    default void addMessageType(String type, Class<? extends Message> messageClass) {
         addMessageType(type, messageClass, obj -> {});
     }
 
-    <T extends SendMessage> void addMessageType(String type, Class<? extends T> messageClass, Consumer<T> processor);
+    <T extends Message> void addMessageType(String type, Class<? extends T> messageClass, Consumer<T> processor);
 
-    void addMessageType(String type, ExceptionableFunction<JsonNode, SendMessage> deserializer);
+    void addMessageType(String type, ExceptionableFunction<JsonNode, Message> deserializer);
 }

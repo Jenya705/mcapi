@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -28,7 +29,7 @@ public class BotPermissionEntity {
     public BotPermissionEntity(int botId, String permission, UUID target, boolean toggled) {
         this.botId = botId;
         this.permission = permission;
-        this.target = target.equals(identityTarget) ? null : target;
+        this.target = Objects.equals(target, identityTarget) ? null : target;
         this.toggled = toggled;
     }
 

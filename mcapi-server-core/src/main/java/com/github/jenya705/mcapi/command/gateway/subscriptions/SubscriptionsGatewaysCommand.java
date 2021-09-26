@@ -7,8 +7,8 @@ import com.github.jenya705.mcapi.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.entity.BotEntity;
-import com.github.jenya705.mcapi.module.web.gateway.GatewayClient;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
+import com.github.jenya705.mcapi.module.web.gateway.GatewayClient;
 
 import java.util.ArrayList;
 import java.util.Collection;

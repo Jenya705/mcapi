@@ -6,9 +6,6 @@ import com.github.jenya705.mcapi.entity.api.event.EntityQuitEvent;
 import com.github.jenya705.mcapi.entity.event.RestJoinEvent;
 import com.github.jenya705.mcapi.entity.event.RestMessageEvent;
 import com.github.jenya705.mcapi.entity.event.RestQuitEvent;
-import com.github.jenya705.mcapi.event.JoinEvent;
-import com.github.jenya705.mcapi.event.MessageEvent;
-import com.github.jenya705.mcapi.event.QuitEvent;
 
 /**
  * @author Jenya705

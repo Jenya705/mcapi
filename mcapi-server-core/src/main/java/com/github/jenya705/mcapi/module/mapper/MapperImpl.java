@@ -5,12 +5,10 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.github.jenya705.mcapi.ApiError;
-import com.github.jenya705.mcapi.entity.RestError;
 import com.github.jenya705.mcapi.entity.api.EntityError;
 import com.github.jenya705.mcapi.util.CacheClassMap;
 import lombok.SneakyThrows;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**

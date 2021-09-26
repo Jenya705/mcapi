@@ -1,7 +1,6 @@
 package com.github.jenya705.mcapi.module.link;
 
 import com.github.jenya705.mcapi.entity.AbstractBot;
-import com.github.jenya705.mcapi.ApiLinkRequest;
 import com.github.jenya705.mcapi.entity.RestLinkRequest;
 import lombok.Data;
 

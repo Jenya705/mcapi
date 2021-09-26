@@ -14,7 +14,7 @@ public class Routes {
 
     public final Route SEND_MESSAGE = Route.post("/player/{selector}/send");
 
-    public final Route PLAYER_LIST = Route.get("/player/list");
+    public final Route PLAYER_LIST = Route.get("/players/list");
 
     public final Route BAN_PLAYER_SELECTOR = Route.put("/player/{selector}/ban");
 

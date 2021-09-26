@@ -11,6 +11,7 @@ import lombok.Getter;
 public enum DefaultPermission {
 
     USER_GET("user.get", false, false, true),
+    USER_GET_LOCATION("user.get.location", false, false, true),
     USER_LIST("user.list", true, false, true),
     USER_HAS_PERMISSION("user.has_permission", false, false, true),
     GATEWAY_MESSAGE("gateway.message", true, false, true),

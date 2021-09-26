@@ -20,31 +20,31 @@ public class PlayerUtils {
 
     private final Random random = new Random();
 
-    public Optional<ApiPlayer> getPlayer(String name, ServerCore core) {
-        Pair<Optional<ApiPlayer>, Boolean> information = getPlayerWithFullInformation(name, core);
+    public Optional<? extends ApiPlayer> getPlayer(String name, ServerCore core) {
+        Pair<Optional<? extends ApiPlayer>, Boolean> information = getPlayerWithFullInformation(name, core);
         if (!information.getRight()) {
             throw new PlayerIdFormatException(name);
         }
         return information.getLeft();
     }
 
-    public Optional<ApiPlayer> getPlayerWithoutException(String name, ServerCore core) {
+    public Optional<? extends ApiPlayer> getPlayerWithoutException(String name, ServerCore core) {
         return getPlayerWithFullInformation(name, core).getLeft();
     }
 
-    public Optional<ApiOfflinePlayer> getOfflinePlayer(String name, ServerCore core) {
-        Pair<Optional<ApiOfflinePlayer>, Boolean> information = getOfflinePlayerWithFullInformation(name, core);
+    public Optional<? extends ApiOfflinePlayer> getOfflinePlayer(String name, ServerCore core) {
+        Pair<Optional<? extends ApiOfflinePlayer>, Boolean> information = getOfflinePlayerWithFullInformation(name, core);
         if (!information.getRight()) {
             throw new PlayerIdFormatException(name);
         }
         return information.getLeft();
     }
 
-    public Optional<ApiOfflinePlayer> getOfflinePlayerWithoutException(String name, ServerCore core) {
+    public Optional<? extends ApiOfflinePlayer> getOfflinePlayerWithoutException(String name, ServerCore core) {
         return getOfflinePlayerWithFullInformation(name, core).getLeft();
     }
 
-    private Pair<Optional<ApiPlayer>, Boolean> getPlayerWithFullInformation(String name, ServerCore core) {
+    private Pair<Optional<? extends ApiPlayer>, Boolean> getPlayerWithFullInformation(String name, ServerCore core) {
         Object id = parsePlayerId(name);
         if (id == null) return new Pair<>(Optional.empty(), false);
         if (id instanceof UUID) {
@@ -55,7 +55,7 @@ public class PlayerUtils {
         }
     }
 
-    private Pair<Optional<ApiOfflinePlayer>, Boolean> getOfflinePlayerWithFullInformation(String name, ServerCore core) {
+    private Pair<Optional<? extends ApiOfflinePlayer>, Boolean> getOfflinePlayerWithFullInformation(String name, ServerCore core) {
         Object id = parsePlayerId(name);
         if (id == null) return new Pair<>(Optional.empty(), false);
         if (id instanceof UUID) {

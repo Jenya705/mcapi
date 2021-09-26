@@ -1,7 +1,6 @@
 package com.github.jenya705.mcapi.entity.api.command;
 
 import com.github.jenya705.mcapi.command.ApiCommandOption;
-import com.github.jenya705.mcapi.entity.command.RestCommand;
 import com.github.jenya705.mcapi.entity.command.RestCommandOption;
 import lombok.AllArgsConstructor;
 import lombok.Data;

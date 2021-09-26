@@ -1,10 +1,7 @@
 package com.github.jenya705.mcapi;
 
 import com.github.jenya705.mcapi.command.CommandExecutor;
-import com.github.jenya705.mcapi.entity.AbstractBot;
-import com.github.jenya705.mcapi.util.PlayerSelector;
 import com.github.jenya705.mcapi.util.PlayerUtils;
-import com.github.jenya705.mcapi.util.Selector;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +21,7 @@ public interface ServerCore {
 
     void givePermission(ApiPlayer player, boolean toggled, String... permissions);
 
-    Collection<ApiPlayer> getPlayers();
+    Collection<? extends ApiPlayer> getPlayers();
 
     ApiPlayer getPlayer(String name);
 
@@ -34,32 +31,28 @@ public interface ServerCore {
 
     ApiOfflinePlayer getOfflinePlayer(UUID uuid);
 
-    default Optional<ApiPlayer> getOptionalPlayer(String name) {
+    default Optional<? extends ApiPlayer> getOptionalPlayer(String name) {
         return Optional.ofNullable(getPlayer(name));
     }
 
-    default Optional<ApiPlayer> getOptionalPlayer(UUID uuid) {
+    default Optional<? extends ApiPlayer> getOptionalPlayer(UUID uuid) {
         return Optional.ofNullable(getPlayer(uuid));
     }
 
-    default Optional<ApiPlayer> getOptionalPlayerId(String id) {
+    default Optional<? extends ApiPlayer> getOptionalPlayerId(String id) {
         return PlayerUtils.getPlayer(id, this);
     }
 
-    default Optional<ApiOfflinePlayer> getOptionalOfflinePlayer(String name) {
+    default Optional<? extends ApiOfflinePlayer> getOptionalOfflinePlayer(String name) {
         return Optional.ofNullable(getOfflinePlayer(name));
     }
 
-    default Optional<ApiOfflinePlayer> getOptionalOfflinePlayer(UUID uuid) {
+    default Optional<? extends ApiOfflinePlayer> getOptionalOfflinePlayer(UUID uuid) {
         return Optional.ofNullable(getOfflinePlayer(uuid));
     }
 
-    default Optional<ApiOfflinePlayer> getOptionalOfflinePlayerId(String id) {
+    default Optional<? extends ApiOfflinePlayer> getOptionalOfflinePlayerId(String id) {
         return PlayerUtils.getOfflinePlayer(id, this);
-    }
-
-    default Selector<ApiPlayer> getPlayersBySelector(String selector, AbstractBot bot) {
-        return PlayerSelector.of(selector, this, bot);
     }
 
     default Object loadFile(String file, FileType type) throws IOException {

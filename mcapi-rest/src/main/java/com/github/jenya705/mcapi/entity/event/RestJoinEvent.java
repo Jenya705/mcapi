@@ -1,6 +1,5 @@
 package com.github.jenya705.mcapi.entity.event;
 
-import com.github.jenya705.mcapi.ApiPlayer;
 import com.github.jenya705.mcapi.event.JoinEvent;
 import lombok.AllArgsConstructor;
 import lombok.Data;

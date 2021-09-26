@@ -1,7 +1,6 @@
 package com.github.jenya705.mcapi.module.storage;
 
 import com.github.jenya705.mcapi.AbstractApplicationModule;
-import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.OnDisable;
 import com.github.jenya705.mcapi.OnStartup;
 import com.github.jenya705.mcapi.data.MapConfigData;

@@ -1,6 +1,9 @@
 package com.github.jenya705.mcapi.module.config;
 
-import com.github.jenya705.mcapi.*;
+import com.github.jenya705.mcapi.AbstractApplicationModule;
+import com.github.jenya705.mcapi.OnDisable;
+import com.github.jenya705.mcapi.OnInitializing;
+import com.github.jenya705.mcapi.OnStartup;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.data.MapConfigData;
 import lombok.Getter;

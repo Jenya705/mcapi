@@ -7,8 +7,6 @@ import net.luckperms.api.model.user.User;
 import net.luckperms.api.model.user.UserManager;
 import net.luckperms.api.node.Node;
 
-import java.util.Arrays;
-
 /**
  * @author Jenya705
  */

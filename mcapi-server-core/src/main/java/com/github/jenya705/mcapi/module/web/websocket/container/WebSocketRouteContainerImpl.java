@@ -2,7 +2,6 @@ package com.github.jenya705.mcapi.module.web.websocket.container;
 
 import com.github.jenya705.mcapi.module.web.websocket.WebSocketConnection;
 import com.github.jenya705.mcapi.module.web.websocket.WebSocketMessage;
-import lombok.Setter;
 
 import java.util.Collection;
 import java.util.HashMap;

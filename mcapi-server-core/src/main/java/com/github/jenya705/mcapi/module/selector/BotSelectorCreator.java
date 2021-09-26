@@ -1,6 +1,5 @@
 package com.github.jenya705.mcapi.module.selector;
 
-import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.entity.BotObject;

@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
@@ -52,7 +51,6 @@ public class BukkitServerCore extends AbstractJavaApplicationModule implements J
     @Override
     public void addCommand(String name, CommandExecutor executor, String permissionName) {
         PluginCommand command = plugin.getCommand(name);
-        if (command == null) return;
         command.setExecutor(new BukkitCommandWrapper(plugin, executor, permissionName));
         Bukkit.getOnlinePlayers().forEach(Player::updateCommands);
     }

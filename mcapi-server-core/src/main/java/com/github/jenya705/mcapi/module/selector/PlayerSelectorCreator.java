@@ -31,6 +31,7 @@ public class PlayerSelectorCreator extends MapSelectorCreator<ApiPlayer, PlayerS
         return application;
     }
 
+    @SuppressWarnings("unchecked")
     public PlayerSelectorCreator(ServerApplication application) {
         this.application = application;
         this
@@ -40,7 +41,7 @@ public class PlayerSelectorCreator extends MapSelectorCreator<ApiPlayer, PlayerS
                                 .orElseThrow(() -> new PlayerNotFoundException(id))
                 )
                 .defaultSelector("a", data ->
-                        core().getPlayers()
+                        (Collection<ApiPlayer>) core().getPlayers()
                 )
                 .defaultSelector("r", data -> {
                     List<ApiPlayer> playerList = new ArrayList<>(core().getPlayers());

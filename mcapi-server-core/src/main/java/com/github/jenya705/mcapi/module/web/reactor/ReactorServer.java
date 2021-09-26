@@ -1,12 +1,10 @@
 package com.github.jenya705.mcapi.module.web.reactor;
 
 import com.github.jenya705.mcapi.*;
-import com.github.jenya705.mcapi.entity.api.EntityError;
+import com.github.jenya705.mcapi.log.TimerTask;
 import com.github.jenya705.mcapi.module.mapper.Mapper;
 import com.github.jenya705.mcapi.module.web.RouteHandler;
 import com.github.jenya705.mcapi.module.web.WebServer;
-import com.github.jenya705.mcapi.module.web.websocket.WebSocketConnection;
-import com.github.jenya705.mcapi.module.web.websocket.WebSocketMessage;
 import com.github.jenya705.mcapi.module.web.websocket.WebSocketRouteHandler;
 import com.github.jenya705.mcapi.util.Pair;
 import com.github.jenya705.mcapi.util.ReactiveUtils;
@@ -45,7 +43,7 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
 
     @OnStartup(priority = 4)
     public void start() {
-        log.info("Starting web server...");
+        TimerTask timerTask = TimerTask.start(log, "Starting web server...");
         server = HttpServer
                 .create()
                 .port(8081)
@@ -61,7 +59,7 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
                 .bind()
                 .doOnError(ReactiveUtils::runtimeException)
                 .block();
-        log.info("Done! (Starting web server...)");
+        timerTask.complete();
     }
 
     @Override

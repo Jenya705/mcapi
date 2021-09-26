@@ -1,7 +1,6 @@
 package com.github.jenya705.mcapi.module.localization;
 
 import com.github.jenya705.mcapi.AbstractApplicationModule;
-import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.OnDisable;
 import com.github.jenya705.mcapi.OnInitializing;
 import com.github.jenya705.mcapi.data.MapConfigData;

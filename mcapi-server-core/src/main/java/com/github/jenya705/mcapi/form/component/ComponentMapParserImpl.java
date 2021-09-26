@@ -2,7 +2,6 @@ package com.github.jenya705.mcapi.form.component;
 
 import com.github.jenya705.mcapi.AbstractApplicationModule;
 import com.github.jenya705.mcapi.form.FormComponent;
-import lombok.experimental.UtilityClass;
 
 import java.util.HashMap;
 import java.util.Locale;

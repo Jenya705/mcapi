@@ -4,11 +4,8 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.github.jenya705.mcapi.command.ApiCommandOption;
 import com.github.jenya705.mcapi.entity.api.command.EntityCommand;
 import com.github.jenya705.mcapi.entity.api.command.EntityCommandOption;
-import com.github.jenya705.mcapi.entity.command.RestCommand;
-import com.github.jenya705.mcapi.entity.command.RestCommandOption;
 import com.github.jenya705.mcapi.util.IteratorUtils;
 
 import java.io.IOException;

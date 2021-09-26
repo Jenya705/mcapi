@@ -4,7 +4,6 @@ import com.github.jenya705.mcapi.ApiPlayer;
 import com.github.jenya705.mcapi.command.RootCommand;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.entity.BotEntity;
-import com.github.jenya705.mcapi.ApiLinkRequest;
 import com.github.jenya705.mcapi.entity.RestLinkRequest;
 
 /**

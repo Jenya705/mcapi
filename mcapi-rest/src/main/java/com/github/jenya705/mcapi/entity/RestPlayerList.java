@@ -1,8 +1,10 @@
-package com.github.jenya705.mcapi.module.message;
+package com.github.jenya705.mcapi.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 /**
  * @author Jenya705
@@ -10,9 +12,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TypedMessageImpl implements TypedMessage {
+public class RestPlayerList {
 
-    private String type;
-    private Message message;
+    private UUID[] uuids;
 
 }

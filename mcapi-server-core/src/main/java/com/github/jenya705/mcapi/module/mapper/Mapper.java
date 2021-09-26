@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.github.jenya705.mcapi.ApiError;
 import com.github.jenya705.mcapi.module.rest.ObjectTunnelFunction;
-import com.github.jenya705.mcapi.module.rest.json.JacksonDeserializer;
 import com.github.jenya705.mcapi.module.rest.json.JsonUtils;
 
 /**

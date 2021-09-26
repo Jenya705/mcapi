@@ -2,19 +2,16 @@ package com.github.jenya705.mcapi.module.rest.route;
 
 import com.github.jenya705.mcapi.ApiPlayer;
 import com.github.jenya705.mcapi.Routes;
-import com.github.jenya705.mcapi.entity.AbstractBot;
-import com.github.jenya705.mcapi.error.AuthorizationBadTokenException;
 import com.github.jenya705.mcapi.module.web.Request;
 import com.github.jenya705.mcapi.module.web.Response;
-import com.github.jenya705.mcapi.util.ReactiveUtils;
 
 /**
  * @author Jenya705
  */
-public class GetPlayerRouteHandler extends AbstractRouteHandler {
+public class GetPlayerLocationRouteHandler extends AbstractRouteHandler {
 
-    public GetPlayerRouteHandler() {
-        super(Routes.PLAYER);
+    public GetPlayerLocationRouteHandler() {
+        super(Routes.PLAYER_LOCATION);
     }
 
     @Override
@@ -23,7 +20,7 @@ public class GetPlayerRouteHandler extends AbstractRouteHandler {
                 .paramOrException("id", ApiPlayer.class);
         request
                 .bot()
-                .needPermission("user.get", player);
-        response.ok(player);
+                .needPermission("user.get.location");
+        response.ok(player.getLocation());
     }
 }

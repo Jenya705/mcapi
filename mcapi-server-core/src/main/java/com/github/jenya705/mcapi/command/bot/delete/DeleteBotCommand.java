@@ -2,7 +2,6 @@ package com.github.jenya705.mcapi.command.bot.delete;
 
 import com.github.jenya705.mcapi.ApiCommandSender;
 import com.github.jenya705.mcapi.ApiPlayer;
-import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutor;

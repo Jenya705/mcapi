@@ -27,7 +27,7 @@ import java.util.function.Consumer;
  */
 public class MessageDeserializerImpl extends StdDeserializer<TypedMessage> implements MessageDeserializer {
 
-    private final Map<String, ExceptionableFunction<JsonNode, SendMessage>> messageDeserializers = new HashMap<>();
+    private final Map<String, ExceptionableFunction<JsonNode, Message>> messageDeserializers = new HashMap<>();
 
     @Bean
     private JacksonProvider jacksonProvider;
@@ -45,15 +45,15 @@ public class MessageDeserializerImpl extends StdDeserializer<TypedMessage> imple
     @OnStartup
     public void start() {
         mapper
-                .jsonDeserializer(SendMessage.class, this);
-        addMessageType("default", node -> new DefaultSendMessage(node.asText()));
+                .jsonDeserializer(TypedMessage.class, this);
+        addMessageType("default", node -> new DefaultMessage(node.asText()));
         addMessageType("form", node -> new FormMessage(
                 jacksonProvider.getMapper().treeToValue(node, Form.class), formProvider
         ));
     }
 
     @Override
-    public <T extends SendMessage> void addMessageType(String type, Class<? extends T> messageClass, Consumer<T> processor) {
+    public <T extends Message> void addMessageType(String type, Class<? extends T> messageClass, Consumer<T> processor) {
         addMessageType(type, node -> {
             T message = jacksonProvider.getMapper().treeToValue(
                     node, messageClass
@@ -64,7 +64,7 @@ public class MessageDeserializerImpl extends StdDeserializer<TypedMessage> imple
     }
 
     @Override
-    public void addMessageType(String type, ExceptionableFunction<JsonNode, SendMessage> deserializer) {
+    public void addMessageType(String type, ExceptionableFunction<JsonNode, Message> deserializer) {
         messageDeserializers.put(type.toLowerCase(Locale.ROOT), deserializer);
     }
 

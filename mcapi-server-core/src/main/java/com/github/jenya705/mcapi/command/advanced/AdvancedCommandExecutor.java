@@ -1,6 +1,9 @@
 package com.github.jenya705.mcapi.command.advanced;
 
-import com.github.jenya705.mcapi.*;
+import com.github.jenya705.mcapi.AbstractApplicationModule;
+import com.github.jenya705.mcapi.ApiCommandSender;
+import com.github.jenya705.mcapi.ApiPlayer;
+import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.CommandExecutor;
 import com.github.jenya705.mcapi.command.CommandTab;
 import com.github.jenya705.mcapi.command.CommandsUtils;
@@ -97,7 +100,7 @@ public abstract class AdvancedCommandExecutor<T> extends AbstractApplicationModu
         ));
     }
 
-    public Optional<ApiPlayer> getPlayer(ApiCommandSender sender, String name) {
+    public Optional<? extends ApiPlayer> getPlayer(ApiCommandSender sender, String name) {
         if (name == null) {
             return Optional
                     .of(sender)
