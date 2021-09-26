@@ -12,11 +12,18 @@ import com.github.jenya705.mcapi.entity.event.*;
 import com.github.jenya705.mcapi.error.JsonDeserializeException;
 import com.github.jenya705.mcapi.error.PlayerNotFoundException;
 import com.github.jenya705.mcapi.event.*;
+import com.github.jenya705.mcapi.form.Form;
+import com.github.jenya705.mcapi.form.FormComponent;
+import com.github.jenya705.mcapi.form.FormPlatformProvider;
+import com.github.jenya705.mcapi.form.component.ComponentMapParser;
 import com.github.jenya705.mcapi.module.authorization.AuthorizationModule;
 import com.github.jenya705.mcapi.module.command.ApiCommandDeserializer;
 import com.github.jenya705.mcapi.module.command.CommandModule;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.module.mapper.Mapper;
+
+import java.util.Arrays;
+import java.util.Map;
 
 /**
  * @author Jenya705
@@ -35,7 +42,14 @@ public class RestModule extends AbstractApplicationModule {
     @Bean
     private CommandModule commandModule;
 
+    @Bean
+    private FormPlatformProvider formProvider;
+
+    @Bean
+    private ComponentMapParser formComponentParser;
+
     @OnStartup
+    @SuppressWarnings("unchecked")
     public void start() {
         mapper
                 .rawDeserializer(AbstractBot.class, authorization -> authorizationModule.bot(authorization))
@@ -88,6 +102,29 @@ public class RestModule extends AbstractApplicationModule {
                                 rest.getToken()
                         )
                 )
+                .tunnelJsonDeserializer(
+                        Form.class,
+                        RestForm.class,
+                        this::parseForm
+                )
+                .tunnelJsonDeserializer(
+                        Form.class,
+                        Map[].class,
+                        map -> parseForm(new RestForm(map))
+                )
         ;
     }
+
+    private Form parseForm(RestForm rest) {
+        return formProvider
+                .newBuilder()
+                .components(
+                        Arrays
+                                .stream(rest.getComponents())
+                                .map(formComponentParser::buildComponent)
+                                .toArray(FormComponent[]::new)
+                )
+                .build();
+    }
+
 }

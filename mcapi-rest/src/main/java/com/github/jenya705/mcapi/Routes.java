@@ -14,10 +14,6 @@ public class Routes {
 
     public final Route SEND_MESSAGE = Route.post("/player/{selector}/send");
 
-    public final Route SEND_FORM = Route.post("/player/{selector}/send/form");
-
-    public final Route SEND_COMPONENT = Route.post("/player/{selector}/send/raw");
-
     public final Route PLAYER_LIST = Route.get("/player/list");
 
     public final Route BAN_PLAYER_SELECTOR = Route.put("/player/{selector}/ban");

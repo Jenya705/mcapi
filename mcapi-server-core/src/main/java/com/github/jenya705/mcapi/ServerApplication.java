@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi;
 
+import com.github.jenya705.mcapi.form.component.ComponentMapParserImpl;
 import com.github.jenya705.mcapi.module.authorization.AuthorizationModuleImpl;
 import com.github.jenya705.mcapi.module.command.CommandModuleImpl;
 import com.github.jenya705.mcapi.module.config.ConfigModuleImpl;
@@ -7,6 +8,7 @@ import com.github.jenya705.mcapi.module.database.DatabaseModuleImpl;
 import com.github.jenya705.mcapi.module.link.LinkingModuleImpl;
 import com.github.jenya705.mcapi.module.localization.LocalizationModuleImpl;
 import com.github.jenya705.mcapi.module.mapper.MapperImpl;
+import com.github.jenya705.mcapi.module.message.MessageDeserializerImpl;
 import com.github.jenya705.mcapi.module.rest.RestModule;
 import com.github.jenya705.mcapi.module.rest.route.GetPlayerRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.SendMessageRouteHandler;
@@ -68,7 +70,9 @@ public class ServerApplication {
                 GetPlayerRouteHandler.class,
                 SendMessageRouteHandler.class,
                 DefaultGateway.class,
-                ServerGatewayImpl.class
+                ServerGatewayImpl.class,
+                MessageDeserializerImpl.class,
+                ComponentMapParserImpl.class
         );
     }
 

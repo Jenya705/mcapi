@@ -11,6 +11,8 @@ public interface Response {
 
     Response body(Object body);
 
+    Response contentType(String type);
+
     default Response noContent() {
         return status(204).body(null);
     }

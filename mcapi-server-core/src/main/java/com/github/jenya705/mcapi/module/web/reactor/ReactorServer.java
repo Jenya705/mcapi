@@ -119,9 +119,11 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
     private String executeHandler(HttpServerRequest request, HttpServerResponse response, RouteHandler handler, String body) {
         ReactorRequest localRequest = new ReactorRequest(this, request, body);
         ReactorResponse localResponse = new ReactorResponse(response);
+        localResponse.contentType("application/json");
         try {
             handler.handle(localRequest, localResponse);
         } catch (Throwable e) {
+            e.printStackTrace();
             ApiError error = mapper.asApiError(e);
             localResponse
                     .status(error.getStatusCode())

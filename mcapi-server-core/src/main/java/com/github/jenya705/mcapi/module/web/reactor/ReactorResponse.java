@@ -35,4 +35,10 @@ public class ReactorResponse implements Response {
         this.body = body;
         return this;
     }
+
+    @Override
+    public Response contentType(String type) {
+        response.header("Content-type", type);
+        return this;
+    }
 }

@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * @author Jenya705
  */
-public class MapperImpl implements Mapper {
+public class MapperImpl implements Mapper, JacksonProvider {
 
     private static final ApiError defaultError = new EntityError(0, 500, null, "Some bad happened");
 
@@ -114,4 +114,8 @@ public class MapperImpl implements Mapper {
         return this;
     }
 
+    @Override
+    public ObjectMapper getMapper() {
+        return json;
+    }
 }

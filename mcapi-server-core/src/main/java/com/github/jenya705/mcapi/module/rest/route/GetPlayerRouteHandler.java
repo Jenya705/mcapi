@@ -12,11 +12,10 @@ import com.github.jenya705.mcapi.util.ReactiveUtils;
 /**
  * @author Jenya705
  */
-public class GetPlayerRouteHandler extends AbstractApplicationModule implements RouteHandler {
+public class GetPlayerRouteHandler extends AbstractRouteHandler {
 
-    @OnStartup
-    public void start() {
-        bean(WebServer.class).addHandler(Routes.PLAYER, this);
+    public GetPlayerRouteHandler() {
+        super(Routes.PLAYER);
     }
 
     @Override

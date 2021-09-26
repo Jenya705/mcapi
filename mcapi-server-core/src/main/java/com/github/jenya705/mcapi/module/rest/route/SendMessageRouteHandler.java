@@ -2,7 +2,9 @@ package com.github.jenya705.mcapi.module.rest.route;
 
 import com.github.jenya705.mcapi.*;
 import com.github.jenya705.mcapi.entity.AbstractBot;
+import com.github.jenya705.mcapi.error.AuthorizationBadTokenException;
 import com.github.jenya705.mcapi.error.BodyIsEmptyException;
+import com.github.jenya705.mcapi.module.message.SendMessage;
 import com.github.jenya705.mcapi.module.selector.SelectorProvider;
 import com.github.jenya705.mcapi.module.web.Request;
 import com.github.jenya705.mcapi.module.web.Response;
@@ -14,21 +16,20 @@ import com.github.jenya705.mcapi.util.Selector;
 /**
  * @author Jenya705
  */
-public class SendMessageRouteHandler extends AbstractApplicationModule implements RouteHandler {
+public class SendMessageRouteHandler extends AbstractRouteHandler {
 
     @Bean
     private SelectorProvider selectorProvider;
 
-    @OnStartup
-    public void start() {
-        bean(WebServer.class).addHandler(Routes.SEND_MESSAGE, this);
+    public SendMessageRouteHandler() {
+        super(Routes.SEND_MESSAGE);
     }
 
     @Override
     public void handle(Request request, Response response) {
         AbstractBot bot = request
                 .header("Authorization", AbstractBot.class)
-                .orElseThrow(ReactiveUtils::unknownException);
+                .orElseThrow(AuthorizationBadTokenException::new);
         Selector<ApiPlayer> players = selectorProvider
                 .players(
                         request
@@ -37,10 +38,10 @@ public class SendMessageRouteHandler extends AbstractApplicationModule implement
                         bot
                 );
         bot.needPermission("user.send_message", players);
-        String message = request
-                .body()
+        SendMessage message = request
+                .body(SendMessage.class)
                 .orElseThrow(BodyIsEmptyException::new);
-        players.forEach(player -> player.sendMessage(message));
+        players.forEach(message::send);
         response.noContent();
     }
 }

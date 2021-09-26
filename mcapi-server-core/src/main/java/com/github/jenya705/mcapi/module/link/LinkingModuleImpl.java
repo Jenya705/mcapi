@@ -196,7 +196,7 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
                             .stream()
                             .filter(it -> it.getOwner().getEntity().getId() == id)
                             .filter(it -> it.isSubscribed(RestUnlinkEvent.type))
-                            .forEach(it -> it.send(new EntityUnlinkEvent(player).rest()))
+                            .forEach(it -> it.send(new EntityUnlinkEvent(player)))
             );
         });
     }
