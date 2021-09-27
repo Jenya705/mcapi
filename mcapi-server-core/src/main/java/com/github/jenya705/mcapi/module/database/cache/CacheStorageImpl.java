@@ -82,7 +82,7 @@ public class CacheStorageImpl extends AbstractApplicationModule implements Cache
 
     @Override
     public void cache(BotEntity bot) {
-        if (bot == null) return;
+        if (bot == null || bot.getToken() == null) return;
         botCache.put(bot.getId(), bot);
         botTokens.put(bot.getToken(), bot.getId());
     }

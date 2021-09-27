@@ -66,12 +66,18 @@ public class ServerApplication {
                 ReactorServer.class,
                 RestModule.class,
                 ServerSelectorProvider.class,
+                // Routes
                 GetPlayerLocationRouteHandler.class,
                 GetPlayerRouteHandler.class,
                 GetPlayerListRouteHandler.class,
                 BanPlayerRouteHandler.class,
                 KickPlayerRouteHandler.class,
+                PlayerPermissionRouteHandler.class,
                 SendMessageRouteHandler.class,
+                GetBotLinkedPlayersRouteHandler.class,
+                GetBotPermissionRouteHandler.class,
+                GetBotTargetPermissionRouteHandler.class,
+                // End Routes
                 DefaultGateway.class,
                 ServerGatewayImpl.class,
                 MessageDeserializerImpl.class,

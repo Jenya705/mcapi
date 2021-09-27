@@ -16,16 +16,15 @@ import java.util.function.Function;
 public class MessageUtils {
 
     public void ban(ApiPlayer player, Request request) {
-        doWithMessage(player, request, it -> it.ban(player));
+        doWithMessage(request, it -> it.ban(player));
     }
 
     public void kick(ApiPlayer player, Request request) {
-        doWithMessage(player, request, it -> it.kick(player));
+        doWithMessage(request, it -> it.kick(player));
     }
 
-    public void doWithMessage(ApiPlayer player, Request request, Function<TypedMessage, Boolean> function) {
+    public void doWithMessage(Request request, Function<TypedMessage, Boolean> function) {
         doWithMessage(
-                player,
                 request
                         .body(TypedMessage.class)
                         .orElseThrow(BodyIsEmptyException::new),
@@ -34,14 +33,14 @@ public class MessageUtils {
     }
 
     public void ban(ApiPlayer player, TypedMessage message) {
-        doWithMessage(player, message, it -> it.ban(player));
+        doWithMessage(message, it -> it.ban(player));
     }
 
     public void kick(ApiPlayer player, TypedMessage message) {
-        doWithMessage(player, message, it -> it.kick(player));
+        doWithMessage(message, it -> it.kick(player));
     }
 
-    public void doWithMessage(ApiPlayer player, TypedMessage message, Function<TypedMessage, Boolean> function) {
+    public void doWithMessage(TypedMessage message, Function<TypedMessage, Boolean> function) {
         ReactiveUtils.ifTrueThrow(
                 !function.apply(message),
                 () -> new MessageTypeNotSupportException(message.getType())

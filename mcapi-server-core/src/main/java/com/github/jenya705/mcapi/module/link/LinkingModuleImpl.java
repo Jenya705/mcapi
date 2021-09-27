@@ -251,7 +251,7 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
                                                 .filter(it -> !it.getValue())
                                                 .map(Map.Entry::getKey)
                                                 .toArray(String[]::new)
-                                ).rest()
+                                )
                         ))
         );
         DatabaseModule.async.submit(() -> {

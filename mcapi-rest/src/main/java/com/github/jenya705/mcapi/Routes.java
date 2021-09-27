@@ -26,6 +26,8 @@ public class Routes {
 
     public final Route BOT_PERMISSION = Route.get("/bot/{selector}/permission/{permission}");
 
+    public final Route BOT_TARGET_PERMISSION = Route.get("/bot/{selector}/permission/{permission}/{target}");
+
     public final Route COMMAND_CREATE = Route.post("/command");
 
     public final Route LINK_REQUEST = Route.post("/player/{id}/link");
