@@ -43,7 +43,7 @@ public class MessageUtils {
 
     public void doWithMessage(ApiPlayer player, TypedMessage message, Function<TypedMessage, Boolean> function) {
         ReactiveUtils.ifTrueThrow(
-                function.apply(message),
+                !function.apply(message),
                 () -> new MessageTypeNotSupportException(message.getType())
         );
     }
