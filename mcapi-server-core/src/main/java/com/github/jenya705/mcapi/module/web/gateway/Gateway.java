@@ -10,5 +10,4 @@ public interface Gateway {
     void broadcast(Object obj, String type);
 
     Collection<? extends GatewayClient> getClients();
-
 }

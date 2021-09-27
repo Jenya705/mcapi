@@ -20,5 +20,4 @@ public class EntityCommandOption implements ApiCommandOption {
     public RestCommandOption rest() {
         return RestCommandOption.from(this);
     }
-
 }

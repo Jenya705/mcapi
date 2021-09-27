@@ -59,5 +59,4 @@ public class FailureOperation {
         }
         return this;
     }
-
 }

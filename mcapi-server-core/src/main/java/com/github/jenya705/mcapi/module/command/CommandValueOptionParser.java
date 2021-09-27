@@ -16,5 +16,4 @@ public interface CommandValueOptionParser {
     Object serialize(ApiCommandValueOption option, AbstractBot owner, String value);
 
     List<String> tabs(ApiCommandValueOption option, AbstractBot owner);
-
 }

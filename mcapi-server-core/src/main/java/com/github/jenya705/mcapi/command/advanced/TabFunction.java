@@ -12,5 +12,4 @@ import java.util.List;
 public interface TabFunction {
 
     List<CommandTab> apply(ApiCommandSender sender, String permission, boolean async);
-
 }

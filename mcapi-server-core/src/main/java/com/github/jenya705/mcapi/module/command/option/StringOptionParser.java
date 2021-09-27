@@ -19,5 +19,4 @@ public class StringOptionParser extends AbstractCommandValueOptionParser {
     public Object serialize(ApiCommandValueOption option, AbstractBot owner, String value) {
         return value;
     }
-
 }

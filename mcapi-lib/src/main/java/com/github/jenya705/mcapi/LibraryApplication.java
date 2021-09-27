@@ -16,5 +16,4 @@ public interface LibraryApplication {
     String serialize(Object object, Class<?> asClass);
 
     RestClient rest();
-
 }

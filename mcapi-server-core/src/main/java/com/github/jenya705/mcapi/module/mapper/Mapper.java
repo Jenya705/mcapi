@@ -34,5 +34,4 @@ public interface Mapper {
     default <T, E> Mapper tunnelJsonSerializer(Class<T> inputClass, ObjectTunnelFunction<T, E> tunnelFunction) {
         return jsonSerializer(inputClass, JsonUtils.jacksonSerializerTunnel(inputClass, tunnelFunction));
     }
-
 }

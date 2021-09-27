@@ -12,5 +12,4 @@ public interface LinkEvent {
     ApiPlayer getPlayer();
 
     String[] getDeclinePermissions();
-
 }

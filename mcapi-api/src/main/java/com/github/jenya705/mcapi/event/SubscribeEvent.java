@@ -6,5 +6,4 @@ package com.github.jenya705.mcapi.event;
 public interface SubscribeEvent {
 
     String[] getFailed();
-
 }

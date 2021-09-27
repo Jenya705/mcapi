@@ -28,5 +28,4 @@ public class Route {
 
     private final HttpMethod method;
     private final String uri;
-
 }

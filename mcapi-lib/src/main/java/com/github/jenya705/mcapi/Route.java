@@ -33,5 +33,4 @@ public class Route {
 
     private final HttpMethod httpMethod;
     private final String uri;
-
 }

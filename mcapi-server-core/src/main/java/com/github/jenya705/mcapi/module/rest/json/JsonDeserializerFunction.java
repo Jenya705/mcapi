@@ -13,5 +13,4 @@ import java.io.IOException;
 public interface JsonDeserializerFunction<T> {
 
     T deserialize(JsonParser parser, DeserializationContext ctxt) throws IOException, JsonProcessingException;
-
 }

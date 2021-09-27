@@ -13,5 +13,4 @@ public interface ComponentMapParser {
     void addType(String type, Function<Map<String, Object>, FormComponent> function);
 
     FormComponent buildComponent(Map<String, Object> obj);
-
 }

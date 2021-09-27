@@ -21,5 +21,4 @@ public class EntityForm implements ApiForm {
     public RestForm rest() {
         return RestForm.from(this);
     }
-
 }

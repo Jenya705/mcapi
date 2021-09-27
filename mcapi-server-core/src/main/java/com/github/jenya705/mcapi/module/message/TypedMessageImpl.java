@@ -14,5 +14,4 @@ public class TypedMessageImpl implements TypedMessage {
 
     private String type;
     private Message message;
-
 }

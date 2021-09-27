@@ -18,5 +18,4 @@ public enum HttpMethod {
 
     private final String name;
     private final boolean withBody;
-
 }

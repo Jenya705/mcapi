@@ -1,6 +1,5 @@
 package com.github.jenya705.mcapi.log;
 
-import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 
 /**

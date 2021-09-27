@@ -17,7 +17,8 @@ public class WebSocketRouteContainerImpl<T extends WebSocketContainerConnection>
     private final Map<WebSocketConnection, T> webSocketConnections = new HashMap<>();
     private Function<WebSocketConnection, T> factoryMethod;
 
-    public WebSocketRouteContainerImpl() { }
+    public WebSocketRouteContainerImpl() {
+    }
 
     public WebSocketRouteContainerImpl(Function<WebSocketConnection, T> factoryMethod) {
         setFactoryMethod(factoryMethod);
@@ -69,5 +70,4 @@ public class WebSocketRouteContainerImpl<T extends WebSocketContainerConnection>
         }
         return webSocketConnections.get(connection);
     }
-
 }

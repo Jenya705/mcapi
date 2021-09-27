@@ -20,5 +20,4 @@ public interface Response {
     default Response ok(Object body) {
         return status(200).body(body);
     }
-
 }

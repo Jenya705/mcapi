@@ -24,5 +24,4 @@ public interface BaseCommon {
     default void autoBeans() {
         app().injectBeansInObject(this);
     }
-
 }

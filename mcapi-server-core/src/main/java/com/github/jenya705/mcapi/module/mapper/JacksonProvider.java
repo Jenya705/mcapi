@@ -8,5 +8,4 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public interface JacksonProvider {
 
     ObjectMapper getMapper();
-
 }

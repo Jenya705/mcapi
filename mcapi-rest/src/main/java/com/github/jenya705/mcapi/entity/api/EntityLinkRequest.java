@@ -21,5 +21,4 @@ public class EntityLinkRequest implements ApiLinkRequest {
     public RestLinkRequest rest() {
         return RestLinkRequest.from(this);
     }
-
 }

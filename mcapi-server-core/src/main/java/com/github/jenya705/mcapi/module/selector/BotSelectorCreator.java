@@ -40,8 +40,8 @@ public class BotSelectorCreator extends MapSelectorCreator<AbstractBot, BotSelec
                                                 .map(entity -> new BotObject(
                                                         entity,
                                                         databaseModule.storage(),
-                                                        storageModule)
-                                                )
+                                                        storageModule
+                                                ))
                                                 .orElse(null),
                                         "", null
                                 )

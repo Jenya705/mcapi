@@ -22,5 +22,4 @@ public class EntityLocation implements ApiLocation {
     public RestLocation rest() {
         return RestLocation.from(this);
     }
-
 }

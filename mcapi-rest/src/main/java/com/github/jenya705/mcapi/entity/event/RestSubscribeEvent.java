@@ -26,5 +26,4 @@ public class RestSubscribeEvent {
                 event.getFailed()
         );
     }
-
 }

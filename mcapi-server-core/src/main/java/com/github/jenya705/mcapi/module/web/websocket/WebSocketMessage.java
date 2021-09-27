@@ -10,5 +10,4 @@ public interface WebSocketMessage {
     }
 
     <T> T as(Class<? extends T> clazz);
-
 }

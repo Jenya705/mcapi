@@ -12,5 +12,4 @@ public interface TimerTask {
     }
 
     void complete();
-
 }

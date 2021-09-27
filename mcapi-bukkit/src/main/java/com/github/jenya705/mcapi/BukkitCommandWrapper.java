@@ -42,5 +42,4 @@ public class BukkitCommandWrapper implements org.bukkit.command.CommandExecutor,
                         .map(CommandTab::getName)
                         .collect(Collectors.toList());
     }
-
 }

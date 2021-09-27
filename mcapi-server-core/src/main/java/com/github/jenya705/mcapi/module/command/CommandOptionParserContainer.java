@@ -35,5 +35,4 @@ public class CommandOptionParserContainer {
     public void addParser(String type, CommandValueOptionParser parser) {
         parsers.put(type, parser);
     }
-
 }

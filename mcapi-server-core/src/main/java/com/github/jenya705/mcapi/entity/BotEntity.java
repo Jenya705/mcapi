@@ -48,5 +48,4 @@ public class BotEntity {
     public boolean isEmpty() {
         return id == -1;
     }
-
 }

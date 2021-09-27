@@ -18,5 +18,4 @@ public interface CommandModule {
     CommandValueOptionParser getParser(String type);
 
     CommandExecutor getBotCommandExecutor(AbstractBot bot, String command);
-
 }

@@ -7,10 +7,12 @@ public interface WebSocketRouteHandler {
 
     Object onMessage(WebSocketConnection connection, WebSocketMessage message);
 
-    default void onConnect(WebSocketConnection connection) { }
+    default void onConnect(WebSocketConnection connection) {
+    }
 
-    default void onClose(WebSocketConnection connection) { }
+    default void onClose(WebSocketConnection connection) {
+    }
 
-    default void onError(WebSocketConnection connection, Throwable throwable) { }
-
+    default void onError(WebSocketConnection connection, Throwable throwable) {
+    }
 }

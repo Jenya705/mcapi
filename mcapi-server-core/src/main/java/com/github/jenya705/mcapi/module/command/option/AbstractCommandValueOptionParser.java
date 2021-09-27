@@ -71,5 +71,4 @@ public abstract class AbstractCommandValueOptionParser implements CommandValueOp
         tabFunctions.put(name, function);
         return this;
     }
-
 }

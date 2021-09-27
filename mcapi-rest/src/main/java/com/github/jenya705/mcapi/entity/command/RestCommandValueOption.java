@@ -28,5 +28,4 @@ public class RestCommandValueOption {
                 option.getSuggestions()
         );
     }
-
 }

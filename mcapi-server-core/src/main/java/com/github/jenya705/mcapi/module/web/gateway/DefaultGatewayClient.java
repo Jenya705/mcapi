@@ -55,7 +55,7 @@ public class DefaultGatewayClient extends SimpleStatefulWebSocketConnection<Inte
                     ApiSubscribeRequest subscribeRequest =
                             message.as(ApiSubscribeRequest.class);
                     List<String> failed = new ArrayList<>();
-                    for (String subscription: subscribeRequest.getSubscriptions()) {
+                    for (String subscription : subscribeRequest.getSubscriptions()) {
                         if (!subscribe(subscription)) failed.add(subscription);
                     }
                     return new RestSubscribeRequest(failed.toArray(String[]::new));

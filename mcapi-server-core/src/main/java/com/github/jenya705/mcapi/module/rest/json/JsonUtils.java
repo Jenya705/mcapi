@@ -26,5 +26,4 @@ public class JsonUtils {
     public <T, E> JsonSerializer<T> jacksonSerializerTunnel(Class<T> tClass, ObjectTunnelFunction<T, E> tunnelFunction) {
         return new JacksonSerializer<>(tClass, serializerTunnel(tunnelFunction));
     }
-
 }

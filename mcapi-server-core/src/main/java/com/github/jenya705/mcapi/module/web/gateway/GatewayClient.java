@@ -20,5 +20,4 @@ public interface GatewayClient {
     boolean isSubscribed(String subscription);
 
     void send(Object obj);
-
 }

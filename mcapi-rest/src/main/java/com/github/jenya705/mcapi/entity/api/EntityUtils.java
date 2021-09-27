@@ -11,5 +11,4 @@ public class EntityUtils {
     public void throwEntityContextException() {
         throw new UnsupportedOperationException("Can not be invoked because of entity");
     }
-
 }

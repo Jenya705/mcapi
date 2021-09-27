@@ -24,5 +24,4 @@ public class EntityCommandValueOption implements ApiCommandValueOption {
     public RestCommandValueOption rest() {
         return RestCommandValueOption.from(this);
     }
-
 }

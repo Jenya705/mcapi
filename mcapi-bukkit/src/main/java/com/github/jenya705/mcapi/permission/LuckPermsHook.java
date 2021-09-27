@@ -29,10 +29,9 @@ public class LuckPermsHook implements PermissionManagerHook {
 
     private void givePermission(User user, boolean toggled, String... permissions) {
         if (user == null) return;
-        for (String permission: permissions) {
+        for (String permission : permissions) {
             user.data().add(Node.builder(permission).value(toggled).build());
         }
         luckPerms.getUserManager().saveUser(user);
     }
-
 }

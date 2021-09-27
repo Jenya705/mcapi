@@ -65,5 +65,4 @@ public class PlayerSelectorCreator extends MapSelectorCreator<ApiPlayer, PlayerS
                                 .orElseGet(Collections::emptyList)
                 );
     }
-
 }

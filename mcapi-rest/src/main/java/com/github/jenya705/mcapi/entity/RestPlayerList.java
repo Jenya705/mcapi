@@ -15,5 +15,4 @@ import java.util.UUID;
 public class RestPlayerList {
 
     private UUID[] uuids;
-
 }

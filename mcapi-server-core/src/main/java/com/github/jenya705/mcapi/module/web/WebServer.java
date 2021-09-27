@@ -30,5 +30,4 @@ public interface WebServer {
         addHandler(route, handler);
         return this;
     }
-
 }

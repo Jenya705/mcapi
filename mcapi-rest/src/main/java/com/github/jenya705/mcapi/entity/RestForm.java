@@ -22,5 +22,4 @@ public class RestForm {
                 form.getComponents()
         );
     }
-
 }

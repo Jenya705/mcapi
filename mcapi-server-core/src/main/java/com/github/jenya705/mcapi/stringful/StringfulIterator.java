@@ -19,5 +19,4 @@ public interface StringfulIterator extends Iterator<String> {
         while (hasNext()) values[i++] = next();
         return values;
     }
-
 }

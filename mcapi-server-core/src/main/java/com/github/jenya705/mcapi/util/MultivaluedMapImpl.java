@@ -11,7 +11,7 @@ import java.util.Map;
  * @author Jenya705
  */
 @AllArgsConstructor
-public class MultivaluedMapImpl<T, V> implements MultivaluedMap<T, V>{
+public class MultivaluedMapImpl<T, V> implements MultivaluedMap<T, V> {
 
     @Delegate
     private final Map<T, List<V>> map;

@@ -20,5 +20,4 @@ public class EntityCommandInteractionValue implements ApiCommandInteractionValue
     public RestCommandInteractionValue rest() {
         return RestCommandInteractionValue.from(this);
     }
-
 }

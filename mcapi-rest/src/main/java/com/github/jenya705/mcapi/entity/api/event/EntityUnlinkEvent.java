@@ -20,5 +20,4 @@ public class EntityUnlinkEvent implements UnlinkEvent {
     public RestUnlinkEvent rest() {
         return RestUnlinkEvent.from(this);
     }
-
 }

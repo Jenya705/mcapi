@@ -16,5 +16,4 @@ public interface CommandTab {
     String getName();
 
     String getTooltip();
-
 }

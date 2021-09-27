@@ -47,5 +47,4 @@ public class EntityPlayer implements ApiPlayer {
     public RestPlayer rest() {
         return RestPlayer.from(this);
     }
-
 }

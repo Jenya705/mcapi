@@ -8,5 +8,4 @@ import java.io.IOException;
 public interface ObjectTunnelFunction<T, E> {
 
     E tunnel(T obj) throws IOException;
-
 }

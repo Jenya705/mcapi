@@ -19,5 +19,4 @@ public class EntitySubscribeRequest implements ApiSubscribeRequest {
     public RestSubscribeRequest rest() {
         return RestSubscribeRequest.from(this);
     }
-
 }

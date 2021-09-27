@@ -23,5 +23,4 @@ public class HttpPredicateUtils {
     public Predicate<HttpServerRequest> predicate(Route route) {
         return predicate(route.getMethod(), route.getUri());
     }
-
 }

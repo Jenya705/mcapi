@@ -23,5 +23,4 @@ public interface DatabaseGetter {
     Collection<BotPermissionEntity> getPermissions(int botId);
 
     BotPermissionEntity getPermission(int botId, String permission, UUID target);
-
 }

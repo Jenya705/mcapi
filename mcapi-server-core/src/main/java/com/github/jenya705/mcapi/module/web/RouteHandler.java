@@ -7,5 +7,4 @@ package com.github.jenya705.mcapi.module.web;
 public interface RouteHandler {
 
     void handle(Request request, Response response);
-
 }

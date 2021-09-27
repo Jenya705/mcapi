@@ -7,5 +7,4 @@ package com.github.jenya705.mcapi.module.mapper;
 public interface RawDeserializer<T> {
 
     T deserialize(String value);
-
 }

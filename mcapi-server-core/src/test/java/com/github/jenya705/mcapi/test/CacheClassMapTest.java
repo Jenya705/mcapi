@@ -18,5 +18,4 @@ public class CacheClassMapTest {
         Assertions.assertEquals(cacheMap.get(String.class), "String");
         Assertions.assertEquals(cacheMap.get(CharSequence.class), "String");
     }
-
 }

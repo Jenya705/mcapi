@@ -22,5 +22,4 @@ public class EntityError implements ApiError {
     public RestError rest() {
         return RestError.from(this);
     }
-
 }

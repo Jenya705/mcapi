@@ -40,5 +40,4 @@ public interface JavaServerCore extends ServerCore {
     default ApiPlayer getPlayer(UUID uuid) {
         return getJavaPlayer(uuid);
     }
-
 }

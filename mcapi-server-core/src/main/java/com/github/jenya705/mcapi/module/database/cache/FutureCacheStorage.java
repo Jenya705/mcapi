@@ -23,5 +23,4 @@ public interface FutureCacheStorage extends CacheStorage {
     default Collection<BotLinkEntity> getCachedLinksAndCacheBotsWithNullSafety(int botId) {
         return Objects.requireNonNullElse(getCachedLinksAndCacheBots(botId), Collections.emptyList());
     }
-
 }

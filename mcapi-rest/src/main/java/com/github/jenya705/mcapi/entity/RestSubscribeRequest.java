@@ -20,5 +20,4 @@ public class RestSubscribeRequest {
                 request.getSubscriptions()
         );
     }
-
 }

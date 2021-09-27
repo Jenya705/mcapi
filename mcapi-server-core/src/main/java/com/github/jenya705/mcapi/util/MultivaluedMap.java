@@ -18,5 +18,4 @@ public interface MultivaluedMap<T, V> extends Map<T, List<V>> {
     default void forEach(T key, Consumer<V> consumer) {
         get(key).forEach(consumer);
     }
-
 }

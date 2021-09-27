@@ -70,6 +70,7 @@ public class ServerApplication {
                 GetPlayerRouteHandler.class,
                 GetPlayerListRouteHandler.class,
                 BanPlayerRouteHandler.class,
+                KickPlayerRouteHandler.class,
                 SendMessageRouteHandler.class,
                 DefaultGateway.class,
                 ServerGatewayImpl.class,

@@ -33,5 +33,4 @@ public class Routes {
     public final Route OFFLINE_PLAYER = Route.get("/offline/{id}");
 
     public final Route OFFLINE_PLAYER_BAN = Route.put("/offline/{id}/ban");
-
 }

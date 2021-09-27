@@ -21,5 +21,4 @@ public class EntityCommand implements ApiCommand {
     public RestCommand rest() {
         return RestCommand.from(this);
     }
-
 }

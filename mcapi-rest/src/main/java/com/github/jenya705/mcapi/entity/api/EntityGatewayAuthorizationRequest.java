@@ -14,5 +14,4 @@ import lombok.NoArgsConstructor;
 public class EntityGatewayAuthorizationRequest implements ApiGatewayAuthorizationRequest {
 
     private String token;
-
 }

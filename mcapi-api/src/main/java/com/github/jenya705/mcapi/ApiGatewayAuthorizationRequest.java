@@ -6,5 +6,4 @@ package com.github.jenya705.mcapi;
 public interface ApiGatewayAuthorizationRequest {
 
     String getToken();
-
 }

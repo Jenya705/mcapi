@@ -21,5 +21,4 @@ public abstract class AbstractRouteHandler extends AbstractApplicationModule imp
     public void addSelfRouteHandler() {
         bean(WebServer.class).addHandler(route, this);
     }
-
 }

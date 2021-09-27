@@ -8,5 +8,4 @@ import com.github.jenya705.mcapi.ApiPlayer;
 public interface PermissionManagerHook {
 
     void givePermission(ApiPlayer player, boolean toggled, String... permissions);
-
 }

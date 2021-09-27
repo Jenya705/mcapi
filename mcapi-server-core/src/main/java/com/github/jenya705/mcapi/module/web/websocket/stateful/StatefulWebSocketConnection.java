@@ -22,5 +22,4 @@ public interface StatefulWebSocketConnection<S> extends WebSocketContainerConnec
     StatefulWebSocketConnection<S> defaultState(S state);
 
     StatefulWebSocketConnection<S> state(S state, Function<WebSocketMessage, Object> stateFunction);
-
 }

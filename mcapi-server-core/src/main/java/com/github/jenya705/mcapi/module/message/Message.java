@@ -17,5 +17,4 @@ public interface Message {
     default boolean kick(ApiPlayer player) {
         return false;
     }
-
 }

@@ -28,6 +28,4 @@ public class RestJoinEvent {
                 event.getPlayer().getUuid()
         );
     }
-
-
 }

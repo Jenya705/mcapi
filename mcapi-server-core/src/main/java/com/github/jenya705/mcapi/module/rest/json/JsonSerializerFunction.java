@@ -12,5 +12,4 @@ import java.io.IOException;
 public interface JsonSerializerFunction<T> {
 
     void serialize(T value, JsonGenerator generator, SerializerProvider serializers) throws IOException;
-
 }

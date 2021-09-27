@@ -8,5 +8,4 @@ import com.github.jenya705.mcapi.ApiError;
 public interface ThrowableParser {
 
     ApiError parse(Throwable throwable);
-
 }

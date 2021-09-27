@@ -10,11 +10,14 @@ public interface WebSocketContainerConnection extends WebSocketConnection {
 
     Object onMessage(WebSocketMessage message);
 
-    default void onConnection() { }
+    default void onConnection() {
+    }
 
-    default void onError(Throwable e) { }
+    default void onError(Throwable e) {
+    }
 
-    default void onClose() { }
+    default void onClose() {
+    }
 
     void delegate(WebSocketConnection connection);
 }

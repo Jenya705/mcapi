@@ -8,7 +8,8 @@ public abstract class AbstractApplicationModule implements BaseCommon {
     @Bean
     private ServerApplication application;
 
-    public AbstractApplicationModule() { }
+    public AbstractApplicationModule() {
+    }
 
     public AbstractApplicationModule(ServerApplication application) {
         this.application = application;
@@ -18,5 +19,4 @@ public abstract class AbstractApplicationModule implements BaseCommon {
     public ServerApplication app() {
         return application;
     }
-
 }

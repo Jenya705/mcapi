@@ -56,5 +56,4 @@ public interface CacheStorage {
     default Collection<BotPermissionEntity> getCachedPermissionsWithNullSafety(int botId) {
         return Objects.requireNonNullElse(getCachedPermissions(botId), Collections.emptyList());
     }
-
 }

@@ -126,5 +126,4 @@ public class RestModule extends AbstractApplicationModule {
                 )
                 .build();
     }
-
 }

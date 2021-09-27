@@ -23,5 +23,4 @@ public class EntityCommandInteractionEvent implements CommandInteractionEvent {
     public RestCommandInteractionEvent rest() {
         return RestCommandInteractionEvent.from(this);
     }
-
 }

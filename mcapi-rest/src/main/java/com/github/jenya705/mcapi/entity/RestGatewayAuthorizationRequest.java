@@ -18,5 +18,4 @@ public class RestGatewayAuthorizationRequest {
     public static RestGatewayAuthorizationRequest from(ApiGatewayAuthorizationRequest request) {
         return new RestGatewayAuthorizationRequest(request.getToken());
     }
-
 }

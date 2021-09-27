@@ -2,7 +2,6 @@ package com.github.jenya705.mcapi.module.message;
 
 import com.github.jenya705.mcapi.ApiCommandSender;
 import com.github.jenya705.mcapi.ApiPlayer;
-import com.github.jenya705.mcapi.error.MessageTypeNotSupportException;
 
 /**
  * @author Jenya705
@@ -24,5 +23,4 @@ public interface TypedMessage extends Message {
     default boolean kick(ApiPlayer player) {
         return getMessage().kick(player);
     }
-
 }

@@ -22,5 +22,4 @@ public class RestCommandOption {
                 option.getType()
         );
     }
-
 }

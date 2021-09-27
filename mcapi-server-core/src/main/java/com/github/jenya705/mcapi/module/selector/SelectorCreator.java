@@ -8,5 +8,4 @@ import com.github.jenya705.mcapi.util.Selector;
 public interface SelectorCreator<T, V> {
 
     Selector<T> create(String selector, V data);
-
 }

@@ -37,5 +37,4 @@ public class RestCommandInteractionEvent {
                 RestCommandSender.from(event.getSender())
         );
     }
-
 }

@@ -24,5 +24,4 @@ public class RestOfflinePlayer {
                 player.getUuid()
         );
     }
-
 }

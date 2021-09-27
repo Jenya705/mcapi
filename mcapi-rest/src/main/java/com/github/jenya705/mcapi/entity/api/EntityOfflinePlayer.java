@@ -28,5 +28,4 @@ public class EntityOfflinePlayer implements ApiOfflinePlayer {
     public RestOfflinePlayer rest() {
         return RestOfflinePlayer.from(this);
     }
-
 }

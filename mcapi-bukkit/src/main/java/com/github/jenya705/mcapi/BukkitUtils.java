@@ -22,5 +22,4 @@ public class BukkitUtils {
             Bukkit.getServer().getScheduler().runTask(plugin, runnable);
         }
     }
-
 }

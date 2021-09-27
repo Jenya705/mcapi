@@ -14,5 +14,4 @@ public interface SelectorProvider {
     Selector<ApiPlayer> players(@NotNull String selector, @Nullable AbstractBot bot);
 
     Selector<AbstractBot> bots(@NotNull String selector, @Nullable AbstractBot bot);
-
 }

@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * @author Jenya705
  */
-public class CacheClassMap<T> implements Map<Class<?>, T>{
+public class CacheClassMap<T> implements Map<Class<?>, T> {
 
     private final Map<Class<?>, T> map = new HashMap<>();
     private final Map<Class<?>, Class<?>> cache = new HashMap<>();
@@ -45,7 +45,7 @@ public class CacheClassMap<T> implements Map<Class<?>, T>{
     @Override
     public T put(Class<?> key, T value) {
         map.put(key, value);
-        for (Map.Entry<Class<?>, Class<?>> entry: cache.entrySet()) {
+        for (Map.Entry<Class<?>, Class<?>> entry : cache.entrySet()) {
             if (entry.getValue() == key) {
                 cache.remove(entry.getKey());
             }
@@ -55,7 +55,7 @@ public class CacheClassMap<T> implements Map<Class<?>, T>{
 
     @Override
     public T remove(Object key) {
-        for (Map.Entry<Class<?>, Class<?>> entry: cache.entrySet()) {
+        for (Map.Entry<Class<?>, Class<?>> entry : cache.entrySet()) {
             if (entry.getValue() == key) {
                 cache.remove(entry.getKey());
             }
@@ -66,7 +66,7 @@ public class CacheClassMap<T> implements Map<Class<?>, T>{
     @Override
     public void putAll(@NotNull Map<? extends Class<?>, ? extends T> m) {
         map.putAll(m);
-        for (Map.Entry<Class<?>, Class<?>> entry: cache.entrySet()) {
+        for (Map.Entry<Class<?>, Class<?>> entry : cache.entrySet()) {
             if (m.containsKey(entry.getValue())) cache.remove(entry.getKey());
         }
     }
@@ -105,7 +105,7 @@ public class CacheClassMap<T> implements Map<Class<?>, T>{
         if (map.containsKey(clazz)) {
             return map.get(clazz);
         }
-        for (Map.Entry<Class<?>, T> entry: map.entrySet()) {
+        for (Map.Entry<Class<?>, T> entry : map.entrySet()) {
             if (entry.getKey().isAssignableFrom(clazz)) {
                 cache.put(clazz, entry.getKey());
                 return entry.getValue();

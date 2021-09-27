@@ -27,5 +27,4 @@ public interface DatabaseModule {
     DatabaseGetter safeSyncWithFuture();
 
     DatabaseGetter safeAsync();
-
 }

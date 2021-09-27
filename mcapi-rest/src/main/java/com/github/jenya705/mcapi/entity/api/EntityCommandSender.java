@@ -31,5 +31,4 @@ public class EntityCommandSender implements ApiCommandSender {
     public RestCommandSender rest() {
         return RestCommandSender.from(this);
     }
-
 }

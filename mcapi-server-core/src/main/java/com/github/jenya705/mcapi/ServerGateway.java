@@ -10,5 +10,4 @@ public interface ServerGateway {
     void join(ApiPlayer player);
 
     void quit(ApiOfflinePlayer player);
-
 }

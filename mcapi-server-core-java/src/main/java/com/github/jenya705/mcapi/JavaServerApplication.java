@@ -14,5 +14,4 @@ public class JavaServerApplication extends ServerApplication {
         );
         setPlatform(ServerPlatform.JAVA);
     }
-
 }

@@ -8,7 +8,8 @@ public abstract class AbstractJavaApplicationModule implements JavaBaseCommon {
     @Bean
     private JavaServerApplication application;
 
-    public AbstractJavaApplicationModule() { }
+    public AbstractJavaApplicationModule() {
+    }
 
     public AbstractJavaApplicationModule(JavaServerApplication application) {
         this.application = application;

@@ -51,5 +51,4 @@ public class ZipUtils {
     public byte[] decompressSneaky(byte[] data) {
         return decompress(data);
     }
-
 }

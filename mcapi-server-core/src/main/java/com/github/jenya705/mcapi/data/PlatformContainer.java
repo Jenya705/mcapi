@@ -8,5 +8,4 @@ import com.github.jenya705.mcapi.ServerPlatform;
 public interface PlatformContainer {
 
     ServerPlatform getPlatform();
-
 }
