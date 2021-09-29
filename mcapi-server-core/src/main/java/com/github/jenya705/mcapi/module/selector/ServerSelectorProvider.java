@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.module.selector;
 
 import com.github.jenya705.mcapi.AbstractApplicationModule;
+import com.github.jenya705.mcapi.ApiOfflinePlayer;
 import com.github.jenya705.mcapi.ApiPlayer;
 import com.github.jenya705.mcapi.OnInitializing;
 import com.github.jenya705.mcapi.entity.AbstractBot;
@@ -15,18 +16,20 @@ public class ServerSelectorProvider extends AbstractApplicationModule implements
 
     private BotSelectorCreator botSelectorCreator;
     private PlayerSelectorCreator playerSelectorCreator;
+    private OfflineSelectorCreator offlinePlayerSelectorCreator;
 
     @OnInitializing
     public void init() {
         playerSelectorCreator = new PlayerSelectorCreator(app());
         botSelectorCreator = new BotSelectorCreator(app());
+        offlinePlayerSelectorCreator = new OfflineSelectorCreator(app());
     }
 
     @Override
     public Selector<ApiPlayer> players(@NotNull String selector, @Nullable AbstractBot bot) {
         return playerSelectorCreator.create(
                 selector,
-                new PlayerSelectorCreator.Data(bot)
+                new DefaultSelectorCreatorData(bot)
         );
     }
 
@@ -34,7 +37,15 @@ public class ServerSelectorProvider extends AbstractApplicationModule implements
     public Selector<AbstractBot> bots(@NotNull String selector, @Nullable AbstractBot bot) {
         return botSelectorCreator.create(
                 selector,
-                new BotSelectorCreator.Data(bot)
+                new DefaultSelectorCreatorData(bot)
+        );
+    }
+
+    @Override
+    public Selector<ApiOfflinePlayer> offlinePlayers(@NotNull String selector, @Nullable AbstractBot bot) {
+        return offlinePlayerSelectorCreator.create(
+                selector,
+                new DefaultSelectorCreatorData(bot)
         );
     }
 }

@@ -4,6 +4,7 @@ import com.github.jenya705.mcapi.ApiPlayer;
 import com.github.jenya705.mcapi.Routes;
 import com.github.jenya705.mcapi.module.web.Request;
 import com.github.jenya705.mcapi.module.web.Response;
+import com.github.jenya705.mcapi.permission.Permissions;
 
 /**
  * @author Jenya705
@@ -20,7 +21,7 @@ public class GetPlayerRouteHandler extends AbstractRouteHandler {
                 .paramOrException("id", ApiPlayer.class);
         request
                 .bot()
-                .needPermission("user.get", player);
+                .needPermission(Permissions.USER_GET, player);
         response.ok(player);
     }
 }

@@ -5,6 +5,7 @@ import com.github.jenya705.mcapi.OnDisable;
 import com.github.jenya705.mcapi.OnStartup;
 import com.github.jenya705.mcapi.data.MapConfigData;
 import com.github.jenya705.mcapi.entity.PermissionEntity;
+import com.github.jenya705.mcapi.module.config.ConfigModule;
 import com.github.jenya705.mcapi.permission.DefaultPermission;
 
 import java.io.IOException;
@@ -42,9 +43,8 @@ public class StorageModuleImpl extends AbstractApplicationModule implements Stor
     @OnDisable(priority = 4)
     public void loadAndSave() throws IOException {
         StorageModuleConfig config = new StorageModuleConfig(
-                new MapConfigData(
-                        core().loadConfig("storage"),
-                        app().getPlatform()
+                bean(ConfigModule.class).createConfig(
+                        core().loadConfig("storage")
                 )
         );
         loadPermissions(config);

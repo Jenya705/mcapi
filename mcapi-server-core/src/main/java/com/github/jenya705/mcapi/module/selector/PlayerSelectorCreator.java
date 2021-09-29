@@ -3,26 +3,17 @@ package com.github.jenya705.mcapi.module.selector;
 import com.github.jenya705.mcapi.ApiPlayer;
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.ServerApplication;
-import com.github.jenya705.mcapi.entity.AbstractBot;
-import com.github.jenya705.mcapi.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.error.PlayerNotFoundException;
-import lombok.AllArgsConstructor;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.Random;
 
 /**
  * @author Jenya705
  */
-public class PlayerSelectorCreator extends MapSelectorCreator<ApiPlayer, PlayerSelectorCreator.Data> implements BaseCommon {
+public class PlayerSelectorCreator extends MapSelectorCreator<ApiPlayer, DefaultSelectorCreatorData> implements BaseCommon {
 
     private final Random random = new Random();
-
-    @lombok.Data
-    @AllArgsConstructor
-    public static class Data {
-        private final AbstractBot bot;
-    }
 
     private final ServerApplication application;
 
@@ -43,26 +34,11 @@ public class PlayerSelectorCreator extends MapSelectorCreator<ApiPlayer, PlayerS
                 .defaultSelector("a", data ->
                         (Collection<ApiPlayer>) core().getPlayers()
                 )
-                .defaultSelector("r", data -> {
-                    List<ApiPlayer> playerList = new ArrayList<>(core().getPlayers());
-                    return Collections.singletonList(
-                            playerList.get(
-                                    random.nextInt(playerList.size())
-                            )
-                    );
-                })
+                .defaultSelector("r", data ->
+                        SelectorCreatorUtils.randomSingleton(core().getPlayers())
+                )
                 .defaultSelector("l", data ->
-                        Optional
-                                .ofNullable(data.getBot())
-                                .map(AbstractBot::getLinks)
-                                .map(links -> links
-                                        .stream()
-                                        .map(BotLinkEntity::getTarget)
-                                        .map(target -> core().getPlayer(target))
-                                        .filter(Objects::nonNull)
-                                        .collect(Collectors.toList())
-                                )
-                                .orElseGet(Collections::emptyList)
+                        SelectorCreatorUtils.botLinked(data.getBot(), linkEntity -> core().getPlayer(linkEntity.getTarget()))
                 );
     }
 }

@@ -5,6 +5,7 @@ import com.github.jenya705.mcapi.Routes;
 import com.github.jenya705.mcapi.entity.api.EntityPermission;
 import com.github.jenya705.mcapi.module.web.Request;
 import com.github.jenya705.mcapi.module.web.Response;
+import com.github.jenya705.mcapi.permission.Permissions;
 
 /**
  * @author Jenya705
@@ -23,7 +24,7 @@ public class PlayerPermissionRouteHandler extends AbstractRouteHandler {
                 .paramOrException("permission");
         request
                 .bot()
-                .needPermission("user.has_permission", player);
+                .needPermission(Permissions.USER_HAS_PERMISSION, player);
         response.ok(new EntityPermission(
                 player.hasPermission(permissionName),
                 permissionName,

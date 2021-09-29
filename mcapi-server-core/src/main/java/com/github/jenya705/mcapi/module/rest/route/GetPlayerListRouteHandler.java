@@ -5,6 +5,7 @@ import com.github.jenya705.mcapi.Routes;
 import com.github.jenya705.mcapi.entity.RestPlayerList;
 import com.github.jenya705.mcapi.module.web.Request;
 import com.github.jenya705.mcapi.module.web.Response;
+import com.github.jenya705.mcapi.permission.Permissions;
 
 import java.util.UUID;
 
@@ -21,7 +22,7 @@ public class GetPlayerListRouteHandler extends AbstractRouteHandler {
     public void handle(Request request, Response response) {
         request
                 .bot()
-                .needPermission("user.list");
+                .needPermission(Permissions.USER_LIST);
         response.ok(new RestPlayerList(
                 core()
                         .getPlayers()

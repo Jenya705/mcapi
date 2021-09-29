@@ -2,7 +2,7 @@ package com.github.jenya705.mcapi.module.localization;
 
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.module.config.Config;
-import com.github.jenya705.mcapi.module.config.Value;
+import com.github.jenya705.mcapi.data.loadable.Value;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

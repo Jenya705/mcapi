@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.module.config;
+package com.github.jenya705.mcapi.data.loadable;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

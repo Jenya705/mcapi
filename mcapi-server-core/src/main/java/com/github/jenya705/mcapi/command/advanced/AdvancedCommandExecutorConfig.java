@@ -1,8 +1,9 @@
 package com.github.jenya705.mcapi.command.advanced;
 
+import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.module.config.Config;
-import com.github.jenya705.mcapi.module.config.Global;
-import com.github.jenya705.mcapi.module.config.Value;
+import com.github.jenya705.mcapi.data.loadable.Global;
+import com.github.jenya705.mcapi.data.loadable.Value;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -13,7 +14,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public abstract class AdvancedCommandExecutorConfig extends Config {
+public class AdvancedCommandExecutorConfig extends Config {
 
     @Value
     @Global("argumentParseFailed")
@@ -22,4 +23,11 @@ public abstract class AdvancedCommandExecutorConfig extends Config {
     @Value
     @Global("notEnoughArguments")
     private String notEnoughArguments = "&cNot enough arguments";
+
+    protected AdvancedCommandExecutorConfig() { }
+
+    public AdvancedCommandExecutorConfig(ConfigData configData) {
+        load(configData);
+    }
+
 }

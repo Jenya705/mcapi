@@ -4,20 +4,13 @@ import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.module.authorization.AuthorizationModule;
 import com.github.jenya705.mcapi.util.SelectorContainer;
-import lombok.AllArgsConstructor;
 
 import java.util.Collections;
 
 /**
  * @author Jenya705
  */
-public class BotSelectorCreator extends MapSelectorCreator<AbstractBot, BotSelectorCreator.Data> {
-
-    @lombok.Data
-    @AllArgsConstructor
-    public static class Data {
-        private AbstractBot bot;
-    }
+public class BotSelectorCreator extends MapSelectorCreator<AbstractBot, DefaultSelectorCreatorData> {
 
     private final AuthorizationModule authorizationModule;
 

@@ -4,6 +4,7 @@ import com.github.jenya705.mcapi.AbstractApplicationModule;
 import com.github.jenya705.mcapi.ApiCommandSender;
 import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.*;
+import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutorConfig;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.entity.api.command.EntityCommandInteractionValue;
@@ -34,8 +35,11 @@ public class ApiCommandExecutor extends AbstractApplicationModule implements Com
     private final List<Supplier<List<String>>> tabs;
     private final String path;
 
-    public ApiCommandExecutor(ServerApplication application, String path, CommandModule commandModule, AbstractBot owner, ApiCommandValueOption... valueOptions) {
+    private final AdvancedCommandExecutorConfig config;
+
+    public ApiCommandExecutor(ServerApplication application, String path, CommandModule commandModule, AbstractBot owner, AdvancedCommandExecutorConfig config, ApiCommandValueOption... valueOptions) {
         super(application);
+        this.config = config;
         this.path = path;
         this.owner = owner;
         this.commandModule = commandModule;
@@ -69,7 +73,18 @@ public class ApiCommandExecutor extends AbstractApplicationModule implements Com
                                         ),
                                         RestCommandInteractionEvent.type
                                 )
-                );
+                )
+                .ifFailed(error -> {
+                    if (error.isNotEnoughArguments()) {
+                        sender.sendMessage(CommandsUtils.placeholderMessage(config.getNotEnoughArguments()));
+                    }
+                    else {
+                        sender.sendMessage(CommandsUtils.placeholderMessage(
+                                config.getArgumentParseFailed(),
+                                "%argument_id%", Integer.toString(error.onArgument())
+                        ));
+                    }
+                });
     }
 
     @Override

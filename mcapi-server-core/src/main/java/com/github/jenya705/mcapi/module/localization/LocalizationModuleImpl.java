@@ -4,6 +4,7 @@ import com.github.jenya705.mcapi.AbstractApplicationModule;
 import com.github.jenya705.mcapi.OnDisable;
 import com.github.jenya705.mcapi.OnInitializing;
 import com.github.jenya705.mcapi.data.MapConfigData;
+import com.github.jenya705.mcapi.module.config.ConfigModule;
 import lombok.SneakyThrows;
 
 /**
@@ -33,9 +34,8 @@ public class LocalizationModuleImpl extends AbstractApplicationModule implements
     @SneakyThrows
     private void load() {
         config = new LocalizationModuleConfig(
-                new MapConfigData(
-                        core().loadConfig("localization"),
-                        app().getPlatform()
+                bean(ConfigModule.class).createConfig(
+                        core().loadConfig("localization")
                 )
         );
     }

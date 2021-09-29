@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.module.config;
+package com.github.jenya705.mcapi.data.loadable;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Java {
+public @interface Bedrock {
 
     String value();
 }

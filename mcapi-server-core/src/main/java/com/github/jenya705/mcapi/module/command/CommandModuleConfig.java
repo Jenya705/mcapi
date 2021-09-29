@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.module.database.cache;
+package com.github.jenya705.mcapi.module.command;
 
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.module.config.Config;
@@ -13,21 +13,16 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class CacheConfig extends Config {
+public class CommandModuleConfig extends Config {
 
     @Value
-    private int botCacheSize = 10;
+    private int maxCommandOptions = 10;
 
     @Value
-    private int botLinksCacheSize = 10;
+    private String commandNameRegex = "[a-zA-Z0-9_]*";
 
-    @Value
-    private int targetLinksCacheSize = 10;
-
-    @Value
-    private int permissionCacheSize = 10;
-
-    public CacheConfig(ConfigData configData) {
+    public CommandModuleConfig(ConfigData configData) {
         load(configData);
     }
+
 }

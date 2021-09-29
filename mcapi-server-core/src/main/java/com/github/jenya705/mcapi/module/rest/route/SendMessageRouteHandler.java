@@ -8,6 +8,7 @@ import com.github.jenya705.mcapi.module.message.Message;
 import com.github.jenya705.mcapi.module.selector.SelectorProvider;
 import com.github.jenya705.mcapi.module.web.Request;
 import com.github.jenya705.mcapi.module.web.Response;
+import com.github.jenya705.mcapi.permission.Permissions;
 import com.github.jenya705.mcapi.util.Selector;
 
 /**
@@ -30,7 +31,7 @@ public class SendMessageRouteHandler extends AbstractRouteHandler {
                         request.paramOrException("selector"),
                         bot
                 );
-        bot.needPermission("user.send_message", players);
+        bot.needPermission(Permissions.USER_SEND_MESSAGE, players);
         Message message = request
                 .bodyOrException(Message.class);
         players.forEach(message::send);

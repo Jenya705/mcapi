@@ -92,7 +92,9 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
     @Override
     public void setup() {
         String[] splitSetup = setup.split("ANOTHEROPERATION");
-        for (String splitSetupElement : splitSetup) databaseModule.update(splitSetupElement);
+        for (String splitSetupElement : splitSetup) {
+            databaseModule.update(splitSetupElement);
+        }
     }
 
     @Override

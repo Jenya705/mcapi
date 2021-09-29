@@ -10,21 +10,21 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum DefaultPermission {
 
-    USER_GET("user.get", false, false, true),
-    USER_GET_LOCATION("user.get.location", false, false, true),
-    USER_LIST("user.list", true, false, true),
-    USER_HAS_PERMISSION("user.has_permission", false, false, true),
-    GATEWAY_MESSAGE("gateway.message", true, false, true),
-    GATEWAY_COMMAND("gateway.command_interaction", true, false, true),
-    GATEWAY_LINK("gateway.link", true, false, true),
-    GATEWAY_UNLINK("gateway.unlink", true, false, true),
-    GATEWAY_JOIN("gateway.join", true, false, true),
-    GATEWAY_QUIT("gateway.quit", true, false, true),
-    LINK_REQUEST("link.request", true, false, true),
-    USER_COMMAND_CREATE("user.command.create", true, false, true),
-    USER_KICK("user.kick", false, true, false),
-    USER_BAN("user.ban", false, true, false),
-    USER_SEND_MESSAGE("user.send_message", false, true, true);
+    USER_GET(Permissions.USER_GET, false, false, true),
+    USER_GET_LOCATION(Permissions.USER_GET_LOCATION, false, false, true),
+    USER_LIST(Permissions.USER_LIST, true, false, true),
+    USER_HAS_PERMISSION(Permissions.USER_HAS_PERMISSION, false, false, true),
+    GATEWAY_MESSAGE(Permissions.GATEWAY_MESSAGE, true, false, true),
+    GATEWAY_COMMAND(Permissions.GATEWAY_COMMAND_INTERACTION, true, false, true),
+    GATEWAY_LINK(Permissions.GATEWAY_LINK, true, false, true),
+    GATEWAY_UNLINK(Permissions.GATEWAY_UNLINK, true, false, true),
+    GATEWAY_JOIN(Permissions.GATEWAY_JOIN, true, false, true),
+    GATEWAY_QUIT(Permissions.GATEWAY_QUIT, true, false, true),
+    LINK_REQUEST(Permissions.LINK_REQUEST, true, false, true),
+    USER_COMMAND_CREATE(Permissions.USER_COMMAND_CREATE, true, false, true),
+    USER_KICK(Permissions.USER_KICK, false, true, false),
+    USER_BAN(Permissions.USER_BAN, false, true, false),
+    USER_SEND_MESSAGE(Permissions.USER_SEND_MESSAGE, false, true, true);
 
     private final String name;
     private final boolean global;

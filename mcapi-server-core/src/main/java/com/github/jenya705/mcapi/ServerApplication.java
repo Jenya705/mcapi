@@ -77,6 +77,7 @@ public class ServerApplication {
                 GetBotLinkedPlayersRouteHandler.class,
                 GetBotPermissionRouteHandler.class,
                 GetBotTargetPermissionRouteHandler.class,
+                CreateCommandRouteHandler.class,
                 // End Routes
                 DefaultGateway.class,
                 ServerGatewayImpl.class,
@@ -119,8 +120,8 @@ public class ServerApplication {
         }
         addBean(this);
         initialized = true;
-        injectBeans();
         injectBeansInObject(this);
+        injectBeans();
         runMethods(initializingMethods, "initialize", true);
         if (!enabled) return;
         runMethods(startupMethods, "startup", true);
