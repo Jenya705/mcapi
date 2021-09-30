@@ -105,20 +105,20 @@ public class CallbackLoadableConfigData extends GlobalConfigData implements Load
                 if (isGlobal) {
                     Optional<Object> obj = global(globalAnnotation.value());
                     if (obj.isPresent()) {
-                        field.set(object, obj.get());
+                        field.set(object, deserialize(obj.get()));
                     }
                     else {
                         global(globalAnnotation.value(), fieldValue);
                     }
                 }
                 else if (valueAnnotation.required()) {
-                    field.set(object, requiredObject(
+                    field.set(object, deserialize(requiredObject(
                             key, fieldValue
-                    ));
+                    )));
                 }
                 else {
                     Optional<Object> objectOptional = getObject(key);
-                    if (objectOptional.isPresent()) field.set(object, objectOptional.get());
+                    if (objectOptional.isPresent()) field.set(object, deserialize(objectOptional.get()));
                 }
             } catch (IllegalAccessException e) {
                 log.error(
@@ -148,4 +148,9 @@ public class CallbackLoadableConfigData extends GlobalConfigData implements Load
     public MapConfigData createSelf(Map<String, Object> from) {
         return new CallbackLoadableConfigData(from, getGlobals(), getPlatform(), getDeserializeFunction());
     }
+
+    private Object deserialize(Object obj) {
+        return deserializeFunction.apply(obj, obj.getClass());
+    }
+
 }
