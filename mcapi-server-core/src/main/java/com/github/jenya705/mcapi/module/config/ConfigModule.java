@@ -18,6 +18,10 @@ public interface ConfigModule {
 
     <T> void addDeserializer(ObjectTunnelFunction<Object, T> tunnelFunction, Class<? extends T> clazz);
 
+    <T> void addSerializer(ObjectTunnelFunction<T, Object> tunnelFunction, Class<? extends T> clazz);
+
     <T> T deserialize(Object value, Class<? extends T> clazz);
+
+    <T> Object serialize(T value, Class<? extends T> clazz);
 
 }

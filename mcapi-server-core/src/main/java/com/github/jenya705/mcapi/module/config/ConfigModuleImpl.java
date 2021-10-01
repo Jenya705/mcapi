@@ -26,6 +26,7 @@ public class ConfigModuleImpl extends AbstractApplicationModule implements Confi
     private GlobalConfig global;
 
     private final CacheClassMap<ObjectTunnelFunction<Object, ?>> deserializers = new CacheClassMap<>();
+    private final CacheClassMap<ObjectTunnelFunction<?, Object>> serializers = new CacheClassMap<>();
 
     @OnInitializing(priority = 1)
     public void initialize() throws IOException {
@@ -63,5 +64,20 @@ public class ConfigModuleImpl extends AbstractApplicationModule implements Confi
         ObjectTunnelFunction<Object, ?> function = deserializers.get(clazz);
         if (function == null) return null;
         return (T) function.tunnel(value);
+    }
+
+    @Override
+    public <T> void addSerializer(ObjectTunnelFunction<T, Object> tunnelFunction, Class<? extends T> clazz) {
+        serializers.put(clazz, tunnelFunction);
+    }
+
+    @Override
+    @SneakyThrows
+    @SuppressWarnings("unchecked")
+    public <T> Object serialize(T value, Class<? extends T> clazz) {
+        ObjectTunnelFunction<T, Object> function =
+                (ObjectTunnelFunction<T, Object>) serializers.get(clazz);
+        if (function == null) return null;
+        return function.tunnel(value);
     }
 }
