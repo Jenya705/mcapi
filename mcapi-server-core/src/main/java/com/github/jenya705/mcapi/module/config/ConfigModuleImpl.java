@@ -6,6 +6,7 @@ import com.github.jenya705.mcapi.OnInitializing;
 import com.github.jenya705.mcapi.OnStartup;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.data.loadable.CallbackLoadableConfigData;
+import com.github.jenya705.mcapi.data.loadable.CallbackLoadableConfigDataSerializer;
 import com.github.jenya705.mcapi.module.rest.ObjectTunnelFunction;
 import com.github.jenya705.mcapi.util.CacheClassMap;
 import lombok.Getter;
@@ -13,7 +14,9 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * @author Jenya705
@@ -30,6 +33,27 @@ public class ConfigModuleImpl extends AbstractApplicationModule implements Confi
 
     @OnInitializing(priority = 1)
     public void initialize() throws IOException {
+        this
+                .raw(String.class)
+                .raw(byte.class)
+                .raw(short.class)
+                .raw(int.class)
+                .raw(long.class)
+                .raw(float.class)
+                .raw(double.class)
+                .raw(boolean.class)
+                .raw(Byte.class)
+                .raw(Short.class)
+                .raw(Integer.class)
+                .raw(Long.class)
+                .raw(Float.class)
+                .raw(Double.class)
+                .raw(Boolean.class)
+                .raw(Map.class)
+                .raw(List.class)
+                .serializer(Pattern.class, Pattern::pattern)
+                .deserializer(Pattern.class, obj -> Pattern.compile(String.valueOf(obj)))
+                ;
         log.info("Loading config...");
         config = createConfig(core().loadConfig("config"));
         log.info("Done! (Loading config...)");
@@ -49,11 +73,11 @@ public class ConfigModuleImpl extends AbstractApplicationModule implements Confi
 
     @Override
     public ConfigData createConfig(Map<String, Object> data) {
-        return new CallbackLoadableConfigData(data, app().getPlatform(), this::deserialize);
+        return new CallbackLoadableConfigData(data, app().getPlatform(), new LoadableConfigModuleSerializerImpl(this));
     }
 
     @Override
-    public <T> void addDeserializer(ObjectTunnelFunction<Object, T> tunnelFunction, Class<? extends T> clazz) {
+    public <T> void addDeserializer( Class<? extends T> clazz, ObjectTunnelFunction<Object, T> tunnelFunction) {
         deserializers.put(clazz, tunnelFunction);
     }
 
@@ -67,7 +91,7 @@ public class ConfigModuleImpl extends AbstractApplicationModule implements Confi
     }
 
     @Override
-    public <T> void addSerializer(ObjectTunnelFunction<T, Object> tunnelFunction, Class<? extends T> clazz) {
+    public <T> void addSerializer(Class<? extends T> clazz, ObjectTunnelFunction<T, Object> tunnelFunction) {
         serializers.put(clazz, tunnelFunction);
     }
 
@@ -80,4 +104,5 @@ public class ConfigModuleImpl extends AbstractApplicationModule implements Confi
         if (function == null) return null;
         return function.tunnel(value);
     }
+
 }

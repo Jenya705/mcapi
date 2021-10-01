@@ -1,7 +1,9 @@
 package com.github.jenya705.mcapi.data.loadable;
 
 import com.github.jenya705.mcapi.ServerPlatform;
-import com.github.jenya705.mcapi.data.*;
+import com.github.jenya705.mcapi.data.GlobalConfigData;
+import com.github.jenya705.mcapi.data.GlobalContainer;
+import com.github.jenya705.mcapi.data.MapConfigData;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -9,9 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
 import java.util.Map;
-import java.util.Optional;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 
 /**
  * @author Jenya705
@@ -20,31 +19,31 @@ import java.util.function.BiFunction;
 public class CallbackLoadableConfigData extends GlobalConfigData implements LoadableConfigData {
 
     @Getter(AccessLevel.PROTECTED)
-    private final BiFunction<Object, Class<?>, Object> deserializeFunction;
+    private final CallbackLoadableConfigDataSerializer serializer;
 
-    public CallbackLoadableConfigData(Map<String, Object> data, Map<String, Object> globals, BiFunction<Object, Class<?>, Object> deserializeFunction) {
+    public CallbackLoadableConfigData(Map<String, Object> data, Map<String, Object> globals, CallbackLoadableConfigDataSerializer serializer) {
         super(data, globals);
-        this.deserializeFunction = deserializeFunction;
+        this.serializer = serializer;
     }
 
-    public CallbackLoadableConfigData(Map<String, Object> data, Map<String, Object> globals, ServerPlatform platform, BiFunction<Object, Class<?>, Object> deserializeFunction) {
+    public CallbackLoadableConfigData(Map<String, Object> data, Map<String, Object> globals, ServerPlatform platform, CallbackLoadableConfigDataSerializer serializer) {
         super(data, globals, platform);
-        this.deserializeFunction = deserializeFunction;
+        this.serializer = serializer;
     }
 
-    public CallbackLoadableConfigData(Map<String, Object> data, ServerPlatform platform, BiFunction<Object, Class<?>, Object> deserializeFunction) {
+    public CallbackLoadableConfigData(Map<String, Object> data, ServerPlatform platform, CallbackLoadableConfigDataSerializer serializer) {
         super(data, platform);
-        this.deserializeFunction = deserializeFunction;
+        this.serializer = serializer;
     }
 
-    public CallbackLoadableConfigData(Map<String, Object> data, BiFunction<Object, Class<?>, Object> deserializeFunction) {
+    public CallbackLoadableConfigData(Map<String, Object> data, CallbackLoadableConfigDataSerializer serializer) {
         super(data);
-        this.deserializeFunction = deserializeFunction;
+        this.serializer = serializer;
     }
 
-    public CallbackLoadableConfigData(BiFunction<Object, Class<?>, Object> deserializeFunction) {
+    public CallbackLoadableConfigData(CallbackLoadableConfigDataSerializer serializer) {
         super();
-        this.deserializeFunction = deserializeFunction;
+        this.serializer = serializer;
     }
 
     @Override
@@ -59,98 +58,46 @@ public class CallbackLoadableConfigData extends GlobalConfigData implements Load
 
     private void loadDependOnClass(Object object, Class<?> clazz) throws Exception {
         for (Field field : clazz.getDeclaredFields()) {
-            Value valueAnnotation = field.getDeclaredAnnotation(Value.class);
-            Global globalAnnotation = field.getAnnotation(Global.class);
-            if (valueAnnotation == null) continue;
+            Value value = field.getAnnotation(Value.class);
+            if (value == null) continue;
+            Global global = field.getAnnotation(Global.class);
+            String name = value.key().isEmpty() ? field.getName() : value.key();
+            Object endValue = getObject(name).orElse(null);
             field.setAccessible(true);
-            String key = parseKey(valueAnnotation.key(), field.getName());
-            try {
+            if (global != null && GlobalContainer.inheritKey.equals(endValue)) {
+                // global value used
+                endValue = global(global.value()).orElse(null);
+            }
+            if (endValue == null) {
+                // not assigned
+                if (!value.required()) continue; // not required to assign
                 Object fieldValue;
-                ServerPlatform platform = getPlatform();
-                if (platform == ServerPlatform.JAVA) {
-                    Java javaAnnotation = field.getAnnotation(Java.class);
-                    if (javaAnnotation == null) {
-                        fieldValue = field.get(object);
-                    }
-                    else {
-                        fieldValue = javaAnnotation.value();
-                    }
+                Java javaValue = field.getAnnotation(Java.class);
+                Bedrock bedrockValue = field.getAnnotation(Bedrock.class);
+                if (getPlatform() == ServerPlatform.JAVA && javaValue != null) {
+                    fieldValue = javaValue.value();
                 }
-                else if (platform == ServerPlatform.BEDROCK) {
-                    Bedrock bedrockAnnotation = field.getAnnotation(Bedrock.class);
-                    if (bedrockAnnotation == null) {
-                        fieldValue = field.get(object);
-                    }
-                    else {
-                        fieldValue = bedrockAnnotation.value();
-                    }
+                else if (getPlatform() == ServerPlatform.BEDROCK && bedrockValue != null) {
+                    fieldValue = bedrockValue.value();
                 }
                 else {
                     fieldValue = field.get(object);
                 }
-                boolean isGlobal = false;
-                if (globalAnnotation != null) {
-                    Optional<Object> obj = getObject(key);
-                    if (obj.isEmpty()) {
-                        set(key, GlobalContainer.inheritKey);
-                        isGlobal = true;
-                    }
-                    else {
-                        isGlobal = obj
-                                .filter(it -> it instanceof String)
-                                .map(it -> it.equals(GlobalContainer.inheritKey))
-                                .orElse(false);
-                    }
-                }
-                if (isGlobal) {
-                    Optional<Object> obj = global(globalAnnotation.value());
-                    if (obj.isPresent()) {
-                        field.set(object, deserialize(obj.get()));
-                    }
-                    else {
-                        global(globalAnnotation.value(), fieldValue);
-                    }
-                }
-                else if (valueAnnotation.required()) {
-                    field.set(object, deserialize(requiredObject(
-                            key, fieldValue
-                    )));
+                if (global == null) {
+                    set(name, fieldValue);
                 }
                 else {
-                    Optional<Object> objectOptional = getObject(key);
-                    if (objectOptional.isPresent()) field.set(object, deserialize(objectOptional.get()));
+                    global(global.value(), serializer.serialize(fieldValue));
+                    set(name, GlobalContainer.inheritKey);
                 }
-            } catch (IllegalAccessException e) {
-                log.error(
-                        String.format(
-                                "IllegalAccessException in %s with field %s",
-                                clazz.getCanonicalName(),
-                                field.getName()
-                        ), e
-                );
+                endValue = serializer.deserialize(fieldValue, field.getType()); // specific platform need to be set
             }
-            field.setAccessible(false);
+            field.set(object, serializer.deserialize(endValue, field.getType()));
         }
-    }
-
-    protected static ServerPlatform getPlatform(ConfigData data) {
-        if (data instanceof PlatformContainer) {
-            return ((PlatformContainer) data).getPlatform();
-        }
-        return ServerPlatform.OTHER;
-    }
-
-    protected static String parseKey(String key, String fieldName) {
-        return key.isEmpty() ? fieldName : key;
     }
 
     @Override
     public MapConfigData createSelf(Map<String, Object> from) {
-        return new CallbackLoadableConfigData(from, getGlobals(), getPlatform(), getDeserializeFunction());
+        return new CallbackLoadableConfigData(from, getGlobals(), getPlatform(), getSerializer());
     }
-
-    private Object deserialize(Object obj) {
-        return deserializeFunction.apply(obj, obj.getClass());
-    }
-
 }
