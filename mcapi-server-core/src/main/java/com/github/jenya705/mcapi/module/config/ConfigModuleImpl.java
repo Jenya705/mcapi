@@ -7,6 +7,7 @@ import com.github.jenya705.mcapi.OnStartup;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.data.loadable.CallbackLoadableConfigData;
 import com.github.jenya705.mcapi.data.loadable.CallbackLoadableConfigDataSerializer;
+import com.github.jenya705.mcapi.log.TimerTask;
 import com.github.jenya705.mcapi.module.rest.ObjectTunnelFunction;
 import com.github.jenya705.mcapi.util.CacheClassMap;
 import lombok.Getter;
@@ -54,9 +55,9 @@ public class ConfigModuleImpl extends AbstractApplicationModule implements Confi
                 .serializer(Pattern.class, Pattern::pattern)
                 .deserializer(Pattern.class, obj -> Pattern.compile(String.valueOf(obj)))
                 ;
-        log.info("Loading config...");
+        TimerTask task = TimerTask.start(log, "Loading config...");
         config = createConfig(core().loadConfig("config"));
-        log.info("Done! (Loading config...)");
+        task.complete();
         global = new GlobalConfig(config.required("global"));
     }
 

@@ -4,6 +4,7 @@ import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.Bean;
 import com.github.jenya705.mcapi.OnStartup;
 import com.github.jenya705.mcapi.ServerApplication;
+import com.github.jenya705.mcapi.log.TimerTask;
 import com.github.jenya705.mcapi.module.web.WebServer;
 import com.github.jenya705.mcapi.module.web.websocket.container.WebSocketRouteContainerImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -30,10 +31,10 @@ public class DefaultGateway extends WebSocketRouteContainerImpl<DefaultGatewayCl
 
     @OnStartup
     public void start() {
-        log.info("Starting gateway...");
+        TimerTask task = TimerTask.start(log, "Starting gateway...");
         setFactoryMethod(() -> new DefaultGatewayClient(app()));
         bean(WebServer.class).addWebSocketHandler("/gateway", this);
-        log.info("Done! (Starting gateway...)");
+        task.complete();
     }
 
     @Override

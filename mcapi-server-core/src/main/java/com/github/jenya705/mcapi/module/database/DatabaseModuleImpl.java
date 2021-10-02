@@ -4,6 +4,7 @@ import com.github.jenya705.mcapi.AbstractApplicationModule;
 import com.github.jenya705.mcapi.OnDisable;
 import com.github.jenya705.mcapi.OnInitializing;
 import com.github.jenya705.mcapi.data.ConfigData;
+import com.github.jenya705.mcapi.log.TimerTask;
 import com.github.jenya705.mcapi.module.config.ConfigModule;
 import com.github.jenya705.mcapi.module.database.cache.CacheConfig;
 import com.github.jenya705.mcapi.module.database.cache.CacheStorage;
@@ -51,13 +52,13 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
                                 .required("cache")
                 )
         );
-        log.info(String.format("Creating connection with %s...", config.getType()));
+        TimerTask task = TimerTask.start(log, String.format("Creating connection with %s...", config.getType()));
         loadDriver(config.getType());
         createConnection();
-        log.info(String.format("Done! (Creating connection with %s...)", config.getType()));
-        log.info("Loading scripts...");
+        task.complete();
+        task.start("Loading scripts...");
         storage = createStorage(config.getType());
-        log.info("Done! (Loading scripts...)");
+        task.complete();
         storage.setup();
         safeAsync = new StorageDatabaseGetter(storage);
         safeSync = new CacheDatabaseGetter(cache);

@@ -11,5 +11,7 @@ public interface TimerTask {
         return new TimerTaskImpl(logger, message);
     }
 
+    void start(String message);
+
     void complete();
 }

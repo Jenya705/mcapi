@@ -26,7 +26,7 @@ public class BanOfflinePlayerRouteHandler extends AbstractRouteHandler {
     @Override
     public void handle(Request request, Response response) {
         AbstractBot bot = request.bot();
-        Selector<ApiOfflinePlayer> offlinePlayerSelector =
+        Selector<ApiOfflinePlayer> offlinePlayers =
                 selectorProvider
                         .offlinePlayers(
                                 request.paramOrException("selector"),
@@ -34,7 +34,7 @@ public class BanOfflinePlayerRouteHandler extends AbstractRouteHandler {
                         );
         TypedMessage message = request
                 .bodyOrException(TypedMessage.class);
-        offlinePlayerSelector.forEach(player -> MessageUtils.ban(player, message));
+        offlinePlayers.forEach(player -> MessageUtils.ban(player, message));
         response.noContent();
     }
 }

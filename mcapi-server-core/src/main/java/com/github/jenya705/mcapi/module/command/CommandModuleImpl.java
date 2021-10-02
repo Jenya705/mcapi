@@ -7,6 +7,7 @@ import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutorConfig;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.error.CommandNameFormatException;
 import com.github.jenya705.mcapi.error.CommandOptionsAllException;
+import com.github.jenya705.mcapi.log.TimerTask;
 import com.github.jenya705.mcapi.module.config.ConfigModule;
 import com.github.jenya705.mcapi.module.mapper.Mapper;
 import com.github.jenya705.mcapi.stringful.ArrayStringfulIterator;
@@ -39,9 +40,9 @@ public class CommandModuleImpl extends AbstractApplicationModule implements Comm
     @OnStartup
     public void start() {
         parserContainer = new CommandOptionParserContainer(app());
-        log.info("Registering root command...");
+        TimerTask task = TimerTask.start(log, "Registering root command...");
         core().addCommand(RootCommand.name, new RootCommand(app()).get(), RootCommand.permission);
-        log.info("Done! (Registering root command...)");
+        task.complete();
         ConfigModule configModule = bean(ConfigModule.class);
         containerCommandConfig = new ContainerCommandConfig(
                 configModule

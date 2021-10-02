@@ -7,19 +7,25 @@ import org.slf4j.Logger;
  */
 public class TimerTaskImpl implements TimerTask {
 
-    private final long start;
     private final Logger logger;
-    private final String message;
+
+    private long start;
+    private String message;
 
     public TimerTaskImpl(Logger logger, String message) {
-        this.message = message;
         this.logger = logger;
+        start(message);
+    }
+
+    @Override
+    public void start(String message) {
+        this.message = message;
         start = System.currentTimeMillis();
         logger.info(message);
     }
 
     @Override
     public void complete() {
-        logger.info(String.format("Done! (%s) %d ms", message, System.currentTimeMillis() - start));
+        logger.info(String.format("Done! (%s) %dms", message, System.currentTimeMillis() - start));
     }
 }
