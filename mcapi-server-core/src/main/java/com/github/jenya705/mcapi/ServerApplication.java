@@ -78,6 +78,9 @@ public class ServerApplication {
                 GetBotPermissionRouteHandler.class,
                 GetBotTargetPermissionRouteHandler.class,
                 CreateCommandRouteHandler.class,
+                LinkRequestRouteHandler.class,
+                GetOfflinePlayerRouteHandler.class,
+                BanOfflinePlayerRouteHandler.class,
                 // End Routes
                 DefaultGateway.class,
                 ServerGatewayImpl.class,
@@ -87,6 +90,12 @@ public class ServerApplication {
     }
 
     public void start() {
+        log.info(
+                "Server running on {} platform",
+                getPlatform() == null ?
+                        "unknown" :
+                        getPlatform().name().toLowerCase(Locale.ROOT)
+        );
         List<Set<Pair<Object, Method>>> initializingMethods = new ArrayList<>(5);
         List<Set<Pair<Object, Method>>> startupMethods = new ArrayList<>(5);
         for (int i = 0; i < 5; ++i) {

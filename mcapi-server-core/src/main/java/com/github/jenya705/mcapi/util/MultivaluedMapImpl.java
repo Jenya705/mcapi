@@ -18,7 +18,9 @@ public class MultivaluedMapImpl<T, V> implements MultivaluedMap<T, V> {
 
     @Override
     public void add(T key, V value) {
-        if (map.containsKey(value)) map.get(key).add(value);
-        else map.put(key, new ArrayList<>());
+        List<V> list;
+        if (map.containsKey(key)) list = map.get(key);
+        else map.put(key, list = new ArrayList<>());
+        list.add(value);
     }
 }

@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.module.message;
 
 import com.github.jenya705.mcapi.ApiCommandSender;
+import com.github.jenya705.mcapi.ApiOfflinePlayer;
 import com.github.jenya705.mcapi.ApiPlayer;
 
 /**
@@ -16,7 +17,7 @@ public interface TypedMessage extends Message {
         getMessage().send(sender);
     }
 
-    default boolean ban(ApiPlayer player) {
+    default boolean ban(ApiOfflinePlayer player) {
         return getMessage().ban(player);
     }
 

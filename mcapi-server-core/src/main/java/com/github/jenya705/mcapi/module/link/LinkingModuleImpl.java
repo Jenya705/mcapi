@@ -1,9 +1,6 @@
 package com.github.jenya705.mcapi.module.link;
 
-import com.github.jenya705.mcapi.AbstractApplicationModule;
-import com.github.jenya705.mcapi.ApiPlayer;
-import com.github.jenya705.mcapi.Bean;
-import com.github.jenya705.mcapi.OnStartup;
+import com.github.jenya705.mcapi.*;
 import com.github.jenya705.mcapi.command.CommandsUtils;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.entity.BotLinkEntity;
@@ -67,7 +64,7 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
     }
 
     @Override
-    public void requestLink(AbstractBot bot, ApiPlayer player, RestLinkRequest request) {
+    public void requestLink(AbstractBot bot, ApiPlayer player, ApiLinkRequest request) {
         validateLinkRequest(bot, player, request);
         LinkObject obj = new LinkObject(
                 request, bot,
@@ -297,7 +294,7 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
                 );
     }
 
-    private void validateLinkRequest(AbstractBot bot, ApiPlayer player, RestLinkRequest request) {
+    private void validateLinkRequest(AbstractBot bot, ApiPlayer player, ApiLinkRequest request) {
         ReactiveUtils.ifTrueThrow(
                 getPlayerLinks(player)
                         .stream()

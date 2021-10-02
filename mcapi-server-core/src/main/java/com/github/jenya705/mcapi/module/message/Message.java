@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.module.message;
 
 import com.github.jenya705.mcapi.ApiCommandSender;
+import com.github.jenya705.mcapi.ApiOfflinePlayer;
 import com.github.jenya705.mcapi.ApiPlayer;
 
 /**
@@ -10,7 +11,7 @@ public interface Message {
 
     void send(ApiCommandSender sender);
 
-    default boolean ban(ApiPlayer player) {
+    default boolean ban(ApiOfflinePlayer player) {
         return false;
     }
 
