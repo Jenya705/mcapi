@@ -29,10 +29,7 @@ public class CommandModuleImpl extends AbstractApplicationModule implements Comm
 
     private static final Pattern commandNamePattern = Pattern.compile("[a-zA-Z0-9_]*");
 
-    private ContainerCommandConfig containerCommandConfig;
-    private AdvancedCommandExecutorConfig advancedCommandExecutorConfig;
     private CommandOptionParserContainer parserContainer;
-
     private CommandModuleConfig config;
 
     private final Map<Integer, ContainerCommandExecutor> botCommands = new HashMap<>();
@@ -44,18 +41,6 @@ public class CommandModuleImpl extends AbstractApplicationModule implements Comm
         core().addCommand(RootCommand.name, new RootCommand(app()).get(), RootCommand.permission);
         task.complete();
         ConfigModule configModule = bean(ConfigModule.class);
-        containerCommandConfig = new ContainerCommandConfig(
-                configModule
-                        .getConfig()
-                        .required("customCommands")
-                        .required("command")
-        );
-        advancedCommandExecutorConfig = new AdvancedCommandExecutorConfig(
-                configModule
-                        .getConfig()
-                        .required("customCommands")
-                        .required("command")
-        );
         config = new CommandModuleConfig(
                 configModule
                         .getConfig()
@@ -82,7 +67,7 @@ public class CommandModuleImpl extends AbstractApplicationModule implements Comm
             botCommand = new ContainerCommandExecutor(
                     app(), owner.getEntity().getName(), globalCommandPermission
             );
-            botCommand.withConfig(containerCommandConfig);
+            botCommand.withConfig(config.getContainer());
             core().addCommand(owner.getEntity().getName(), botCommand, globalCommandPermission);
             botCommands.put(owner.getEntity().getId(), botCommand);
         }
@@ -117,7 +102,7 @@ public class CommandModuleImpl extends AbstractApplicationModule implements Comm
                 path,
                 this,
                 owner,
-                advancedCommandExecutorConfig,
+                config.getCommand(),
                 Arrays.stream(options)
                         .map(it -> (ApiCommandValueOption) it)
                         .toArray(ApiCommandValueOption[]::new)

@@ -24,7 +24,7 @@ public class AdvancedCommandExecutorConfig extends Config {
     @Global("notEnoughArguments")
     private String notEnoughArguments = "&cNot enough arguments";
 
-    protected AdvancedCommandExecutorConfig() { }
+    public AdvancedCommandExecutorConfig() { }
 
     public AdvancedCommandExecutorConfig(ConfigData configData) {
         load(configData);

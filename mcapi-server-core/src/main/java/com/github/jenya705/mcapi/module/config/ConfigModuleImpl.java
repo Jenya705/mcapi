@@ -32,6 +32,7 @@ public class ConfigModuleImpl extends AbstractApplicationModule implements Confi
     private final CacheClassMap<ObjectTunnelFunction<Object, ?>> deserializers = new CacheClassMap<>();
     private final CacheClassMap<ObjectTunnelFunction<?, Object>> serializers = new CacheClassMap<>();
 
+    @SuppressWarnings("unchecked")
     @OnInitializing(priority = 1)
     public void initialize() throws IOException {
         this
@@ -54,7 +55,9 @@ public class ConfigModuleImpl extends AbstractApplicationModule implements Confi
                 .raw(List.class)
                 .serializer(Pattern.class, Pattern::pattern)
                 .deserializer(Pattern.class, obj -> Pattern.compile(String.valueOf(obj)))
-                ;
+                .rawSerializer(ConfigData.class)
+                .deserializer(ConfigData.class, obj -> createConfig((Map<String, Object>) obj));
+        ;
         TimerTask task = TimerTask.start(log, "Loading config...");
         config = createConfig(core().loadConfig("config"));
         task.complete();

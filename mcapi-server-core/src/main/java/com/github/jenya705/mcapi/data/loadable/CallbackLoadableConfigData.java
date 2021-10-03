@@ -1,14 +1,17 @@
 package com.github.jenya705.mcapi.data.loadable;
 
 import com.github.jenya705.mcapi.ServerPlatform;
+import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.data.GlobalConfigData;
 import com.github.jenya705.mcapi.data.GlobalContainer;
 import com.github.jenya705.mcapi.data.MapConfigData;
+import com.github.jenya705.mcapi.module.config.Config;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Map;
 
@@ -84,15 +87,15 @@ public class CallbackLoadableConfigData extends GlobalConfigData implements Load
                     fieldValue = field.get(object);
                 }
                 if (global == null) {
-                    set(name, fieldValue);
+                    set(name, serializer.serialize(fieldValue, this, name));
                 }
                 else {
-                    global(global.value(), serializer.serialize(fieldValue));
+                    global(global.value(), serializer.serialize(fieldValue, this, name));
                     set(name, GlobalContainer.inheritKey);
                 }
-                endValue = serializer.deserialize(fieldValue, field.getType()); // specific platform need to be set
+                endValue = fieldValue; // specific platform need to be set
             }
-            field.set(object, serializer.deserialize(endValue, field.getType()));
+            field.set(object, serializer.deserialize(endValue, field.getType(), this, name));
         }
     }
 

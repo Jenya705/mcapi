@@ -1,7 +1,16 @@
 package com.github.jenya705.mcapi.module.config;
 
+import com.github.jenya705.mcapi.command.ContainerCommandConfig;
+import com.github.jenya705.mcapi.data.ConfigData;
+import com.github.jenya705.mcapi.data.loadable.CallbackLoadableConfigData;
 import com.github.jenya705.mcapi.data.loadable.CallbackLoadableConfigDataSerializer;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Jenya705
@@ -12,12 +21,28 @@ public class LoadableConfigModuleSerializerImpl implements CallbackLoadableConfi
     private final ConfigModule configModule;
 
     @Override
-    public Object serialize(Object obj) {
+    public Object serialize(Object obj, ConfigData data, String name) {
         return configModule.serialize(obj, obj.getClass());
     }
 
     @Override
-    public Object deserialize(Object obj, Class<?> type) {
-        return configModule.deserialize(obj, type);
+    @SneakyThrows
+    public Object deserialize(Object obj, Class<?> type, ConfigData data, String name) {
+
+        Object endObject = obj;
+        if (Config.class.isAssignableFrom(type)) {
+            if (endObject instanceof Config) {
+                ConfigData endObjectData = configModule.createConfig(new HashMap<>());
+                ((Config) endObject).load(endObjectData);
+                data.set(name, endObjectData);
+                return endObject;
+            }
+            if (endObject instanceof ConfigData) {
+                Constructor<?> constructor = type.getConstructor(ConfigData.class);
+                return constructor.newInstance(endObject);
+            }
+        }
+
+        return configModule.deserialize(endObject, type);
     }
 }

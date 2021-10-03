@@ -47,14 +47,6 @@ public class GlobalConfigData extends MapConfigData implements GlobalContainer {
     }
 
     @Override
-    public Optional<Object> getObject(String key) {
-        if (globals.containsKey(key)) {
-            return Optional.ofNullable(globals.get(key));
-        }
-        return super.getObject(key);
-    }
-
-    @Override
     public GlobalContainer global(String key, Object value) {
         globals.put(key, value);
         return this;
