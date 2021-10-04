@@ -14,7 +14,7 @@ import com.github.jenya705.mcapi.command.linkmenu.LinkPermissionCommand;
 import com.github.jenya705.mcapi.command.linkmenu.LinkTogglePermissionCommand;
 import com.github.jenya705.mcapi.command.linkmenu.LinkUnlinkCommand;
 import com.github.jenya705.mcapi.data.ConfigData;
-import com.github.jenya705.mcapi.data.GlobalConfigData;
+import com.github.jenya705.mcapi.module.config.ConfigModule;
 import lombok.SneakyThrows;
 
 import java.util.function.Supplier;
@@ -55,8 +55,8 @@ public class RootCommand extends AbstractApplicationModule implements Supplier<C
                 .leaf("links", new LinksCommand(app()))
                 .leaf("unlink", new UnlinkCommand(app()))
         ;
-        ConfigData configData =
-                new GlobalConfigData(core().loadConfig("commands"));
+        ConfigData configData = bean(ConfigModule.class)
+                .createConfig(core().loadConfig("commands"));
         container.setConfig(configData);
         core().saveConfig("commands", configData.primitiveRepresent());
         return container;

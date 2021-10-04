@@ -24,7 +24,7 @@ public class DeleteBotConfig extends AdvancedCommandExecutorConfig {
 
     @Value
     @Global("notPermitted")
-    private String notPermitted;
+    private String notPermitted = "&cYou are not permitted to do this";
 
     public DeleteBotConfig(ConfigData configData) {
         load(configData);

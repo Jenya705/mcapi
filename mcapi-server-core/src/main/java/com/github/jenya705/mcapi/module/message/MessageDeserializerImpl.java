@@ -45,7 +45,8 @@ public class MessageDeserializerImpl extends StdDeserializer<TypedMessage> imple
     @OnStartup
     public void start() {
         mapper
-                .jsonDeserializer(TypedMessage.class, this);
+                .jsonDeserializer(TypedMessage.class, this)
+                .jsonDeserializer(Message.class, this);
         addMessageType("default", node -> new DefaultMessage(node.asText()));
         addMessageType("form", node -> new FormMessage(
                 jacksonProvider.getMapper().treeToValue(node, Form.class), formProvider

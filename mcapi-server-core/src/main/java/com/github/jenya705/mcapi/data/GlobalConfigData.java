@@ -26,7 +26,9 @@ public class GlobalConfigData extends MapConfigData implements GlobalContainer {
     }
 
     public GlobalConfigData(Map<String, Object> data, ServerPlatform platform) {
-        this(data, new HashMap<>(), platform);
+        super(data, platform);
+        globals = new HashMap<>();
+        data.put(globalKey, globals);
     }
 
     @SuppressWarnings("unchecked")

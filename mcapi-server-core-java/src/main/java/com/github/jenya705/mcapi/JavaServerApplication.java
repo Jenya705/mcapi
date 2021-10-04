@@ -10,7 +10,8 @@ public class JavaServerApplication extends ServerApplication {
     public JavaServerApplication() {
         super();
         addClasses(
-                JavaFormProvider.class
+                JavaFormProvider.class,
+                JavaComponentMessageProvider.class
         );
         setPlatform(ServerPlatform.JAVA);
     }

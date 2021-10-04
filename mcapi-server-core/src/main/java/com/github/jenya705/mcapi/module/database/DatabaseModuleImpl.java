@@ -3,6 +3,7 @@ package com.github.jenya705.mcapi.module.database;
 import com.github.jenya705.mcapi.AbstractApplicationModule;
 import com.github.jenya705.mcapi.OnDisable;
 import com.github.jenya705.mcapi.OnInitializing;
+import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.log.TimerTask;
 import com.github.jenya705.mcapi.module.config.ConfigModule;
@@ -17,6 +18,10 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.function.Function;
 
 /**
  * @author Jenya705
@@ -24,14 +29,16 @@ import java.sql.*;
 @Slf4j
 public class DatabaseModuleImpl extends AbstractApplicationModule implements DatabaseModule {
 
-    private static final String urlFormat = "jdbc:%s://%s/%s";
-    private static final String sqliteUrlFormat = "jdbc:sqlite://%s";
+    private final Map<String, DatabaseTypeInitializer> databaseTypeInitializers = new HashMap<>();
+
+    private DefaultDatabaseTypeInitializer defaultDatabaseTypeInitializer;
 
     private Connection connection;
-    private DatabaseModuleConfig config;
     private DatabaseStorage storage;
-    private CacheStorage cache;
 
+    private DatabaseModuleConfig config;
+
+    private CacheStorage cache;
     private DatabaseGetter safeSync;
     private DatabaseGetter safeSyncWithFuture;
     private DatabaseGetter safeAsync;
@@ -39,7 +46,10 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
     private final Object block = new Object();
 
     @OnInitializing
-    public void initialize() throws ClassNotFoundException, SQLException, IOException {
+    public void initialize() {
+        addTypeInitializer("mysql", new MySqlDatabaseInitializer(app()));
+        addTypeInitializer("sqlite", new SqliteDatabaseInitializer(app()));
+        defaultDatabaseTypeInitializer = new DefaultDatabaseTypeInitializer(app());
         ConfigData configData =
                 bean(ConfigModule.class)
                         .getConfig()
@@ -53,10 +63,9 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
                 )
         );
         TimerTask task = TimerTask.start(log, String.format("Creating connection with %s...", config.getType()));
-        loadDriver(config.getType());
         createConnection();
         task.complete();
-        task.start("Loading scripts...");
+        task.start("Loading storage...");
         storage = createStorage(config.getType());
         task.complete();
         storage.setup();
@@ -65,40 +74,21 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
         safeSyncWithFuture = new CacheDatabaseGetter(cache.withFuture());
     }
 
-    protected void loadDriver(String type) throws ClassNotFoundException {
-        if (type.equalsIgnoreCase("mysql")) {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        }
-        else if (type.equalsIgnoreCase("sqlite")) {
-            Class.forName("org.sqlite.jdbc4.JDBC4Connection");
-        }
-        else {
-            throw new IllegalArgumentException("Type is not exist in default context");
-        }
-    }
-
-    protected void createConnection() throws SQLException {
-        if (config.getType().equalsIgnoreCase("sqlite")) {
-            connection = DriverManager.getConnection(
-                    String.format(
-                            sqliteUrlFormat,
-                            core()
-                                    .getPluginFile("database.db")
-                                    .getAbsolutePath()
-                    )
-            );
-        }
-        else {
-            connection = DriverManager.getConnection(
-                    String.format(
-                            urlFormat,
-                            config.getType(),
+    protected void createConnection() {
+        String loweredType = config.getType().toLowerCase(Locale.ROOT);
+        if (databaseTypeInitializers.containsKey(loweredType)) {
+            connection = databaseTypeInitializers
+                    .get(loweredType)
+                    .connection(
                             config.getHost(),
+                            config.getUser(),
+                            config.getPassword(),
                             config.getDatabase()
-                    ),
-                    config.getUser(),
-                    config.getPassword()
-            );
+                    );
+        }
+        if (connection == null) {
+            connection = defaultDatabaseTypeInitializer
+                    .connection(config);
         }
     }
 
@@ -153,13 +143,18 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
         return cache;
     }
 
-    public DatabaseStorage createStorage(String sqlType) throws IOException {
-        if (sqlType.equalsIgnoreCase("mysql")) {
-            return new MySqlDatabaseStorage(app(), this);
+    public DatabaseStorage createStorage(String sqlType) {
+        String loweredSqlType = sqlType.toLowerCase(Locale.ROOT);
+        DatabaseStorage created = null;
+        if (databaseTypeInitializers.containsKey(loweredSqlType)) {
+            created = databaseTypeInitializers
+                    .get(loweredSqlType)
+                    .storage();
         }
-        else {
-            return new DatabaseStorageImpl(app(), this, sqlType);
+        if (created == null) {
+            created = defaultDatabaseTypeInitializer.storage(config);
         }
+        return created;
     }
 
     @Override
@@ -175,5 +170,10 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
     @Override
     public DatabaseGetter safeAsync() {
         return safeAsync;
+    }
+
+    @Override
+    public void addTypeInitializer(String type, DatabaseTypeInitializer typeInitializer) {
+        databaseTypeInitializers.put(type.toLowerCase(Locale.ROOT), typeInitializer);
     }
 }
