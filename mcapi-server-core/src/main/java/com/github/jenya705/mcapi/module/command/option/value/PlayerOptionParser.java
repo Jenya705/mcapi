@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.module.command.option;
+package com.github.jenya705.mcapi.module.command.option.value;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.jenya705.mcapi.ApiOfflinePlayer;
@@ -44,7 +44,7 @@ public class PlayerOptionParser extends AbstractCommandValueOptionParser impleme
     }
 
     @Override
-    public ApiCommandValueOption deserialize(JsonNode node) {
+    public ApiCommandValueOption valueDeserialize(JsonNode node) {
         return new PlayerOption(
                 node.get("name").asText(),
                 defaultNode(node.get("required"), false, JsonNode::asBoolean),

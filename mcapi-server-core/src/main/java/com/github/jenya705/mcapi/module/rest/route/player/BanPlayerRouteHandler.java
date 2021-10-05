@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.module.rest.route;
+package com.github.jenya705.mcapi.module.rest.route.player;
 
 import com.github.jenya705.mcapi.ApiPlayer;
 import com.github.jenya705.mcapi.Bean;
@@ -6,6 +6,7 @@ import com.github.jenya705.mcapi.Routes;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.module.message.MessageUtils;
 import com.github.jenya705.mcapi.module.message.TypedMessage;
+import com.github.jenya705.mcapi.module.rest.route.AbstractRouteHandler;
 import com.github.jenya705.mcapi.module.selector.SelectorProvider;
 import com.github.jenya705.mcapi.module.web.Request;
 import com.github.jenya705.mcapi.module.web.Response;

@@ -1,10 +1,12 @@
-package com.github.jenya705.mcapi.module.rest.route;
+package com.github.jenya705.mcapi.module.rest.route.bot;
 
+import com.github.jenya705.mcapi.ApiOfflinePlayer;
 import com.github.jenya705.mcapi.Bean;
 import com.github.jenya705.mcapi.Routes;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.entity.api.EntityPermission;
 import com.github.jenya705.mcapi.error.SelectorEmptyException;
+import com.github.jenya705.mcapi.module.rest.route.AbstractRouteHandler;
 import com.github.jenya705.mcapi.module.selector.SelectorProvider;
 import com.github.jenya705.mcapi.module.web.Request;
 import com.github.jenya705.mcapi.module.web.Response;
@@ -13,13 +15,13 @@ import com.github.jenya705.mcapi.util.Selector;
 /**
  * @author Jenya705
  */
-public class GetBotPermissionRouteHandler extends AbstractRouteHandler {
+public class GetBotTargetPermissionRouteHandler extends AbstractRouteHandler {
 
     @Bean
     private SelectorProvider selectorProvider;
 
-    public GetBotPermissionRouteHandler() {
-        super(Routes.BOT_PERMISSION);
+    public GetBotTargetPermissionRouteHandler() {
+        super(Routes.BOT_TARGET_PERMISSION);
     }
 
     @Override
@@ -32,10 +34,12 @@ public class GetBotPermissionRouteHandler extends AbstractRouteHandler {
                 .findAny()
                 .orElseThrow(SelectorEmptyException::new);
         String permission = request.paramOrException("permission");
+        ApiOfflinePlayer player = request
+                .paramOrException("target", ApiOfflinePlayer.class);
         response.ok(new EntityPermission(
-                selectorBot.hasPermission(permission),
+                selectorBot.hasPermission(permission, player),
                 permission,
-                null
+                player.getUuid()
         ));
     }
 }

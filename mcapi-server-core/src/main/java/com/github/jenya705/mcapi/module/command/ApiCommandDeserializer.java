@@ -24,7 +24,7 @@ public class ApiCommandDeserializer extends StdDeserializer<ApiCommand> {
                         .get("options")
                         .elements()
         )
-                .map(it -> (ApiCommandOption) commandModule.getParser(it.get("type").asText()).deserialize(it))
+                .map(it -> commandModule.getParser(it.get("type").asText()).deserialize(it))
                 .toArray(ApiCommandOption[]::new);
     }
 

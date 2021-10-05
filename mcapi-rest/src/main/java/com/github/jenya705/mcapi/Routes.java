@@ -30,6 +30,8 @@ public class Routes {
 
     public final Route COMMAND_CREATE = Route.post("/command");
 
+    public final Route COMMAND_DELETE = Route.delete("/command/{name}");
+
     public final Route LINK_REQUEST = Route.post("/player/{id}/link");
 
     public final Route OFFLINE_PLAYER = Route.get("/offline/{id}");

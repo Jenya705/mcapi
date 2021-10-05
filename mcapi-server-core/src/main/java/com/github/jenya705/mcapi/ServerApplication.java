@@ -11,6 +11,15 @@ import com.github.jenya705.mcapi.module.mapper.MapperImpl;
 import com.github.jenya705.mcapi.module.message.MessageDeserializerImpl;
 import com.github.jenya705.mcapi.module.rest.RestModule;
 import com.github.jenya705.mcapi.module.rest.route.*;
+import com.github.jenya705.mcapi.module.rest.route.bot.GetBotLinkedPlayersRouteHandler;
+import com.github.jenya705.mcapi.module.rest.route.bot.GetBotPermissionRouteHandler;
+import com.github.jenya705.mcapi.module.rest.route.bot.GetBotTargetPermissionRouteHandler;
+import com.github.jenya705.mcapi.module.rest.route.bot.LinkRequestRouteHandler;
+import com.github.jenya705.mcapi.module.rest.route.command.CreateCommandRouteHandler;
+import com.github.jenya705.mcapi.module.rest.route.command.DeleteCommandRouteHandler;
+import com.github.jenya705.mcapi.module.rest.route.offline.BanOfflinePlayerRouteHandler;
+import com.github.jenya705.mcapi.module.rest.route.offline.GetOfflinePlayerRouteHandler;
+import com.github.jenya705.mcapi.module.rest.route.player.*;
 import com.github.jenya705.mcapi.module.selector.ServerSelectorProvider;
 import com.github.jenya705.mcapi.module.storage.StorageModuleImpl;
 import com.github.jenya705.mcapi.module.web.gateway.DefaultGateway;
@@ -78,6 +87,7 @@ public class ServerApplication {
                 GetBotPermissionRouteHandler.class,
                 GetBotTargetPermissionRouteHandler.class,
                 CreateCommandRouteHandler.class,
+                DeleteCommandRouteHandler.class,
                 LinkRequestRouteHandler.class,
                 GetOfflinePlayerRouteHandler.class,
                 BanOfflinePlayerRouteHandler.class,

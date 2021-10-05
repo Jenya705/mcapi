@@ -120,7 +120,7 @@ public class ApiCommandExecutor extends AbstractApplicationModule implements Com
 
     private StringfulDataValueFunction<List<Object>> generateStringfulFunction(ApiCommandValueOption option) {
         return (list, value) -> {
-            CommandValueOptionParser parser = getParser(option);
+            CommandOptionParser parser = getParser(option);
             Object obj = parser.serialize(option, owner, value);
             if (option.isOnlyFromTab() && !parser.tabs(option, owner).contains(String.valueOf(obj))) {
                 throw new IllegalArgumentException(String.format("Not in tab list %s", obj));
@@ -133,7 +133,7 @@ public class ApiCommandExecutor extends AbstractApplicationModule implements Com
         return () -> getParser(option).tabs(option, owner);
     }
 
-    private CommandValueOptionParser getParser(ApiCommandValueOption option) {
+    private CommandOptionParser getParser(ApiCommandValueOption option) {
         return commandModule.getParser(option.getType());
     }
 }

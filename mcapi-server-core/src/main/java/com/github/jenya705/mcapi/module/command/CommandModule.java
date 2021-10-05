@@ -13,9 +13,11 @@ public interface CommandModule {
 
     void registerCommand(ApiCommand command, AbstractBot owner);
 
-    void addOptionParser(String type, CommandValueOptionParser parser);
+    void deleteCommand(String name, AbstractBot owner);
 
-    CommandValueOptionParser getParser(String type);
+    void addOptionParser(String type, CommandOptionParser parser);
+
+    CommandOptionParser getParser(String type);
 
     CommandExecutor getBotCommandExecutor(AbstractBot bot, String command);
 }

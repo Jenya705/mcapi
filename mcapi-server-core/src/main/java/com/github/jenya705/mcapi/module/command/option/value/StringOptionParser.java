@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.module.command.option;
+package com.github.jenya705.mcapi.module.command.option.value;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.jenya705.mcapi.command.ApiCommandValueOption;
@@ -11,7 +11,7 @@ import com.github.jenya705.mcapi.entity.AbstractBot;
 public class StringOptionParser extends AbstractCommandValueOptionParser {
 
     @Override
-    public ApiCommandValueOption deserialize(JsonNode node) {
+    public ApiCommandValueOption valueDeserialize(JsonNode node) {
         return defaultDeserialize(StringOption::new, node);
     }
 

@@ -1,17 +1,14 @@
 package com.github.jenya705.mcapi.data.loadable;
 
 import com.github.jenya705.mcapi.ServerPlatform;
-import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.data.GlobalConfigData;
 import com.github.jenya705.mcapi.data.GlobalContainer;
 import com.github.jenya705.mcapi.data.MapConfigData;
-import com.github.jenya705.mcapi.module.config.Config;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Map;
 
@@ -50,7 +47,6 @@ public class CallbackLoadableConfigData extends GlobalConfigData implements Load
     }
 
     @Override
-    @SneakyThrows
     public void load(Object obj) {
         Class<?> currentClass = obj.getClass();
         while (currentClass != null) {
@@ -59,43 +55,53 @@ public class CallbackLoadableConfigData extends GlobalConfigData implements Load
         }
     }
 
-    private void loadDependOnClass(Object object, Class<?> clazz) throws Exception {
+    private void loadDependOnClass(Object object, Class<?> clazz) {
         for (Field field : clazz.getDeclaredFields()) {
-            Value value = field.getAnnotation(Value.class);
-            if (value == null) continue;
-            Global global = field.getAnnotation(Global.class);
-            String name = value.key().isEmpty() ? field.getName() : value.key();
-            Object endValue = getObject(name).orElse(null);
-            field.setAccessible(true);
-            if (global != null && GlobalContainer.inheritKey.equals(endValue)) {
-                // global value used
-                endValue = global(global.value()).orElse(null);
+            try {
+                Value value = field.getAnnotation(Value.class);
+                if (value == null) continue;
+                Global global = field.getAnnotation(Global.class);
+                String name = value.key().isEmpty() ? field.getName() : value.key();
+                Object endValue = getObject(name).orElse(null);
+                field.setAccessible(true);
+                if (global != null && GlobalContainer.inheritKey.equals(endValue)) {
+                    // global value used
+                    endValue = global(global.value()).orElse(null);
+                }
+                if (endValue == null) {
+                    // not assigned
+                    if (!value.required()) continue; // not required to assign
+                    Object fieldValue;
+                    Java javaValue = field.getAnnotation(Java.class);
+                    Bedrock bedrockValue = field.getAnnotation(Bedrock.class);
+                    if (getPlatform() == ServerPlatform.JAVA && javaValue != null) {
+                        fieldValue = javaValue.value();
+                    }
+                    else if (getPlatform() == ServerPlatform.BEDROCK && bedrockValue != null) {
+                        fieldValue = bedrockValue.value();
+                    }
+                    else {
+                        fieldValue = field.get(object);
+                    }
+                    if (global == null) {
+                        set(name, serializer.serialize(fieldValue, this, name));
+                    }
+                    else {
+                        global(global.value(), serializer.serialize(fieldValue, this, name));
+                        set(name, GlobalContainer.inheritKey);
+                    }
+                    endValue = fieldValue; // specific platform need to be set
+                }
+                field.set(object, serializer.deserialize(endValue, field.getType(), this, name));
+            } catch (Exception e) {
+                throw new RuntimeException(
+                        String.format(
+                                "Exception in %s field in %s class",
+                                field.getName(),
+                                clazz.getCanonicalName()
+                        ), e
+                );
             }
-            if (endValue == null) {
-                // not assigned
-                if (!value.required()) continue; // not required to assign
-                Object fieldValue;
-                Java javaValue = field.getAnnotation(Java.class);
-                Bedrock bedrockValue = field.getAnnotation(Bedrock.class);
-                if (getPlatform() == ServerPlatform.JAVA && javaValue != null) {
-                    fieldValue = javaValue.value();
-                }
-                else if (getPlatform() == ServerPlatform.BEDROCK && bedrockValue != null) {
-                    fieldValue = bedrockValue.value();
-                }
-                else {
-                    fieldValue = field.get(object);
-                }
-                if (global == null) {
-                    set(name, serializer.serialize(fieldValue, this, name));
-                }
-                else {
-                    global(global.value(), serializer.serialize(fieldValue, this, name));
-                    set(name, GlobalContainer.inheritKey);
-                }
-                endValue = fieldValue; // specific platform need to be set
-            }
-            field.set(object, serializer.deserialize(endValue, field.getType(), this, name));
         }
     }
 

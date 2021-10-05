@@ -1,9 +1,10 @@
-package com.github.jenya705.mcapi.module.command.option;
+package com.github.jenya705.mcapi.module.command.option.value;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.github.jenya705.mcapi.command.ApiCommandOption;
 import com.github.jenya705.mcapi.command.ApiCommandValueOption;
 import com.github.jenya705.mcapi.entity.AbstractBot;
-import com.github.jenya705.mcapi.module.command.CommandValueOptionParser;
+import com.github.jenya705.mcapi.module.command.CommandOptionParser;
 import com.github.jenya705.mcapi.util.IteratorUtils;
 
 import java.util.Arrays;
@@ -16,7 +17,7 @@ import java.util.function.Function;
 /**
  * @author Jenya705
  */
-public abstract class AbstractCommandValueOptionParser implements CommandValueOptionParser {
+public abstract class AbstractCommandValueOptionParser implements CommandOptionParser {
 
     public static final String tabDefault = "__default__";
 
@@ -51,6 +52,20 @@ public abstract class AbstractCommandValueOptionParser implements CommandValueOp
         return node == null ? defaultValue : function.apply(node);
     }
 
+    @Override
+    public final ApiCommandOption deserialize(JsonNode node) {
+        return valueDeserialize(node);
+    }
+
+    @Override
+    public final Object serialize(ApiCommandOption option, AbstractBot owner, String value) {
+        return serialize((ApiCommandValueOption) option, owner, value);
+    }
+
+    public abstract ApiCommandValueOption valueDeserialize(JsonNode node);
+
+    public abstract Object serialize(ApiCommandValueOption option, AbstractBot owner, String value);
+
     protected ApiCommandValueOption defaultDeserialize(DefaultDeserializeConstructor constructor, JsonNode node) {
         return constructor.get(
                 node.get("name").asText(),
@@ -61,10 +76,11 @@ public abstract class AbstractCommandValueOptionParser implements CommandValueOp
     }
 
     @Override
-    public List<String> tabs(ApiCommandValueOption option, AbstractBot owner) {
-        return option.getSuggestions() == null ?
-                tabFunctions.get(option.getTabFunction()).apply(option, owner) :
-                Arrays.asList(option.getSuggestions());
+    public List<String> tabs(ApiCommandOption option, AbstractBot owner) {
+        ApiCommandValueOption realOption = (ApiCommandValueOption) option;
+        return realOption.getSuggestions() == null ?
+                tabFunctions.get(realOption.getTabFunction()).apply(realOption, owner) :
+                Arrays.asList(realOption.getSuggestions());
     }
 
     public AbstractCommandValueOptionParser tab(String name, BiFunction<ApiCommandValueOption, AbstractBot, List<String>> function) {

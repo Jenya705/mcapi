@@ -3,8 +3,8 @@ package com.github.jenya705.mcapi.module.command;
 import com.github.jenya705.mcapi.AbstractApplicationModule;
 import com.github.jenya705.mcapi.OnStartup;
 import com.github.jenya705.mcapi.command.*;
-import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutorConfig;
 import com.github.jenya705.mcapi.entity.AbstractBot;
+import com.github.jenya705.mcapi.error.BotCommandNotExistException;
 import com.github.jenya705.mcapi.error.CommandNameFormatException;
 import com.github.jenya705.mcapi.error.CommandOptionsAllException;
 import com.github.jenya705.mcapi.log.TimerTask;
@@ -77,6 +77,29 @@ public class CommandModuleImpl extends AbstractApplicationModule implements Comm
         botCommand.recalculatePermissions();
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    public void deleteCommand(String name, AbstractBot owner) {
+        if (!botCommands.containsKey(owner.getEntity().getId())) {
+            throw new BotCommandNotExistException(name);
+        }
+        ContainerCommandExecutor commandExecutor = botCommands.get(owner.getEntity().getId());
+        String[] path = name.split("_");
+        Map<String, Object> currentNode = commandExecutor.getNodes();
+        for (String command: path) {
+            Object obj = currentNode.getOrDefault(command, null);
+            if (obj == null) {
+                throw new BotCommandNotExistException(name);
+            }
+            if (obj instanceof Map) {
+                currentNode = (Map<String, Object>) obj;
+            }
+            else if (obj instanceof CommandExecutor) {
+               currentNode.remove(command);
+            }
+        }
+    }
+
     private Object parseOptions(ApiCommandOption[] options, String path, AbstractBot owner) {
         ValidateResult validateResult = validateOptions(options);
         if (validateResult == ValidateResult.ALL) {
@@ -128,12 +151,12 @@ public class CommandModuleImpl extends AbstractApplicationModule implements Comm
     }
 
     @Override
-    public void addOptionParser(String type, CommandValueOptionParser parser) {
+    public void addOptionParser(String type, CommandOptionParser parser) {
         parserContainer.addParser(type, parser);
     }
 
     @Override
-    public CommandValueOptionParser getParser(String type) {
+    public CommandOptionParser getParser(String type) {
         return parserContainer.getParser(type);
     }
 

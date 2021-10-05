@@ -104,7 +104,7 @@ public class ContainerCommandExecutor extends AbstractApplicationModule implemen
     }
 
     @SuppressWarnings("unchecked")
-    protected Pair<Object, String> walkThrew(StringfulIterator args) {
+    private Pair<Object, String> walkThrew(StringfulIterator args) {
         Map<String, Object> current = nodes;
         StringBuilder path = new StringBuilder();
         while (true) {
@@ -122,6 +122,8 @@ public class ContainerCommandExecutor extends AbstractApplicationModule implemen
         }
         return new Pair<>(current, path.toString());
     }
+
+
 
     @Override
     public void setConfig(ConfigData config) {

@@ -2,6 +2,7 @@ package com.github.jenya705.mcapi.module.config;
 
 import com.github.jenya705.mcapi.command.ContainerCommandConfig;
 import com.github.jenya705.mcapi.data.ConfigData;
+import com.github.jenya705.mcapi.data.MapConfigData;
 import com.github.jenya705.mcapi.data.loadable.CallbackLoadableConfigData;
 import com.github.jenya705.mcapi.data.loadable.CallbackLoadableConfigDataSerializer;
 import lombok.AllArgsConstructor;
@@ -27,8 +28,8 @@ public class LoadableConfigModuleSerializerImpl implements CallbackLoadableConfi
 
     @Override
     @SneakyThrows
+    @SuppressWarnings("unchecked")
     public Object deserialize(Object obj, Class<?> type, ConfigData data, String name) {
-
         Object endObject = obj;
         if (Config.class.isAssignableFrom(type)) {
             if (endObject instanceof Config) {
@@ -37,12 +38,15 @@ public class LoadableConfigModuleSerializerImpl implements CallbackLoadableConfi
                 data.set(name, endObjectData);
                 return endObject;
             }
+            if (endObject instanceof Map) {
+                MapConfigData mapConfigData = (MapConfigData) data;
+                endObject = mapConfigData.createSelf((Map<String, Object>) endObject);
+            }
             if (endObject instanceof ConfigData) {
                 Constructor<?> constructor = type.getConstructor(ConfigData.class);
                 return constructor.newInstance(endObject);
             }
         }
-
         return configModule.deserialize(endObject, type);
     }
 }
