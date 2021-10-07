@@ -12,4 +12,6 @@ dependencies {
     implementation 'mysql:mysql-connector-java:8.0.26'
     implementation 'org.xerial:sqlite-jdbc:3.36.0.1'
     testImplementation 'com.h2database:h2:1.4.200'
+    testImplementation 'org.mockito:mockito-junit-jupiter:3.12.4'
+    testImplementation 'ch.qos.logback:logback-classic:1.2.6'
 }

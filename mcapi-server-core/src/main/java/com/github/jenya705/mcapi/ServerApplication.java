@@ -41,11 +41,15 @@ import java.util.*;
 @Slf4j
 public class ServerApplication {
 
+    @Getter
     private final List<Class<?>> classes = new ArrayList<>();
+
     private final List<Object> beans = new ArrayList<>();
     private final Map<Class<?>, Object> cachedBeans = new HashMap<>();
 
+    @Getter
     private boolean initialized = false;
+    @Getter
     private boolean enabled = true;
 
     @Getter
