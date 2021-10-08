@@ -33,7 +33,7 @@ public class ConfigModuleImpl extends AbstractApplicationModule implements Confi
     private final CacheClassMap<ObjectTunnelFunction<?, Object>> serializers = new CacheClassMap<>();
 
     @SuppressWarnings("unchecked")
-    @OnInitializing(priority = 0)
+    @OnInitializing(priority = 1)
     public void initialize() throws IOException {
         this
                 .raw(String.class)
