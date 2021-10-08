@@ -5,7 +5,6 @@ import com.github.jenya705.mcapi.permission.PermissionManagerHook;
 import lombok.Cleanup;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
@@ -52,7 +51,7 @@ public class BukkitServerCore extends AbstractJavaApplicationModule implements J
     public void addCommand(String name, CommandExecutor executor, String permissionName) {
         PluginCommand command = plugin.getCommand(name);
         command.setExecutor(new BukkitCommandWrapper(plugin, executor, permissionName));
-        Bukkit.getOnlinePlayers().forEach(Player::updateCommands);
+        Bukkit.getOnlinePlayers().forEach(org.bukkit.entity.Player::updateCommands);
     }
 
     @Override
@@ -73,7 +72,7 @@ public class BukkitServerCore extends AbstractJavaApplicationModule implements J
     }
 
     @Override
-    public void givePermission(ApiPlayer player, boolean toggled, String... permissions) {
+    public void givePermission(Player player, boolean toggled, String... permissions) {
         if (permissionManagerHook == null) return;
         permissionManagerHook.givePermission(player, toggled, permissions);
     }
@@ -109,12 +108,12 @@ public class BukkitServerCore extends AbstractJavaApplicationModule implements J
 
     @Override
     // TODO Change method to get offline player
-    public ApiOfflinePlayer getOfflinePlayer(String name) {
+    public OfflinePlayer getOfflinePlayer(String name) {
         return BukkitWrapper.offlinePlayer(Bukkit.getOfflinePlayer(name));
     }
 
     @Override
-    public ApiOfflinePlayer getOfflinePlayer(UUID uuid) {
+    public OfflinePlayer getOfflinePlayer(UUID uuid) {
         return BukkitWrapper.offlinePlayer(Bukkit.getOfflinePlayer(uuid));
     }
 

@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.entity.api.event;
 
-import com.github.jenya705.mcapi.ApiPlayer;
+import com.github.jenya705.mcapi.Player;
 import com.github.jenya705.mcapi.entity.event.RestLinkEvent;
 import com.github.jenya705.mcapi.event.LinkEvent;
 import lombok.AllArgsConstructor;
@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class EntityLinkEvent implements LinkEvent {
 
     private boolean failed;
-    private ApiPlayer player;
+    private Player player;
     private String[] declinePermissions;
 
     public RestLinkEvent rest() {

@@ -5,7 +5,7 @@ import java.util.Map;
 /**
  * @author Jenya705
  */
-public interface ApiForm {
+public interface Form {
 
     Map<String, Object>[] getComponents();
 }

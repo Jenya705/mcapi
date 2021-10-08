@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.command;
 
 import com.github.jenya705.mcapi.AbstractApplicationModule;
-import com.github.jenya705.mcapi.ApiCommandSender;
+import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.stringful.StringfulIterator;
@@ -42,7 +42,7 @@ public class ContainerCommandExecutor extends AbstractApplicationModule implemen
 
     @Override
     @SuppressWarnings("unchecked")
-    public void onCommand(ApiCommandSender sender, StringfulIterator args, String permission) {
+    public void onCommand(CommandSender sender, StringfulIterator args, String permission) {
         Pair<Object, String> pair = walkThrew(args);
         String fullPermission = permission + pair.getRight();
         if (pair.getLeft() instanceof CommandExecutor) {
@@ -71,17 +71,17 @@ public class ContainerCommandExecutor extends AbstractApplicationModule implemen
     }
 
     @Override
-    public List<CommandTab> onTab(ApiCommandSender sender, StringfulIterator args, String permission) {
+    public List<CommandTab> onTab(CommandSender sender, StringfulIterator args, String permission) {
         return tab(sender, args, permission, executor -> executor.onTab(sender, args, permission));
     }
 
     @Override
-    public List<CommandTab> asyncTab(ApiCommandSender sender, StringfulIterator args, String permission) {
+    public List<CommandTab> asyncTab(CommandSender sender, StringfulIterator args, String permission) {
         return tab(sender, args, permission, executor -> executor.asyncTab(sender, args, permission));
     }
 
     @SuppressWarnings("unchecked")
-    private List<CommandTab> tab(ApiCommandSender sender, StringfulIterator args, String permission, Function<CommandExecutor, List<CommandTab>> tab) {
+    private List<CommandTab> tab(CommandSender sender, StringfulIterator args, String permission, Function<CommandExecutor, List<CommandTab>> tab) {
         Pair<Object, String> pair = walkThrew(args);
         pair.setRight(permission + pair.getRight());
         if (pair.getLeft() instanceof CommandExecutor) {

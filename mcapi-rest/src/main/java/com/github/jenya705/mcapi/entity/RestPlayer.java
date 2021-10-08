@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.entity;
 
-import com.github.jenya705.mcapi.ApiPlayer;
+import com.github.jenya705.mcapi.Player;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +19,7 @@ public class RestPlayer {
     private UUID uuid;
     private RestLocation location;
 
-    public static RestPlayer from(ApiPlayer player) {
+    public static RestPlayer from(Player player) {
         return new RestPlayer(
                 player.getName(),
                 player.getUuid(),

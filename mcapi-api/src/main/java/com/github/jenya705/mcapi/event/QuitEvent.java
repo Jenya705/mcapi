@@ -1,11 +1,11 @@
 package com.github.jenya705.mcapi.event;
 
-import com.github.jenya705.mcapi.ApiOfflinePlayer;
+import com.github.jenya705.mcapi.OfflinePlayer;
 
 /**
  * @author Jenya705
  */
 public interface QuitEvent {
 
-    ApiOfflinePlayer getPlayer();
+    OfflinePlayer getPlayer();
 }

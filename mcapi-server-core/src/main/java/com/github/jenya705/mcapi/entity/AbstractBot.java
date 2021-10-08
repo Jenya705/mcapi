@@ -1,8 +1,8 @@
 package com.github.jenya705.mcapi.entity;
 
-import com.github.jenya705.mcapi.ApiOfflinePlayer;
-import com.github.jenya705.mcapi.ApiPlayer;
-import com.github.jenya705.mcapi.ApiUUID;
+import com.github.jenya705.mcapi.OfflinePlayer;
+import com.github.jenya705.mcapi.Player;
+import com.github.jenya705.mcapi.UUIDHolder;
 import com.github.jenya705.mcapi.error.BotNotPermittedException;
 import com.github.jenya705.mcapi.util.Selector;
 
@@ -24,11 +24,11 @@ public interface AbstractBot {
         return hasPermission(permission, BotPermissionEntity.identityTarget);
     }
 
-    default boolean hasPermission(String permission, ApiPlayer player) {
+    default boolean hasPermission(String permission, Player player) {
         return hasPermission(permission, player.getUuid());
     }
 
-    default boolean hasPermission(String permission, ApiOfflinePlayer player) {
+    default boolean hasPermission(String permission, OfflinePlayer player) {
         return hasPermission(permission, player.getUuid());
     }
 
@@ -48,7 +48,7 @@ public interface AbstractBot {
         }
     }
 
-    default void needPermission(String permission, ApiUUID uuid) {
+    default void needPermission(String permission, UUIDHolder uuid) {
         needPermission(permission, uuid.getUuid());
     }
 

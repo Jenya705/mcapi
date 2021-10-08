@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.entity.api.event;
 
-import com.github.jenya705.mcapi.ApiPlayer;
+import com.github.jenya705.mcapi.Player;
 import com.github.jenya705.mcapi.entity.event.RestUnlinkEvent;
 import com.github.jenya705.mcapi.event.UnlinkEvent;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EntityUnlinkEvent implements UnlinkEvent {
 
-    private ApiPlayer player;
+    private Player player;
 
     public RestUnlinkEvent rest() {
         return RestUnlinkEvent.from(this);

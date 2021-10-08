@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.event;
 
-import com.github.jenya705.mcapi.ApiCommandSender;
-import com.github.jenya705.mcapi.command.ApiCommandInteractionValue;
+import com.github.jenya705.mcapi.CommandSender;
+import com.github.jenya705.mcapi.command.CommandInteractionValue;
 
 /**
  * @author Jenya705
@@ -10,7 +10,7 @@ public interface CommandInteractionEvent {
 
     String getPath();
 
-    ApiCommandInteractionValue[] getValues();
+    CommandInteractionValue[] getValues();
 
-    ApiCommandSender getSender();
+    CommandSender getSender();
 }

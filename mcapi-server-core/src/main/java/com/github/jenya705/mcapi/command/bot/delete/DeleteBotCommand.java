@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.command.bot.delete;
 
-import com.github.jenya705.mcapi.ApiCommandSender;
-import com.github.jenya705.mcapi.ApiPlayer;
+import com.github.jenya705.mcapi.CommandSender;
+import com.github.jenya705.mcapi.Player;
 import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutor;
@@ -26,12 +26,12 @@ public class DeleteBotCommand extends AdvancedCommandExecutor<DeleteBotArguments
     }
 
     @Override
-    public void onCommand(ApiCommandSender sender, DeleteBotArguments args, String permission) {
+    public void onCommand(CommandSender sender, DeleteBotArguments args, String permission) {
         DatabaseModule.async.submit(() -> {
             BotEntity botEntity = databaseModule
                     .storage()
                     .findBotByToken(args.getToken());
-            UUID senderUuid = sender instanceof ApiPlayer ? ((ApiPlayer) sender).getUuid() : null;
+            UUID senderUuid = sender instanceof Player ? ((Player) sender).getUuid() : null;
             if ((botEntity == null || !botEntity.getOwner().equals(senderUuid)) &&
                     hasPermission(sender, permission, "others")) {
                 sendMessage(sender, config.getNotPermitted());

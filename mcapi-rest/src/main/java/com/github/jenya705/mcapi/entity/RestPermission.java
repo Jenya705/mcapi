@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.entity;
 
-import com.github.jenya705.mcapi.ApiPermission;
+import com.github.jenya705.mcapi.Permission;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +19,7 @@ public class RestPermission {
     private String name;
     private UUID target;
 
-    public static RestPermission from(ApiPermission playerPermission) {
+    public static RestPermission from(Permission playerPermission) {
         return new RestPermission(
                 playerPermission.isToggled(),
                 playerPermission.getName(),

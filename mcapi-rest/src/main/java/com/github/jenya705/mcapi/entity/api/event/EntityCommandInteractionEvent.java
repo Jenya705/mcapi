@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.entity.api.event;
 
-import com.github.jenya705.mcapi.ApiCommandSender;
-import com.github.jenya705.mcapi.command.ApiCommandInteractionValue;
+import com.github.jenya705.mcapi.CommandSender;
+import com.github.jenya705.mcapi.command.CommandInteractionValue;
 import com.github.jenya705.mcapi.entity.event.RestCommandInteractionEvent;
 import com.github.jenya705.mcapi.event.CommandInteractionEvent;
 import lombok.AllArgsConstructor;
@@ -17,8 +17,8 @@ import lombok.NoArgsConstructor;
 public class EntityCommandInteractionEvent implements CommandInteractionEvent {
 
     private String path;
-    private ApiCommandSender sender;
-    private ApiCommandInteractionValue[] values;
+    private CommandSender sender;
+    private CommandInteractionValue[] values;
 
     public RestCommandInteractionEvent rest() {
         return RestCommandInteractionEvent.from(this);

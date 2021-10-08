@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.module.message;
 
-import com.github.jenya705.mcapi.ApiOfflinePlayer;
-import com.github.jenya705.mcapi.ApiPlayer;
+import com.github.jenya705.mcapi.OfflinePlayer;
+import com.github.jenya705.mcapi.Player;
 import com.github.jenya705.mcapi.error.BodyIsEmptyException;
 import com.github.jenya705.mcapi.error.MessageTypeNotSupportException;
 import com.github.jenya705.mcapi.module.web.Request;
@@ -16,11 +16,11 @@ import java.util.function.Function;
 @UtilityClass
 public class MessageUtils {
 
-    public void ban(ApiOfflinePlayer player, Request request) {
+    public void ban(OfflinePlayer player, Request request) {
         doWithMessage(request, it -> it.ban(player));
     }
 
-    public void kick(ApiPlayer player, Request request) {
+    public void kick(Player player, Request request) {
         doWithMessage(request, it -> it.kick(player));
     }
 
@@ -33,11 +33,11 @@ public class MessageUtils {
         );
     }
 
-    public void ban(ApiOfflinePlayer player, TypedMessage message) {
+    public void ban(OfflinePlayer player, TypedMessage message) {
         doWithMessage(message, it -> it.ban(player));
     }
 
-    public void kick(ApiPlayer player, TypedMessage message) {
+    public void kick(Player player, TypedMessage message) {
         doWithMessage(message, it -> it.kick(player));
     }
 

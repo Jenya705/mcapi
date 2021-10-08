@@ -59,9 +59,9 @@ public class LinkPermissionCommand extends MenuCommand implements BaseCommon {
     }
 
     @Override
-    public void menuCommand(ApiCommandSender sender, StringfulIterator args, String permission) throws Exception {
-        if (!args.hasNext(1) || !(sender instanceof ApiPlayer)) return;
-        ApiPlayer player = (ApiPlayer) sender;
+    public void menuCommand(CommandSender sender, StringfulIterator args, String permission) throws Exception {
+        if (!args.hasNext(1) || !(sender instanceof Player)) return;
+        Player player = (Player) sender;
         int botId = Integer.parseInt(args.next());
         DatabaseModule.async.submit(() ->
                 player.sendMessage(

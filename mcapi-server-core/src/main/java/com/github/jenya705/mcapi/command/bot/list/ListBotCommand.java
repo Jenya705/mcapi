@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.command.bot.list;
 
-import com.github.jenya705.mcapi.ApiCommandSender;
+import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutor;
@@ -30,7 +30,7 @@ public class ListBotCommand extends AdvancedCommandExecutor<ListBotArguments> {
     }
 
     @Override
-    public void onCommand(ApiCommandSender sender, ListBotArguments args, String permission) {
+    public void onCommand(CommandSender sender, ListBotArguments args, String permission) {
         if (args.getPlayer() != null && !hasPermission(sender, permission, "others")) {
             sendMessage(sender, config.getNotPermittedForOthers());
             return;

@@ -47,11 +47,11 @@ public class CommandModuleImpl extends AbstractApplicationModule implements Comm
                         .required("customCommands")
         );
         bean(Mapper.class)
-                .jsonDeserializer(ApiCommand.class, new ApiCommandDeserializer(this));
+                .jsonDeserializer(Command.class, new ApiCommandDeserializer(this));
     }
 
     @Override
-    public void registerCommand(ApiCommand command, AbstractBot owner) {
+    public void registerCommand(Command command, AbstractBot owner) {
         validateCommandName(command.getName());
         Object endObject = parseOptions(command.getOptions(), command.getName(), owner);
         if (!(endObject instanceof Map) && !(endObject instanceof CommandExecutor)) {
@@ -100,15 +100,15 @@ public class CommandModuleImpl extends AbstractApplicationModule implements Comm
         }
     }
 
-    private Object parseOptions(ApiCommandOption[] options, String path, AbstractBot owner) {
+    private Object parseOptions(CommandOption[] options, String path, AbstractBot owner) {
         ValidateResult validateResult = validateOptions(options);
         if (validateResult == ValidateResult.ALL) {
             throw new CommandOptionsAllException();
         }
         if (validateResult == ValidateResult.SUBS) {
             Map<String, Object> newNode = new HashMap<>();
-            for (ApiCommandOption option : options) {
-                ApiCommandExecutableOption executableOption = (ApiCommandExecutableOption) option;
+            for (CommandOption option : options) {
+                CommandExecutableOption executableOption = (CommandExecutableOption) option;
                 newNode.put(
                         option.getName(),
                         parseOptions(
@@ -127,8 +127,8 @@ public class CommandModuleImpl extends AbstractApplicationModule implements Comm
                 owner,
                 config.getCommand(),
                 Arrays.stream(options)
-                        .map(it -> (ApiCommandValueOption) it)
-                        .toArray(ApiCommandValueOption[]::new)
+                        .map(it -> (CommandValueOption) it)
+                        .toArray(CommandValueOption[]::new)
         );
     }
 
@@ -138,14 +138,14 @@ public class CommandModuleImpl extends AbstractApplicationModule implements Comm
         ALL
     }
 
-    private ValidateResult validateOptions(ApiCommandOption[] options) {
+    private ValidateResult validateOptions(CommandOption[] options) {
         boolean anyValues = false;
         boolean anySubs = false;
-        for (ApiCommandOption option : options) {
+        for (CommandOption option : options) {
             validateCommandName(option.getName());
             if (anySubs && anyValues) break;
-            if (option instanceof ApiCommandValueOption) anyValues = true;
-            else if (option instanceof ApiCommandExecutableOption) anySubs = true;
+            if (option instanceof CommandValueOption) anyValues = true;
+            else if (option instanceof CommandExecutableOption) anySubs = true;
         }
         return anyValues ? (anySubs ? ValidateResult.ALL : ValidateResult.VALUES) : ValidateResult.SUBS;
     }

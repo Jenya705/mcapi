@@ -3,7 +3,7 @@ package com.github.jenya705.mcapi;
 /**
  * @author Jenya705
  */
-public interface ApiGatewayAuthorizationRequest {
+public interface GatewayAuthorizationRequest {
 
     String getToken();
 }

@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.module.selector;
 
-import com.github.jenya705.mcapi.ApiOfflinePlayer;
+import com.github.jenya705.mcapi.OfflinePlayer;
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.error.PlayerNotFoundException;
@@ -8,7 +8,7 @@ import com.github.jenya705.mcapi.error.PlayerNotFoundException;
 /**
  * @author Jenya705
  */
-public class OfflineSelectorCreator extends MapSelectorCreator<ApiOfflinePlayer, DefaultSelectorCreatorData> implements BaseCommon {
+public class OfflineSelectorCreator extends MapSelectorCreator<OfflinePlayer, DefaultSelectorCreatorData> implements BaseCommon {
 
     private final ServerApplication application;
 

@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.command.gateway.subscriptions;
 
-import com.github.jenya705.mcapi.ApiCommandSender;
-import com.github.jenya705.mcapi.ApiPlayer;
+import com.github.jenya705.mcapi.CommandSender;
+import com.github.jenya705.mcapi.Player;
 import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutor;
@@ -33,11 +33,11 @@ public class SubscriptionsGatewaysCommand extends AdvancedCommandExecutor<Subscr
     }
 
     @Override
-    public void onCommand(ApiCommandSender sender, SubscriptionsGatewaysArguments args, String permission) {
+    public void onCommand(CommandSender sender, SubscriptionsGatewaysArguments args, String permission) {
         BotEntity bot = databaseModule
                 .storage()
                 .findBotByToken(args.getToken());
-        UUID executorUuid = sender instanceof ApiPlayer ? ((ApiPlayer) sender).getUuid() : null;
+        UUID executorUuid = sender instanceof Player ? ((Player) sender).getUuid() : null;
         if (!bot.getOwner().equals(executorUuid) && !hasPermission(sender, permission, "others")) {
             sendMessage(sender, config.getNotPermitted());
             return;

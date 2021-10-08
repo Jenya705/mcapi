@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.command.bot.create;
 
-import com.github.jenya705.mcapi.ApiCommandSender;
+import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutor;
@@ -35,7 +35,7 @@ public class CreateBotCommand extends AdvancedCommandExecutor<CreateBotArguments
     }
 
     @Override
-    public void onCommand(ApiCommandSender sender, CreateBotArguments args, String permission) {
+    public void onCommand(CommandSender sender, CreateBotArguments args, String permission) {
         if (args.getName().length() > 64) {
             sendMessage(sender, config.getBotNameTooLong());
             return;

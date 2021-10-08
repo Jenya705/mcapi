@@ -5,7 +5,7 @@ import java.util.UUID;
 /**
  * @author Jenya705
  */
-public interface ApiPermission {
+public interface Permission {
 
     boolean isToggled();
 

@@ -5,7 +5,6 @@ import com.github.jenya705.mcapi.command.CommandsUtils;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.entity.BotPermissionEntity;
-import com.github.jenya705.mcapi.entity.RestLinkRequest;
 import com.github.jenya705.mcapi.entity.api.event.EntityLinkEvent;
 import com.github.jenya705.mcapi.entity.api.event.EntityUnlinkEvent;
 import com.github.jenya705.mcapi.entity.event.RestLinkEvent;
@@ -64,7 +63,7 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
     }
 
     @Override
-    public void requestLink(AbstractBot bot, ApiPlayer player, ApiLinkRequest request) {
+    public void requestLink(AbstractBot bot, Player player, LinkRequest request) {
         validateLinkRequest(bot, player, request);
         LinkObject obj = new LinkObject(
                 request, bot,
@@ -74,7 +73,7 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
         sendMessage(player, obj);
     }
 
-    public void sendMessage(ApiPlayer player, LinkObject request) {
+    public void sendMessage(Player player, LinkObject request) {
         formProvider.sendMessage(player,
                 formProvider
                         .newBuilder()
@@ -178,7 +177,7 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
     }
 
     @Override
-    public void unlink(int id, ApiPlayer player) {
+    public void unlink(int id, Player player) {
         DatabaseModule.async.submit(() -> {
             BotLinkEntity link = databaseModule
                     .storage()
@@ -199,26 +198,26 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
     }
 
     @Override
-    public boolean isExists(ApiPlayer player, int index, String permission) {
+    public boolean isExists(Player player, int index, String permission) {
         return getPlayerLinks(player)
                 .stream()
                 .anyMatch(linkObject -> linkObject.getId() == index);
     }
 
     @Override
-    public void toggle(ApiPlayer player, int index, String permission) {
+    public void toggle(Player player, int index, String permission) {
         getPlayerLinksById(player, index)
                 .forEach(linkObject -> linkObject.toggleOptionalPermission(permission));
     }
 
     @Override
-    public void update(ApiPlayer player, int index) {
+    public void update(Player player, int index) {
         getPlayerLinksById(player, index)
                 .forEach(linkObject -> sendMessage(player, linkObject));
     }
 
     @Override
-    public void end(ApiPlayer player, int index, boolean enabled) {
+    public void end(Player player, int index, boolean enabled) {
         LinkObject linkObject = null;
         List<LinkObject> playerLinks = getPlayerLinks(player);
         for (int i = 0; i < playerLinks.size(); ++i) {
@@ -294,7 +293,7 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
                 );
     }
 
-    private void validateLinkRequest(AbstractBot bot, ApiPlayer player, ApiLinkRequest request) {
+    private void validateLinkRequest(AbstractBot bot, Player player, LinkRequest request) {
         ReactiveUtils.ifTrueThrow(
                 getPlayerLinks(player)
                         .stream()
@@ -328,12 +327,12 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
                 });
     }
 
-    private List<LinkObject> getPlayerLinks(ApiPlayer player) {
+    private List<LinkObject> getPlayerLinks(Player player) {
         return links
                 .getOrDefault(player.getUuid(), Collections.emptyList());
     }
 
-    private Stream<LinkObject> getPlayerLinksById(ApiPlayer player, int index) {
+    private Stream<LinkObject> getPlayerLinksById(Player player, int index) {
         return getPlayerLinks(player)
                 .stream()
                 .filter(it -> it.getId() == index);
@@ -343,7 +342,7 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
         return linkCommand + " " + String.format(command, formats);
     }
 
-    private void savePermission(LinkObject linkObject, String permission, ApiPlayer player) {
+    private void savePermission(LinkObject linkObject, String permission, Player player) {
         databaseModule
                 .storage()
                 .upsert(new BotPermissionEntity(

@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.entity.api.event;
 
-import com.github.jenya705.mcapi.ApiOfflinePlayer;
+import com.github.jenya705.mcapi.OfflinePlayer;
 import com.github.jenya705.mcapi.entity.event.RestQuitEvent;
 import com.github.jenya705.mcapi.event.QuitEvent;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EntityQuitEvent implements QuitEvent {
 
-    private ApiOfflinePlayer player;
+    private OfflinePlayer player;
 
     public RestQuitEvent rest() {
         return RestQuitEvent.from(this);

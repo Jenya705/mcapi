@@ -2,7 +2,7 @@ package com.github.jenya705.mcapi.module.rest.route.command;
 
 import com.github.jenya705.mcapi.Bean;
 import com.github.jenya705.mcapi.Routes;
-import com.github.jenya705.mcapi.command.ApiCommand;
+import com.github.jenya705.mcapi.command.Command;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.module.command.CommandModule;
 import com.github.jenya705.mcapi.module.rest.route.AbstractRouteHandler;
@@ -26,8 +26,8 @@ public class CreateCommandRouteHandler extends AbstractRouteHandler {
     public void handle(Request request, Response response) {
         AbstractBot bot = request.bot();
         bot.needPermission(Permissions.USER_COMMAND_CREATE);
-        ApiCommand command = request
-                .bodyOrException(ApiCommand.class);
+        Command command = request
+                .bodyOrException(Command.class);
         commandModule.registerCommand(command, bot);
         response.noContent();
     }

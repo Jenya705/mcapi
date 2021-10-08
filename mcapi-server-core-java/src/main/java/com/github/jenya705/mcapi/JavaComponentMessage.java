@@ -13,7 +13,7 @@ public class JavaComponentMessage implements Message {
     private final Component component;
 
     @Override
-    public void send(ApiCommandSender sender) {
+    public void send(CommandSender sender) {
         if (sender instanceof JavaCommandSender) {
             ((JavaCommandSender) sender).sendMessage(component);
             return;

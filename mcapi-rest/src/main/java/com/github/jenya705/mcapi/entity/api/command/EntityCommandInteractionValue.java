@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.entity.api.command;
 
-import com.github.jenya705.mcapi.command.ApiCommandInteractionValue;
+import com.github.jenya705.mcapi.command.CommandInteractionValue;
 import com.github.jenya705.mcapi.entity.command.RestCommandInteractionValue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EntityCommandInteractionValue implements ApiCommandInteractionValue {
+public class EntityCommandInteractionValue implements CommandInteractionValue {
 
     private String name;
     private Object value;

@@ -3,7 +3,7 @@ package com.github.jenya705.mcapi;
 /**
  * @author Jenya705
  */
-public interface ApiLocation {
+public interface Location {
 
     double getX();
 

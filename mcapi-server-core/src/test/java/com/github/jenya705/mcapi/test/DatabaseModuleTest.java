@@ -11,7 +11,6 @@ import com.github.jenya705.mcapi.test.mock.ConfigModuleMock;
 import com.github.jenya705.mcapi.test.mock.ServerApplicationMock;
 import com.github.jenya705.mcapi.util.ConfigDataBuilder;
 import com.github.jenya705.mcapi.util.TokenUtils;
-import lombok.Data;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -78,5 +77,49 @@ public class DatabaseModuleTest {
                 new BotEntity(generatedToken, "test", ownerUUID, 1)
         );
     }
+
+    @Test
+    public void cachingTest() {
+        ServerApplication application = initialize();
+        DatabaseModule databaseModule = application.getBean(DatabaseModule.class);
+        String generatedToken = TokenUtils.generateToken();
+        UUID ownerUUID = UUID.randomUUID();
+        databaseModule.storage().save(new BotEntity(generatedToken, "test", ownerUUID, 1));
+        Assertions.assertEquals(
+                databaseModule.cache().getCachedBot(1),
+                new BotEntity(generatedToken, "test", ownerUUID, 1)
+        );
+        Assertions.assertEquals(
+                databaseModule.cache().getCachedBot(generatedToken),
+                new BotEntity(generatedToken, "test", ownerUUID, 1)
+        );
+    }
+
+    @Test
+    public void cachingConcurrentTest() {
+        ServerApplication application = initialize();
+        DatabaseModule databaseModule = application.getBean(DatabaseModule.class);
+        BotEntity[] botEntities = new BotEntity[30];
+        for (int i = 0; i < botEntities.length; ++i) {
+            botEntities[i] = new BotEntity(
+                    TokenUtils.generateToken(),
+                    "test" + i,
+                    UUID.randomUUID(), i
+            );
+            databaseModule.storage().save(botEntities[i]);
+        }
+        for (int i = 0; i < 20; ++i) {
+            Assertions.assertNull(
+                    databaseModule.cache().getCachedBot(i)
+            );
+        }
+        for (int i = 20; i < 30; ++i) {
+            Assertions.assertEquals(
+                    databaseModule.cache().getCachedBot(i),
+                    botEntities[i]
+            );
+        }
+    }
+
 
 }

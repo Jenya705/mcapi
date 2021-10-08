@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.entity.command;
 
-import com.github.jenya705.mcapi.command.ApiCommandValueOption;
+import com.github.jenya705.mcapi.command.CommandValueOption;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +19,7 @@ public class RestCommandValueOption {
     private String tabFunction = "";
     private String[] suggestions = {};
 
-    public static RestCommandValueOption from(ApiCommandValueOption option) {
+    public static RestCommandValueOption from(CommandValueOption option) {
         return new RestCommandValueOption(
                 option.getName(),
                 option.isRequired(),

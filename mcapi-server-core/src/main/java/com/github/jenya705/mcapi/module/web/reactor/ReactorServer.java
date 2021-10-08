@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.module.web.reactor;
 
 import com.github.jenya705.mcapi.*;
+import com.github.jenya705.mcapi.ApiError;
 import com.github.jenya705.mcapi.log.TimerTask;
 import com.github.jenya705.mcapi.module.mapper.Mapper;
 import com.github.jenya705.mcapi.module.web.RouteHandler;
@@ -24,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 
 /**
  * @author Jenya705

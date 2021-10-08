@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.command.linkmenu;
 
-import com.github.jenya705.mcapi.ApiCommandSender;
-import com.github.jenya705.mcapi.ApiPlayer;
+import com.github.jenya705.mcapi.CommandSender;
+import com.github.jenya705.mcapi.Player;
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.CommandsUtils;
@@ -48,11 +48,11 @@ public class LinkUnlinkCommand extends MenuCommand implements BaseCommon {
     }
 
     @Override
-    public void menuCommand(ApiCommandSender sender, StringfulIterator args, String permission) throws Exception {
-        if (!args.hasNext(1) || !(sender instanceof ApiPlayer)) {
+    public void menuCommand(CommandSender sender, StringfulIterator args, String permission) throws Exception {
+        if (!args.hasNext(1) || !(sender instanceof Player)) {
             return;
         }
-        ApiPlayer player = (ApiPlayer) sender;
+        Player player = (Player) sender;
         int botId = Integer.parseInt(args.next());
         linkingModule.unlink(botId, player);
         player.sendMessage(CommandsUtils.placeholderMessage(config.getSuccess()));

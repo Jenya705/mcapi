@@ -3,7 +3,6 @@ package com.github.jenya705.mcapi;
 import com.github.jenya705.mcapi.command.CommandExecutor;
 import com.github.jenya705.mcapi.util.PlayerUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
@@ -19,39 +18,39 @@ public interface ServerCore {
 
     void permission(String name, boolean toggled);
 
-    void givePermission(ApiPlayer player, boolean toggled, String... permissions);
+    void givePermission(Player player, boolean toggled, String... permissions);
 
-    Collection<? extends ApiPlayer> getPlayers();
+    Collection<? extends Player> getPlayers();
 
-    ApiPlayer getPlayer(String name);
+    Player getPlayer(String name);
 
-    ApiPlayer getPlayer(UUID uuid);
+    Player getPlayer(UUID uuid);
 
-    ApiOfflinePlayer getOfflinePlayer(String name);
+    OfflinePlayer getOfflinePlayer(String name);
 
-    ApiOfflinePlayer getOfflinePlayer(UUID uuid);
+    OfflinePlayer getOfflinePlayer(UUID uuid);
 
-    default Optional<? extends ApiPlayer> getOptionalPlayer(String name) {
+    default Optional<? extends Player> getOptionalPlayer(String name) {
         return Optional.ofNullable(getPlayer(name));
     }
 
-    default Optional<? extends ApiPlayer> getOptionalPlayer(UUID uuid) {
+    default Optional<? extends Player> getOptionalPlayer(UUID uuid) {
         return Optional.ofNullable(getPlayer(uuid));
     }
 
-    default Optional<? extends ApiPlayer> getOptionalPlayerId(String id) {
+    default Optional<? extends Player> getOptionalPlayerId(String id) {
         return PlayerUtils.getPlayer(id, this);
     }
 
-    default Optional<? extends ApiOfflinePlayer> getOptionalOfflinePlayer(String name) {
+    default Optional<? extends OfflinePlayer> getOptionalOfflinePlayer(String name) {
         return Optional.ofNullable(getOfflinePlayer(name));
     }
 
-    default Optional<? extends ApiOfflinePlayer> getOptionalOfflinePlayer(UUID uuid) {
+    default Optional<? extends OfflinePlayer> getOptionalOfflinePlayer(UUID uuid) {
         return Optional.ofNullable(getOfflinePlayer(uuid));
     }
 
-    default Optional<? extends ApiOfflinePlayer> getOptionalOfflinePlayerId(String id) {
+    default Optional<? extends OfflinePlayer> getOptionalOfflinePlayerId(String id) {
         return PlayerUtils.getOfflinePlayer(id, this);
     }
 

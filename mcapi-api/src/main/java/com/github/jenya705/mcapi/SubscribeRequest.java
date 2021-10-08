@@ -3,7 +3,7 @@ package com.github.jenya705.mcapi;
 /**
  * @author Jenya705
  */
-public interface ApiSubscribeRequest {
+public interface SubscribeRequest {
 
     String[] getSubscriptions();
 }

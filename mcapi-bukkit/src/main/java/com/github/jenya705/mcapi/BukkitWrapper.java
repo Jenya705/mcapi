@@ -1,9 +1,6 @@
 package com.github.jenya705.mcapi;
 
 import lombok.experimental.UtilityClass;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
@@ -12,14 +9,14 @@ import org.bukkit.entity.Player;
 @UtilityClass
 public class BukkitWrapper {
 
-    public ApiCommandSender sender(CommandSender sender) {
+    public CommandSender sender(org.bukkit.command.CommandSender sender) {
         if (sender instanceof Player) {
             return BukkitPlayerWrapper.of((Player) sender);
         }
         return BukkitCommandSenderWrapper.of(sender);
     }
 
-    public ApiOfflinePlayer offlinePlayer(OfflinePlayer player) {
+    public OfflinePlayer offlinePlayer(org.bukkit.OfflinePlayer player) {
         if (player.isOnline() && player instanceof Player) {
             return BukkitPlayerWrapper.of((Player) player);
         }
@@ -30,7 +27,7 @@ public class BukkitWrapper {
         return BukkitPlayerWrapper.of(player);
     }
 
-    public ApiLocation location(Location location) {
+    public Location location(org.bukkit.Location location) {
         return BukkitLocationWrapper.of(location);
     }
 }

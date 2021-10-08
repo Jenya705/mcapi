@@ -1,21 +1,21 @@
 package com.github.jenya705.mcapi.module.message;
 
-import com.github.jenya705.mcapi.ApiCommandSender;
-import com.github.jenya705.mcapi.ApiOfflinePlayer;
-import com.github.jenya705.mcapi.ApiPlayer;
+import com.github.jenya705.mcapi.CommandSender;
+import com.github.jenya705.mcapi.OfflinePlayer;
+import com.github.jenya705.mcapi.Player;
 
 /**
  * @author Jenya705
  */
 public interface Message {
 
-    void send(ApiCommandSender sender);
+    void send(CommandSender sender);
 
-    default boolean ban(ApiOfflinePlayer player) {
+    default boolean ban(OfflinePlayer player) {
         return false;
     }
 
-    default boolean kick(ApiPlayer player) {
+    default boolean kick(Player player) {
         return false;
     }
 }

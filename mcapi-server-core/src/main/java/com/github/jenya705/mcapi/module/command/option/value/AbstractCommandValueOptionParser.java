@@ -1,8 +1,8 @@
 package com.github.jenya705.mcapi.module.command.option.value;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.github.jenya705.mcapi.command.ApiCommandOption;
-import com.github.jenya705.mcapi.command.ApiCommandValueOption;
+import com.github.jenya705.mcapi.command.CommandOption;
+import com.github.jenya705.mcapi.command.CommandValueOption;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.module.command.CommandOptionParser;
 import com.github.jenya705.mcapi.util.IteratorUtils;
@@ -25,10 +25,10 @@ public abstract class AbstractCommandValueOptionParser implements CommandOptionP
 
     @FunctionalInterface
     interface DefaultDeserializeConstructor {
-        ApiCommandValueOption get(String name, boolean required, Object tab, boolean onlyFromTab);
+        CommandValueOption get(String name, boolean required, Object tab, boolean onlyFromTab);
     }
 
-    private final Map<String, BiFunction<ApiCommandValueOption, AbstractBot, List<String>>> tabFunctions = new HashMap<>();
+    private final Map<String, BiFunction<CommandValueOption, AbstractBot, List<String>>> tabFunctions = new HashMap<>();
 
     protected Object getTabs(JsonNode tabsNode) {
         if (tabsNode == null) {
@@ -53,20 +53,20 @@ public abstract class AbstractCommandValueOptionParser implements CommandOptionP
     }
 
     @Override
-    public final ApiCommandOption deserialize(JsonNode node) {
+    public final CommandOption deserialize(JsonNode node) {
         return valueDeserialize(node);
     }
 
     @Override
-    public final Object serialize(ApiCommandOption option, AbstractBot owner, String value) {
-        return serialize((ApiCommandValueOption) option, owner, value);
+    public final Object serialize(CommandOption option, AbstractBot owner, String value) {
+        return serialize((CommandValueOption) option, owner, value);
     }
 
-    public abstract ApiCommandValueOption valueDeserialize(JsonNode node);
+    public abstract CommandValueOption valueDeserialize(JsonNode node);
 
-    public abstract Object serialize(ApiCommandValueOption option, AbstractBot owner, String value);
+    public abstract Object serialize(CommandValueOption option, AbstractBot owner, String value);
 
-    protected ApiCommandValueOption defaultDeserialize(DefaultDeserializeConstructor constructor, JsonNode node) {
+    protected CommandValueOption defaultDeserialize(DefaultDeserializeConstructor constructor, JsonNode node) {
         return constructor.get(
                 node.get("name").asText(),
                 defaultNode(node.get("required"), false, JsonNode::asBoolean),
@@ -76,14 +76,14 @@ public abstract class AbstractCommandValueOptionParser implements CommandOptionP
     }
 
     @Override
-    public List<String> tabs(ApiCommandOption option, AbstractBot owner) {
-        ApiCommandValueOption realOption = (ApiCommandValueOption) option;
+    public List<String> tabs(CommandOption option, AbstractBot owner) {
+        CommandValueOption realOption = (CommandValueOption) option;
         return realOption.getSuggestions() == null ?
                 tabFunctions.get(realOption.getTabFunction()).apply(realOption, owner) :
                 Arrays.asList(realOption.getSuggestions());
     }
 
-    public AbstractCommandValueOptionParser tab(String name, BiFunction<ApiCommandValueOption, AbstractBot, List<String>> function) {
+    public AbstractCommandValueOptionParser tab(String name, BiFunction<CommandValueOption, AbstractBot, List<String>> function) {
         tabFunctions.put(name, function);
         return this;
     }

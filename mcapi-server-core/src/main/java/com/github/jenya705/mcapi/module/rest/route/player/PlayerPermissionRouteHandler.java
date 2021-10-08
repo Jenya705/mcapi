@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.module.rest.route.player;
 
-import com.github.jenya705.mcapi.ApiPlayer;
+import com.github.jenya705.mcapi.Player;
 import com.github.jenya705.mcapi.Routes;
 import com.github.jenya705.mcapi.entity.api.EntityPermission;
 import com.github.jenya705.mcapi.module.rest.route.AbstractRouteHandler;
@@ -19,8 +19,8 @@ public class PlayerPermissionRouteHandler extends AbstractRouteHandler {
 
     @Override
     public void handle(Request request, Response response) {
-        ApiPlayer player = request
-                .paramOrException("id", ApiPlayer.class);
+        Player player = request
+                .paramOrException("id", Player.class);
         String permissionName = request
                 .paramOrException("permission");
         request

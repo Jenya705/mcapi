@@ -17,7 +17,7 @@ public interface JavaServerCore extends ServerCore {
 
     JavaPlayer getJavaPlayer(UUID uuid);
 
-    default Collection<? extends ApiPlayer> getPlayers() {
+    default Collection<? extends Player> getPlayers() {
         return getJavaPlayers();
     }
 
@@ -33,11 +33,11 @@ public interface JavaServerCore extends ServerCore {
         return PlayerUtils.getPlayer(id, this).map(player -> (JavaPlayer) player);
     }
 
-    default ApiPlayer getPlayer(String name) {
+    default Player getPlayer(String name) {
         return getJavaPlayer(name);
     }
 
-    default ApiPlayer getPlayer(UUID uuid) {
+    default Player getPlayer(UUID uuid) {
         return getJavaPlayer(uuid);
     }
 }

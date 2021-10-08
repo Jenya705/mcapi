@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.module.selector;
 
-import com.github.jenya705.mcapi.ApiPlayer;
+import com.github.jenya705.mcapi.Player;
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.error.PlayerNotFoundException;
@@ -11,7 +11,7 @@ import java.util.Random;
 /**
  * @author Jenya705
  */
-public class PlayerSelectorCreator extends MapSelectorCreator<ApiPlayer, DefaultSelectorCreatorData> implements BaseCommon {
+public class PlayerSelectorCreator extends MapSelectorCreator<Player, DefaultSelectorCreatorData> implements BaseCommon {
 
     private final Random random = new Random();
 
@@ -32,7 +32,7 @@ public class PlayerSelectorCreator extends MapSelectorCreator<ApiPlayer, Default
                                 .orElseThrow(() -> new PlayerNotFoundException(id))
                 )
                 .defaultSelector("a", data ->
-                        (Collection<ApiPlayer>) core().getPlayers()
+                        (Collection<Player>) core().getPlayers()
                 )
                 .defaultSelector("r", data ->
                         SelectorCreatorUtils.randomSingleton(core().getPlayers())

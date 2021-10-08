@@ -52,7 +52,7 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements J
     }
 
     @Override
-    public ApiLocation getLocation() {
+    public Location getLocation() {
         return BukkitWrapper.location(player.getLocation());
     }
 }

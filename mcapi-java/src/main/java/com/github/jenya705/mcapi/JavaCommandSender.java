@@ -5,7 +5,7 @@ import net.kyori.adventure.text.Component;
 /**
  * @author Jenya705
  */
-public interface JavaCommandSender extends ApiCommandSender {
+public interface JavaCommandSender extends CommandSender {
 
     void sendMessage(Component component);
 }

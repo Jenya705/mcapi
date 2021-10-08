@@ -1,7 +1,6 @@
 package com.github.jenya705.mcapi;
 
 import lombok.AllArgsConstructor;
-import org.bukkit.OfflinePlayer;
 
 import java.util.UUID;
 
@@ -9,11 +8,11 @@ import java.util.UUID;
  * @author Jenya705
  */
 @AllArgsConstructor
-public class BukkitOfflinePlayerWrapper implements ApiOfflinePlayer {
+public class BukkitOfflinePlayerWrapper implements OfflinePlayer {
 
-    private final OfflinePlayer player;
+    private final org.bukkit.OfflinePlayer player;
 
-    public static BukkitOfflinePlayerWrapper of(OfflinePlayer player) {
+    public static BukkitOfflinePlayerWrapper of(org.bukkit.OfflinePlayer player) {
         return player == null ? null : new BukkitOfflinePlayerWrapper(player);
     }
 

@@ -1,8 +1,8 @@
 package com.github.jenya705.mcapi.module.selector;
 
 import com.github.jenya705.mcapi.AbstractApplicationModule;
-import com.github.jenya705.mcapi.ApiOfflinePlayer;
-import com.github.jenya705.mcapi.ApiPlayer;
+import com.github.jenya705.mcapi.OfflinePlayer;
+import com.github.jenya705.mcapi.Player;
 import com.github.jenya705.mcapi.OnInitializing;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.util.Selector;
@@ -26,7 +26,7 @@ public class ServerSelectorProvider extends AbstractApplicationModule implements
     }
 
     @Override
-    public Selector<ApiPlayer> players(@NotNull String selector, @Nullable AbstractBot bot) {
+    public Selector<Player> players(@NotNull String selector, @Nullable AbstractBot bot) {
         return playerSelectorCreator.create(
                 selector,
                 new DefaultSelectorCreatorData(bot)
@@ -42,7 +42,7 @@ public class ServerSelectorProvider extends AbstractApplicationModule implements
     }
 
     @Override
-    public Selector<ApiOfflinePlayer> offlinePlayers(@NotNull String selector, @Nullable AbstractBot bot) {
+    public Selector<OfflinePlayer> offlinePlayers(@NotNull String selector, @Nullable AbstractBot bot) {
         return offlinePlayerSelectorCreator.create(
                 selector,
                 new DefaultSelectorCreatorData(bot)

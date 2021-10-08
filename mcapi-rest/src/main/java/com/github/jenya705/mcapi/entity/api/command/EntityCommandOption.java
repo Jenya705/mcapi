@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.entity.api.command;
 
-import com.github.jenya705.mcapi.command.ApiCommandOption;
+import com.github.jenya705.mcapi.command.CommandOption;
 import com.github.jenya705.mcapi.entity.command.RestCommandOption;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EntityCommandOption implements ApiCommandOption {
+public class EntityCommandOption implements CommandOption {
 
     private String name;
     private String type;

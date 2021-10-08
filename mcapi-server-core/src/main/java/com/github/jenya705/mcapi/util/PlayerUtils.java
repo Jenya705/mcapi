@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.util;
 
-import com.github.jenya705.mcapi.ApiOfflinePlayer;
-import com.github.jenya705.mcapi.ApiPlayer;
+import com.github.jenya705.mcapi.OfflinePlayer;
+import com.github.jenya705.mcapi.Player;
 import com.github.jenya705.mcapi.ServerCore;
 import com.github.jenya705.mcapi.error.PlayerIdFormatException;
 import lombok.experimental.UtilityClass;
@@ -20,31 +20,31 @@ public class PlayerUtils {
 
     private final Random random = new Random();
 
-    public Optional<? extends ApiPlayer> getPlayer(String name, ServerCore core) {
-        Pair<Optional<? extends ApiPlayer>, Boolean> information = getPlayerWithFullInformation(name, core);
+    public Optional<? extends Player> getPlayer(String name, ServerCore core) {
+        Pair<Optional<? extends Player>, Boolean> information = getPlayerWithFullInformation(name, core);
         if (!information.getRight()) {
             throw new PlayerIdFormatException(name);
         }
         return information.getLeft();
     }
 
-    public Optional<? extends ApiPlayer> getPlayerWithoutException(String name, ServerCore core) {
+    public Optional<? extends Player> getPlayerWithoutException(String name, ServerCore core) {
         return getPlayerWithFullInformation(name, core).getLeft();
     }
 
-    public Optional<? extends ApiOfflinePlayer> getOfflinePlayer(String name, ServerCore core) {
-        Pair<Optional<? extends ApiOfflinePlayer>, Boolean> information = getOfflinePlayerWithFullInformation(name, core);
+    public Optional<? extends OfflinePlayer> getOfflinePlayer(String name, ServerCore core) {
+        Pair<Optional<? extends OfflinePlayer>, Boolean> information = getOfflinePlayerWithFullInformation(name, core);
         if (!information.getRight()) {
             throw new PlayerIdFormatException(name);
         }
         return information.getLeft();
     }
 
-    public Optional<? extends ApiOfflinePlayer> getOfflinePlayerWithoutException(String name, ServerCore core) {
+    public Optional<? extends OfflinePlayer> getOfflinePlayerWithoutException(String name, ServerCore core) {
         return getOfflinePlayerWithFullInformation(name, core).getLeft();
     }
 
-    private Pair<Optional<? extends ApiPlayer>, Boolean> getPlayerWithFullInformation(String name, ServerCore core) {
+    private Pair<Optional<? extends Player>, Boolean> getPlayerWithFullInformation(String name, ServerCore core) {
         Object id = parsePlayerId(name);
         if (id == null) return new Pair<>(Optional.empty(), false);
         if (id instanceof UUID) {
@@ -55,7 +55,7 @@ public class PlayerUtils {
         }
     }
 
-    private Pair<Optional<? extends ApiOfflinePlayer>, Boolean> getOfflinePlayerWithFullInformation(String name, ServerCore core) {
+    private Pair<Optional<? extends OfflinePlayer>, Boolean> getOfflinePlayerWithFullInformation(String name, ServerCore core) {
         Object id = parsePlayerId(name);
         if (id == null) return new Pair<>(Optional.empty(), false);
         if (id instanceof UUID) {
@@ -93,7 +93,7 @@ public class PlayerUtils {
         return core
                 .getPlayers()
                 .stream()
-                .map(ApiPlayer::getName)
+                .map(Player::getName)
                 .collect(Collectors.toList());
     }
 

@@ -1,17 +1,16 @@
 package com.github.jenya705.mcapi;
 
 import lombok.AllArgsConstructor;
-import org.bukkit.Location;
 
 /**
  * @author Jenya705
  */
 @AllArgsConstructor
-public class BukkitLocationWrapper implements ApiLocation {
+public class BukkitLocationWrapper implements Location {
 
-    private final Location location;
+    private final org.bukkit.Location location;
 
-    public static BukkitLocationWrapper of(Location location) {
+    public static BukkitLocationWrapper of(org.bukkit.Location location) {
         return location == null ? null : new BukkitLocationWrapper(location);
     }
 

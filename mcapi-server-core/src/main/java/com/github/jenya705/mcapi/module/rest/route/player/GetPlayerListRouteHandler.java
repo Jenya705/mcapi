@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.module.rest.route.player;
 
-import com.github.jenya705.mcapi.ApiUUID;
+import com.github.jenya705.mcapi.UUIDHolder;
 import com.github.jenya705.mcapi.Routes;
 import com.github.jenya705.mcapi.entity.RestPlayerList;
 import com.github.jenya705.mcapi.module.rest.route.AbstractRouteHandler;
@@ -28,7 +28,7 @@ public class GetPlayerListRouteHandler extends AbstractRouteHandler {
                 core()
                         .getPlayers()
                         .stream()
-                        .map(ApiUUID::getUuid)
+                        .map(UUIDHolder::getUuid)
                         .toArray(UUID[]::new)
         ));
     }

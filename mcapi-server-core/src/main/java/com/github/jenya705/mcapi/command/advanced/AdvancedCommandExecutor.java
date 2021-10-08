@@ -1,8 +1,8 @@
 package com.github.jenya705.mcapi.command.advanced;
 
 import com.github.jenya705.mcapi.AbstractApplicationModule;
-import com.github.jenya705.mcapi.ApiCommandSender;
-import com.github.jenya705.mcapi.ApiPlayer;
+import com.github.jenya705.mcapi.CommandSender;
+import com.github.jenya705.mcapi.Player;
 import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.CommandExecutor;
 import com.github.jenya705.mcapi.command.CommandTab;
@@ -45,7 +45,7 @@ public abstract class AdvancedCommandExecutor<T> extends AbstractApplicationModu
     }
 
     @Override
-    public void onCommand(ApiCommandSender sender, StringfulIterator args, String permission) {
+    public void onCommand(CommandSender sender, StringfulIterator args, String permission) {
         parser.create(args)
                 .ifPresent(data -> onCommand(sender, data, permission))
                 .ifFailed(error -> {
@@ -60,18 +60,18 @@ public abstract class AdvancedCommandExecutor<T> extends AbstractApplicationModu
                 });
     }
 
-    public abstract void onCommand(ApiCommandSender sender, T args, String permission);
+    public abstract void onCommand(CommandSender sender, T args, String permission);
 
-    public boolean hasPermission(ApiCommandSender sender, String rootPermission, String permission) {
+    public boolean hasPermission(CommandSender sender, String rootPermission, String permission) {
         return sender.hasPermission(rootPermission + "." + permission);
     }
 
-    public void sendMessage(ApiCommandSender sender, String message, String... placeholders) {
+    public void sendMessage(CommandSender sender, String message, String... placeholders) {
         sender.sendMessage(CommandsUtils.placeholderMessage(message, placeholders));
     }
 
     public <E> void sendListMessage(
-            ApiCommandSender sender,
+            CommandSender sender,
             String layout,
             String element,
             String delimiter,
@@ -85,7 +85,7 @@ public abstract class AdvancedCommandExecutor<T> extends AbstractApplicationModu
     }
 
     public <E> void sendListMessage(
-            ApiCommandSender sender,
+            CommandSender sender,
             String layout,
             String element,
             String delimiter,
@@ -100,27 +100,27 @@ public abstract class AdvancedCommandExecutor<T> extends AbstractApplicationModu
         ));
     }
 
-    public Optional<? extends ApiPlayer> getPlayer(ApiCommandSender sender, String name) {
+    public Optional<? extends Player> getPlayer(CommandSender sender, String name) {
         if (name == null) {
             return Optional
                     .of(sender)
-                    .filter(it -> it instanceof ApiPlayer)
-                    .map(it -> (ApiPlayer) it);
+                    .filter(it -> it instanceof Player)
+                    .map(it -> (Player) it);
         }
         return PlayerUtils.getPlayerWithoutException(name, core());
     }
 
     @Override
-    public List<CommandTab> onTab(ApiCommandSender sender, StringfulIterator args, String permission) {
+    public List<CommandTab> onTab(CommandSender sender, StringfulIterator args, String permission) {
         return allTab(sender, args, permission, false);
     }
 
     @Override
-    public List<CommandTab> asyncTab(ApiCommandSender sender, StringfulIterator args, String permission) {
+    public List<CommandTab> asyncTab(CommandSender sender, StringfulIterator args, String permission) {
         return allTab(sender, args, permission, true);
     }
 
-    private List<CommandTab> allTab(ApiCommandSender sender, StringfulIterator args, String permission, boolean async) {
+    private List<CommandTab> allTab(CommandSender sender, StringfulIterator args, String permission, boolean async) {
         int count = args.countNext();
         if (count > tabs.size() || count == 0) return null;
         return tabs.get(count - 1).apply(sender, permission, async);
@@ -131,7 +131,7 @@ public abstract class AdvancedCommandExecutor<T> extends AbstractApplicationModu
         return this;
     }
 
-    public AdvancedCommandExecutor<T> tab(BiFunction<ApiCommandSender, String, List<String>> tabFunction) {
+    public AdvancedCommandExecutor<T> tab(BiFunction<CommandSender, String, List<String>> tabFunction) {
         tabs.add(DefaultTabFunction.syncOldFunction(tabFunction));
         return this;
     }
@@ -141,7 +141,7 @@ public abstract class AdvancedCommandExecutor<T> extends AbstractApplicationModu
         return this;
     }
 
-    public AdvancedCommandExecutor<T> tooltipTab(BiFunction<ApiCommandSender, String, List<CommandTab>> tabFunction) {
+    public AdvancedCommandExecutor<T> tooltipTab(BiFunction<CommandSender, String, List<CommandTab>> tabFunction) {
         tabs.add(DefaultTabFunction.syncFunction(tabFunction));
         return this;
     }

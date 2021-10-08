@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.entity.command;
 
-import com.github.jenya705.mcapi.command.ApiCommand;
+import com.github.jenya705.mcapi.command.Command;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +18,7 @@ public class RestCommand {
     private String name;
     private RestCommandOption[] options;
 
-    public static RestCommand from(ApiCommand command) {
+    public static RestCommand from(Command command) {
         return new RestCommand(
                 command.getName(),
                 Arrays

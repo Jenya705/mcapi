@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.entity.api;
 
-import com.github.jenya705.mcapi.ApiPermission;
+import com.github.jenya705.mcapi.Permission;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +13,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EntityPermission implements ApiPermission {
+public class EntityPermission implements Permission {
 
     private boolean toggled;
     private String name;

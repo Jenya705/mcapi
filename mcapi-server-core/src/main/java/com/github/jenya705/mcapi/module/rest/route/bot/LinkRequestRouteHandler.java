@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.module.rest.route.bot;
 
-import com.github.jenya705.mcapi.ApiLinkRequest;
-import com.github.jenya705.mcapi.ApiPlayer;
+import com.github.jenya705.mcapi.LinkRequest;
+import com.github.jenya705.mcapi.Player;
 import com.github.jenya705.mcapi.Bean;
 import com.github.jenya705.mcapi.Routes;
 import com.github.jenya705.mcapi.entity.AbstractBot;
@@ -26,11 +26,11 @@ public class LinkRequestRouteHandler extends AbstractRouteHandler {
     @Override
     public void handle(Request request, Response response) {
         AbstractBot bot = request.bot();
-        ApiPlayer player = request
-                .paramOrException("id", ApiPlayer.class);
+        Player player = request
+                .paramOrException("id", Player.class);
         bot.needPermission(Permissions.LINK_REQUEST, player);
-        ApiLinkRequest linkRequest = request
-                .bodyOrException(ApiLinkRequest.class);
+        LinkRequest linkRequest = request
+                .bodyOrException(LinkRequest.class);
         linkingModule.requestLink(
                 bot, player, linkRequest
         );

@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.command.linkmenu;
 
-import com.github.jenya705.mcapi.ApiCommandSender;
-import com.github.jenya705.mcapi.ApiPlayer;
+import com.github.jenya705.mcapi.CommandSender;
+import com.github.jenya705.mcapi.Player;
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.MenuCommand;
@@ -30,9 +30,9 @@ public class LinkTogglePermissionCommand extends MenuCommand implements BaseComm
     }
 
     @Override
-    public void menuCommand(ApiCommandSender sender, StringfulIterator args, String permission) throws Exception {
-        if (!args.hasNext(2) || !(sender instanceof ApiPlayer)) return;
-        ApiPlayer player = (ApiPlayer) sender;
+    public void menuCommand(CommandSender sender, StringfulIterator args, String permission) throws Exception {
+        if (!args.hasNext(2) || !(sender instanceof Player)) return;
+        Player player = (Player) sender;
         int id = Integer.parseInt(args.next());
         String linkPermission = args.next();
         linkingModule.toggle(player, id, linkPermission);

@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.entity.api;
 
-import com.github.jenya705.mcapi.ApiForm;
+import com.github.jenya705.mcapi.Form;
 import com.github.jenya705.mcapi.entity.RestForm;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +14,7 @@ import java.util.Map;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EntityForm implements ApiForm {
+public class EntityForm implements Form {
 
     private Map<String, Object>[] components;
 

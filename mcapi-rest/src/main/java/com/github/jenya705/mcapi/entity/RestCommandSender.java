@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.entity;
 
-import com.github.jenya705.mcapi.ApiCommandSender;
+import com.github.jenya705.mcapi.CommandSender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +16,7 @@ public class RestCommandSender {
     private String type;
     private String name;
 
-    public static RestCommandSender from(ApiCommandSender sender) {
+    public static RestCommandSender from(CommandSender sender) {
         return new RestCommandSender(
                 sender.getType(),
                 sender.getName()

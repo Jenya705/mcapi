@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.module.rest.route.offline;
 
-import com.github.jenya705.mcapi.ApiOfflinePlayer;
+import com.github.jenya705.mcapi.OfflinePlayer;
 import com.github.jenya705.mcapi.Bean;
 import com.github.jenya705.mcapi.Routes;
 import com.github.jenya705.mcapi.entity.AbstractBot;
@@ -27,7 +27,7 @@ public class BanOfflinePlayerRouteHandler extends AbstractRouteHandler {
     @Override
     public void handle(Request request, Response response) {
         AbstractBot bot = request.bot();
-        Selector<ApiOfflinePlayer> offlinePlayers =
+        Selector<OfflinePlayer> offlinePlayers =
                 selectorProvider
                         .offlinePlayers(
                                 request.paramOrException("selector"),

@@ -3,10 +3,9 @@ package com.github.jenya705.mcapi.module.command.option.executable;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.ServerApplication;
-import com.github.jenya705.mcapi.command.ApiCommandExecutableOption;
-import com.github.jenya705.mcapi.command.ApiCommandValueOption;
+import com.github.jenya705.mcapi.command.CommandExecutableOption;
+import com.github.jenya705.mcapi.command.CommandValueOption;
 import com.github.jenya705.mcapi.command.types.SubCommandOption;
-import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.error.BadOptionException;
 import com.github.jenya705.mcapi.module.command.CommandModule;
 import com.github.jenya705.mcapi.util.IteratorUtils;
@@ -31,7 +30,7 @@ public class SubCommandOptionParser extends AbstractCommandExecutableOptionParse
     }
 
     @Override
-    public ApiCommandExecutableOption executableDeserialize(JsonNode node) {
+    public CommandExecutableOption executableDeserialize(JsonNode node) {
         return new SubCommandOption(
                 node.get("name").asText(),
                 IteratorUtils.stream(
@@ -41,10 +40,10 @@ public class SubCommandOptionParser extends AbstractCommandExecutableOptionParse
                 )
                         .map(it -> commandModule.getParser(it.get("type").asText()).deserialize(it))
                         .map(it -> {
-                            if (it instanceof ApiCommandValueOption) return (ApiCommandValueOption) it;
+                            if (it instanceof CommandValueOption) return (CommandValueOption) it;
                             throw new BadOptionException(it.getName());
                         })
-                        .toArray(ApiCommandValueOption[]::new)
+                        .toArray(CommandValueOption[]::new)
         );
     }
 

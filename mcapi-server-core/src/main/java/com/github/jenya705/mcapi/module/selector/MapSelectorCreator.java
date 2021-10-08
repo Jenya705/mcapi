@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.module.selector;
 
-import com.github.jenya705.mcapi.ApiUUID;
+import com.github.jenya705.mcapi.UUIDHolder;
 import com.github.jenya705.mcapi.util.Selector;
 import com.github.jenya705.mcapi.util.SelectorContainer;
 
@@ -36,13 +36,13 @@ public class MapSelectorCreator<T, V> implements SelectorCreator<T, V> {
     public MapSelectorCreator<T, V> uuidDirect(BiFunction<V, String, T> selectorFunction) {
         return direct((data, str) -> {
             T uuidObject = selectorFunction.apply(data, str);
-            if (!(uuidObject instanceof ApiUUID)) {
+            if (!(uuidObject instanceof UUIDHolder)) {
                 throw new IllegalArgumentException("Return object is not ApiUUID object");
             }
             return new SelectorContainer<>(
                     uuidObject,
                     "",
-                    ((ApiUUID) uuidObject).getUuid()
+                    ((UUIDHolder) uuidObject).getUuid()
             );
         });
     }

@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.command.advanced;
 
-import com.github.jenya705.mcapi.ApiCommandSender;
+import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.command.CommandTab;
 
 import java.util.List;
@@ -11,5 +11,5 @@ import java.util.List;
 @FunctionalInterface
 public interface TabFunction {
 
-    List<CommandTab> apply(ApiCommandSender sender, String permission, boolean async);
+    List<CommandTab> apply(CommandSender sender, String permission, boolean async);
 }

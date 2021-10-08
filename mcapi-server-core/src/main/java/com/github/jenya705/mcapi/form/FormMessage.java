@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.form;
 
-import com.github.jenya705.mcapi.ApiCommandSender;
+import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.module.message.Message;
 import lombok.AllArgsConstructor;
 
@@ -15,7 +15,7 @@ public class FormMessage implements Message {
     private final FormPlatformProvider formProvider;
 
     @Override
-    public void send(ApiCommandSender sender) {
+    public void send(CommandSender sender) {
         formProvider.sendMessage(sender, form);
     }
 }

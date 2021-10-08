@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.form;
 
-import com.github.jenya705.mcapi.ApiCommandSender;
+import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.JavaCommandSender;
 import com.github.jenya705.mcapi.JavaPlatformUtils;
 
@@ -15,7 +15,7 @@ public class JavaFormProvider implements FormPlatformProvider {
     }
 
     @Override
-    public void sendMessage(ApiCommandSender sender, Form form) {
+    public void sendMessage(CommandSender sender, Form form) {
         if (form instanceof JavaForm && sender instanceof JavaCommandSender) {
             JavaForm platformForm = (JavaForm) form;
             JavaCommandSender platformSender = (JavaCommandSender) sender;

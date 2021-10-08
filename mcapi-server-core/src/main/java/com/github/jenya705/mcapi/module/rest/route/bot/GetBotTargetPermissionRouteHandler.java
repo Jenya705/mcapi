@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.module.rest.route.bot;
 
-import com.github.jenya705.mcapi.ApiOfflinePlayer;
+import com.github.jenya705.mcapi.OfflinePlayer;
 import com.github.jenya705.mcapi.Bean;
 import com.github.jenya705.mcapi.Routes;
 import com.github.jenya705.mcapi.entity.AbstractBot;
@@ -34,8 +34,8 @@ public class GetBotTargetPermissionRouteHandler extends AbstractRouteHandler {
                 .findAny()
                 .orElseThrow(SelectorEmptyException::new);
         String permission = request.paramOrException("permission");
-        ApiOfflinePlayer player = request
-                .paramOrException("target", ApiOfflinePlayer.class);
+        OfflinePlayer player = request
+                .paramOrException("target", OfflinePlayer.class);
         response.ok(new EntityPermission(
                 selectorBot.hasPermission(permission, player),
                 permission,

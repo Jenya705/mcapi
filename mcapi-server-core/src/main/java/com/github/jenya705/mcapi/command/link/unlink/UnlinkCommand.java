@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.command.link.unlink;
 
-import com.github.jenya705.mcapi.ApiCommandSender;
-import com.github.jenya705.mcapi.ApiPlayer;
+import com.github.jenya705.mcapi.CommandSender;
+import com.github.jenya705.mcapi.Player;
 import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.command.CommandTab;
@@ -36,7 +36,7 @@ public class UnlinkCommand extends AdvancedCommandExecutor<UnlinkArguments> {
         this
                 .databaseTab((sender, permission, databaseGetter) ->
                         Optional.of(sender)
-                                .map(it -> it instanceof ApiPlayer ? (ApiPlayer) it : null)
+                                .map(it -> it instanceof Player ? (Player) it : null)
                                 .map(it -> databaseGetter
                                         .getLinks(it.getUuid())
                                         .stream()
@@ -59,7 +59,7 @@ public class UnlinkCommand extends AdvancedCommandExecutor<UnlinkArguments> {
     }
 
     @Override
-    public void onCommand(ApiCommandSender sender, UnlinkArguments args, String permission) {
+    public void onCommand(CommandSender sender, UnlinkArguments args, String permission) {
         if (!globalConfig.isBotNameUnique()) {
             sendMessage(sender, config.getDisabledByAdmin());
             return;

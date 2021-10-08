@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.module.rest.route;
 
-import com.github.jenya705.mcapi.ApiPlayer;
+import com.github.jenya705.mcapi.Player;
 import com.github.jenya705.mcapi.Bean;
 import com.github.jenya705.mcapi.Routes;
 import com.github.jenya705.mcapi.entity.AbstractBot;
@@ -26,7 +26,7 @@ public class SendMessageRouteHandler extends AbstractRouteHandler {
     @Override
     public void handle(Request request, Response response) {
         AbstractBot bot = request.bot();
-        Selector<ApiPlayer> players = selectorProvider
+        Selector<Player> players = selectorProvider
                 .players(
                         request.paramOrException("selector"),
                         bot

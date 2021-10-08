@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.entity.api;
 
-import com.github.jenya705.mcapi.ApiSubscribeRequest;
+import com.github.jenya705.mcapi.SubscribeRequest;
 import com.github.jenya705.mcapi.entity.RestSubscribeRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EntitySubscribeRequest implements ApiSubscribeRequest {
+public class EntitySubscribeRequest implements SubscribeRequest {
 
     private String[] subscriptions;
 

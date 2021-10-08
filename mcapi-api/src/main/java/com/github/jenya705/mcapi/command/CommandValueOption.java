@@ -3,7 +3,7 @@ package com.github.jenya705.mcapi.command;
 /**
  * @author Jenya705
  */
-public interface ApiCommandValueOption extends ApiCommandOption {
+public interface CommandValueOption extends CommandOption {
 
     boolean isRequired();
 

@@ -1,8 +1,8 @@
 package com.github.jenya705.mcapi.module.command.option.executable;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.github.jenya705.mcapi.command.ApiCommandExecutableOption;
-import com.github.jenya705.mcapi.command.ApiCommandOption;
+import com.github.jenya705.mcapi.command.CommandExecutableOption;
+import com.github.jenya705.mcapi.command.CommandOption;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.module.command.CommandOptionParser;
 
@@ -14,23 +14,23 @@ import java.util.List;
 public abstract class AbstractCommandExecutableOptionParser implements CommandOptionParser {
 
     @Override
-    public final ApiCommandOption deserialize(JsonNode node) {
+    public final CommandOption deserialize(JsonNode node) {
         return executableDeserialize(node);
     }
 
     @Override
-    public final Object serialize(ApiCommandOption option, AbstractBot owner, String value) {
-        return serialize((ApiCommandExecutableOption) option, owner, value);
+    public final Object serialize(CommandOption option, AbstractBot owner, String value) {
+        return serialize((CommandExecutableOption) option, owner, value);
     }
 
     @Override
-    public List<String> tabs(ApiCommandOption option, AbstractBot owner) {
+    public List<String> tabs(CommandOption option, AbstractBot owner) {
         return null;
     }
 
-    public abstract ApiCommandExecutableOption executableDeserialize(JsonNode node);
+    public abstract CommandExecutableOption executableDeserialize(JsonNode node);
 
-    public Object serialize(ApiCommandExecutableOption option, AbstractBot owner, String value) {
+    public Object serialize(CommandExecutableOption option, AbstractBot owner, String value) {
         return null;
     }
 

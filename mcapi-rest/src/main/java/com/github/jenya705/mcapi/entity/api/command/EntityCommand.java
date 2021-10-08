@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.entity.api.command;
 
-import com.github.jenya705.mcapi.command.ApiCommand;
-import com.github.jenya705.mcapi.command.ApiCommandOption;
+import com.github.jenya705.mcapi.command.Command;
+import com.github.jenya705.mcapi.command.CommandOption;
 import com.github.jenya705.mcapi.entity.command.RestCommand;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,10 +13,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EntityCommand implements ApiCommand {
+public class EntityCommand implements Command {
 
     private String name;
-    private ApiCommandOption[] options;
+    private CommandOption[] options;
 
     public RestCommand rest() {
         return RestCommand.from(this);

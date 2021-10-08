@@ -1,8 +1,8 @@
 package com.github.jenya705.mcapi.module.message;
 
-import com.github.jenya705.mcapi.ApiCommandSender;
-import com.github.jenya705.mcapi.ApiOfflinePlayer;
-import com.github.jenya705.mcapi.ApiPlayer;
+import com.github.jenya705.mcapi.CommandSender;
+import com.github.jenya705.mcapi.OfflinePlayer;
+import com.github.jenya705.mcapi.Player;
 
 /**
  * @author Jenya705
@@ -13,15 +13,15 @@ public interface TypedMessage extends Message {
 
     Message getMessage();
 
-    default void send(ApiCommandSender sender) {
+    default void send(CommandSender sender) {
         getMessage().send(sender);
     }
 
-    default boolean ban(ApiOfflinePlayer player) {
+    default boolean ban(OfflinePlayer player) {
         return getMessage().ban(player);
     }
 
-    default boolean kick(ApiPlayer player) {
+    default boolean kick(Player player) {
         return getMessage().kick(player);
     }
 }

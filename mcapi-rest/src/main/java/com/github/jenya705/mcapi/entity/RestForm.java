@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.entity;
 
-import com.github.jenya705.mcapi.ApiForm;
+import com.github.jenya705.mcapi.Form;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +17,7 @@ public class RestForm {
 
     private Map<String, Object>[] components;
 
-    public static RestForm from(ApiForm form) {
+    public static RestForm from(Form form) {
         return new RestForm(
                 form.getComponents()
         );

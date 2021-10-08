@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.entity.api.event;
 
-import com.github.jenya705.mcapi.ApiPlayer;
+import com.github.jenya705.mcapi.Player;
 import com.github.jenya705.mcapi.entity.event.RestMessageEvent;
 import com.github.jenya705.mcapi.event.MessageEvent;
 import lombok.AllArgsConstructor;
@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class EntityMessageEvent implements MessageEvent {
 
     private String message;
-    private ApiPlayer author;
+    private Player author;
 
     public RestMessageEvent rest() {
         return RestMessageEvent.from(this);

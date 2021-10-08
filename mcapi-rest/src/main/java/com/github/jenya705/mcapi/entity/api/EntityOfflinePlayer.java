@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.entity.api;
 
-import com.github.jenya705.mcapi.ApiOfflinePlayer;
+import com.github.jenya705.mcapi.OfflinePlayer;
 import com.github.jenya705.mcapi.entity.RestOfflinePlayer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +14,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EntityOfflinePlayer implements ApiOfflinePlayer {
+public class EntityOfflinePlayer implements OfflinePlayer {
 
     private String name;
     private UUID uuid;

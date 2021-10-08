@@ -5,7 +5,7 @@ import java.util.UUID;
 /**
  * @author Jenya705
  */
-public interface ApiUUID {
+public interface UUIDHolder {
 
     UUID getUuid();
 }

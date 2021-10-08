@@ -3,7 +3,7 @@ package com.github.jenya705.mcapi;
 /**
  * @author Jenya705
  */
-public interface ApiCommandSender {
+public interface CommandSender {
 
     String getType();
 

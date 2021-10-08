@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.entity;
 
-import com.github.jenya705.mcapi.ApiGatewayAuthorizationRequest;
+import com.github.jenya705.mcapi.GatewayAuthorizationRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +15,7 @@ public class RestGatewayAuthorizationRequest {
 
     private String token;
 
-    public static RestGatewayAuthorizationRequest from(ApiGatewayAuthorizationRequest request) {
+    public static RestGatewayAuthorizationRequest from(GatewayAuthorizationRequest request) {
         return new RestGatewayAuthorizationRequest(request.getToken());
     }
 }

@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.command.types;
 
-import com.github.jenya705.mcapi.command.ApiCommandValueOption;
+import com.github.jenya705.mcapi.command.CommandValueOption;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -9,7 +9,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public abstract class AbstractValueOption implements ApiCommandValueOption {
+public abstract class AbstractValueOption implements CommandValueOption {
 
     private final String name;
     private final boolean required;

@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.module.command.option.value;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.github.jenya705.mcapi.command.ApiCommandValueOption;
+import com.github.jenya705.mcapi.command.CommandValueOption;
 import com.github.jenya705.mcapi.command.types.IntegerOption;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 
@@ -11,7 +11,7 @@ import com.github.jenya705.mcapi.entity.AbstractBot;
 public class IntegerOptionParser extends AbstractCommandValueOptionParser {
 
     @Override
-    public ApiCommandValueOption valueDeserialize(JsonNode node) {
+    public CommandValueOption valueDeserialize(JsonNode node) {
         return new IntegerOption(
                 node.get("name").asText(),
                 defaultNode(node.get("required"), false, JsonNode::asBoolean),
@@ -23,7 +23,7 @@ public class IntegerOptionParser extends AbstractCommandValueOptionParser {
     }
 
     @Override
-    public Object serialize(ApiCommandValueOption option, AbstractBot owner, String value) {
+    public Object serialize(CommandValueOption option, AbstractBot owner, String value) {
         IntegerOption realOption = (IntegerOption) option;
         int realValue = Integer.parseInt(value);
         if (realOption.getMax() <= realValue || realOption.getMin() >= realValue) {

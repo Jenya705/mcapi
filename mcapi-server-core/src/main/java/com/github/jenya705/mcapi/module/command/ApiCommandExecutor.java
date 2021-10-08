@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.module.command;
 
 import com.github.jenya705.mcapi.AbstractApplicationModule;
-import com.github.jenya705.mcapi.ApiCommandSender;
+import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.*;
 import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutorConfig;
@@ -37,7 +37,7 @@ public class ApiCommandExecutor extends AbstractApplicationModule implements Com
 
     private final AdvancedCommandExecutorConfig config;
 
-    public ApiCommandExecutor(ServerApplication application, String path, CommandModule commandModule, AbstractBot owner, AdvancedCommandExecutorConfig config, ApiCommandValueOption... valueOptions) {
+    public ApiCommandExecutor(ServerApplication application, String path, CommandModule commandModule, AbstractBot owner, AdvancedCommandExecutorConfig config, CommandValueOption... valueOptions) {
         super(application);
         this.config = config;
         this.path = path;
@@ -45,7 +45,7 @@ public class ApiCommandExecutor extends AbstractApplicationModule implements Com
         this.commandModule = commandModule;
         int requiredStart = Integer.MAX_VALUE;
         for (int i = 0; i < valueOptions.length; ++i) {
-            ApiCommandValueOption option = valueOptions[i];
+            CommandValueOption option = valueOptions[i];
             if (!option.isRequired()) requiredStart = Math.min(i, requiredStart);
             names.add(option.getName());
         }
@@ -61,7 +61,7 @@ public class ApiCommandExecutor extends AbstractApplicationModule implements Com
     }
 
     @Override
-    public void onCommand(ApiCommandSender sender, StringfulIterator args, String permission) {
+    public void onCommand(CommandSender sender, StringfulIterator args, String permission) {
         parser.create(args)
                 .ifPresent(list ->
                         gateway()
@@ -88,7 +88,7 @@ public class ApiCommandExecutor extends AbstractApplicationModule implements Com
     }
 
     @Override
-    public List<CommandTab> onTab(ApiCommandSender sender, StringfulIterator args, String permission) {
+    public List<CommandTab> onTab(CommandSender sender, StringfulIterator args, String permission) {
         int countNext = args.countNext();
         return countNext < tabs.size() ?
                 tabs
@@ -105,11 +105,11 @@ public class ApiCommandExecutor extends AbstractApplicationModule implements Com
         /* NOTHING */
     }
 
-    public static ApiCommandInteractionValue[] parseValues(List<Object> values, List<String> names, String[] allNext) {
+    public static CommandInteractionValue[] parseValues(List<Object> values, List<String> names, String[] allNext) {
         if (values.size() > names.size()) {
             throw new IllegalArgumentException("Size of values bigger than size of names");
         }
-        ApiCommandInteractionValue[] interactionValues = new EntityCommandInteractionValue[values.size() + 1];
+        CommandInteractionValue[] interactionValues = new EntityCommandInteractionValue[values.size() + 1];
         for (int i = 0; i < interactionValues.length - 1; ++i) {
             interactionValues[i] =
                     new EntityCommandInteractionValue(names.get(i), values.get(i));
@@ -118,7 +118,7 @@ public class ApiCommandExecutor extends AbstractApplicationModule implements Com
         return interactionValues;
     }
 
-    private StringfulDataValueFunction<List<Object>> generateStringfulFunction(ApiCommandValueOption option) {
+    private StringfulDataValueFunction<List<Object>> generateStringfulFunction(CommandValueOption option) {
         return (list, value) -> {
             CommandOptionParser parser = getParser(option);
             Object obj = parser.serialize(option, owner, value);
@@ -129,11 +129,11 @@ public class ApiCommandExecutor extends AbstractApplicationModule implements Com
         };
     }
 
-    private Supplier<List<String>> generateTabFunction(ApiCommandValueOption option) {
+    private Supplier<List<String>> generateTabFunction(CommandValueOption option) {
         return () -> getParser(option).tabs(option, owner);
     }
 
-    private CommandOptionParser getParser(ApiCommandValueOption option) {
+    private CommandOptionParser getParser(CommandValueOption option) {
         return commandModule.getParser(option.getType());
     }
 }

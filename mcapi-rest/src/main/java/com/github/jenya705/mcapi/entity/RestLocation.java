@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.entity;
 
-import com.github.jenya705.mcapi.ApiLocation;
+import com.github.jenya705.mcapi.Location;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +18,7 @@ public class RestLocation {
     private double y;
     private double z;
 
-    public static RestLocation from(ApiLocation location) {
+    public static RestLocation from(Location location) {
         return new RestLocation(
                 location.getWorld(),
                 location.getX(),

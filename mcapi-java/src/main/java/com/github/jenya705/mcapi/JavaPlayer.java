@@ -3,6 +3,6 @@ package com.github.jenya705.mcapi;
 /**
  * @author Jenya705
  */
-public interface JavaPlayer extends ApiPlayer, JavaCommandSender {
+public interface JavaPlayer extends Player, JavaCommandSender {
 
 }

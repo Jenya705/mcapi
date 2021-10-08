@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.command.gateway.connected;
 
-import com.github.jenya705.mcapi.ApiCommandSender;
+import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.data.ConfigData;
@@ -21,7 +21,7 @@ public class ConnectedGatewaysCommand extends AdvancedCommandExecutor<ConnectedG
     }
 
     @Override
-    public void onCommand(ApiCommandSender sender, ConnectedGatewaysArguments args, String permission) {
+    public void onCommand(CommandSender sender, ConnectedGatewaysArguments args, String permission) {
         sendListMessage(
                 sender,
                 config.getListLayout(),

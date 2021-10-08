@@ -13,19 +13,19 @@ import com.github.jenya705.mcapi.entity.event.RestQuitEvent;
 public class ServerGatewayImpl extends AbstractApplicationModule implements ServerGateway {
 
     @Override
-    public void receiveMessage(ApiPlayer player, String message) {
+    public void receiveMessage(Player player, String message) {
         gateway()
                 .broadcast(new EntityMessageEvent(message, player).rest(), RestMessageEvent.type);
     }
 
     @Override
-    public void join(ApiPlayer player) {
+    public void join(Player player) {
         gateway()
                 .broadcast(new EntityJoinEvent(player).rest(), RestJoinEvent.type);
     }
 
     @Override
-    public void quit(ApiOfflinePlayer player) {
+    public void quit(OfflinePlayer player) {
         gateway()
                 .broadcast(new EntityQuitEvent(player).rest(), RestQuitEvent.type);
     }

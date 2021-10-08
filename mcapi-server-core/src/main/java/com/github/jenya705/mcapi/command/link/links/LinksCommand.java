@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.command.link.links;
 
-import com.github.jenya705.mcapi.ApiCommandSender;
+import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.data.ConfigData;
@@ -28,7 +28,7 @@ public class LinksCommand extends AdvancedCommandExecutor<LinksArguments> {
     }
 
     @Override
-    public void onCommand(ApiCommandSender sender, LinksArguments args, String permission) {
+    public void onCommand(CommandSender sender, LinksArguments args, String permission) {
         getPlayer(sender, args.getPlayer())
                 .ifPresentOrElse(
                         player -> DatabaseModule.async.submit(() ->

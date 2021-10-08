@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.permission;
 
-import com.github.jenya705.mcapi.ApiPlayer;
+import com.github.jenya705.mcapi.Player;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.model.user.User;
@@ -15,7 +15,7 @@ public class LuckPermsHook implements PermissionManagerHook {
     private final LuckPerms luckPerms = LuckPermsProvider.get();
 
     @Override
-    public void givePermission(ApiPlayer player, boolean toggled, String... permissions) {
+    public void givePermission(Player player, boolean toggled, String... permissions) {
         UserManager userManager = luckPerms.getUserManager();
         if (userManager.isLoaded(player.getUuid())) {
             givePermission(userManager.getUser(player.getUuid()), toggled, permissions);

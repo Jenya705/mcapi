@@ -1,10 +1,10 @@
 package com.github.jenya705.mcapi.module.command.option.value;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.github.jenya705.mcapi.ApiOfflinePlayer;
+import com.github.jenya705.mcapi.OfflinePlayer;
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.ServerApplication;
-import com.github.jenya705.mcapi.command.ApiCommandValueOption;
+import com.github.jenya705.mcapi.command.CommandValueOption;
 import com.github.jenya705.mcapi.command.types.PlayerOption;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.error.PlayerNotFoundException;
@@ -36,7 +36,7 @@ public class PlayerOptionParser extends AbstractCommandValueOptionParser impleme
                                 .stream()
                                 .map(it -> core().getPlayer(it.getTarget()))
                                 .filter(Objects::nonNull)
-                                .map(ApiOfflinePlayer::getName)
+                                .map(OfflinePlayer::getName)
                                 .collect(Collectors.toList());
                     }
                     return PlayerUtils.playerTabs(core());
@@ -44,7 +44,7 @@ public class PlayerOptionParser extends AbstractCommandValueOptionParser impleme
     }
 
     @Override
-    public ApiCommandValueOption valueDeserialize(JsonNode node) {
+    public CommandValueOption valueDeserialize(JsonNode node) {
         return new PlayerOption(
                 node.get("name").asText(),
                 defaultNode(node.get("required"), false, JsonNode::asBoolean),
@@ -55,7 +55,7 @@ public class PlayerOptionParser extends AbstractCommandValueOptionParser impleme
     }
 
     @Override
-    public Object serialize(ApiCommandValueOption option, AbstractBot owner, String value) {
+    public Object serialize(CommandValueOption option, AbstractBot owner, String value) {
         return core()
                 .getOptionalPlayerId(value)
                 .orElseThrow(() -> new PlayerNotFoundException(value))

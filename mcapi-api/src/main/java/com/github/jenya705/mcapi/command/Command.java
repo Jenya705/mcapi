@@ -3,9 +3,9 @@ package com.github.jenya705.mcapi.command;
 /**
  * @author Jenya705
  */
-public interface ApiCommand {
+public interface Command {
 
     String getName();
 
-    ApiCommandOption[] getOptions();
+    CommandOption[] getOptions();
 }
