@@ -26,8 +26,7 @@ public class SqliteDatabaseInitializer implements DatabaseTypeInitializer {
                         sqliteUrlFormat,
                         application
                                 .getCore()
-                                .getPluginFile("database.db")
-                                .getAbsolutePath()
+                                .getAbsolutePath("database.db")
                 )
         );
     }

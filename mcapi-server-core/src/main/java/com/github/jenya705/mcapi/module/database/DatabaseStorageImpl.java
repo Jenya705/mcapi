@@ -12,11 +12,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.SneakyThrows;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -422,7 +419,7 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
 
     protected String loadScript(String fileName) throws IOException {
         String realFileName = fileName + ".sql";
-        core().getPluginFile(String.format("sql/%s", sqlType)).mkdirs();
+        core().mkdirs(String.format("sql/%s", sqlType));
         String fixedContextScriptContent = loadContextScript(String.format("sql/%s/%s", sqlType, realFileName));
         if (fixedContextScriptContent != null) return fixedContextScriptContent;
         String defaultContextScriptContent = loadContextScript(String.format("sql/%s", realFileName));
@@ -436,20 +433,16 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
     }
 
     protected String loadContextScript(String path) throws IOException {
-        File fixedScriptFile = core()
-                .getPluginFile(path);
-        if (fixedScriptFile.exists()) {
-            return Files.readString(fixedScriptFile.toPath());
+        if (core().isExistsFile(path)) {
+            return new String(core().loadSpecific(path));
         }
         InputStream fixedInputStream = getClass()
                 .getClassLoader()
                 .getResourceAsStream(path);
         if (fixedInputStream != null) {
             byte[] bytes = FileUtils.readInputStream(fixedInputStream);
-            Files.write(
-                    fixedScriptFile.toPath(),
-                    bytes,
-                    StandardOpenOption.CREATE
+            core().saveSpecific(
+                    path, bytes
             );
             fixedInputStream.close();
             return new String(bytes);

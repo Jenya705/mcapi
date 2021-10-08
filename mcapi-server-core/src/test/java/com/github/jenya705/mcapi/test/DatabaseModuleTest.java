@@ -1,15 +1,24 @@
 package com.github.jenya705.mcapi.test;
 
+import com.github.jenya705.mcapi.Bean;
+import com.github.jenya705.mcapi.OnInitializing;
 import com.github.jenya705.mcapi.ServerApplication;
+import com.github.jenya705.mcapi.entity.BotEntity;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.module.database.DatabaseModuleImpl;
 import com.github.jenya705.mcapi.module.database.DatabaseTypeInitializer;
 import com.github.jenya705.mcapi.test.mock.ConfigModuleMock;
 import com.github.jenya705.mcapi.test.mock.ServerApplicationMock;
+import com.github.jenya705.mcapi.util.ConfigDataBuilder;
+import com.github.jenya705.mcapi.util.TokenUtils;
+import lombok.Data;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.UUID;
 
 /**
  * @author Jenya705
@@ -17,7 +26,7 @@ import java.sql.DriverManager;
 public class DatabaseModuleTest {
 
     @SneakyThrows
-    private DatabaseModule initialize() {
+    private ServerApplication initialize() {
         ServerApplication application = new ServerApplicationMock();
         DatabaseModule module = new DatabaseModuleImpl();
         module.addTypeInitializer("h2", new DatabaseTypeInitializer() {
@@ -26,14 +35,48 @@ public class DatabaseModuleTest {
             public Connection connection(String host, String user, String password, String database) {
                 Class.forName("org.h2.Driver");
                 return DriverManager.getConnection(
-                        String.format("h2:jdbc:mem:%s", database), user, password
+                        String.format("jdbc:h2:mem:%s", database), user, password
                 );
             }
         });
+        application.addBean(module);
         ConfigModuleMock configModuleMock = new ConfigModuleMock();
+        application.addBean(configModuleMock);
+        application.addBean(new Object(){
+            @Bean
+            private ConfigModuleMock configModuleMock;
+
+            @OnInitializing(priority = 1)
+            public void initialize() {
+                configModuleMock.joinConfig(
+                        ConfigDataBuilder
+                                .empty()
+                                .directory("database", it -> it
+                                        .put("type", "h2")
+                                )
+                                .getData()
+                );
+            }
+        });
         application.start();
-        application.stop();
-        return module;
+        return application;
+    }
+
+    @Test
+    public void containerTest() {
+        ServerApplication application = initialize();
+        DatabaseModule databaseModule = application.getBean(DatabaseModule.class);
+        String generatedToken = TokenUtils.generateToken();
+        UUID ownerUUID = UUID.randomUUID();
+        databaseModule.storage().save(new BotEntity(generatedToken, "test", ownerUUID, 1));
+        Assertions.assertEquals(
+                databaseModule.storage().findBotById(1),
+                new BotEntity(generatedToken, "test", ownerUUID, 1)
+        );
+        Assertions.assertEquals(
+                databaseModule.storage().findBotByToken(generatedToken),
+                new BotEntity(generatedToken, "test", ownerUUID, 1)
+        );
     }
 
 }

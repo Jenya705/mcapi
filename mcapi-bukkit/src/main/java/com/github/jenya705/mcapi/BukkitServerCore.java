@@ -148,9 +148,23 @@ public class BukkitServerCore extends AbstractJavaApplicationModule implements J
         Files.write(fileObject.toPath(), bytes, StandardOpenOption.WRITE);
     }
 
-    @Override
-    public File getPluginFile(String file) {
+    public File getFile(String file) {
         return new File(plugin.getDataFolder(), file);
+    }
+
+    @Override
+    public boolean isExistsFile(String file) {
+        return getFile(file).exists();
+    }
+
+    @Override
+    public void mkdirs(String file) {
+        getFile(file).mkdirs();
+    }
+
+    @Override
+    public String getAbsolutePath(String file) {
+        return getFile(file).getAbsolutePath();
     }
 
     @Override

@@ -79,7 +79,11 @@ public interface ServerCore {
 
     void saveSpecific(String file, byte[] bytes) throws IOException;
 
-    File getPluginFile(String file);
+    boolean isExistsFile(String file);
+
+    String getAbsolutePath(String file);
+
+    void mkdirs(String file);
 
     void disable();
 }

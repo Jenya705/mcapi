@@ -5,6 +5,7 @@ import com.github.jenya705.mcapi.ServerCore;
 import org.mockito.Mockito;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -15,7 +16,8 @@ public class ServerApplicationMock extends ServerApplication {
     public ServerApplicationMock() throws IOException {
         getClasses().clear();
         ServerCore core = Mockito.mock(ServerCore.class);
-        Mockito.when(core.loadConfig(Mockito.any())).thenReturn(Map.of());
+        addBean(core);
+        Mockito.when(core.loadConfig(Mockito.any())).thenReturn(new HashMap<>());
     }
 
     @Override

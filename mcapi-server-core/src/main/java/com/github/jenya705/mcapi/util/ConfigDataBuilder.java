@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.util;
 
 import com.github.jenya705.mcapi.data.ConfigData;
+import com.github.jenya705.mcapi.data.MapConfigData;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -15,6 +16,10 @@ public class ConfigDataBuilder {
 
     private final ConfigData data;
 
+    public static ConfigDataBuilder empty() {
+        return new ConfigDataBuilder(new MapConfigData());
+    }
+
     public ConfigDataBuilder put(String key, Object value) {
         data.set(key, value);
         return this;
@@ -25,5 +30,4 @@ public class ConfigDataBuilder {
         consumer.accept(new ConfigDataBuilder(newData));
         return this;
     }
-
 }

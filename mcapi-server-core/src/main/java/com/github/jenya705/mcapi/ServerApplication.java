@@ -10,7 +10,7 @@ import com.github.jenya705.mcapi.module.localization.LocalizationModuleImpl;
 import com.github.jenya705.mcapi.module.mapper.MapperImpl;
 import com.github.jenya705.mcapi.module.message.MessageDeserializerImpl;
 import com.github.jenya705.mcapi.module.rest.RestModule;
-import com.github.jenya705.mcapi.module.rest.route.*;
+import com.github.jenya705.mcapi.module.rest.route.SendMessageRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.bot.GetBotLinkedPlayersRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.bot.GetBotPermissionRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.bot.GetBotTargetPermissionRouteHandler;
@@ -116,24 +116,14 @@ public class ServerApplication {
             initializingMethods.add(new HashSet<>());
             startupMethods.add(new HashSet<>());
         }
+        for (Object obj: beans) {
+            onStartMethods(initializingMethods, startupMethods, obj);
+        }
         for (Class<?> clazz : classes) {
             try {
                 Constructor<?> clazzConstructor = clazz.getConstructor();
                 Object thisObject = clazzConstructor.newInstance();
-                Class<?> currentClass = clazz;
-                while (currentClass != null) {
-                    for (Method method : currentClass.getMethods()) {
-                        OnInitializing onInitializing = method.getAnnotation(OnInitializing.class);
-                        if (onInitializing != null) {
-                            initializingMethods.get(onInitializing.priority()).add(new Pair<>(thisObject, method));
-                        }
-                        OnStartup onStartup = method.getAnnotation(OnStartup.class);
-                        if (onStartup != null) {
-                            startupMethods.get(onStartup.priority()).add(new Pair<>(thisObject, method));
-                        }
-                    }
-                    currentClass = currentClass.getSuperclass();
-                }
+                onStartMethods(initializingMethods, startupMethods, thisObject);
                 beans.add(thisObject);
             } catch (Exception e) {
                 log.error(String.format("Can not initialize bean %s, disabling:", clazz.getCanonicalName()), e);
@@ -148,6 +138,23 @@ public class ServerApplication {
         runMethods(initializingMethods, "initialize", true);
         if (!enabled) return;
         runMethods(startupMethods, "startup", true);
+    }
+
+    protected void onStartMethods(List<Set<Pair<Object, Method>>> initializingMethods, List<Set<Pair<Object, Method>>> startupMethods, Object obj) {
+        Class<?> currentClass = obj.getClass();
+        while (currentClass != null) {
+            for (Method method : currentClass.getMethods()) {
+                OnInitializing onInitializing = method.getAnnotation(OnInitializing.class);
+                if (onInitializing != null) {
+                    initializingMethods.get(onInitializing.priority()).add(new Pair<>(obj, method));
+                }
+                OnStartup onStartup = method.getAnnotation(OnStartup.class);
+                if (onStartup != null) {
+                    startupMethods.get(onStartup.priority()).add(new Pair<>(obj, method));
+                }
+            }
+            currentClass = currentClass.getSuperclass();
+        }
     }
 
     protected void injectBeans() {
@@ -195,6 +202,7 @@ public class ServerApplication {
         for (Set<Pair<Object, Method>> methodsPriority : methods) {
             for (Pair<Object, Method> methodPair : methodsPriority) {
                 try {
+                    methodPair.getRight().setAccessible(true);
                     methodPair.getRight().invoke(methodPair.getLeft());
                 } catch (Throwable e) {
                     log.error(String.format(
