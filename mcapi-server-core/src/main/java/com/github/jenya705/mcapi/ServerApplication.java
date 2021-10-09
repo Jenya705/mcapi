@@ -55,6 +55,10 @@ public class ServerApplication {
 
     @Getter
     @Setter
+    private boolean debug = false;
+
+    @Getter
+    @Setter
     private ServerPlatform platform;
 
     @Getter
@@ -136,6 +140,9 @@ public class ServerApplication {
         runMethods(initializingMethods, "initialize", true);
         if (!enabled) return;
         runMethods(startupMethods, "startup", true);
+        if (debug) {
+            log.info("Debug mode enabled");
+        }
     }
 
     protected void onStartMethods(Map<Integer, Set<Pair<Object, Method>>> initializingMethods, Map<Integer, Set<Pair<Object, Method>>> startupMethods, Object obj) {

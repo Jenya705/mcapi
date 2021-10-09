@@ -30,14 +30,18 @@ public class BukkitServerCore extends AbstractJavaApplicationModule implements J
         return new Yaml(dumperOptions);
     }
 
+    @Bean
     private BukkitApplication plugin;
+
+    @Bean
     private PermissionManagerHook permissionManagerHook;
+
+    @Bean
+    private BukkitOfflinePlayerStorage offlinePlayerStorage;
 
     @OnInitializing(priority = -1)
     public void initialize() {
-        plugin = bean(BukkitApplication.class);
         plugin.getDataFolder().mkdir();
-        permissionManagerHook = bean(PermissionManagerHook.class);
         if (permissionManagerHook == null) {
             plugin.getLogger().severe(
                     "Permission manager can not be found. " +
@@ -109,7 +113,7 @@ public class BukkitServerCore extends AbstractJavaApplicationModule implements J
     @Override
     // TODO Change method to get offline player
     public OfflinePlayer getOfflinePlayer(String name) {
-        return BukkitWrapper.offlinePlayer(Bukkit.getOfflinePlayer(name));
+        return BukkitWrapper.offlinePlayer(offlinePlayerStorage.getPlayer(name));
     }
 
     @Override

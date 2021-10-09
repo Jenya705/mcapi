@@ -62,6 +62,11 @@ public class ConfigModuleImpl extends AbstractApplicationModule implements Confi
         config = createConfig(core().loadConfig("config"));
         task.complete();
         global = new GlobalConfig(config.required("global"));
+        app().setDebug(
+                config
+                        .getBoolean("debug")
+                        .orElse(false)
+        );
     }
 
     @OnDisable(priority = 4)

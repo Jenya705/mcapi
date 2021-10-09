@@ -17,7 +17,7 @@ public class BukkitWrapper {
     }
 
     public OfflinePlayer offlinePlayer(org.bukkit.OfflinePlayer player) {
-        if (player.isOnline() && player instanceof Player) {
+        if (player instanceof Player && player.isOnline()) {
             return BukkitPlayerWrapper.of((Player) player);
         }
         return BukkitOfflinePlayerWrapper.of(player);

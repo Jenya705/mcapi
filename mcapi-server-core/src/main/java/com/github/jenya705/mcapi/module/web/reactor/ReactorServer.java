@@ -122,7 +122,9 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
         try {
             handler.handle(localRequest, localResponse);
         } catch (Throwable e) {
-            e.printStackTrace();
+            if (app().isDebug()) {
+                log.info("Exception on request: ", e);
+            }
             ApiError error = mapper.asApiError(e);
             localResponse
                     .status(error.getStatusCode())
