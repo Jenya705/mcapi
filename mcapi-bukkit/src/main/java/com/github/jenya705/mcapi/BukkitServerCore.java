@@ -111,7 +111,6 @@ public class BukkitServerCore extends AbstractJavaApplicationModule implements J
     }
 
     @Override
-    // TODO Change method to get offline player
     public OfflinePlayer getOfflinePlayer(String name) {
         return BukkitWrapper.offlinePlayer(offlinePlayerStorage.getPlayer(name));
     }
