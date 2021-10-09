@@ -1,10 +1,11 @@
 package com.github.jenya705.mcapi.module.web.reactor;
 
 import com.github.jenya705.mcapi.*;
-import com.github.jenya705.mcapi.ApiError;
 import com.github.jenya705.mcapi.log.TimerTask;
+import com.github.jenya705.mcapi.module.config.ConfigModule;
 import com.github.jenya705.mcapi.module.mapper.Mapper;
 import com.github.jenya705.mcapi.module.web.RouteHandler;
+import com.github.jenya705.mcapi.module.web.WebConfig;
 import com.github.jenya705.mcapi.module.web.WebServer;
 import com.github.jenya705.mcapi.module.web.websocket.WebSocketRouteHandler;
 import com.github.jenya705.mcapi.util.Pair;
@@ -39,15 +40,22 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
     @Bean
     private Mapper mapper;
 
+    private WebConfig config;
+
     private HttpServer server;
     private DisposableServer nettyServer;
 
     @OnStartup(priority = 4)
     public void start() {
+        config = new WebConfig(
+                bean(ConfigModule.class)
+                        .getConfig()
+                        .required("web")
+        );
         TimerTask timerTask = TimerTask.start(log, "Starting web server...");
         server = HttpServer
                 .create()
-                .port(8081)
+                .port(config.getPort())
                 .route(routes -> {
                     routeImplementations.forEach(routeImplementation ->
                             route(routeImplementation, routes)
@@ -61,6 +69,7 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
                 .doOnError(ReactiveUtils::runtimeException)
                 .block();
         timerTask.complete();
+        log.info("Web server available on port {}", config.getPort());
     }
 
     @Override
