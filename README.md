@@ -1,3 +1,5 @@
+> :warning: **Work in progress**: mcapi is under **heavy** development. Any part of the project is subject to change at any time. Contributions are much appreciated. 
+
 # mcapi
 
 Web Api for your minecraft server
