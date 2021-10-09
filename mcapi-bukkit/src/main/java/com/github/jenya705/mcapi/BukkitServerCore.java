@@ -33,7 +33,7 @@ public class BukkitServerCore extends AbstractJavaApplicationModule implements J
     private BukkitApplication plugin;
     private PermissionManagerHook permissionManagerHook;
 
-    @OnInitializing(priority = 0)
+    @OnInitializing(priority = -1)
     public void initialize() {
         plugin = bean(BukkitApplication.class);
         plugin.getDataFolder().mkdir();

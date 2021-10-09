@@ -34,6 +34,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Jenya705
@@ -110,13 +111,10 @@ public class ServerApplication {
                         "unknown" :
                         getPlatform().name().toLowerCase(Locale.ROOT)
         );
-        List<Set<Pair<Object, Method>>> initializingMethods = new ArrayList<>(5);
-        List<Set<Pair<Object, Method>>> startupMethods = new ArrayList<>(5);
-        for (int i = 0; i < 5; ++i) {
-            initializingMethods.add(new HashSet<>());
-            startupMethods.add(new HashSet<>());
-        }
-        for (Object obj: beans) {
+
+        Map<Integer, Set<Pair<Object, Method>>> initializingMethods = new HashMap<>();
+        Map<Integer, Set<Pair<Object, Method>>> startupMethods = new HashMap<>();
+        for (Object obj : beans) {
             onStartMethods(initializingMethods, startupMethods, obj);
         }
         for (Class<?> clazz : classes) {
@@ -140,21 +138,26 @@ public class ServerApplication {
         runMethods(startupMethods, "startup", true);
     }
 
-    protected void onStartMethods(List<Set<Pair<Object, Method>>> initializingMethods, List<Set<Pair<Object, Method>>> startupMethods, Object obj) {
+    protected void onStartMethods(Map<Integer, Set<Pair<Object, Method>>> initializingMethods, Map<Integer, Set<Pair<Object, Method>>> startupMethods, Object obj) {
         Class<?> currentClass = obj.getClass();
         while (currentClass != null) {
             for (Method method : currentClass.getMethods()) {
                 OnInitializing onInitializing = method.getAnnotation(OnInitializing.class);
                 if (onInitializing != null) {
-                    initializingMethods.get(onInitializing.priority()).add(new Pair<>(obj, method));
+                    addToMap(initializingMethods, onInitializing.priority(), new Pair<>(obj, method));
                 }
                 OnStartup onStartup = method.getAnnotation(OnStartup.class);
                 if (onStartup != null) {
-                    startupMethods.get(onStartup.priority()).add(new Pair<>(obj, method));
+                    addToMap(startupMethods, onStartup.priority(), new Pair<>(obj, method));
                 }
             }
             currentClass = currentClass.getSuperclass();
         }
+    }
+
+    protected <T> void addToMap(Map<Integer, Set<T>> map, int key, T value) {
+        if (!map.containsKey(key)) map.put(key, new HashSet<>());
+        map.get(key).add(value);
     }
 
     protected void injectBeans() {
@@ -198,8 +201,15 @@ public class ServerApplication {
         }
     }
 
-    protected void runMethods(List<Set<Pair<Object, Method>>> methods, String procedureName, boolean onFailedDisable) {
-        for (Set<Pair<Object, Method>> methodsPriority : methods) {
+    protected void runMethods(Map<Integer, Set<Pair<Object, Method>>> methods, String procedureName, boolean onFailedDisable) {
+        List<Set<Pair<Object, Method>>> sortedMethods =
+                methods
+                        .entrySet()
+                        .stream()
+                        .sorted(Comparator.comparingInt(Map.Entry::getKey))
+                        .map(Map.Entry::getValue)
+                        .collect(Collectors.toList());
+        for (Set<Pair<Object, Method>> methodsPriority : sortedMethods) {
             for (Pair<Object, Method> methodPair : methodsPriority) {
                 try {
                     methodPair.getRight().setAccessible(true);
@@ -222,17 +232,14 @@ public class ServerApplication {
 
     public void stop() {
         if (!initialized || !enabled) return;
-        List<Set<Pair<Object, Method>>> endMethods = new ArrayList<>(5);
-        for (int i = 0; i < 5; ++i) {
-            endMethods.add(new HashSet<>());
-        }
+        Map<Integer, Set<Pair<Object, Method>>> endMethods = new HashMap<>();
         for (Object obj : beans) {
             Class<?> currentClass = obj.getClass();
             while (currentClass != null) {
                 for (Method method : currentClass.getMethods()) {
                     OnDisable onDisable = method.getAnnotation(OnDisable.class);
                     if (onDisable != null) {
-                        endMethods.get(onDisable.priority()).add(new Pair<>(obj, method));
+                        addToMap(endMethods, onDisable.priority(), new Pair<>(obj, method));
                     }
                 }
                 currentClass = currentClass.getSuperclass();
