@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.command.gateway.connected;
+package com.github.jenya705.mcapi.command.tunnels.connected;
 
 import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.ServerApplication;
@@ -10,24 +10,24 @@ import java.util.Collections;
 /**
  * @author Jenya705
  */
-public class ConnectedGatewaysCommand extends AdvancedCommandExecutor<ConnectedGatewaysArguments> {
+public class ConnectedEventTunnelsCommand extends AdvancedCommandExecutor<ConnectedEventTunnelsArguments> {
 
-    private ConnectedGatewaysConfig config;
+    private ConnectedEventTunnelsConfig config;
 
-    public ConnectedGatewaysCommand(ServerApplication application) {
-        super(application, ConnectedGatewaysArguments.class);
+    public ConnectedEventTunnelsCommand(ServerApplication application) {
+        super(application, ConnectedEventTunnelsArguments.class);
         this
                 .tab(() -> Collections.singletonList("<page>"));
     }
 
     @Override
-    public void onCommand(CommandSender sender, ConnectedGatewaysArguments args, String permission) {
+    public void onCommand(CommandSender sender, ConnectedEventTunnelsArguments args, String permission) {
         sendListMessage(
                 sender,
                 config.getListLayout(),
                 config.getListElement(),
                 config.getListDelimiter(),
-                gateway().getClients(),
+                eventTunnel().getClients(),
                 client -> new String[]{
                         "%name%", client.getOwner().getEntity().getName()
                 },
@@ -39,7 +39,7 @@ public class ConnectedGatewaysCommand extends AdvancedCommandExecutor<ConnectedG
 
     @Override
     public void setConfig(ConfigData config) {
-        this.config = new ConnectedGatewaysConfig(config);
+        this.config = new ConnectedEventTunnelsConfig(config);
         setConfig(this.config);
     }
 }

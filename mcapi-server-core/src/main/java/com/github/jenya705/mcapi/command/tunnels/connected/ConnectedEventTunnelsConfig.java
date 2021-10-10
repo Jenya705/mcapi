@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.command.gateway.subscriptions;
+package com.github.jenya705.mcapi.command.tunnels.connected;
 
 import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutorConfig;
 import com.github.jenya705.mcapi.data.ConfigData;
@@ -14,13 +14,13 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class SubscriptionsGatewaysConfig extends AdvancedCommandExecutorConfig {
+public class ConnectedEventTunnelsConfig extends AdvancedCommandExecutorConfig {
 
     @Value
-    private String listLayout = "&eSubscriptions %name%\n%list%\nPage %page%";
+    private String listLayout = "&eConnected event tunnels\n%list%\nPage %page%";
 
     @Value
-    @Global("subscriptionsElementListRepresentation")
+    @Global("gatewaysElementListRepresentation")
     private String listElement = "&7- &e%name%";
 
     @Value
@@ -28,17 +28,10 @@ public class SubscriptionsGatewaysConfig extends AdvancedCommandExecutorConfig {
     private String listDelimiter = "&r\n";
 
     @Value
-    @Global("notPermitted")
-    private String notPermitted = "&cYou are not permitted to do that";
-
-    @Value
-    private String botIsNotConnected = "&cBot is not connected to gateway";
-
-    @Value
     @Global("maxElementsInList")
     private int maxElements = 10;
 
-    public SubscriptionsGatewaysConfig(ConfigData configData) {
+    public ConnectedEventTunnelsConfig(ConfigData configData) {
         load(configData);
     }
 }

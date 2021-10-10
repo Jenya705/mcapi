@@ -1,6 +1,6 @@
-package com.github.jenya705.mcapi.module.web.gateway;
+package com.github.jenya705.mcapi.module.web.tunnel;
 
-import com.github.jenya705.mcapi.GatewayAuthorizationRequest;
+import com.github.jenya705.mcapi.EventTunnelAuthorizationRequest;
 import com.github.jenya705.mcapi.SubscribeRequest;
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.ServerApplication;
@@ -20,9 +20,9 @@ import java.util.Set;
 /**
  * @author Jenya705
  */
-public class DefaultGatewayClient extends SimpleStatefulWebSocketConnection<Integer> implements GatewayClient, BaseCommon {
+public class DefaultEventTunnelClient extends SimpleStatefulWebSocketConnection<Integer> implements EventTunnelClient, BaseCommon {
 
-    private static final String permissionFormat = "gateway.%s";
+    private static final String permissionFormat = "event_tunnel.%s";
 
     private final ServerApplication application;
 
@@ -39,14 +39,14 @@ public class DefaultGatewayClient extends SimpleStatefulWebSocketConnection<Inte
     @Getter
     private AbstractBot owner;
 
-    public DefaultGatewayClient(ServerApplication application) {
+    public DefaultEventTunnelClient(ServerApplication application) {
         this.application = application;
         authorizationModule = bean(AuthorizationModule.class);
         this
                 .defaultState(0)
                 .state(0, message -> {
-                    GatewayAuthorizationRequest authorizationRequest =
-                            message.as(GatewayAuthorizationRequest.class);
+                    EventTunnelAuthorizationRequest authorizationRequest =
+                            message.as(EventTunnelAuthorizationRequest.class);
                     authorization(authorizationRequest.getToken());
                     changeState(1);
                     return null;

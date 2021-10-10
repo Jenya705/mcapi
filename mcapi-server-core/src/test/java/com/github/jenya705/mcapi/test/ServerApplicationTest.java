@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.test;
 
 import com.github.jenya705.mcapi.*;
-import com.github.jenya705.mcapi.module.web.gateway.Gateway;
+import com.github.jenya705.mcapi.module.web.tunnel.EventTunnel;
 import lombok.Getter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -86,8 +86,8 @@ public class ServerApplicationTest {
     private ServerApplication runWithClasses(Class<?>... classes) {
         ServerApplication application = new ServerApplication();
         application.addBean(Mockito.mock(ServerCore.class));
-        application.addBean(Mockito.mock(Gateway.class));
-        application.addBean(Mockito.mock(ServerGateway.class));
+        application.addBean(Mockito.mock(EventTunnel.class));
+        application.addBean(Mockito.mock(ServerLocalEventHandler.class));
         application.setPlatform(ServerPlatform.OTHER);
         application.getClasses().clear();
         application.getClasses().addAll(Arrays.asList(classes));

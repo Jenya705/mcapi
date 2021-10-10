@@ -5,7 +5,7 @@ import com.github.jenya705.mcapi.*;
 import com.github.jenya705.mcapi.ApiError;
 import com.github.jenya705.mcapi.command.*;
 import com.github.jenya705.mcapi.entity.*;
-import com.github.jenya705.mcapi.entity.api.EntityGatewayAuthorizationRequest;
+import com.github.jenya705.mcapi.entity.api.EntityEventTunnelAuthorizationRequest;
 import com.github.jenya705.mcapi.entity.api.EntityLinkRequest;
 import com.github.jenya705.mcapi.entity.api.EntitySubscribeRequest;
 import com.github.jenya705.mcapi.entity.command.*;
@@ -84,7 +84,7 @@ public class RestModule extends AbstractApplicationModule {
                 .tunnelJsonSerializer(OfflinePlayer.class, RestOfflinePlayer::from)
                 .tunnelJsonSerializer(Player.class, RestPlayer::from)
                 .tunnelJsonSerializer(SubscribeRequest.class, RestSubscribeRequest::from)
-                .tunnelJsonSerializer(GatewayAuthorizationRequest.class, RestGatewayAuthorizationRequest::from)
+                .tunnelJsonSerializer(EventTunnelAuthorizationRequest.class, RestEventTunnelAuthorizationRequest::from)
                 .tunnelJsonSerializer(Permission.class, RestPermission::from)
                 .jsonDeserializer(Command.class, new ApiCommandDeserializer(commandModule))
                 .tunnelJsonDeserializer(
@@ -102,9 +102,9 @@ public class RestModule extends AbstractApplicationModule {
                         )
                 )
                 .tunnelJsonDeserializer(
-                        GatewayAuthorizationRequest.class,
-                        RestGatewayAuthorizationRequest.class,
-                        rest -> new EntityGatewayAuthorizationRequest(
+                        EventTunnelAuthorizationRequest.class,
+                        RestEventTunnelAuthorizationRequest.class,
+                        rest -> new EntityEventTunnelAuthorizationRequest(
                                 rest.getToken()
                         )
                 )

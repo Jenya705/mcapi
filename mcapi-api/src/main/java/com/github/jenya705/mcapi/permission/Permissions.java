@@ -16,17 +16,17 @@ public class Permissions {
 
     public final String USER_HAS_PERMISSION = "user.has_permission";
 
-    public final String GATEWAY_MESSAGE = "gateway.message";
+    public final String EVENT_TUNNEL_MESSAGE = "event_tunnel.message";
 
-    public final String GATEWAY_COMMAND_INTERACTION = "gateway.command_interaction";
+    public final String EVENT_TUNNEL_COMMAND_INTERACTION = "event_tunnel.command_interaction";
 
-    public final String GATEWAY_LINK = "gateway.link";
+    public final String EVENT_TUNNEL_LINK = "event_tunnel.link";
 
-    public final String GATEWAY_UNLINK = "gateway.unlink";
+    public final String EVENT_TUNNEL_UNLINK = "event_tunnel.unlink";
 
-    public final String GATEWAY_JOIN = "gateway.join";
+    public final String EVENT_TUNNEL_JOIN = "event_tunnel.join";
 
-    public final String GATEWAY_QUIT = "gateway.quit";
+    public final String EVENT_TUNNEL_QUIT = "event_tunnel.quit";
 
     public final String LINK_REQUEST = "link.request";
 

@@ -5,8 +5,8 @@ import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.bot.create.CreateBotCommand;
 import com.github.jenya705.mcapi.command.bot.delete.DeleteBotCommand;
 import com.github.jenya705.mcapi.command.bot.list.ListBotCommand;
-import com.github.jenya705.mcapi.command.gateway.connected.ConnectedGatewaysCommand;
-import com.github.jenya705.mcapi.command.gateway.subscriptions.SubscriptionsGatewaysCommand;
+import com.github.jenya705.mcapi.command.tunnels.connected.ConnectedEventTunnelsCommand;
+import com.github.jenya705.mcapi.command.tunnels.subscriptions.SubscriptionsEventTunnelsCommand;
 import com.github.jenya705.mcapi.command.link.links.LinksCommand;
 import com.github.jenya705.mcapi.command.link.unlink.UnlinkCommand;
 import com.github.jenya705.mcapi.command.linkmenu.LinkEndCommand;
@@ -42,9 +42,9 @@ public class RootCommand extends AbstractApplicationModule implements Supplier<C
                         .leaf("list", new ListBotCommand(app()))
                         .leaf("delete", new DeleteBotCommand(app()))
                 )
-                .branch("gateway", branch -> branch
-                        .leaf("connected", new ConnectedGatewaysCommand(app()))
-                        .leaf("subscriptions", new SubscriptionsGatewaysCommand(app()))
+                .branch("tunnel", branch -> branch
+                        .leaf("connected", new ConnectedEventTunnelsCommand(app()))
+                        .leaf("subscriptions", new SubscriptionsEventTunnelsCommand(app()))
                 )
                 .ghostBranch("linkMenu", branch -> branch
                         .leaf("end", new LinkEndCommand(app()))

@@ -64,7 +64,7 @@ public class ApiCommandExecutor extends AbstractApplicationModule implements Com
     public void onCommand(CommandSender sender, StringfulIterator args, String permission) {
         parser.create(args)
                 .ifPresent(list ->
-                        gateway()
+                        eventTunnel()
                                 .broadcast(
                                         new EntityCommandInteractionEvent(
                                                 path,

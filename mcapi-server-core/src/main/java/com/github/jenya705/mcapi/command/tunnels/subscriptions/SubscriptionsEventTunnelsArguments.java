@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.command.gateway.subscriptions;
+package com.github.jenya705.mcapi.command.tunnels.subscriptions;
 
 import com.github.jenya705.mcapi.stringful.Argument;
 import com.github.jenya705.mcapi.stringful.Index;
@@ -8,7 +8,7 @@ import lombok.Data;
  * @author Jenya705
  */
 @Data
-public class SubscriptionsGatewaysArguments {
+public class SubscriptionsEventTunnelsArguments {
 
     @Index(0)
     private String token;

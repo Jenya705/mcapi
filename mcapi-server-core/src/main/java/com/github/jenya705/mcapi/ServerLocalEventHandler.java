@@ -3,7 +3,7 @@ package com.github.jenya705.mcapi;
 /**
  * @author Jenya705
  */
-public interface ServerGateway {
+public interface ServerLocalEventHandler {
 
     void receiveMessage(Player player, String message);
 

@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.entity.api;
 
-import com.github.jenya705.mcapi.GatewayAuthorizationRequest;
+import com.github.jenya705.mcapi.EventTunnelAuthorizationRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EntityGatewayAuthorizationRequest implements GatewayAuthorizationRequest {
+public class EntityEventTunnelAuthorizationRequest implements EventTunnelAuthorizationRequest {
 
     private String token;
 }

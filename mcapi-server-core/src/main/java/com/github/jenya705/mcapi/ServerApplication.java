@@ -22,8 +22,8 @@ import com.github.jenya705.mcapi.module.rest.route.offline.GetOfflinePlayerRoute
 import com.github.jenya705.mcapi.module.rest.route.player.*;
 import com.github.jenya705.mcapi.module.selector.ServerSelectorProvider;
 import com.github.jenya705.mcapi.module.storage.StorageModuleImpl;
-import com.github.jenya705.mcapi.module.web.gateway.DefaultGateway;
-import com.github.jenya705.mcapi.module.web.gateway.Gateway;
+import com.github.jenya705.mcapi.module.web.tunnel.DefaultEventTunnel;
+import com.github.jenya705.mcapi.module.web.tunnel.EventTunnel;
 import com.github.jenya705.mcapi.module.web.reactor.ReactorServer;
 import com.github.jenya705.mcapi.util.Pair;
 import lombok.Getter;
@@ -66,10 +66,10 @@ public class ServerApplication {
     private ServerCore core;
     @Getter
     @Bean
-    private Gateway gateway;
+    private EventTunnel eventTunnel;
     @Getter
     @Bean
-    private ServerGateway serverGateway;
+    private ServerLocalEventHandler serverLocalEventHandler;
 
     public ServerApplication() {
         addClasses(
@@ -101,8 +101,8 @@ public class ServerApplication {
                 GetOfflinePlayerRouteHandler.class,
                 BanOfflinePlayerRouteHandler.class,
                 // End Routes
-                DefaultGateway.class,
-                ServerGatewayImpl.class,
+                DefaultEventTunnel.class,
+                ServerLocalEventHandlerImpl.class,
                 MessageDeserializerImpl.class,
                 ComponentMapParserImpl.class
         );

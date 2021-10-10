@@ -31,7 +31,7 @@ public class BukkitApplication extends JavaPlugin {
         BukkitUtils.setPlugin(this);
         application = new JavaServerApplication();
         application.addClass(BukkitServerCore.class);
-        application.addClass(BukkitServerGateway.class);
+        application.addClass(BukkitServerEventHandler.class);
         application.addClass(BukkitOfflinePlayerStorageImpl.class);
         paperFeatures();
         permissionManager();

@@ -59,7 +59,7 @@ public class ReactorWebSocketConnection implements WebSocketConnection {
         return inbound.hashCode();
     }
 
-    public synchronized void setSink(FluxSink<String> sink) {
+    public void setSink(FluxSink<String> sink) {
         this.sink = sink;
         toSend.forEach(str -> this.sink.next(str));
         toSend.clear();

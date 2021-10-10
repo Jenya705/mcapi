@@ -10,23 +10,23 @@ import com.github.jenya705.mcapi.entity.event.RestQuitEvent;
 /**
  * @author Jenya705
  */
-public class ServerGatewayImpl extends AbstractApplicationModule implements ServerGateway {
+public class ServerLocalEventHandlerImpl extends AbstractApplicationModule implements ServerLocalEventHandler {
 
     @Override
     public void receiveMessage(Player player, String message) {
-        gateway()
+        eventTunnel()
                 .broadcast(new EntityMessageEvent(message, player).rest(), RestMessageEvent.type);
     }
 
     @Override
     public void join(Player player) {
-        gateway()
+        eventTunnel()
                 .broadcast(new EntityJoinEvent(player).rest(), RestJoinEvent.type);
     }
 
     @Override
     public void quit(OfflinePlayer player) {
-        gateway()
+        eventTunnel()
                 .broadcast(new EntityQuitEvent(player).rest(), RestQuitEvent.type);
     }
 }

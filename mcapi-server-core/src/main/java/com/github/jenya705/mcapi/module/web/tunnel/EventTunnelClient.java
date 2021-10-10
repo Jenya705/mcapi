@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.module.web.gateway;
+package com.github.jenya705.mcapi.module.web.tunnel;
 
 import com.github.jenya705.mcapi.entity.AbstractBot;
 
@@ -7,7 +7,7 @@ import java.util.Collection;
 /**
  * @author Jenya705
  */
-public interface GatewayClient {
+public interface EventTunnelClient {
 
     AbstractBot getOwner();
 

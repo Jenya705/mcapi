@@ -187,7 +187,7 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
                     .storage()
                     .delete(link);
             async.submit(() ->
-                    gateway()
+                    eventTunnel()
                             .getClients()
                             .stream()
                             .filter(it -> it.getOwner().getEntity().getId() == id)
@@ -231,7 +231,7 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
         if (linkObject == null) return;
         LinkObject finalLinkObject = linkObject;
         async.submit(() ->
-                gateway()
+                eventTunnel()
                         .getClients()
                         .stream()
                         .filter(client -> client.getOwner().getEntity().getId() == finalLinkObject.getId())

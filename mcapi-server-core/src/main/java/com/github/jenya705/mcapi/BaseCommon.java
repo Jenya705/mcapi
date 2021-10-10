@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi;
 
-import com.github.jenya705.mcapi.module.web.gateway.Gateway;
+import com.github.jenya705.mcapi.module.web.tunnel.EventTunnel;
 
 /**
  * @author Jenya705
@@ -13,8 +13,8 @@ public interface BaseCommon {
         return app().getCore();
     }
 
-    default Gateway gateway() {
-        return app().getGateway();
+    default EventTunnel eventTunnel() {
+        return app().getEventTunnel();
     }
 
     default <T> T bean(Class<? extends T> clazz) {

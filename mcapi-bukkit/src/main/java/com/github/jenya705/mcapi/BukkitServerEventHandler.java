@@ -12,15 +12,15 @@ import org.bukkit.event.player.PlayerQuitEvent;
 /**
  * @author Jenya705
  */
-public class BukkitServerGateway extends AbstractApplicationModule implements Listener {
+public class BukkitServerEventHandler extends AbstractApplicationModule implements Listener {
 
-    private ServerGateway serverGateway() {
-        return app().getServerGateway();
+    private ServerLocalEventHandler eventHandler() {
+        return app().getServerLocalEventHandler();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void chat(AsyncChatEvent event) {
-        serverGateway()
+        eventHandler()
                 .receiveMessage(
                         BukkitPlayerWrapper.of(event.getPlayer()),
                         PlainTextComponentSerializer.plainText().serialize(event.message())
@@ -29,13 +29,13 @@ public class BukkitServerGateway extends AbstractApplicationModule implements Li
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void join(PlayerJoinEvent event) {
-        serverGateway()
+        eventHandler()
                 .join(BukkitPlayerWrapper.of(event.getPlayer()));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void quit(PlayerQuitEvent event) {
-        serverGateway()
+        eventHandler()
                 .quit(BukkitPlayerWrapper.of(event.getPlayer()));
     }
 

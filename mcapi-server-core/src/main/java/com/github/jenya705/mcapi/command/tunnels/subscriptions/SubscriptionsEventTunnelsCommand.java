@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.command.gateway.subscriptions;
+package com.github.jenya705.mcapi.command.tunnels.subscriptions;
 
 import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.Player;
@@ -8,7 +8,7 @@ import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.entity.BotEntity;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
-import com.github.jenya705.mcapi.module.web.gateway.GatewayClient;
+import com.github.jenya705.mcapi.module.web.tunnel.EventTunnelClient;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,21 +19,21 @@ import java.util.UUID;
  * @author Jenya705
  */
 @AdditionalPermissions("others")
-public class SubscriptionsGatewaysCommand extends AdvancedCommandExecutor<SubscriptionsGatewaysArguments> {
+public class SubscriptionsEventTunnelsCommand extends AdvancedCommandExecutor<SubscriptionsEventTunnelsArguments> {
 
     private final DatabaseModule databaseModule = bean(DatabaseModule.class);
 
-    private SubscriptionsGatewaysConfig config;
+    private SubscriptionsEventTunnelsConfig config;
 
-    public SubscriptionsGatewaysCommand(ServerApplication application) {
-        super(application, SubscriptionsGatewaysArguments.class);
+    public SubscriptionsEventTunnelsCommand(ServerApplication application) {
+        super(application, SubscriptionsEventTunnelsArguments.class);
         this
                 .tab(() -> Collections.singletonList("<token>"))
                 .tab(() -> Collections.singletonList("<page>"));
     }
 
     @Override
-    public void onCommand(CommandSender sender, SubscriptionsGatewaysArguments args, String permission) {
+    public void onCommand(CommandSender sender, SubscriptionsEventTunnelsArguments args, String permission) {
         BotEntity bot = databaseModule
                 .storage()
                 .findBotByToken(args.getToken());
@@ -43,12 +43,12 @@ public class SubscriptionsGatewaysCommand extends AdvancedCommandExecutor<Subscr
             return;
         }
         Collection<String> subscriptions =
-                gateway()
+                eventTunnel()
                         .getClients()
                         .stream()
                         .filter(it -> it.getOwner().getEntity().getId() == bot.getId())
                         .findFirst()
-                        .map(GatewayClient::getSubscriptions)
+                        .map(EventTunnelClient::getSubscriptions)
                         .orElse(null);
         if (subscriptions == null) {
             sendMessage(sender, config.getBotIsNotConnected());
@@ -72,7 +72,7 @@ public class SubscriptionsGatewaysCommand extends AdvancedCommandExecutor<Subscr
 
     @Override
     public void setConfig(ConfigData config) {
-        this.config = new SubscriptionsGatewaysConfig(config);
+        this.config = new SubscriptionsEventTunnelsConfig(config);
         setConfig(this.config);
     }
 }

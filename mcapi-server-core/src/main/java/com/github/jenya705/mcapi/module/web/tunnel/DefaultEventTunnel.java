@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.module.web.gateway;
+package com.github.jenya705.mcapi.module.web.tunnel;
 
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.Bean;
@@ -15,7 +15,7 @@ import java.util.Collection;
  * @author Jenya705
  */
 @Slf4j
-public class DefaultGateway extends WebSocketRouteContainerImpl<DefaultGatewayClient> implements Gateway, BaseCommon {
+public class DefaultEventTunnel extends WebSocketRouteContainerImpl<DefaultEventTunnelClient> implements EventTunnel, BaseCommon {
 
     @Bean
     private ServerApplication application;
@@ -25,15 +25,15 @@ public class DefaultGateway extends WebSocketRouteContainerImpl<DefaultGatewayCl
         return application;
     }
 
-    public DefaultGateway() {
+    public DefaultEventTunnel() {
 
     }
 
     @OnStartup
     public void start() {
-        TimerTask task = TimerTask.start(log, "Starting gateway...");
-        setFactoryMethod(() -> new DefaultGatewayClient(app()));
-        bean(WebServer.class).addWebSocketHandler("/gateway", this);
+        TimerTask task = TimerTask.start(log, "Starting event tunnel...");
+        setFactoryMethod(() -> new DefaultEventTunnelClient(app()));
+        bean(WebServer.class).addWebSocketHandler("/tunnel", this);
         task.complete();
     }
 
@@ -46,7 +46,7 @@ public class DefaultGateway extends WebSocketRouteContainerImpl<DefaultGatewayCl
     }
 
     @Override
-    public Collection<? extends GatewayClient> getClients() {
+    public Collection<? extends EventTunnelClient> getClients() {
         return getConnections();
     }
 }
