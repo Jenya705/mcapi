@@ -2,9 +2,9 @@
 
 # mcapi
 
-Web Api for your minecraft server
+Web / Rest api for server owners and players! Built on top of reactor-netty.
 
-# Now implemented
+## Now implemented
 
 - Bukkit platform
 
