@@ -6,15 +6,20 @@ import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Jenya705
  */
-public class ServerApplicationMock extends ServerApplication {
+public class MockServerApplication extends ServerApplication {
 
-    public ServerApplicationMock() throws IOException {
-        getClasses().clear();
+    public MockServerApplication() throws IOException {
+        this(true);
+    }
+
+    public MockServerApplication(boolean clear) throws IOException {
+        if (clear) {
+            getClasses().clear();
+        }
         ServerCore core = Mockito.mock(ServerCore.class);
         addBean(core);
         Mockito.when(core.loadConfig(Mockito.any())).thenReturn(new HashMap<>());

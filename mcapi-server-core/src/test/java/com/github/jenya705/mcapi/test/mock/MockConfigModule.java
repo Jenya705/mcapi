@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * @author Jenya705
  */
-public class ConfigModuleMock extends ConfigModuleImpl {
+public class MockConfigModule extends ConfigModuleImpl {
 
     public void joinConfig(ConfigData configData) {
         joinConfig(getConfig(), configData);

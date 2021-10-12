@@ -7,8 +7,8 @@ import com.github.jenya705.mcapi.entity.BotEntity;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.module.database.DatabaseModuleImpl;
 import com.github.jenya705.mcapi.module.database.DatabaseTypeInitializer;
-import com.github.jenya705.mcapi.test.mock.ConfigModuleMock;
-import com.github.jenya705.mcapi.test.mock.ServerApplicationMock;
+import com.github.jenya705.mcapi.test.mock.MockConfigModule;
+import com.github.jenya705.mcapi.test.mock.MockServerApplication;
 import com.github.jenya705.mcapi.util.ConfigDataBuilder;
 import com.github.jenya705.mcapi.util.TokenUtils;
 import lombok.SneakyThrows;
@@ -26,7 +26,7 @@ public class DatabaseModuleTest {
 
     @SneakyThrows
     private ServerApplication initialize() {
-        ServerApplication application = new ServerApplicationMock();
+        ServerApplication application = new MockServerApplication();
         DatabaseModule module = new DatabaseModuleImpl();
         module.addTypeInitializer("h2", new DatabaseTypeInitializer() {
             @Override
@@ -39,15 +39,15 @@ public class DatabaseModuleTest {
             }
         });
         application.addBean(module);
-        ConfigModuleMock configModuleMock = new ConfigModuleMock();
-        application.addBean(configModuleMock);
+        MockConfigModule mockConfigModule = new MockConfigModule();
+        application.addBean(mockConfigModule);
         application.addBean(new Object(){
             @Bean
-            private ConfigModuleMock configModuleMock;
+            private MockConfigModule mockConfigModule;
 
             @OnInitializing(priority = 1)
             public void initialize() {
-                configModuleMock.joinConfig(
+                this.mockConfigModule.joinConfig(
                         ConfigDataBuilder
                                 .empty()
                                 .directory("database", it -> it
