@@ -4,9 +4,7 @@ import com.github.jenya705.mcapi.*;
 import com.github.jenya705.mcapi.log.TimerTask;
 import com.github.jenya705.mcapi.module.config.ConfigModule;
 import com.github.jenya705.mcapi.module.mapper.Mapper;
-import com.github.jenya705.mcapi.module.web.RouteHandler;
-import com.github.jenya705.mcapi.module.web.WebConfig;
-import com.github.jenya705.mcapi.module.web.WebServer;
+import com.github.jenya705.mcapi.module.web.*;
 import com.github.jenya705.mcapi.module.web.websocket.WebSocketRouteHandler;
 import com.github.jenya705.mcapi.util.Pair;
 import com.github.jenya705.mcapi.util.ReactiveUtils;
@@ -26,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiFunction;
+import java.util.function.Predicate;
 
 /**
  * @author Jenya705
@@ -34,7 +33,7 @@ import java.util.function.BiFunction;
 @Getter
 public class ReactorServer extends AbstractApplicationModule implements WebServer {
 
-    private final List<Pair<Route, RouteHandler>> routeImplementations = new ArrayList<>();
+    private final List<ReactorRouteImplementation> routeImplementations = new ArrayList<>();
     private final List<Pair<String, WebSocketRouteHandler>> webSocketRouteImplementations = new ArrayList<>();
 
     @Bean
@@ -73,8 +72,8 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
     }
 
     @Override
-    public void addHandler(Route route, RouteHandler handler) {
-        Pair<Route, RouteHandler> routeImplementation = new Pair<>(route, handler);
+    public void addHandler(RoutePredicate routePredicate, RouteHandler handler, boolean readBody) {
+        ReactorRouteImplementation routeImplementation = new ReactorRouteImplementation(routePredicate, handler, readBody);
         routeImplementations.add(routeImplementation);
         if (server != null) {
             server.route(routes ->
@@ -94,13 +93,16 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
         }
     }
 
-    private void route(Pair<Route, RouteHandler> routeImplementation, HttpServerRoutes routes) {
+    private void route(ReactorRouteImplementation routeImplementation, HttpServerRoutes routes) {
         routes
                 .route(
-                        HttpPredicateUtils.predicate(routeImplementation.getLeft()),
-                        routeImplementation.getLeft().getMethod().isWithBody() ?
-                                routeWithBody(routeImplementation.getRight()) :
-                                routeWithoutBody(routeImplementation.getRight())
+                        request -> routeImplementation.getRoutePredicate().apply(
+                                ReactorNettyUtils.wrap(request.method()),
+                                request.uri()
+                        ),
+                        routeImplementation.isReadBody() ?
+                                routeWithBody(routeImplementation.getRouteHandler()) :
+                                routeWithoutBody(routeImplementation.getRouteHandler())
                 );
     }
 

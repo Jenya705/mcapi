@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi.module.web;
 
+import com.github.jenya705.mcapi.HttpMethod;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.error.AuthorizationBadTokenException;
 import com.github.jenya705.mcapi.error.BodyIsEmptyException;
@@ -44,6 +45,10 @@ public interface Request {
     default <T> T bodyOrException(Class<? extends T> clazz) {
         return body(clazz).orElseThrow(BodyIsEmptyException::new);
     }
+    
+    String getUri();
+    
+    HttpMethod getMethod();
 
     <T> Optional<T> param(String key, Class<? extends T> clazz);
 

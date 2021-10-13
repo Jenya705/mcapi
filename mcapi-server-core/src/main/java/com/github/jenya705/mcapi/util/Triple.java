@@ -4,17 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Map;
-
-/**
- * @author Jenya705
- */
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class Pair<T, V> {
+@AllArgsConstructor
+public class Triple<T, V, E> {
 
-    private T left;
-    private V right;
+    private T first;
+    private V second;
+    private E third;
 
 }
