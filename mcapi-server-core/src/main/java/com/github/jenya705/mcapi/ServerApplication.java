@@ -118,7 +118,7 @@ public class ServerApplication {
                         "unknown" :
                         getPlatform().name().toLowerCase(Locale.ROOT)
         );
-
+        addBean(this);
         Map<Integer, Set<Pair<Object, Method>>> initializingMethods = new HashMap<>();
         Map<Integer, Set<Pair<Object, Method>>> startupMethods = new HashMap<>();
         for (Object obj : beans) {
@@ -136,9 +136,7 @@ public class ServerApplication {
                 return;
             }
         }
-        addBean(this);
         initialized = true;
-        injectBeansInObject(this);
         injectBeans();
         runMethods(initializingMethods, "initialize", true);
         if (!enabled) return;
@@ -257,6 +255,7 @@ public class ServerApplication {
         }
         runMethods(endMethods, "stop", false);
         initialized = false;
+        enabled = false;
     }
 
     @SuppressWarnings("unchecked")
