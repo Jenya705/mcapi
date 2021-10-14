@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -26,8 +27,8 @@ public class StorageModuleConfig extends Config {
     }
 
     public Map<String, Object> represent() {
-        return Map.of(
+        return new HashMap<>(Map.of(
                 "permissions", getPermissions()
-        );
+        ));
     }
 }

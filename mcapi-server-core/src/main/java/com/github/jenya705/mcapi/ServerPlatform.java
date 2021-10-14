@@ -7,5 +7,6 @@ public enum ServerPlatform {
 
     JAVA,
     BEDROCK,
+    TESTING,
     OTHER
 }
