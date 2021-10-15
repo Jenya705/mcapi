@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi.mock.filesystem;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,11 +21,11 @@ public class MockFileSystemImpl implements MockFileSystem {
 
     @Override
     public void createFile(String name, byte[] bytes) {
-        specifics.put(name, bytes);
+        specifics.put(name, Arrays.copyOf(bytes, bytes.length));
     }
 
     @Override
     public void createConfig(String name, Map<String, Object> config) {
-        configs.put(name, config);
+        configs.put(name, new HashMap<>(config));
     }
 }

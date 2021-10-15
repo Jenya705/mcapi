@@ -18,16 +18,12 @@ public class RestPlayer {
     private String name;
     private UUID uuid;
     private String type;
-    private RestLocation location;
 
     public static RestPlayer from(Player player) {
         return new RestPlayer(
                 player.getName(),
                 player.getUuid(),
-                player.getType(),
-                RestLocation.from(
-                        player.getLocation()
-                )
+                player.getType()
         );
     }
 }

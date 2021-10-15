@@ -27,8 +27,8 @@ public class StorageModuleConfig extends Config {
     }
 
     public Map<String, Object> represent() {
-        return new HashMap<>(Map.of(
+        return Map.of(
                 "permissions", getPermissions()
-        ));
+        );
     }
 }
