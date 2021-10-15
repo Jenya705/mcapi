@@ -96,10 +96,7 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
     private void route(ReactorRouteImplementation routeImplementation, HttpServerRoutes routes) {
         routes
                 .route(
-                        request -> routeImplementation.getRoutePredicate().apply(
-                                ReactorNettyUtils.wrap(request.method()),
-                                request.uri()
-                        ),
+                        new ReactorRoutePredicate(routeImplementation.getRoutePredicate()),
                         routeImplementation.isReadBody() ?
                                 routeWithBody(routeImplementation.getRouteHandler()) :
                                 routeWithoutBody(routeImplementation.getRouteHandler())

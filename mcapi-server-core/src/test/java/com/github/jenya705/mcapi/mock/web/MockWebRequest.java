@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.mock.web;
 
 import com.github.jenya705.mcapi.HttpMethod;
+import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.module.mapper.Mapper;
 import com.github.jenya705.mcapi.module.web.Request;
 import lombok.AllArgsConstructor;
@@ -12,13 +13,17 @@ import java.util.Optional;
 @AllArgsConstructor
 public class MockWebRequest implements Request {
 
+    public static MockWebRequestBuilder builder(ServerApplication application) {
+        return MockWebRequestBuilder.builder(application);
+    }
+
     private final Map<String, String> params;
     private final Map<String, String> headers;
     @Getter
     private final String uri;
     @Getter
     private final HttpMethod method;
-    private final Object body;
+    private final String body;
 
     private final Mapper mapper;
 
@@ -30,9 +35,10 @@ public class MockWebRequest implements Request {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public <T> Optional<T> body(Class<? extends T> clazz) {
-        return Optional.ofNullable((T) body);
+        return body != null ?
+                Optional.ofNullable(mapper.fromJson(body, clazz)) :
+                Optional.empty();
     }
 
     @Override
@@ -41,4 +47,9 @@ public class MockWebRequest implements Request {
                 Optional.of(mapper.fromRaw(headers.get(key), clazz)) :
                 Optional.empty();
     }
+
+    public void joinParams(Map<String, String> params) {
+        this.params.putAll(params);
+    }
+
 }
