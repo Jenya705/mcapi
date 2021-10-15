@@ -16,3 +16,5 @@ Web / Rest api for server owners and players! Built on top of reactor-netty.
 - Commands: create bot, bot lists, gateways list, gateways subscriptions, unlink with bot, delete bot
 
 - Authorization using token
+
+- [wiki](https://github.com/Jenya705/mcapi/wiki)
