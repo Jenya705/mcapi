@@ -98,33 +98,39 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
                 .route(
                         new ReactorRoutePredicate(routeImplementation.getRoutePredicate()),
                         routeImplementation.isReadBody() ?
-                                routeWithBody(routeImplementation.getRouteHandler()) :
-                                routeWithoutBody(routeImplementation.getRouteHandler())
+                                routeWithBody(
+                                        routeImplementation.getRouteHandler(),
+                                        routeParameters(routeImplementation.getRoutePredicate())
+                                ) :
+                                routeWithoutBody(
+                                        routeImplementation.getRouteHandler(),
+                                        routeParameters(routeImplementation.getRoutePredicate())
+                                )
                 );
     }
 
-    private BiFunction<HttpServerRequest, HttpServerResponse, Publisher<Void>> routeWithBody(RouteHandler handler) {
+    private BiFunction<HttpServerRequest, HttpServerResponse, Publisher<Void>> routeWithBody(RouteHandler handler, RouteParameters parameters) {
         return (request, response) ->
                 response.sendString(
                         request
                                 .receive()
                                 .aggregate()
                                 .asString()
-                                .map(body -> executeHandler(request, response, handler, body))
+                                .map(body -> executeHandler(request, response, handler, body, parameters))
                 );
     }
 
-    private BiFunction<HttpServerRequest, HttpServerResponse, Publisher<Void>> routeWithoutBody(RouteHandler handler) {
+    private BiFunction<HttpServerRequest, HttpServerResponse, Publisher<Void>> routeWithoutBody(RouteHandler handler, RouteParameters parameters) {
         return (request, response) ->
                 response.sendString(
                         ReactorUtils.mono(() ->
-                                executeHandler(request, response, handler, null)
+                                executeHandler(request, response, handler, null, parameters)
                         )
                 );
     }
 
-    private String executeHandler(HttpServerRequest request, HttpServerResponse response, RouteHandler handler, String body) {
-        ReactorRequest localRequest = new ReactorRequest(this, request, body);
+    private String executeHandler(HttpServerRequest request, HttpServerResponse response, RouteHandler handler, String body, RouteParameters parameters) {
+        ReactorRequest localRequest = new ReactorRequest(this, request, body, parameters);
         ReactorResponse localResponse = new ReactorResponse(response);
         localResponse.contentType("application/json");
         try {
@@ -193,4 +199,9 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
                         .doOnError(e -> outbound.sendClose())
         );
     }
+
+    private RouteParameters routeParameters(Object obj) {
+        return obj instanceof RouteParameters ? (RouteParameters) obj : null;
+    }
+
 }
