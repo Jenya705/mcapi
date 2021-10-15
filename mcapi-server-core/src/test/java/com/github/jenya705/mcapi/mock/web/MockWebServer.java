@@ -43,6 +43,7 @@ public class MockWebServer extends AbstractApplicationModule implements WebServe
                 return response;
             }
         }
+        throw new IllegalArgumentException("Given uri is not matching any of existing filters");
     }
 
 }
