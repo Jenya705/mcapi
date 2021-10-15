@@ -4,7 +4,9 @@ import com.github.jenya705.mcapi.*;
 import com.github.jenya705.mcapi.entity.api.EntityLocation;
 import com.github.jenya705.mcapi.entity.api.EntityPlayer;
 import com.github.jenya705.mcapi.mock.database.MockDatabaseModule;
+import com.github.jenya705.mcapi.mock.web.MockWebServer;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
+import com.github.jenya705.mcapi.module.web.WebServer;
 import org.mockito.Mockito;
 
 import java.util.*;
@@ -58,6 +60,7 @@ public class MockServerApplication extends ServerApplication {
     public MockServerApplication() {
         addClass(MockServerCore.class);
         change(DatabaseModule.class, MockDatabaseModule.class);
+        change(WebServer.class, MockWebServer.class);
         setPlatform(ServerPlatform.TESTING);
     }
 
