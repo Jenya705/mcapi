@@ -97,6 +97,11 @@ public class MockServerApplication extends ServerApplication {
         return this;
     }
 
+    public MockServerApplication run() {
+        start();
+        return this;
+    }
+
     public Player getPlayer(int index) {
         return players.get(index);
     }

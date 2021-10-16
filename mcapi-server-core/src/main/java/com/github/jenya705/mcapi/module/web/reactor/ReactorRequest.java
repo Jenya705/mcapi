@@ -32,7 +32,7 @@ public class ReactorRequest implements Request {
         this.request = request;
         this.body = body;
         this.parameters = parameters;
-        this.method = HttpMethod.valueOf(request.method().name().toUpperCase(Locale.ROOT));
+        this.method = ReactorNettyUtils.wrap(request.method());
     }
 
     @Override

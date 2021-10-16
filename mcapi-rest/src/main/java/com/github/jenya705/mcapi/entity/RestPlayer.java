@@ -26,4 +26,5 @@ public class RestPlayer {
                 player.getType()
         );
     }
+
 }

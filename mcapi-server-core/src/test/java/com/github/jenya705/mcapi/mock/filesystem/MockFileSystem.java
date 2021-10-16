@@ -12,4 +12,6 @@ public interface MockFileSystem {
 
     void createConfig(String name, Map<String, Object> config);
 
+    boolean isExistsFile(String name);
+
 }

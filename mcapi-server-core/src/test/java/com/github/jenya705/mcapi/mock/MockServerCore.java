@@ -86,7 +86,7 @@ public class MockServerCore implements ServerCore {
 
     @Override
     public boolean isExistsFile(String file) {
-        return fileSystem.getSpecific(file) != null || fileSystem.getConfig(file) != null;
+        return fileSystem.isExistsFile(file);
     }
 
     @Override

@@ -28,4 +28,9 @@ public class MockFileSystemImpl implements MockFileSystem {
     public void createConfig(String name, Map<String, Object> config) {
         configs.put(name, new HashMap<>(config));
     }
+
+    @Override
+    public boolean isExistsFile(String name) {
+        return configs.get(name) != null || specifics.get(name) != null;
+    }
 }
