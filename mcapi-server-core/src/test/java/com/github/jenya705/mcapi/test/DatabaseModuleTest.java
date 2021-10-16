@@ -14,32 +14,24 @@ import java.util.UUID;
  */
 public class DatabaseModuleTest {
 
-    private final BotEntity sampleBotEntity = BotEntity
-            .builder()
-            .owner(UUID.randomUUID())
-            .token(TokenUtils.generateToken())
-            .name("some")
-            .id(1)
-            .build();
-
     @Test
     public void saveTest() {
         MockServerApplication application = MockServerApplication.mock().run();
         DatabaseModule databaseModule = application.getBean(DatabaseModule.class);
         databaseModule
                 .storage()
-                .save(sampleBotEntity);
+                .save(TestUtils.sampleBotEntity);
         Assertions.assertEquals(
-                sampleBotEntity,
+                TestUtils.sampleBotEntity,
                 databaseModule
                         .storage()
-                        .findBotById(sampleBotEntity.getId())
+                        .findBotById(TestUtils.sampleBotEntity.getId())
         );
         Assertions.assertEquals(
-                sampleBotEntity,
+                TestUtils.sampleBotEntity,
                 databaseModule
                         .storage()
-                        .findBotByToken(sampleBotEntity.getToken())
+                        .findBotByToken(TestUtils.sampleBotEntity.getToken())
         );
     }
 
@@ -49,18 +41,18 @@ public class DatabaseModuleTest {
         DatabaseModule databaseModule = application.getBean(DatabaseModule.class);
         databaseModule
                 .storage()
-                .save(sampleBotEntity);
+                .save(TestUtils.sampleBotEntity);
         Assertions.assertEquals(
-                sampleBotEntity,
+                TestUtils.sampleBotEntity,
                 databaseModule
                         .cache()
-                        .getCachedBot(sampleBotEntity.getId())
+                        .getCachedBot(TestUtils.sampleBotEntity.getId())
         );
         Assertions.assertEquals(
-                sampleBotEntity,
+                TestUtils.sampleBotEntity,
                 databaseModule
                         .cache()
-                        .getCachedBot(sampleBotEntity.getToken())
+                        .getCachedBot(TestUtils.sampleBotEntity.getToken())
         );
     }
 
