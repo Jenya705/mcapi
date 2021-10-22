@@ -2,8 +2,10 @@ package com.github.jenya705.mcapi.entity;
 
 import com.github.jenya705.mcapi.*;
 import com.github.jenya705.mcapi.selector.PlayerSelector;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
 
@@ -11,6 +13,8 @@ import java.util.UUID;
  * @author Jenya705
  */
 @Builder
+@Getter(AccessLevel.PROTECTED)
+@Setter(AccessLevel.PROTECTED)
 public class LazyPlayer implements Player {
 
     private final RestClient client;
