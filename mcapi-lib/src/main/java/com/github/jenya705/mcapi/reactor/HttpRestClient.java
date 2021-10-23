@@ -6,6 +6,7 @@ import com.github.jenya705.mcapi.command.Command;
 import com.github.jenya705.mcapi.entity.LazyPlayer;
 import com.github.jenya705.mcapi.entity.RestLocation;
 import com.github.jenya705.mcapi.entity.RestPlayer;
+import com.github.jenya705.mcapi.entity.RestPlayerList;
 import com.github.jenya705.mcapi.entity.api.EntityLocation;
 import com.github.jenya705.mcapi.selector.BotSelector;
 import com.github.jenya705.mcapi.selector.OfflinePlayerSelector;
@@ -68,7 +69,16 @@ public class HttpRestClient implements RestClient {
 
     @Override
     public Flux<Player> getOnlinePlayers() {
-        return null;
+        return makeRequest(Routes.PLAYER_LIST)
+                .map(it -> fromJson(it, RestPlayerList.class))
+                .map(RestPlayerList::getUuids)
+                .flatMapMany(Flux::just)
+                .map(it -> LazyPlayer
+                        .builder()
+                        .client(this)
+                        .uuid(it)
+                        .build()
+                );
     }
 
     @Override
@@ -137,24 +147,33 @@ public class HttpRestClient implements RestClient {
     }
 
     public Mono<String> makeRequest(Route route, Object... args) {
-        return httpClient
-                .request(ReactorNettyUtils.wrap(route.getMethod()))
-                .uri(ReactorNettyUtils.formatUri(route.getUri(), args))
-                .responseContent()
-                .aggregate()
-                .asString();
+        return Mono.create(sink ->
+                sink.success(
+                        httpClient
+                                .request(ReactorNettyUtils.wrap(route.getMethod()))
+                                .uri(ReactorNettyUtils.formatUri(route.getUri(), args))
+                                .responseContent()
+                                .aggregate()
+                                .asString()
+                                .block()
+                )
+        );
     }
 
     public Mono<String> makeRequestWithBody(Route route, Object body, Object... args) {
-        return httpClient
-                .request(ReactorNettyUtils.wrap(route.getMethod()))
-                .uri(ReactorNettyUtils.formatUri(route.getUri(), args))
-                .send(ByteBufMono.fromString(
-                        Mono.just(asJson(body))
-                ))
-                .responseContent()
-                .aggregate()
-                .asString();
+        return Mono.create(sink ->
+                sink.success(
+                        httpClient
+                                .request(ReactorNettyUtils.wrap(route.getMethod()))
+                                .uri(ReactorNettyUtils.formatUri(route.getUri(), args))
+                                .send(ByteBufMono.fromString(
+                                        Mono.just(asJson(body))
+                                ))
+                                .responseContent()
+                                .aggregate()
+                                .asString()
+                                .block()
+                )
+        );
     }
-
 }
