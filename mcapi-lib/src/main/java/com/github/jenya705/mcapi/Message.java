@@ -7,6 +7,6 @@ public interface Message {
 
     String getType();
 
-    Object getSendMessage();
+    Object getMessage();
 
 }

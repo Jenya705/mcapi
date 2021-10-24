@@ -1,6 +1,9 @@
 package com.github.jenya705.mcapi.reactor;
 
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.github.jenya705.mcapi.*;
 import com.github.jenya705.mcapi.command.Command;
 import com.github.jenya705.mcapi.entity.LazyPlayer;
@@ -63,8 +66,9 @@ public class HttpRestClient implements RestClient {
     }
 
     @Override
-    public Mono<Void> sendMessage(PlayerSelector selector, Message message) {
-        return null;
+    public Mono<Boolean> sendMessage(PlayerSelector selector, Message message) {
+        return makeRequestWithBody(Routes.SEND_MESSAGE, message, selector.asString())
+                .map(it -> true);
     }
 
     @Override
@@ -82,12 +86,12 @@ public class HttpRestClient implements RestClient {
     }
 
     @Override
-    public Mono<Void> banPlayers(PlayerSelector selector, Message message) {
+    public Mono<Boolean> banPlayers(PlayerSelector selector, Message message) {
         return null;
     }
 
     @Override
-    public Mono<Void> kickPlayers(PlayerSelector selector, Message message) {
+    public Mono<Boolean> kickPlayers(PlayerSelector selector, Message message) {
         return null;
     }
 
@@ -112,17 +116,17 @@ public class HttpRestClient implements RestClient {
     }
 
     @Override
-    public Mono<Void> createCommand(Command command) {
+    public Mono<Boolean> createCommand(Command command) {
         return null;
     }
 
     @Override
-    public Mono<Void> deleteCommand(String... path) {
+    public Mono<Boolean> deleteCommand(String... path) {
         return null;
     }
 
     @Override
-    public Mono<Void> requestLink(PlayerID id, LinkRequest request) {
+    public Mono<Boolean> requestLink(PlayerID id, LinkRequest request) {
         return null;
     }
 
@@ -132,7 +136,7 @@ public class HttpRestClient implements RestClient {
     }
 
     @Override
-    public Mono<Void> banOfflinePlayer(OfflinePlayerSelector selector, Message message) {
+    public Mono<Boolean> banOfflinePlayer(OfflinePlayerSelector selector, Message message) {
         return null;
     }
 
@@ -147,33 +151,41 @@ public class HttpRestClient implements RestClient {
     }
 
     public Mono<String> makeRequest(Route route, Object... args) {
-        return Mono.create(sink ->
-                sink.success(
-                        httpClient
-                                .request(ReactorNettyUtils.wrap(route.getMethod()))
-                                .uri(ReactorNettyUtils.formatUri(route.getUri(), args))
-                                .responseContent()
-                                .aggregate()
-                                .asString()
-                                .block()
-                )
+        return Mono.justOrEmpty(
+                httpClient
+                        .request(ReactorNettyUtils.wrap(route.getMethod()))
+                        .uri(ReactorNettyUtils.formatUri(route.getUri(), args))
+                        .responseContent()
+                        .aggregate()
+                        .asString()
+                        .block()
         );
     }
 
     public Mono<String> makeRequestWithBody(Route route, Object body, Object... args) {
-        return Mono.create(sink ->
-                sink.success(
-                        httpClient
-                                .request(ReactorNettyUtils.wrap(route.getMethod()))
-                                .uri(ReactorNettyUtils.formatUri(route.getUri(), args))
-                                .send(ByteBufMono.fromString(
-                                        Mono.just(asJson(body))
-                                ))
-                                .responseContent()
-                                .aggregate()
-                                .asString()
-                                .block()
-                )
+        return Mono.justOrEmpty(
+                httpClient
+                        .request(ReactorNettyUtils.wrap(route.getMethod()))
+                        .uri(ReactorNettyUtils.formatUri(route.getUri(), args))
+                        .send(ByteBufMono.fromString(
+                                Mono.just(asJson(body))
+                        ))
+                        .responseContent()
+                        .aggregate()
+                        .asString()
+                        .block()
         );
+    }
+
+    public <T> void addSerializer(Class<? extends T> clazz, JsonSerializer<T> serializer) {
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(clazz, serializer);
+        mapper.registerModule(module);
+    }
+
+    public <T> void addDeserializer(Class<T> clazz, JsonDeserializer<? extends T> deserializer) {
+        SimpleModule module = new SimpleModule();
+        module.addDeserializer(clazz, deserializer);
+        mapper.registerModule(module);
     }
 }

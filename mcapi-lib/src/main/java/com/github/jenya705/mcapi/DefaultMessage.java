@@ -16,7 +16,7 @@ public class DefaultMessage implements Message {
     }
 
     @Override
-    public Object getSendMessage() {
+    public Object getMessage() {
         return message;
     }
 }
