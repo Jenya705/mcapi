@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.github.jenya705.mcapi.*;
+import com.github.jenya705.mcapi.app.LibraryApplication;
 import com.github.jenya705.mcapi.command.Command;
 import com.github.jenya705.mcapi.entity.LazyPlayer;
 import com.github.jenya705.mcapi.entity.RestLocation;
@@ -29,20 +30,24 @@ public class HttpRestClient implements RestClient {
 
     private final HttpClient httpClient;
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ReactorBlockingThread blockingThread = new ReactorBlockingThread();
 
-    public HttpRestClient(String ip, int port, String token) {
+    private final LibraryApplication application;
+
+    public HttpRestClient(LibraryApplication application) {
+        this.application = application;
         httpClient = HttpClient
                 .create()
-                .host(ip)
-                .port(port)
-                .headers(it -> it.add("Authorization", "Bot " + token));
+                .host(application.getIp())
+                .port(application.getPort())
+                .headers(it -> it.add("Authorization", "Bot " + application.getToken()));
+        blockingThread.start();
     }
 
     @Override
     public Mono<Player> getPlayer(PlayerID id) {
         return makeRequest(Routes.PLAYER, id.getId())
-                .map(it -> fromJson(it, RestPlayer.class))
+                .map(it -> application.fromJson(it, RestPlayer.class))
                 .map(it -> LazyPlayer
                         .builder()
                         .client(this)
@@ -56,7 +61,7 @@ public class HttpRestClient implements RestClient {
     @Override
     public Mono<Location> getPlayerLocation(PlayerID id) {
         return makeRequest(Routes.PLAYER_LOCATION, id.getId())
-                .map(it -> fromJson(it, RestLocation.class))
+                .map(it -> application.fromJson(it, RestLocation.class))
                 .map(it -> new EntityLocation(
                         it.getX(),
                         it.getY(),
@@ -74,7 +79,7 @@ public class HttpRestClient implements RestClient {
     @Override
     public Flux<Player> getOnlinePlayers() {
         return makeRequest(Routes.PLAYER_LIST)
-                .map(it -> fromJson(it, RestPlayerList.class))
+                .map(it -> application.fromJson(it, RestPlayerList.class))
                 .map(RestPlayerList::getUuids)
                 .flatMapMany(Flux::just)
                 .map(it -> LazyPlayer
@@ -140,52 +145,28 @@ public class HttpRestClient implements RestClient {
         return null;
     }
 
-    @SneakyThrows
-    public <T> T fromJson(String json, Class<? extends T> type) {
-        return mapper.readValue(json, type);
-    }
-
-    @SneakyThrows
-    public String asJson(Object obj) {
-        return mapper.writeValueAsString(obj);
-    }
-
     public Mono<String> makeRequest(Route route, Object... args) {
-        return Mono.justOrEmpty(
+        return blockingThread.addTask(
                 httpClient
                         .request(ReactorNettyUtils.wrap(route.getMethod()))
                         .uri(ReactorNettyUtils.formatUri(route.getUri(), args))
                         .responseContent()
                         .aggregate()
                         .asString()
-                        .block()
         );
     }
 
     public Mono<String> makeRequestWithBody(Route route, Object body, Object... args) {
-        return Mono.justOrEmpty(
+        return blockingThread.addTask(
                 httpClient
                         .request(ReactorNettyUtils.wrap(route.getMethod()))
                         .uri(ReactorNettyUtils.formatUri(route.getUri(), args))
                         .send(ByteBufMono.fromString(
-                                Mono.just(asJson(body))
+                                Mono.just(application.asJson(body))
                         ))
                         .responseContent()
                         .aggregate()
                         .asString()
-                        .block()
         );
-    }
-
-    public <T> void addSerializer(Class<? extends T> clazz, JsonSerializer<T> serializer) {
-        SimpleModule module = new SimpleModule();
-        module.addSerializer(clazz, serializer);
-        mapper.registerModule(module);
-    }
-
-    public <T> void addDeserializer(Class<T> clazz, JsonDeserializer<? extends T> deserializer) {
-        SimpleModule module = new SimpleModule();
-        module.addDeserializer(clazz, deserializer);
-        mapper.registerModule(module);
     }
 }

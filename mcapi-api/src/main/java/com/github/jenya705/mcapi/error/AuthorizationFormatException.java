@@ -14,6 +14,10 @@ public class AuthorizationFormatException extends IllegalArgumentException imple
         super("Bad format");
     }
 
+    public AuthorizationFormatException(String message) {
+        super(message);
+    }
+
     @Override
     public int getStatusCode() {
         return status;

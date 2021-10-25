@@ -14,6 +14,10 @@ public class AuthorizationBadTokenException extends IllegalArgumentException imp
         super("Bad token");
     }
 
+    public AuthorizationBadTokenException(String message) {
+        super(message);
+    }
+
     @Override
     public int getStatusCode() {
         return status;
