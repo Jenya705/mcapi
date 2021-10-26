@@ -7,10 +7,8 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.github.jenya705.mcapi.*;
 import com.github.jenya705.mcapi.app.LibraryApplication;
 import com.github.jenya705.mcapi.command.Command;
-import com.github.jenya705.mcapi.entity.LazyPlayer;
-import com.github.jenya705.mcapi.entity.RestLocation;
-import com.github.jenya705.mcapi.entity.RestPlayer;
-import com.github.jenya705.mcapi.entity.RestPlayerList;
+import com.github.jenya705.mcapi.entity.*;
+import com.github.jenya705.mcapi.entity.api.EntityError;
 import com.github.jenya705.mcapi.entity.api.EntityLocation;
 import com.github.jenya705.mcapi.selector.BotSelector;
 import com.github.jenya705.mcapi.selector.OfflinePlayerSelector;
@@ -153,6 +151,7 @@ public class HttpRestClient implements RestClient {
                         .responseContent()
                         .aggregate()
                         .asString()
+                        .flatMap(this::handleResponse)
         );
     }
 
@@ -167,6 +166,24 @@ public class HttpRestClient implements RestClient {
                         .responseContent()
                         .aggregate()
                         .asString()
+                        .flatMap(this::handleResponse)
         );
     }
+
+    private Mono<String> handleResponse(String responseValue) {
+        try {
+            RestError apiError = application.fromJson(responseValue, RestError.class);
+            return Mono.error(application.buildException(
+                    new EntityError(
+                            500,
+                            apiError.getCode(),
+                            apiError.getNamespace(),
+                            apiError.getReason()
+                    )
+            ));
+        } catch (Throwable e) {
+            return Mono.justOrEmpty(responseValue);
+        }
+    }
+
 }

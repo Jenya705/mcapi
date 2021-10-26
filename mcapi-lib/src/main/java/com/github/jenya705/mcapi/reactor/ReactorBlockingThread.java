@@ -14,10 +14,8 @@ public class ReactorBlockingThread extends Thread {
 
     private final Queue<Pair<MonoSink<Object>, Object>> tasks = new ArrayDeque<>();
 
-    private final Object waiter = new Object();
-
     public ReactorBlockingThread() {
-        super("Reactor-blocking-thread");
+        setName("Reactor-blocking-thread");
         setDaemon(true);
     }
 
@@ -27,12 +25,15 @@ public class ReactorBlockingThread extends Thread {
             Pair<MonoSink<Object>, Object> task = tasks.poll();
             if (task == null) {
                 try {
-                    synchronized (waiter) {
-                        waiter.wait();
+                    synchronized (this) {
+                        wait();
                     }
                 } catch (InterruptedException e) {
                     // continue
                 }
+            }
+            else if (task.getRight() instanceof Throwable) {
+                task.getLeft().error((Throwable) task.getRight());
             }
             else {
                 task.getLeft().success(task.getRight());
@@ -40,18 +41,27 @@ public class ReactorBlockingThread extends Thread {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public <T> Mono<T> addTask(Mono<T> mono) {
         if (Thread.currentThread().equals(this)) {
-            return Mono.justOrEmpty(mono.block());
+            try {
+                return Mono.justOrEmpty(mono.block());
+            } catch (Throwable e) {
+                return Mono.error(e);
+            }
         }
         return Mono.create(sink ->
-                mono.subscribe(value -> {
-                    tasks.add(new Pair<>((MonoSink<Object>) sink, value));
-                    synchronized (waiter) {
-                        waiter.notifyAll();
-                    }
-                })
+                mono
+                        .doOnError(e -> add(sink, e))
+                        .subscribe(value -> add(sink, value))
         );
     }
+
+    @SuppressWarnings("unchecked")
+    private <T> void add(MonoSink<T> sink, Object value) {
+        tasks.add(new Pair<>((MonoSink<Object>) sink, value));
+        synchronized (this) {
+            notifyAll();
+        }
+    }
+
 }
