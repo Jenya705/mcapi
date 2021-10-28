@@ -17,11 +17,13 @@ public class RestOfflinePlayer {
 
     private String name;
     private UUID uuid;
+    private boolean online;
 
     public static RestOfflinePlayer from(OfflinePlayer player) {
         return new RestOfflinePlayer(
                 player.getName(),
-                player.getUuid()
+                player.getUuid(),
+                player.isOnline()
         );
     }
 }

@@ -1,36 +1,31 @@
 package com.github.jenya705.mcapi.sample;
 
-import com.github.jenya705.mcapi.Location;
-import com.github.jenya705.mcapi.PlayerID;
+import com.github.jenya705.mcapi.Permission;
 import com.github.jenya705.mcapi.app.DefaultLibraryApplication;
 import com.github.jenya705.mcapi.app.LibraryApplication;
+import com.github.jenya705.mcapi.permission.Permissions;
+import com.github.jenya705.mcapi.selector.BotSelector;
 
 /**
  * @author Jenya705
  */
-class SampleGetLocation {
+class SampleGetBotPermission {
 
     public static void main(String[] args) {
         LibraryApplication application = new DefaultLibraryApplication("localhost", 8080, "ce727c0a74024afdbd6ed9d03225d4e60000001630142908370"); // some token
-        Location location = application
+        Permission permission = application
                 .rest()
-                .getPlayerLocation(PlayerID.of("Jenya705"))
+                .getBotPermission(
+                        BotSelector.me,
+                        Permissions.USER_KICK // or just "user.kick"
+                )
                 .block();
-        if (location == null) {
-            System.out.println("Location is null!");
-            return;
+        if (permission != null) {
+            System.out.printf("Can i kick players: %s", permission.isToggled());
         }
-        System.out.printf(
-                "x: %s, y: %s, z: %s, world: %s",
-                location.getX(),
-                location.getY(),
-                location.getZ(),
-                location.getWorld()
-        );
         application
                 .rest()
                 .stop()
                 .block();
     }
-
 }

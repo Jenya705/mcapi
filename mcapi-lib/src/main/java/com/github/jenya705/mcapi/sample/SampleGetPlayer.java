@@ -24,6 +24,10 @@ class SampleGetPlayer {
                 "I found the player with name %s and uuid %s%n",
                 player.getName(), player.getUuid()
         );
+        application
+                .rest()
+                .stop()
+                .block();
     }
 
 }

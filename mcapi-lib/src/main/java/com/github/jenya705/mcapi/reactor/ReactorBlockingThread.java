@@ -14,6 +14,8 @@ public class ReactorBlockingThread extends Thread {
 
     private final Queue<Pair<MonoSink<Object>, Object>> tasks = new ArrayDeque<>();
 
+    private boolean stopped = false;
+
     public ReactorBlockingThread() {
         setName("Reactor-blocking-thread");
         setDaemon(true);
@@ -21,7 +23,7 @@ public class ReactorBlockingThread extends Thread {
 
     @Override
     public void run() {
-        while (isAlive()) {
+        while (isAlive() && !stopped) {
             Pair<MonoSink<Object>, Object> task = tasks.poll();
             if (task == null) {
                 try {
@@ -54,6 +56,13 @@ public class ReactorBlockingThread extends Thread {
                         .doOnError(e -> add(sink, e))
                         .subscribe(value -> add(sink, value))
         );
+    }
+
+    public void terminate() {
+        stopped = true;
+        synchronized (this) {
+            notifyAll();
+        }
     }
 
     @SuppressWarnings("unchecked")

@@ -18,13 +18,13 @@ public interface RestClient {
 
     Mono<Location> getPlayerLocation(PlayerID id);
 
-    Mono<Boolean> sendMessage(PlayerSelector selector, Message message);
+    Mono<Void> sendMessage(PlayerSelector selector, Message message);
 
     Flux<Player> getOnlinePlayers();
 
-    Mono<Boolean> banPlayers(PlayerSelector selector, Message message);
+    Mono<Void> banPlayers(PlayerSelector selector, Message message);
 
-    Mono<Boolean> kickPlayers(PlayerSelector selector, Message message);
+    Mono<Void> kickPlayers(PlayerSelector selector, Message message);
 
     Mono<Permission> getPlayerPermission(PlayerID id, String permissionName);
 
@@ -34,14 +34,16 @@ public interface RestClient {
 
     Mono<Permission> getBotPermission(BotSelector selector, String permissionName, UUID target);
 
-    Mono<Boolean> createCommand(Command command);
+    Mono<Void> createCommand(Command command);
 
-    Mono<Boolean> deleteCommand(String... path);
+    Mono<Void> deleteCommand(String... path);
 
-    Mono<Boolean> requestLink(PlayerID id, LinkRequest request);
+    Mono<Void> requestLink(PlayerID id, LinkRequest request);
 
     Mono<OfflinePlayer> getOfflinePlayer(PlayerID id);
 
-    Mono<Boolean> banOfflinePlayer(OfflinePlayerSelector selector, Message message);
+    Mono<Void> banOfflinePlayer(OfflinePlayerSelector selector, Message message);
+
+    Mono<Void> stop();
 
 }

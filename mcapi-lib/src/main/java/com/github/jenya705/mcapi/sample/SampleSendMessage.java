@@ -16,6 +16,10 @@ class SampleSendMessage {
                 .rest()
                 .sendMessage(PlayerSelector.all, new DefaultMessage("Hi!"))
                 .block();
+        application
+                .rest()
+                .stop()
+                .block();
     }
 
 }

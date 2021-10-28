@@ -17,7 +17,7 @@ import java.util.UUID;
 @Setter(AccessLevel.PROTECTED)
 public class LazyPlayer implements Player {
 
-    private final RestClient client;
+    private final RestClient restClient;
     @Getter
     private final UUID uuid;
 
@@ -42,7 +42,7 @@ public class LazyPlayer implements Player {
 
     @Override
     public void sendMessage(String message) {
-        client.sendMessage(PlayerSelector.of(getUuid()), new DefaultMessage(message));
+        restClient.sendMessage(PlayerSelector.of(getUuid()), new DefaultMessage(message));
     }
 
     @Override
@@ -52,7 +52,7 @@ public class LazyPlayer implements Player {
 
     @Override
     public void ban(String reason) {
-        client.banPlayers(PlayerSelector.of(getUuid()), new DefaultMessage(reason));
+        restClient.banPlayers(PlayerSelector.of(getUuid()), new DefaultMessage(reason));
     }
 
     @Override
@@ -62,19 +62,19 @@ public class LazyPlayer implements Player {
 
     @Override
     public void kick(String reason) {
-        client.kickPlayers(PlayerSelector.of(getUuid()), new DefaultMessage(reason));
+        restClient.kickPlayers(PlayerSelector.of(getUuid()), new DefaultMessage(reason));
     }
 
     @Override
     public Location getLocation() {
-        return client
+        return restClient
                 .getPlayerLocation(PlayerID.of(getUuid()))
                 .blockOptional()
                 .orElseThrow();
     }
 
     private void loadFullPlayer() {
-        Player loaded = client
+        Player loaded = restClient
                 .getPlayer(PlayerID.of(uuid))
                 .blockOptional()
                 .orElseThrow();
