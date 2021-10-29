@@ -3,6 +3,7 @@ package com.github.jenya705.mcapi.module.command;
 import com.github.jenya705.mcapi.AbstractApplicationModule;
 import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.ServerApplication;
+import com.github.jenya705.mcapi.builder.command.*;
 import com.github.jenya705.mcapi.command.*;
 import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutorConfig;
 import com.github.jenya705.mcapi.data.ConfigData;

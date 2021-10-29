@@ -6,10 +6,6 @@ import com.github.jenya705.mcapi.ServerCore;
 import com.github.jenya705.mcapi.command.CommandExecutor;
 import com.github.jenya705.mcapi.mock.filesystem.MockFileSystem;
 import com.github.jenya705.mcapi.mock.filesystem.MockFileSystemImpl;
-import com.github.jenya705.mcapi.util.MultivaluedMap;
-import com.github.jenya705.mcapi.util.MultivaluedMapImpl;
-import com.github.jenya705.mcapi.util.Pair;
-import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.util.Collection;
