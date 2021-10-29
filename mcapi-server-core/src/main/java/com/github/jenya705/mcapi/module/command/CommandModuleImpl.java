@@ -7,6 +7,7 @@ import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.error.BotCommandNotExistException;
 import com.github.jenya705.mcapi.error.CommandNameFormatException;
 import com.github.jenya705.mcapi.error.CommandOptionsAllException;
+import com.github.jenya705.mcapi.error.TooManyOptionsException;
 import com.github.jenya705.mcapi.log.TimerTask;
 import com.github.jenya705.mcapi.module.config.ConfigModule;
 import com.github.jenya705.mcapi.module.mapper.Mapper;
@@ -19,15 +20,12 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author Jenya705
  */
 @Slf4j
 public class CommandModuleImpl extends AbstractApplicationModule implements CommandModule {
-
-    private static final Pattern commandNamePattern = Pattern.compile("[a-zA-Z0-9_]*");
 
     private CommandOptionParserContainer parserContainer;
     private CommandModuleConfig config;
@@ -139,6 +137,9 @@ public class CommandModuleImpl extends AbstractApplicationModule implements Comm
     }
 
     private ValidateResult validateOptions(CommandOption[] options) {
+        if (options.length > config.getMaxCommandOptions()) {
+            throw new TooManyOptionsException(config.getMaxCommandOptions());
+        }
         boolean anyValues = false;
         boolean anySubs = false;
         for (CommandOption option : options) {
@@ -186,14 +187,14 @@ public class CommandModuleImpl extends AbstractApplicationModule implements Comm
         return null;
     }
 
-    private static boolean isCommandNameRight(String commandName) {
-        Matcher matcher = commandNamePattern.matcher(commandName);
+    private boolean isCommandNameRight(String commandName) {
+        Matcher matcher = config.getCommandNamePattern().matcher(commandName);
         return matcher.find() && matcher.end() == commandName.length();
     }
 
-    private static void validateCommandName(String commandName) {
+    private void validateCommandName(String commandName) {
         if (!isCommandNameRight(commandName)) {
-            throw new CommandNameFormatException(commandNamePattern.pattern());
+            throw new CommandNameFormatException(config.getCommandNamePattern().pattern());
         }
     }
 }
