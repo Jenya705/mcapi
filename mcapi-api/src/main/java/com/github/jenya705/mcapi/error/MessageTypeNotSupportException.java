@@ -11,8 +11,12 @@ public class MessageTypeNotSupportException extends IllegalArgumentException imp
     private static final int code = 16;
     private static final String format = "Message type %s is not supported for this operation";
 
-    public MessageTypeNotSupportException(String type) {
-        super(String.format(format, type));
+    public MessageTypeNotSupportException(String message) {
+        super(message);
+    }
+
+    public static MessageTypeNotSupportException create(String type) {
+        return new MessageTypeNotSupportException(String.format(format, type));
     }
 
     @Override

@@ -56,14 +56,14 @@ public class RestModule extends AbstractApplicationModule {
                 .rawDeserializer(Player.class, id ->
                         core()
                                 .getOptionalPlayerId(id)
-                                .orElseThrow(() -> new PlayerNotFoundException(id))
+                                .orElseThrow(() -> PlayerNotFoundException.create(id))
                 )
                 .rawDeserializer(OfflinePlayer.class, id ->
                         core()
                                 .getOptionalOfflinePlayerId(id)
-                                .orElseThrow(() -> new PlayerNotFoundException(id))
+                                .orElseThrow(() -> PlayerNotFoundException.create(id))
                 )
-                .throwableParser(JsonProcessingException.class, e -> new JsonDeserializeException())
+                .throwableParser(JsonProcessingException.class, e -> JsonDeserializeException.create())
                 .tunnelJsonSerializer(Command.class, RestCommand::from)
                 .tunnelJsonSerializer(CommandExecutableOption.class, RestCommandExecutableOption::from)
                 .tunnelJsonSerializer(CommandInteractionValue.class, RestCommandInteractionValue::from)

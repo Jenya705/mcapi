@@ -11,8 +11,12 @@ public class BadOptionException extends IllegalArgumentException implements ApiE
     private static final int code = 18;
     private static final String format = "Bad option with name %s";
 
-    public BadOptionException(String option) {
-        super(String.format(format, option));
+    public BadOptionException(String message) {
+        super(message);
+    }
+
+    public static BadOptionException create(String option) {
+        return new BadOptionException(String.format(format, option));
     }
 
     @Override

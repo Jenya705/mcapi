@@ -11,8 +11,12 @@ public class MessageTypeNotExistException extends IllegalArgumentException imple
     private static final int code = 15;
     private static final String format = "Message type %s is not exist";
 
-    public MessageTypeNotExistException(String type) {
-        super(String.format(format, type));
+    public MessageTypeNotExistException(String message) {
+        super(message);
+    }
+
+    public static MessageTypeNotExistException create(String type) {
+        return new MessageTypeNotExistException(String.format(format, type));
     }
 
     @Override

@@ -38,13 +38,13 @@ public interface AbstractBot {
 
     default void needPermission(String permission) {
         if (!hasPermission(permission)) {
-            throw new BotNotPermittedException(permission);
+            throw BotNotPermittedException.create(permission);
         }
     }
 
     default void needPermission(String permission, UUID target) {
         if (!hasPermission(permission, target)) {
-            throw new BotNotPermittedException(permission);
+            throw BotNotPermittedException.create(permission);
         }
     }
 

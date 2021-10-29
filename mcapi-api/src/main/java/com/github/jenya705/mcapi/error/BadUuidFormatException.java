@@ -11,8 +11,12 @@ public class BadUuidFormatException extends IllegalArgumentException implements 
     private static final String format = "Bad uuid %s";
     private static final int status = 400;
 
-    public BadUuidFormatException(String uuid) {
-        super(String.format(format, uuid));
+    public BadUuidFormatException(String message) {
+        super(message);
+    }
+
+    public static BadUuidFormatException create(String uuid) {
+        return new BadUuidFormatException(String.format(format, uuid));
     }
 
     @Override

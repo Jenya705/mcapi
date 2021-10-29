@@ -29,7 +29,7 @@ public class PlayerSelectorCreator extends MapSelectorCreator<Player, DefaultSel
                 .uuidDirect((data, id) ->
                         core()
                                 .getOptionalPlayerId(id)
-                                .orElseThrow(() -> new PlayerNotFoundException(id))
+                                .orElseThrow(() -> PlayerNotFoundException.create(id))
                 )
                 .defaultSelector("a", data ->
                         (Collection<Player>) core().getPlayers()

@@ -10,12 +10,12 @@ public class AuthorizationFormatException extends IllegalArgumentException imple
     private static final int code = 3;
     private static final int status = 401;
 
-    public AuthorizationFormatException() {
-        super("Bad format");
-    }
-
     public AuthorizationFormatException(String message) {
         super(message);
+    }
+
+    public static AuthorizationFormatException create() {
+        return new AuthorizationFormatException("Bad format");
     }
 
     @Override

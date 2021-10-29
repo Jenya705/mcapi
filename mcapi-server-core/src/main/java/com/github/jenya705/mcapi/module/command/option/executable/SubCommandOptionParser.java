@@ -41,7 +41,7 @@ public class SubCommandOptionParser extends AbstractCommandExecutableOptionParse
                         .map(it -> commandModule.getParser(it.get("type").asText()).deserialize(it))
                         .map(it -> {
                             if (it instanceof CommandValueOption) return (CommandValueOption) it;
-                            throw new BadOptionException(it.getName());
+                            throw BadOptionException.create(it.getName());
                         })
                         .toArray(CommandValueOption[]::new)
         );

@@ -31,7 +31,7 @@ public class GetBotPermissionRouteHandler extends AbstractRouteHandler {
         AbstractBot selectorBot = botSelector
                 .stream()
                 .findAny()
-                .orElseThrow(SelectorEmptyException::new);
+                .orElseThrow(SelectorEmptyException::create);
         String permission = request.paramOrException("permission");
         response.ok(new EntityPermission(
                 selectorBot.hasPermission(permission),

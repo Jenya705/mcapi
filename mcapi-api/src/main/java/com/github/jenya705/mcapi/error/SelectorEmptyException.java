@@ -10,8 +10,12 @@ public class SelectorEmptyException extends IllegalArgumentException implements 
     private static final int status = 404;
     private static final int code = 17;
 
-    public SelectorEmptyException() {
-        super("Selector is empty");
+    public SelectorEmptyException(String message) {
+        super(message);
+    }
+
+    public static SelectorEmptyException create() {
+        return new SelectorEmptyException("Selector is empty");
     }
 
     @Override

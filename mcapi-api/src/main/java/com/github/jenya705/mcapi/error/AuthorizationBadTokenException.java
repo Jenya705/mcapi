@@ -10,12 +10,12 @@ public class AuthorizationBadTokenException extends IllegalArgumentException imp
     private static final int code = 4;
     private static final int status = 401;
 
-    public AuthorizationBadTokenException() {
-        super("Bad token");
-    }
-
     public AuthorizationBadTokenException(String message) {
         super(message);
+    }
+
+    public static AuthorizationBadTokenException create() {
+        return new AuthorizationBadTokenException("Bad token");
     }
 
     @Override

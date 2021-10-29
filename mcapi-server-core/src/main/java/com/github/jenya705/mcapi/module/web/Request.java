@@ -15,7 +15,7 @@ public interface Request {
 
     default AbstractBot bot() {
         return header("Authorization", AbstractBot.class)
-                .orElseThrow(AuthorizationBadTokenException::new);
+                .orElseThrow(AuthorizationBadTokenException::create);
     }
 
     default Optional<String> param(String key) {
@@ -39,11 +39,11 @@ public interface Request {
     }
 
     default String bodyOrException() {
-        return body().orElseThrow(BodyIsEmptyException::new);
+        return body().orElseThrow(BodyIsEmptyException::create);
     }
 
     default <T> T bodyOrException(Class<? extends T> clazz) {
-        return body(clazz).orElseThrow(BodyIsEmptyException::new);
+        return body(clazz).orElseThrow(BodyIsEmptyException::create);
     }
     
     String getUri();

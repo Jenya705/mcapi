@@ -40,7 +40,7 @@ public class SubCommandGroupOptionParser extends AbstractCommandExecutableOption
                         .map(it -> commandModule.getParser(it.get("type").asText()).deserialize(it))
                         .map(it -> {
                             if (it instanceof CommandExecutableOption) return (CommandExecutableOption) it;
-                            throw new BadOptionException(it.getName());
+                            throw BadOptionException.create(it.getName());
                         })
                         .toArray(CommandExecutableOption[]::new)
         );

@@ -11,8 +11,12 @@ public class TooManyOptionsException extends IllegalArgumentException implements
     private static final int code = 19;
     private static final String format = "Too many options, max: %s";
 
-    public TooManyOptionsException(int max) {
-        super(String.format(format, max));
+    public TooManyOptionsException(String message) {
+        super(message);
+    }
+
+    public static TooManyOptionsException create(int max) {
+        return new TooManyOptionsException(String.format(format, max));
     }
 
     @Override

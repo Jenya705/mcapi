@@ -28,7 +28,7 @@ public class MessageUtils {
         doWithMessage(
                 request
                         .body(TypedMessage.class)
-                        .orElseThrow(BodyIsEmptyException::new),
+                        .orElseThrow(BodyIsEmptyException::create),
                 function
         );
     }
@@ -44,7 +44,7 @@ public class MessageUtils {
     public void doWithMessage(TypedMessage message, Function<TypedMessage, Boolean> function) {
         ReactiveUtils.ifTrueThrow(
                 !function.apply(message),
-                () -> new MessageTypeNotSupportException(message.getType())
+                () -> MessageTypeNotSupportException.create(message.getType())
         );
     }
 }

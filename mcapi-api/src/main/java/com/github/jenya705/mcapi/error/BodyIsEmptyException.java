@@ -10,8 +10,12 @@ public class BodyIsEmptyException extends IllegalArgumentException implements Ap
     private static final int code = 13;
     private static final int status = 400;
 
-    public BodyIsEmptyException() {
-        super("Body is empty");
+    public BodyIsEmptyException(String message) {
+        super(message);
+    }
+
+    public static BodyIsEmptyException create() {
+        return new BodyIsEmptyException("Body is empty");
     }
 
     @Override

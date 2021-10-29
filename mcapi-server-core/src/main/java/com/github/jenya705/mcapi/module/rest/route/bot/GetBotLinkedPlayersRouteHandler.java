@@ -34,7 +34,7 @@ public class GetBotLinkedPlayersRouteHandler extends AbstractRouteHandler {
         AbstractBot selectorBot = bots
                 .stream()
                 .findAny()
-                .orElseThrow(SelectorEmptyException::new);
+                .orElseThrow(SelectorEmptyException::create);
         response.ok(new RestPlayerList(
                 selectorBot
                         .getLinks()

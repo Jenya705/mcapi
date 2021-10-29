@@ -24,12 +24,12 @@ public class AuthorizationModuleImpl extends AbstractApplicationModule implement
     @Override
     public AbstractBot bot(String authorization) {
         if (authorization == null) {
-            throw new AuthorizationFormatException();
+            throw AuthorizationFormatException.create();
         }
         String[] splitAuthorization = authorization.split(" ");
         if (splitAuthorization.length != 2 ||
                 !splitAuthorization[0].equalsIgnoreCase("bot")) {
-            throw new AuthorizationFormatException();
+            throw AuthorizationFormatException.create();
         }
         return rawBot(splitAuthorization[1]);
     }
@@ -38,7 +38,7 @@ public class AuthorizationModuleImpl extends AbstractApplicationModule implement
     public AbstractBot rawBot(String token) {
         BotEntity bot = databaseModule.storage().findBotByToken(token);
         if (bot == null) {
-            throw new AuthorizationBadTokenException();
+            throw AuthorizationBadTokenException.create();
         }
         return new BotObject(bot, databaseModule.storage(), storage);
     }

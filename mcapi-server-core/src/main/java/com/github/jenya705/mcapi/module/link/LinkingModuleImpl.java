@@ -298,7 +298,7 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
                 getPlayerLinks(player)
                         .stream()
                         .anyMatch(it -> it.getId() == bot.getEntity().getId()),
-                LinkRequestExistException::new
+                LinkRequestExistException::create
         );
         List<String> joinedList = ListUtils.join(
                 request.getRequireRequestPermissions(),
@@ -309,21 +309,21 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
                 .filter(it -> storageModule.getPermission(it) == null)
                 .findAny()
                 .ifPresent(it -> {
-                    throw new LinkRequestPermissionNotFoundException(it);
+                    throw LinkRequestPermissionNotFoundException.create(it);
                 });
         joinedList
                 .stream()
                 .filter(it -> storageModule.getPermission(it).isGlobal())
                 .findAny()
                 .ifPresent(it -> {
-                    throw new LinkRequestPermissionIsGlobalException(it);
+                    throw LinkRequestPermissionIsGlobalException.create(it);
                 });
         Arrays
                 .stream(request.getMinecraftRequestCommands())
                 .filter(it -> commandModule.getBotCommandExecutor(bot, it) == null)
                 .findAny()
                 .ifPresent(it -> {
-                    throw new BotCommandNotExistException(it);
+                    throw BotCommandNotExistException.create(it);
                 });
     }
 

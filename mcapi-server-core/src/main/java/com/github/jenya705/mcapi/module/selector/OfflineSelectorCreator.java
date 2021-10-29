@@ -23,7 +23,7 @@ public class OfflineSelectorCreator extends MapSelectorCreator<OfflinePlayer, De
                 .uuidDirect((data, id) ->
                         core()
                                 .getOptionalOfflinePlayerId(id)
-                                .orElseThrow(() -> new PlayerNotFoundException(id))
+                                .orElseThrow(() -> PlayerNotFoundException.create(id))
                 )
                 .defaultSelector("l", data ->
                         SelectorCreatorUtils

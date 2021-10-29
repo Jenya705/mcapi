@@ -32,7 +32,7 @@ public class GetBotTargetPermissionRouteHandler extends AbstractRouteHandler {
         AbstractBot selectorBot = botSelector
                 .stream()
                 .findAny()
-                .orElseThrow(SelectorEmptyException::new);
+                .orElseThrow(SelectorEmptyException::create);
         String permission = request.paramOrException("permission");
         OfflinePlayer player = request
                 .paramOrException("target", OfflinePlayer.class);

@@ -10,8 +10,12 @@ public class CommandOptionsAllException extends IllegalArgumentException impleme
     private static final int code = 10;
     private static final int status = 400;
 
-    public CommandOptionsAllException() {
-        super("Options of command is combined (please insert sub commands or values)");
+    public CommandOptionsAllException(String message) {
+        super(message);
+    }
+
+    public static CommandOptionsAllException create() {
+        return new CommandOptionsAllException("Options of command is combined (please insert sub commands or values)");
     }
 
     @Override

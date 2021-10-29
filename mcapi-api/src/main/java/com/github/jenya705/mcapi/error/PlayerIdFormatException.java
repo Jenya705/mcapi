@@ -11,8 +11,12 @@ public class PlayerIdFormatException extends IllegalArgumentException implements
     private static final String format = "Player id %s is not right";
     private static final int status = 403;
 
-    public PlayerIdFormatException(String id) {
-        super(String.format(format, id));
+    public PlayerIdFormatException(String message) {
+        super(message);
+    }
+
+    public static PlayerIdFormatException create(String id) {
+        return new PlayerIdFormatException(String.format(format, id));
     }
 
     @Override

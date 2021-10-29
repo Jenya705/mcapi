@@ -75,7 +75,7 @@ public class MessageDeserializerImpl extends StdDeserializer<TypedMessage> imple
         JsonNode node = p.getCodec().readTree(p);
         String type = node.get("type").asText().toLowerCase(Locale.ROOT);
         if (!messageDeserializers.containsKey(type)) {
-            throw new MessageTypeNotExistException(type);
+            throw MessageTypeNotExistException.create(type);
         }
         return new TypedMessageImpl(
                 type,

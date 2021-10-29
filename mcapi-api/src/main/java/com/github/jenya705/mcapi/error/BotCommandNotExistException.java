@@ -11,8 +11,12 @@ public class BotCommandNotExistException extends IllegalArgumentException implem
     private static final String format = "%s bot command not exist";
     private static final int status = 404;
 
-    public BotCommandNotExistException(String command) {
-        super(String.format(format, command));
+    public BotCommandNotExistException(String message) {
+        super(message);
+    }
+
+    public static BotCommandNotExistException create(String command) {
+        return new BotCommandNotExistException(String.format(format, command));
     }
 
     @Override

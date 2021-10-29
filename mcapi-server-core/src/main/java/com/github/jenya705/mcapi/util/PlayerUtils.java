@@ -23,7 +23,7 @@ public class PlayerUtils {
     public Optional<? extends Player> getPlayer(String name, ServerCore core) {
         Pair<Optional<? extends Player>, Boolean> information = getPlayerWithFullInformation(name, core);
         if (!information.getRight()) {
-            throw new PlayerIdFormatException(name);
+            throw PlayerIdFormatException.create(name);
         }
         return information.getLeft();
     }
@@ -35,7 +35,7 @@ public class PlayerUtils {
     public Optional<? extends OfflinePlayer> getOfflinePlayer(String name, ServerCore core) {
         Pair<Optional<? extends OfflinePlayer>, Boolean> information = getOfflinePlayerWithFullInformation(name, core);
         if (!information.getRight()) {
-            throw new PlayerIdFormatException(name);
+            throw PlayerIdFormatException.create(name);
         }
         return information.getLeft();
     }

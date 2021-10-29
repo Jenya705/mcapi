@@ -10,8 +10,12 @@ public class LinkRequestExistException extends IllegalStateException implements 
     private static final int code = 7;
     private static final int status = 403;
 
-    public LinkRequestExistException() {
-        super("Link request exist");
+    public LinkRequestExistException(String message) {
+        super(message);
+    }
+
+    public static LinkRequestExistException create() {
+        return new LinkRequestExistException("Link request already exist");
     }
 
     @Override

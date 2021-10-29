@@ -11,8 +11,12 @@ public class CommandNameFormatException extends IllegalArgumentException impleme
     private static final String format = "Command name or option name is not matches %s pattern";
     private static final int status = 400;
 
-    public CommandNameFormatException(String pattern) {
-        super(String.format(format, pattern));
+    public CommandNameFormatException(String message) {
+        super(message);
+    }
+
+    public static CommandNameFormatException create(String pattern) {
+        return new CommandNameFormatException(String.format(format, pattern));
     }
 
     @Override

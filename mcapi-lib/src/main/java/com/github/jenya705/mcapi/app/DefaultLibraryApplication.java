@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.github.jenya705.mcapi.ApiError;
 import com.github.jenya705.mcapi.InternalException;
 import com.github.jenya705.mcapi.RestClient;
+import com.github.jenya705.mcapi.error.*;
 import com.github.jenya705.mcapi.reactor.HttpRestClient;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -36,8 +37,31 @@ public class DefaultLibraryApplication implements LibraryApplication {
        this.ip = ip;
        this.port = port;
        this.token = token;
-
        restClient = new HttpRestClient(this);
+
+       MCAPIErrorRegisterer.registerAllErrors(
+               this,
+               AuthorizationBadTokenException.class,
+               AuthorizationFormatException.class,
+               BadOptionException.class,
+               BadUuidFormatException.class,
+               BodyIsEmptyException.class,
+               BotCommandNotExistException.class,
+               BotNotPermittedException.class,
+               CommandNameFormatException.class,
+               CommandOptionsAllException.class,
+               JsonDeserializeException.class,
+               LinkRequestExistException.class,
+               LinkRequestPermissionIsGlobalException.class,
+               LinkRequestPermissionNotFoundException.class,
+               MessageTypeNotExistException.class,
+               MessageTypeNotSupportException.class,
+               PlayerIdFormatException.class,
+               PlayerNotFoundException.class,
+               SelectorEmptyException.class,
+               TooManyOptionsException.class
+       );
+
     }
 
     @Override
@@ -61,7 +85,7 @@ public class DefaultLibraryApplication implements LibraryApplication {
     public RuntimeException buildException(ApiError error) {
         List<Function<ApiError, RuntimeException>> namespaceBuilders =
                 exceptionBuilders.getOrDefault(error.getNamespace(), null);
-        if (namespaceBuilders == null || namespaceBuilders.size() > error.getCode()) {
+        if (namespaceBuilders == null || namespaceBuilders.size() < error.getCode()) {
             // unknown exception
             return new InternalException(error.getReason());
         }
@@ -78,10 +102,10 @@ public class DefaultLibraryApplication implements LibraryApplication {
     public void addExceptionBuilder(String namespace, int code, Function<ApiError, RuntimeException> builder) {
         exceptionBuilders.putIfAbsent(namespace, new ArrayList<>());
         List<Function<ApiError, RuntimeException>> namespaceBuilders = exceptionBuilders.get(namespace);
-        for (int i = namespaceBuilders.size() + 1; i < code; ++i) {
+        for (int i = namespaceBuilders.size(); i < code; ++i) {
             namespaceBuilders.add(null);
         }
-        namespaceBuilders.add(builder);
+        namespaceBuilders.set(code - 1, builder);
     }
 
     @Override

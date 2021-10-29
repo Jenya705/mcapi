@@ -10,8 +10,12 @@ public class JsonDeserializeException extends IllegalArgumentException implement
     private static final int code = 14;
     private static final int status = 400;
 
-    public JsonDeserializeException() {
-        super("Can not deserialize given json");
+    public JsonDeserializeException(String message) {
+        super(message);
+    }
+
+    public static JsonDeserializeException create() {
+        return new JsonDeserializeException("Can not deserialize given json");
     }
 
     @Override

@@ -11,8 +11,12 @@ public class LinkRequestPermissionNotFoundException extends IllegalArgumentExcep
     private static final String format = "Permission %s is not found";
     private static final int status = 404;
 
-    public LinkRequestPermissionNotFoundException(String permissionName) {
-        super(String.format(format, permissionName));
+    public LinkRequestPermissionNotFoundException(String message) {
+        super(message);
+    }
+
+    public static LinkRequestPermissionNotFoundException create(String permissionName) {
+        return new LinkRequestPermissionNotFoundException(String.format(format, permissionName));
     }
 
     @Override

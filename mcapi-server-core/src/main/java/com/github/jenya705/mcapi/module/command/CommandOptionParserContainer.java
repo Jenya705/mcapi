@@ -21,11 +21,12 @@ public class CommandOptionParserContainer {
 
     public CommandOptionParserContainer(ServerApplication application) {
         parsers = new HashMap<>();
-        parsers.put(BooleanOption.type, new BooleanOptionParser());
-        parsers.put(IntegerOption.type, new IntegerOptionParser());
-        parsers.put(StringOption.type, new StringOptionParser());
-        parsers.put(PlayerOption.type, new PlayerOptionParser(application));
-
+        // values
+        addParser(BooleanOption.type, new BooleanOptionParser());
+        addParser(IntegerOption.type, new IntegerOptionParser());
+        addParser(StringOption.type, new StringOptionParser());
+        addParser(PlayerOption.type, new PlayerOptionParser(application));
+        // executables
         addParser(SubCommandOption.type, new SubCommandOptionParser(application));
         addParser(SubCommandGroupOption.type, new SubCommandGroupOptionParser(application));
     }

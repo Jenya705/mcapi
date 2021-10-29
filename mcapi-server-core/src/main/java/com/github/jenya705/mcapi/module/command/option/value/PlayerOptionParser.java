@@ -58,7 +58,7 @@ public class PlayerOptionParser extends AbstractCommandValueOptionParser impleme
     public Object serialize(CommandValueOption option, AbstractBot owner, String value) {
         return core()
                 .getOptionalPlayerId(value)
-                .orElseThrow(() -> new PlayerNotFoundException(value))
+                .orElseThrow(() -> PlayerNotFoundException.create(value))
                 .getUuid();
     }
 }

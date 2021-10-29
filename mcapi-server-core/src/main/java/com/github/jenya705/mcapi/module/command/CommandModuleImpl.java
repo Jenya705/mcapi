@@ -79,7 +79,7 @@ public class CommandModuleImpl extends AbstractApplicationModule implements Comm
     @SuppressWarnings("unchecked")
     public void deleteCommand(String name, AbstractBot owner) {
         if (!botCommands.containsKey(owner.getEntity().getId())) {
-            throw new BotCommandNotExistException(name);
+            throw BotCommandNotExistException.create(name);
         }
         ContainerCommandExecutor commandExecutor = botCommands.get(owner.getEntity().getId());
         String[] path = name.split("_");
@@ -87,7 +87,7 @@ public class CommandModuleImpl extends AbstractApplicationModule implements Comm
         for (String command: path) {
             Object obj = currentNode.getOrDefault(command, null);
             if (obj == null) {
-                throw new BotCommandNotExistException(name);
+                throw BotCommandNotExistException.create(name);
             }
             if (obj instanceof Map) {
                 currentNode = (Map<String, Object>) obj;
@@ -101,7 +101,7 @@ public class CommandModuleImpl extends AbstractApplicationModule implements Comm
     private Object parseOptions(CommandOption[] options, String path, AbstractBot owner) {
         ValidateResult validateResult = validateOptions(options);
         if (validateResult == ValidateResult.ALL) {
-            throw new CommandOptionsAllException();
+            throw CommandOptionsAllException.create();
         }
         if (validateResult == ValidateResult.SUBS) {
             Map<String, Object> newNode = new HashMap<>();
@@ -138,7 +138,7 @@ public class CommandModuleImpl extends AbstractApplicationModule implements Comm
 
     private ValidateResult validateOptions(CommandOption[] options) {
         if (options.length > config.getMaxCommandOptions()) {
-            throw new TooManyOptionsException(config.getMaxCommandOptions());
+            throw TooManyOptionsException.create(config.getMaxCommandOptions());
         }
         boolean anyValues = false;
         boolean anySubs = false;
@@ -194,7 +194,7 @@ public class CommandModuleImpl extends AbstractApplicationModule implements Comm
 
     private void validateCommandName(String commandName) {
         if (!isCommandNameRight(commandName)) {
-            throw new CommandNameFormatException(config.getCommandNamePattern().pattern());
+            throw CommandNameFormatException.create(config.getCommandNamePattern().pattern());
         }
     }
 }
