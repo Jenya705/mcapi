@@ -2,7 +2,6 @@ package com.github.jenya705.mcapi.module.command;
 
 import com.github.jenya705.mcapi.AbstractApplicationModule;
 import com.github.jenya705.mcapi.OnStartup;
-import com.github.jenya705.mcapi.builder.command.*;
 import com.github.jenya705.mcapi.command.*;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.error.BotCommandNotExistException;
