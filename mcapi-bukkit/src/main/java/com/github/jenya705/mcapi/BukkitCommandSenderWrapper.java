@@ -29,8 +29,12 @@ public class BukkitCommandSenderWrapper implements JavaCommandSender {
     }
 
     @Override
-    public String getName() {
-        return sender instanceof ConsoleCommandSender ? "@c" : sender.getName();
+    public String getId() {
+        return sender instanceof ConsoleCommandSender ? "@c" :
+                (sender instanceof Player ?
+                        ((Player) sender).getUniqueId().toString() :
+                        sender.getName()
+                );
     }
 
     @Override

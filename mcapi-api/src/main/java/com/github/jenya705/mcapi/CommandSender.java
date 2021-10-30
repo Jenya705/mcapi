@@ -7,7 +7,7 @@ public interface CommandSender {
 
     String getType();
 
-    String getName();
+    String getId();
 
     void sendMessage(String message);
 

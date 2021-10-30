@@ -17,6 +17,24 @@ import java.util.UUID;
 @Setter(AccessLevel.PROTECTED)
 public class LazyPlayer implements Player {
 
+    public static LazyPlayer of(RestClient client, UUID uuid) {
+        return LazyPlayer
+                .builder()
+                .restClient(client)
+                .uuid(uuid)
+                .build();
+    }
+
+    public static LazyPlayer of(RestClient client, RestPlayer player) {
+        return LazyPlayer
+                .builder()
+                .restClient(client)
+                .uuid(player.getUuid())
+                .name(player.getName())
+                .type(player.getType())
+                .build();
+    }
+
     private final RestClient restClient;
     @Getter
     private final UUID uuid;
@@ -33,6 +51,11 @@ public class LazyPlayer implements Player {
     }
 
     @Override
+    public String getId() {
+        return uuid.toString();
+    }
+
+    @Override
     public String getName() {
         if (name == null) {
             loadFullPlayer();
@@ -42,17 +65,17 @@ public class LazyPlayer implements Player {
 
     @Override
     public void sendMessage(String message) {
-        restClient.sendMessage(PlayerSelector.of(getUuid()), new DefaultMessage(message));
+        restClient.sendMessage(PlayerSelector.of(getUuid()), new DefaultMessage(message)).subscribe();
     }
 
     @Override
     public boolean hasPermission(String permission) {
-        return false;
+        return restClient.getPlayerPermission(PlayerID.of(getUuid()), permission).block().isToggled();
     }
 
     @Override
     public void ban(String reason) {
-        restClient.banPlayers(PlayerSelector.of(getUuid()), new DefaultMessage(reason));
+        restClient.banPlayers(PlayerSelector.of(getUuid()), new DefaultMessage(reason)).subscribe();
     }
 
     @Override
@@ -62,7 +85,7 @@ public class LazyPlayer implements Player {
 
     @Override
     public void kick(String reason) {
-        restClient.kickPlayers(PlayerSelector.of(getUuid()), new DefaultMessage(reason));
+        restClient.kickPlayers(PlayerSelector.of(getUuid()), new DefaultMessage(reason)).subscribe();
     }
 
     @Override

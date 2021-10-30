@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 /**
  * @author Jenya705
  */
@@ -13,9 +15,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RestLinkEvent {
 
-    public static String type = "link";
+    public static final String type = "link";
 
     private boolean failed;
+    private UUID player;
     private String[] declinePermissions;
 
     public String getType() {
@@ -25,6 +28,7 @@ public class RestLinkEvent {
     public static RestLinkEvent from(LinkEvent event) {
         return new RestLinkEvent(
                 event.isFailed(),
+                event.getPlayer().getUuid(),
                 event.getDeclinePermissions()
         );
     }

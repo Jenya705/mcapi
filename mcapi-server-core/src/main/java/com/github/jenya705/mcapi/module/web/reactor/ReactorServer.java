@@ -9,7 +9,7 @@ import com.github.jenya705.mcapi.module.web.websocket.WebSocketRouteHandler;
 import com.github.jenya705.mcapi.util.Pair;
 import com.github.jenya705.mcapi.util.ReactiveUtils;
 import com.github.jenya705.mcapi.util.ReactorUtils;
-import com.github.jenya705.mcapi.util.ZipUtils;
+import com.github.jenya705.mcapi.utils.ZipUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.reactivestreams.Publisher;
@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiFunction;
-import java.util.function.Predicate;
 
 /**
  * @author Jenya705

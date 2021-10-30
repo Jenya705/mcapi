@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi.entity.event;
 
+import com.github.jenya705.mcapi.entity.api.event.EntityJoinEvent;
 import com.github.jenya705.mcapi.event.JoinEvent;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,4 +29,5 @@ public class RestJoinEvent {
                 event.getPlayer().getUuid()
         );
     }
+
 }

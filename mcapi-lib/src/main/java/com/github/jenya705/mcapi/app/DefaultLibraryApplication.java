@@ -7,8 +7,10 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.github.jenya705.mcapi.ApiError;
 import com.github.jenya705.mcapi.InternalException;
 import com.github.jenya705.mcapi.RestClient;
+import com.github.jenya705.mcapi.TunnelClient;
 import com.github.jenya705.mcapi.error.*;
-import com.github.jenya705.mcapi.reactor.HttpRestClient;
+import com.github.jenya705.mcapi.reactor.rest.HttpRestClient;
+import com.github.jenya705.mcapi.reactor.tunnel.HttpTunnelClient;
 import lombok.Getter;
 import lombok.SneakyThrows;
 
@@ -26,18 +28,24 @@ public class DefaultLibraryApplication implements LibraryApplication {
 
     private final Map<String, List<Function<ApiError, RuntimeException>>> exceptionBuilders = new HashMap<>();
     private final ObjectMapper jsonMapper = new ObjectMapper();
+    private final List<Runnable> startHandlers = new ArrayList<>();
 
     private final RestClient restClient;
+    private final TunnelClient tunnelClient;
 
     private final String ip;
     private final int port;
     private final String token;
 
+    private boolean started;
+
     public DefaultLibraryApplication(String ip, int port, String token) {
        this.ip = ip;
        this.port = port;
        this.token = token;
+
        restClient = new HttpRestClient(this);
+       tunnelClient = new HttpTunnelClient(this);
 
        MCAPIErrorRegisterer.registerAllErrors(
                this,
@@ -65,8 +73,31 @@ public class DefaultLibraryApplication implements LibraryApplication {
     }
 
     @Override
+    public boolean isStarted() {
+        return started;
+    }
+
+    @Override
+    public void start() {
+        if (isStarted()) return;
+        startHandlers.forEach(Runnable::run);
+        startHandlers.clear();
+        started = true;
+    }
+
+    @Override
+    public void onStart(Runnable runnable) {
+        startHandlers.add(runnable);
+    }
+
+    @Override
     public RestClient rest() {
         return restClient;
+    }
+
+    @Override
+    public TunnelClient tunnel() {
+        return tunnelClient;
     }
 
     @Override

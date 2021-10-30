@@ -15,6 +15,24 @@ import java.util.UUID;
 @Builder
 public class LazyOfflinePlayer implements OfflinePlayer {
 
+    public static LazyOfflinePlayer of(RestClient client, UUID uuid) {
+        return LazyOfflinePlayer
+                .builder()
+                .restClient(client)
+                .uuid(uuid)
+                .build();
+    }
+
+    public static LazyOfflinePlayer of(RestClient client, RestOfflinePlayer offlinePlayer) {
+        return LazyOfflinePlayer
+                .builder()
+                .restClient(client)
+                .uuid(offlinePlayer.getUuid())
+                .name(offlinePlayer.getName())
+                .online(offlinePlayer.isOnline())
+                .build();
+    }
+
     private final RestClient restClient;
     private final UUID uuid;
 
@@ -31,7 +49,7 @@ public class LazyOfflinePlayer implements OfflinePlayer {
 
     @Override
     public void ban(String reason) {
-        restClient.banOfflinePlayer(OfflinePlayerSelector.of(uuid), new DefaultMessage(reason));
+        restClient.banOfflinePlayer(OfflinePlayerSelector.of(uuid), new DefaultMessage(reason)).subscribe();
     }
 
     @Override

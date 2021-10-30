@@ -1,5 +1,7 @@
 package com.github.jenya705.mcapi.stringful;
 
+import com.github.jenya705.mcapi.module.mapper.Mapper;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -14,30 +16,15 @@ import java.util.function.Function;
  */
 public class StringfulParserImpl<T> implements StringfulParser<T> {
 
-    public static final Map<Class<?>, Function<String, Object>> typeParsers = new HashMap<>();
-
-    static {
-        typeParsers.put(String.class, value -> value);
-        // Integers
-        typeParsers.put(byte.class, Byte::parseByte);
-        typeParsers.put(short.class, Short::parseShort);
-        typeParsers.put(int.class, Integer::parseInt);
-        typeParsers.put(long.class, Long::parseLong);
-        // Floats
-        typeParsers.put(float.class, Float::parseFloat);
-        typeParsers.put(double.class, Double::parseDouble);
-        // Boolean
-        typeParsers.put(boolean.class, Boolean::parseBoolean);
-    }
-
     private final Class<? extends T> dataClass;
-
+    private final Mapper mapper;
     private final List<StringfulDataValueFunction<T>> dataValues = new ArrayList<>();
     private Constructor<? extends T> dataConstructor;
     private int requiredStart = -1;
 
-    public StringfulParserImpl(Class<? extends T> dataClass) throws Exception {
+    public StringfulParserImpl(Class<? extends T> dataClass, Mapper mapper) throws Exception {
         this.dataClass = dataClass;
+        this.mapper = mapper;
         regenerate();
     }
 
@@ -121,11 +108,11 @@ public class StringfulParserImpl<T> implements StringfulParser<T> {
 
     protected StringfulDataValueFunction<T> generateFieldFunction(Field field) {
         return (data, value) ->
-                field.set(data, typeParsers.get(field.getType()).apply(value));
+                field.set(data, mapper.fromRaw(value, field.getType()));
     }
 
     protected StringfulDataValueFunction<T> generateMethodFunction(Method method) {
         return (data, value) ->
-                method.invoke(typeParsers.get(method.getParameterTypes()[0]).apply(value));
+                method.invoke(data, mapper.fromRaw(value, method.getParameterTypes()[0]));
     }
 }

@@ -8,6 +8,7 @@ import com.github.jenya705.mcapi.command.CommandExecutor;
 import com.github.jenya705.mcapi.command.CommandTab;
 import com.github.jenya705.mcapi.command.CommandsUtils;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
+import com.github.jenya705.mcapi.module.mapper.Mapper;
 import com.github.jenya705.mcapi.stringful.StringfulIterator;
 import com.github.jenya705.mcapi.stringful.StringfulParser;
 import com.github.jenya705.mcapi.stringful.StringfulParserImpl;
@@ -38,7 +39,7 @@ public abstract class AdvancedCommandExecutor<T> extends AbstractApplicationModu
         super(application);
         databaseModule = bean(DatabaseModule.class);
         try {
-            parser = new StringfulParserImpl<>(argsClass);
+            parser = new StringfulParserImpl<>(argsClass, bean(Mapper.class));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -56,6 +57,7 @@ public abstract class AdvancedCommandExecutor<T> extends AbstractApplicationModu
                         sendMessage(sender, config.getArgumentParseFailed(),
                                 "%argument_id%", Integer.toString(error.onArgument())
                         );
+                        error.causedBy().printStackTrace();
                     }
                 });
     }

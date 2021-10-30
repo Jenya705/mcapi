@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EntityCommandSender implements CommandSender {
 
-    private String name;
+    private String id;
     private String type;
 
     @Override

@@ -8,4 +8,9 @@ public interface Player extends CommandSender, OfflinePlayer {
     void kick(String reason);
 
     Location getLocation();
+
+    @Override
+    default String getId() {
+        return getUuid().toString();
+    }
 }

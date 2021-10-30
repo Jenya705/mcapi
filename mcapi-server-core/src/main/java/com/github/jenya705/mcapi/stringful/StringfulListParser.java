@@ -1,5 +1,7 @@
 package com.github.jenya705.mcapi.stringful;
 
+import com.github.jenya705.mcapi.module.mapper.Mapper;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -12,12 +14,12 @@ public class StringfulListParser implements StringfulParser<List<Object>> {
     private final List<StringfulDataValueFunction<List<Object>>> dataValues;
     private final int requiredStart;
 
-    public StringfulListParser(int requiredStart, Class<?>... types) {
+    public StringfulListParser(Mapper mapper, int requiredStart, Class<?>... types) {
         dataValues = new ArrayList<>();
         for (Class<?> type : types) {
             dataValues.add(generateFunction(
-                    StringfulParserImpl.typeParsers.get(type))
-            );
+                    it -> mapper.fromRaw(it, type)
+            ));
         }
         this.requiredStart = requiredStart;
     }

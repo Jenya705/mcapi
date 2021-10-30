@@ -15,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class RestUnlinkEvent {
 
-    public static String type = "unlink";
+    public static final String type = "unlink";
 
     private UUID player;
 

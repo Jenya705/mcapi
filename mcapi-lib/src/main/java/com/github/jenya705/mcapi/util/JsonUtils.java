@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import lombok.experimental.UtilityClass;
 
 import java.io.IOException;
+import java.util.function.Function;
 
 /**
  * @author Jenya705
@@ -32,6 +33,14 @@ public class JsonUtils {
                 serializer.serialize(value, gen, provider);
             }
         };
+    }
+
+    public <T, V> StdDeserializer<V> getDeserializer(Class<? extends T> from, Class<? extends V> to, Function<T, V> function) {
+        return getDeserializer(to, (p, ctxt) -> function.apply(p.getCodec().readValue(p, from)));
+    }
+
+    public <T, V> StdSerializer<T> getSerializer(Class<T> from, Class<? extends V> to, Function<T, V> function) {
+        return getSerializer(from, (value, gen, provider) -> gen.writeObject(function.apply(value)));
     }
 
 }

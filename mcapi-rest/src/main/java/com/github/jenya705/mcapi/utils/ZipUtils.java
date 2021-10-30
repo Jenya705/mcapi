@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.util;
+package com.github.jenya705.mcapi.utils;
 
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;

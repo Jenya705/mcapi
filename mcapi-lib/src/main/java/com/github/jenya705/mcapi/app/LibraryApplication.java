@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.github.jenya705.mcapi.ApiError;
 import com.github.jenya705.mcapi.RestClient;
+import com.github.jenya705.mcapi.TunnelClient;
 import com.github.jenya705.mcapi.util.JacksonDeserializer;
 import com.github.jenya705.mcapi.util.JacksonSerializer;
 import com.github.jenya705.mcapi.util.JsonUtils;
+import reactor.core.publisher.Mono;
 
 import java.util.function.Function;
 
@@ -19,7 +21,15 @@ public interface LibraryApplication {
         return new DefaultLibraryApplication(ip, port, token);
     }
 
+    boolean isStarted();
+
+    void start();
+
+    void onStart(Runnable runnable);
+
     RestClient rest();
+
+    TunnelClient tunnel();
 
     String getIp();
 
@@ -46,4 +56,13 @@ public interface LibraryApplication {
     default <T> void addDeserializer(Class<T> clazz, JacksonDeserializer<T> deserializer) {
         addDeserializer(clazz, JsonUtils.getDeserializer(clazz, deserializer));
     }
+
+    default <T, V> void addSerializer(Class<T> from, Class<? extends V> to, Function<T, V> function) {
+        addSerializer(from, JsonUtils.getSerializer(from, to, function));
+    }
+
+    default <T, V> void addDeserializer(Class<? extends T> from, Class<V> to, Function<T, V> function) {
+        addDeserializer(to, JsonUtils.getDeserializer(from, to, function));
+    }
+
 }
