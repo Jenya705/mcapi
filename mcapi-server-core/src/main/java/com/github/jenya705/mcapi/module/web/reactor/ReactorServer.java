@@ -129,6 +129,9 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
     }
 
     private String executeHandler(HttpServerRequest request, HttpServerResponse response, RouteHandler handler, String body, RouteParameters parameters) {
+        if (app().isDebug()) {
+            log.info("Received request to uri {} with body {}", request.uri(), body);
+        }
         ReactorRequest localRequest = new ReactorRequest(this, request, body, parameters);
         ReactorResponse localResponse = new ReactorResponse(response);
         localResponse.contentType("application/json");

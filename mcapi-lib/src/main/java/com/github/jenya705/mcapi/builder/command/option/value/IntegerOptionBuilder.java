@@ -38,7 +38,7 @@ public class IntegerOptionBuilder extends CommandValueOptionBuilder<IntegerOptio
                 isRequired(),
                 getTab(),
                 isOnlyFromTab(),
-                min, max
+                max, min
         );
     }
 }

@@ -10,6 +10,7 @@ import com.github.jenya705.mcapi.module.command.option.value.PlayerOptionParser;
 import com.github.jenya705.mcapi.module.command.option.value.StringOptionParser;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -32,10 +33,10 @@ public class CommandOptionParserContainer {
     }
 
     public CommandOptionParser getParser(String type) {
-        return parsers.get(type);
+        return parsers.get(type.toLowerCase(Locale.ROOT));
     }
 
     public void addParser(String type, CommandOptionParser parser) {
-        parsers.put(type, parser);
+        parsers.put(type.toLowerCase(Locale.ROOT), parser);
     }
 }

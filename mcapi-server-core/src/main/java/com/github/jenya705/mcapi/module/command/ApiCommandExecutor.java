@@ -4,6 +4,7 @@ import com.github.jenya705.mcapi.AbstractApplicationModule;
 import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.*;
+import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutorConfig;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.entity.AbstractBot;
@@ -74,17 +75,7 @@ public class ApiCommandExecutor extends AbstractApplicationModule implements Com
                                         RestCommandInteractionEvent.type
                                 )
                 )
-                .ifFailed(error -> {
-                    if (error.isNotEnoughArguments()) {
-                        sender.sendMessage(CommandsUtils.placeholderMessage(config.getNotEnoughArguments()));
-                    }
-                    else {
-                        sender.sendMessage(CommandsUtils.placeholderMessage(
-                                config.getArgumentParseFailed(),
-                                "%argument_id%", Integer.toString(error.onArgument())
-                        ));
-                    }
-                });
+                .ifFailed(error -> AdvancedCommandExecutor.handleOnError(error, sender, config));
     }
 
     @Override

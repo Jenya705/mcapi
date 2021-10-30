@@ -10,6 +10,7 @@ import com.github.jenya705.mcapi.command.CommandsUtils;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.module.mapper.Mapper;
 import com.github.jenya705.mcapi.stringful.StringfulIterator;
+import com.github.jenya705.mcapi.stringful.StringfulParseError;
 import com.github.jenya705.mcapi.stringful.StringfulParser;
 import com.github.jenya705.mcapi.stringful.StringfulParserImpl;
 import com.github.jenya705.mcapi.util.PlayerUtils;
@@ -49,17 +50,7 @@ public abstract class AdvancedCommandExecutor<T> extends AbstractApplicationModu
     public void onCommand(CommandSender sender, StringfulIterator args, String permission) {
         parser.create(args)
                 .ifPresent(data -> onCommand(sender, data, permission))
-                .ifFailed(error -> {
-                    if (error.isNotEnoughArguments()) {
-                        sendMessage(sender, config.getNotEnoughArguments());
-                    }
-                    else {
-                        sendMessage(sender, config.getArgumentParseFailed(),
-                                "%argument_id%", Integer.toString(error.onArgument())
-                        );
-                        error.causedBy().printStackTrace();
-                    }
-                });
+                .ifFailed(error -> handleOnError(error, sender, config));
     }
 
     public abstract void onCommand(CommandSender sender, T args, String permission);
@@ -165,4 +156,19 @@ public abstract class AdvancedCommandExecutor<T> extends AbstractApplicationModu
         );
         return this;
     }
+
+    public static void handleOnError(StringfulParseError error, CommandSender sender, AdvancedCommandExecutorConfig config) {
+        if (error.isNotEnoughArguments()) {
+            sender.sendMessage(CommandsUtils.placeholderMessage(
+                    config.getNotEnoughArguments()
+            ));
+        }
+        else {
+            sender.sendMessage(CommandsUtils.placeholderMessage(
+                    config.getArgumentParseFailed(),
+                    "%argument_id%", Integer.toString(error.onArgument())
+            ));
+        }
+    }
+
 }

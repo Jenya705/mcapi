@@ -17,6 +17,9 @@ public class IntegerOption extends AbstractValueOption {
         super(name, required, tab, onlyFromTab);
         this.max = max;
         this.min = min;
+        if (this.max <= this.min) {
+            throw new IllegalArgumentException("Max less than min");
+        }
     }
 
     @Override
