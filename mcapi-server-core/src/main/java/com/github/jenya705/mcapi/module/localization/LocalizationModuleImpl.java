@@ -23,6 +23,7 @@ public class LocalizationModuleImpl extends AbstractApplicationModule implements
         linkPermissionLocalization("user.kick", "Kick you");
         linkPermissionLocalization("user.ban", "Ban you");
         linkPermissionLocalization("user.send_message", "Send message to you");
+        linkPermissionLocalization("user.get.location", "Get your location");
         save();
     }
 
