@@ -3,6 +3,8 @@ package com.github.jenya705.mcapi.module.rest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.jenya705.mcapi.*;
 import com.github.jenya705.mcapi.ApiError;
+import com.github.jenya705.mcapi.block.Block;
+import com.github.jenya705.mcapi.block.CommandBlock;
 import com.github.jenya705.mcapi.command.*;
 import com.github.jenya705.mcapi.entity.*;
 import com.github.jenya705.mcapi.entity.api.EntityEventTunnelAuthorizationRequest;
@@ -21,6 +23,7 @@ import com.github.jenya705.mcapi.module.command.ApiCommandDeserializer;
 import com.github.jenya705.mcapi.module.command.CommandModule;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.module.mapper.Mapper;
+import com.github.jenya705.mcapi.world.World;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -86,6 +89,9 @@ public class RestModule extends AbstractApplicationModule {
                 .tunnelJsonSerializer(SubscribeRequest.class, RestSubscribeRequest::from)
                 .tunnelJsonSerializer(EventTunnelAuthorizationRequest.class, RestEventTunnelAuthorizationRequest::from)
                 .tunnelJsonSerializer(Permission.class, RestPermission::from)
+                .tunnelJsonSerializer(World.class, RestWorld::from)
+                .tunnelJsonSerializer(Block.class, RestBlock::from)
+                .tunnelJsonSerializer(CommandBlock.class, RestCommandBlock::from)
                 .jsonDeserializer(Command.class, new ApiCommandDeserializer(commandModule))
                 .tunnelJsonDeserializer(
                         SubscribeRequest.class,

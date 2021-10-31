@@ -20,7 +20,7 @@ public class RestLocation {
 
     public static RestLocation from(Location location) {
         return new RestLocation(
-                location.getWorld(),
+                location.getWorld().getName(),
                 location.getX(),
                 location.getY(),
                 location.getZ()

@@ -1,5 +1,7 @@
 package com.github.jenya705.mcapi;
 
+import com.github.jenya705.mcapi.block.BukkitBlockDataRegistry;
+import com.github.jenya705.mcapi.world.World;
 import lombok.experimental.UtilityClass;
 import org.bukkit.entity.Player;
 
@@ -30,4 +32,9 @@ public class BukkitWrapper {
     public Location location(org.bukkit.Location location) {
         return BukkitLocationWrapper.of(location);
     }
+
+    public World world(org.bukkit.World world) {
+        return BukkitWorldWrapper.of(world);
+    }
+
 }

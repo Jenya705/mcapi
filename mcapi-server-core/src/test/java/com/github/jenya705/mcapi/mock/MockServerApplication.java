@@ -19,28 +19,28 @@ public class MockServerApplication extends ServerApplication {
                     UUID.randomUUID(),
                     "player",
                     true,
-                    new EntityLocation(0, 10, 0, "overworld")
+                    new EntityLocation(0, 10, 0, null)
             )),
             createMockPlayer(new EntityPlayer(
                     "DJ5613",
                     UUID.randomUUID(),
                     "player",
                     true,
-                    new EntityLocation(-3, 10, 3, "end")
+                    new EntityLocation(-3, 10, 3, null)
             )),
             createMockPlayer(new EntityPlayer(
                     "ladola",
                     UUID.randomUUID(),
                     "player",
                     true,
-                    new EntityLocation(8, 20, 4, "nether")
+                    new EntityLocation(8, 20, 4, null)
             )),
             createMockPlayer(new EntityPlayer(
                     "evtushok",
                     UUID.randomUUID(),
                     "player",
                     true,
-                    new EntityLocation(1, 11, 2, "overworld")
+                    new EntityLocation(1, 11, 2, null)
             ))
     );
 

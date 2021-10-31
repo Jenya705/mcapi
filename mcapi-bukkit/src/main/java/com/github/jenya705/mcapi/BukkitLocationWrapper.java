@@ -1,5 +1,7 @@
 package com.github.jenya705.mcapi;
 
+import com.github.jenya705.mcapi.block.BukkitBlockDataRegistry;
+import com.github.jenya705.mcapi.world.World;
 import lombok.AllArgsConstructor;
 
 /**
@@ -30,7 +32,7 @@ public class BukkitLocationWrapper implements Location {
     }
 
     @Override
-    public String getWorld() {
-        return location.getWorld().getKey().getKey();
+    public World getWorld() {
+        return BukkitWrapper.world(location.getWorld());
     }
 }

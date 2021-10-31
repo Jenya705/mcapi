@@ -6,6 +6,7 @@ import com.github.jenya705.mcapi.ServerCore;
 import com.github.jenya705.mcapi.command.CommandExecutor;
 import com.github.jenya705.mcapi.mock.filesystem.MockFileSystem;
 import com.github.jenya705.mcapi.mock.filesystem.MockFileSystemImpl;
+import com.github.jenya705.mcapi.world.World;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -51,6 +52,11 @@ public class MockServerCore implements ServerCore {
                 .filter(p -> p.getName().equalsIgnoreCase(name))
                 .findAny()
                 .orElse(null);
+    }
+
+    @Override
+    public World getWorld(String id) {
+        return null;
     }
 
     @Override

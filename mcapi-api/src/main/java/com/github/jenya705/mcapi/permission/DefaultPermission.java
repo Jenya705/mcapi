@@ -24,7 +24,10 @@ public enum DefaultPermission {
     USER_COMMAND_CREATE(Permissions.USER_COMMAND_CREATE, true, false, true),
     USER_KICK(Permissions.USER_KICK, false, true, false),
     USER_BAN(Permissions.USER_BAN, false, true, false),
-    USER_SEND_MESSAGE(Permissions.USER_SEND_MESSAGE, false, true, true);
+    USER_SEND_MESSAGE(Permissions.USER_SEND_MESSAGE, false, true, true),
+    BLOCK_GET(Permissions.BLOCK_GET, true, false, true),
+    WORLD_GET(Permissions.WORLD_GET, true, false, true),
+    COMMAND_BLOCK_GET(Permissions.COMMAND_BLOCK_GET, true, false, true);
 
     private final String name;
     private final boolean global;

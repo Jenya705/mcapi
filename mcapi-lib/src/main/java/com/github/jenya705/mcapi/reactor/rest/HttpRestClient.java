@@ -2,15 +2,17 @@ package com.github.jenya705.mcapi.reactor.rest;
 
 import com.github.jenya705.mcapi.*;
 import com.github.jenya705.mcapi.app.LibraryApplication;
+import com.github.jenya705.mcapi.block.Block;
+import com.github.jenya705.mcapi.block.BlockData;
 import com.github.jenya705.mcapi.command.Command;
 import com.github.jenya705.mcapi.entity.*;
 import com.github.jenya705.mcapi.entity.api.EntityError;
-import com.github.jenya705.mcapi.entity.api.EntityLocation;
 import com.github.jenya705.mcapi.entity.api.EntityPermission;
 import com.github.jenya705.mcapi.reactor.ReactorNettyUtils;
 import com.github.jenya705.mcapi.selector.BotSelector;
 import com.github.jenya705.mcapi.selector.OfflinePlayerSelector;
 import com.github.jenya705.mcapi.selector.PlayerSelector;
+import com.github.jenya705.mcapi.world.World;
 import lombok.Getter;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -54,12 +56,7 @@ public class HttpRestClient implements RestClient {
     public Mono<Location> getPlayerLocation(PlayerID id) {
         return makeRequest(Routes.PLAYER_LOCATION, id.getId())
                 .map(it -> application.fromJson(it, RestLocation.class))
-                .map(it -> new EntityLocation(
-                        it.getX(),
-                        it.getY(),
-                        it.getZ(),
-                        it.getWorld()
-                ));
+                .map(it -> LazyLocation.of(this, it));
     }
 
     @Override
@@ -153,6 +150,31 @@ public class HttpRestClient implements RestClient {
     @Override
     public Mono<Void> banOfflinePlayer(OfflinePlayerSelector selector, Message message) {
         return voidMono(makeRequestWithBody(Routes.OFFLINE_PLAYER_BAN, message, selector.asString()));
+    }
+
+    @Override
+    public Mono<World> getWorld(String name) {
+        return makeRequest(Routes.WORLD, name)
+                .map(it -> application.fromJson(it, RestWorld.class))
+                .map(it -> LazyWorld.of(this, it));
+    }
+
+    @Override
+    public Mono<Block> getBlock(String world, int x, int y, int z) {
+        return makeRequest(Routes.BLOCK, world, x, y, z)
+                .map(it -> application.fromJson(it, RestBlock.class))
+                .map(it -> LazyBlock.of(this, it));
+    }
+
+    @Override
+    public Mono<? extends BlockData> getBlockData(String world, int x, int y, int z, String blockType) {
+        return makeRequest(Routes.BLOCK_DATA, world, x, y, z)
+                .map(it -> application.fromJson(
+                        it,
+                        application
+                                .getBlockDataRegistry()
+                                .getBlockDataClass(blockType)
+                ));
     }
 
     @Override

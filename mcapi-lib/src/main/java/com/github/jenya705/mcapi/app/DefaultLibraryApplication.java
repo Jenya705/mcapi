@@ -11,6 +11,8 @@ import com.github.jenya705.mcapi.TunnelClient;
 import com.github.jenya705.mcapi.error.*;
 import com.github.jenya705.mcapi.reactor.rest.HttpRestClient;
 import com.github.jenya705.mcapi.reactor.tunnel.HttpTunnelClient;
+import com.github.jenya705.mcapi.registry.BlockDataRegistry;
+import com.github.jenya705.mcapi.registry.BlockDataRegistryImpl;
 import lombok.Getter;
 import lombok.SneakyThrows;
 
@@ -29,6 +31,7 @@ public class DefaultLibraryApplication implements LibraryApplication {
     private final Map<String, List<Function<ApiError, RuntimeException>>> exceptionBuilders = new HashMap<>();
     private final ObjectMapper jsonMapper = new ObjectMapper();
     private final List<Runnable> startHandlers = new ArrayList<>();
+    private final BlockDataRegistry blockDataRegistry = new BlockDataRegistryImpl();
 
     private final RestClient restClient;
     private final TunnelClient tunnelClient;
@@ -67,7 +70,9 @@ public class DefaultLibraryApplication implements LibraryApplication {
                PlayerIdFormatException.class,
                PlayerNotFoundException.class,
                SelectorEmptyException.class,
-               TooManyOptionsException.class
+               TooManyOptionsException.class,
+               WorldNotFoundException.class,
+               BlockNotFoundException.class
        );
 
     }
@@ -151,5 +156,10 @@ public class DefaultLibraryApplication implements LibraryApplication {
         SimpleModule simpleModule = new SimpleModule();
         simpleModule.addDeserializer(clazz, deserializer);
         jsonMapper.registerModule(simpleModule);
+    }
+
+    @Override
+    public void stop() {
+        restClient.stop().block();
     }
 }

@@ -203,6 +203,7 @@ public class HttpTunnelClient implements TunnelClient {
     }
 
     private Object getEvent(String json) {
+        System.out.println("Json: " + json);
         JsonNode node = application.fromJson(json, JsonNode.class);
         String eventType = node.get("type").asText();
         Class<?> eventClass = eventTypes.get(eventType);

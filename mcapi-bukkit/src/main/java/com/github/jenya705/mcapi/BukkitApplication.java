@@ -1,11 +1,13 @@
 package com.github.jenya705.mcapi;
 
+import com.github.jenya705.mcapi.block.BukkitBlockDataRegistryImpl;
 import com.github.jenya705.mcapi.permission.LuckPermsHook;
 import com.github.jenya705.mcapi.permission.VaultPermissionHook;
 import com.github.jenya705.mcapi.utils.FailureOperation;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import net.kyori.adventure.text.Component;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
@@ -33,6 +35,7 @@ public class BukkitApplication extends JavaPlugin {
         application.addClass(BukkitServerCore.class);
         application.addClass(BukkitServerEventHandler.class);
         application.addClass(BukkitOfflinePlayerStorageImpl.class);
+        application.addClass(BukkitBlockDataRegistryImpl.class);
         paperFeatures();
         permissionManager();
         application.addBean(this);

@@ -37,4 +37,11 @@ public class Routes {
     public final Route OFFLINE_PLAYER = Route.get("/offline/{id}");
 
     public final Route OFFLINE_PLAYER_BAN = Route.put("/offline/{selector}/ban");
+
+    public final Route WORLD = Route.get("/world/{id}");
+
+    public final Route BLOCK = Route.get("/world/{id}/block/{x}/{y}/{z}");
+
+    public final Route BLOCK_DATA = Route.get("/world/{id}/block/{x}/{y}/{z}/data");
+
 }

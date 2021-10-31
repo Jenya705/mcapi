@@ -11,6 +11,8 @@ import com.github.jenya705.mcapi.module.mapper.MapperImpl;
 import com.github.jenya705.mcapi.module.message.MessageDeserializerImpl;
 import com.github.jenya705.mcapi.module.rest.RestModule;
 import com.github.jenya705.mcapi.module.rest.route.SendMessageRouteHandler;
+import com.github.jenya705.mcapi.module.rest.route.block.GetBlockDataRouteHandler;
+import com.github.jenya705.mcapi.module.rest.route.block.GetBlockRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.bot.GetBotLinkedPlayersRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.bot.GetBotPermissionRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.bot.GetBotTargetPermissionRouteHandler;
@@ -20,6 +22,7 @@ import com.github.jenya705.mcapi.module.rest.route.command.DeleteCommandRouteHan
 import com.github.jenya705.mcapi.module.rest.route.offline.BanOfflinePlayerRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.offline.GetOfflinePlayerRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.player.*;
+import com.github.jenya705.mcapi.module.rest.route.world.GetWorldRouteHandler;
 import com.github.jenya705.mcapi.module.selector.ServerSelectorProvider;
 import com.github.jenya705.mcapi.module.storage.StorageModuleImpl;
 import com.github.jenya705.mcapi.module.web.tunnel.DefaultEventTunnel;
@@ -84,6 +87,10 @@ public class ServerApplication {
                 ReactorServer.class,
                 RestModule.class,
                 ServerSelectorProvider.class,
+                DefaultEventTunnel.class,
+                ServerLocalEventHandlerImpl.class,
+                MessageDeserializerImpl.class,
+                ComponentMapParserImpl.class,
                 // Routes
                 GetPlayerLocationRouteHandler.class,
                 GetPlayerRouteHandler.class,
@@ -100,11 +107,10 @@ public class ServerApplication {
                 LinkRequestRouteHandler.class,
                 GetOfflinePlayerRouteHandler.class,
                 BanOfflinePlayerRouteHandler.class,
+                GetBlockRouteHandler.class,
+                GetWorldRouteHandler.class,
+                GetBlockDataRouteHandler.class
                 // End Routes
-                DefaultEventTunnel.class,
-                ServerLocalEventHandlerImpl.class,
-                MessageDeserializerImpl.class,
-                ComponentMapParserImpl.class
         );
     }
 

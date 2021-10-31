@@ -1,9 +1,12 @@
 package com.github.jenya705.mcapi;
 
+import com.github.jenya705.mcapi.block.Block;
+import com.github.jenya705.mcapi.block.BlockData;
 import com.github.jenya705.mcapi.command.Command;
 import com.github.jenya705.mcapi.selector.BotSelector;
 import com.github.jenya705.mcapi.selector.OfflinePlayerSelector;
 import com.github.jenya705.mcapi.selector.PlayerSelector;
+import com.github.jenya705.mcapi.world.World;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -14,36 +17,42 @@ import java.util.UUID;
  */
 public interface RestClient {
 
-    Mono<Player> getPlayer(PlayerID id);
+    Mono<? extends Player> getPlayer(PlayerID id);
 
-    Mono<Location> getPlayerLocation(PlayerID id);
+    Mono<? extends Location> getPlayerLocation(PlayerID id);
 
-    Mono<Void> sendMessage(PlayerSelector selector, Message message);
+    Mono<? extends Void> sendMessage(PlayerSelector selector, Message message);
 
-    Flux<Player> getOnlinePlayers();
+    Flux<? extends Player> getOnlinePlayers();
 
-    Mono<Void> banPlayers(PlayerSelector selector, Message message);
+    Mono<? extends Void> banPlayers(PlayerSelector selector, Message message);
 
-    Mono<Void> kickPlayers(PlayerSelector selector, Message message);
+    Mono<? extends Void> kickPlayers(PlayerSelector selector, Message message);
 
-    Mono<Permission> getPlayerPermission(PlayerID id, String permissionName);
+    Mono<? extends Permission> getPlayerPermission(PlayerID id, String permissionName);
 
-    Flux<OfflinePlayer> getLinkedPlayers(BotSelector selector);
+    Flux<? extends OfflinePlayer> getLinkedPlayers(BotSelector selector);
 
-    Mono<Permission> getBotPermission(BotSelector selector, String permissionName);
+    Mono<? extends Permission> getBotPermission(BotSelector selector, String permissionName);
 
-    Mono<Permission> getBotPermission(BotSelector selector, String permissionName, UUID target);
+    Mono<? extends Permission> getBotPermission(BotSelector selector, String permissionName, UUID target);
 
-    Mono<Void> createCommand(Command command);
+    Mono<? extends Void> createCommand(Command command);
 
-    Mono<Void> deleteCommand(String... path);
+    Mono<? extends Void> deleteCommand(String... path);
 
-    Mono<Void> requestLink(PlayerID id, LinkRequest request);
+    Mono<? extends Void> requestLink(PlayerID id, LinkRequest request);
 
-    Mono<OfflinePlayer> getOfflinePlayer(PlayerID id);
+    Mono<? extends OfflinePlayer> getOfflinePlayer(PlayerID id);
 
-    Mono<Void> banOfflinePlayer(OfflinePlayerSelector selector, Message message);
+    Mono<? extends Void> banOfflinePlayer(OfflinePlayerSelector selector, Message message);
 
-    Mono<Void> stop();
+    Mono<? extends World> getWorld(String name);
+
+    Mono<? extends Block> getBlock(String world, int x, int y, int z);
+
+    Mono<? extends Void> stop();
+
+    Mono<? extends BlockData> getBlockData(String world, int x, int y, int z, String blockType);
 
 }

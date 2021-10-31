@@ -1,9 +1,12 @@
 package com.github.jenya705.mcapi;
 
+import com.github.jenya705.mcapi.block.BukkitBlockDataRegistry;
 import com.github.jenya705.mcapi.command.CommandExecutor;
 import com.github.jenya705.mcapi.permission.PermissionManagerHook;
+import com.github.jenya705.mcapi.world.World;
 import lombok.Cleanup;
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
@@ -38,6 +41,9 @@ public class BukkitServerCore extends AbstractJavaApplicationModule implements J
 
     @Bean
     private BukkitOfflinePlayerStorage offlinePlayerStorage;
+
+    @Bean
+    private BukkitBlockDataRegistry blockDataRegistry;
 
     @OnInitializing(priority = -1)
     public void initialize() {
@@ -118,6 +124,11 @@ public class BukkitServerCore extends AbstractJavaApplicationModule implements J
     @Override
     public OfflinePlayer getOfflinePlayer(UUID uuid) {
         return BukkitWrapper.offlinePlayer(Bukkit.getOfflinePlayer(uuid));
+    }
+
+    @Override
+    public World getWorld(String id) {
+        return BukkitWrapper.world(Bukkit.getWorld(NamespacedKey.minecraft(id)));
     }
 
     @Override

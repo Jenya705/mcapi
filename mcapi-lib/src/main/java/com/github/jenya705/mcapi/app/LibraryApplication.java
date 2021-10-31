@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.github.jenya705.mcapi.ApiError;
 import com.github.jenya705.mcapi.RestClient;
 import com.github.jenya705.mcapi.TunnelClient;
+import com.github.jenya705.mcapi.registry.BlockDataRegistry;
 import com.github.jenya705.mcapi.util.JacksonDeserializer;
 import com.github.jenya705.mcapi.util.JacksonSerializer;
 import com.github.jenya705.mcapi.util.JsonUtils;
@@ -43,6 +44,8 @@ public interface LibraryApplication {
 
     RuntimeException buildException(ApiError error);
 
+    BlockDataRegistry getBlockDataRegistry();
+
     void addExceptionBuilder(String namespace, int code, Function<ApiError, RuntimeException> builder);
 
     <T> void addSerializer(Class<? extends T> clazz, JsonSerializer<T> serializer);
@@ -64,5 +67,7 @@ public interface LibraryApplication {
     default <T, V> void addDeserializer(Class<? extends T> from, Class<V> to, Function<T, V> function) {
         addDeserializer(to, JsonUtils.getDeserializer(from, to, function));
     }
+
+    void stop();
 
 }

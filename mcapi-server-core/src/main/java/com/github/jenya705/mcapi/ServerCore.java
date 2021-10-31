@@ -1,7 +1,10 @@
 package com.github.jenya705.mcapi;
 
+import com.github.jenya705.mcapi.block.Block;
+import com.github.jenya705.mcapi.block.BlockData;
 import com.github.jenya705.mcapi.command.CommandExecutor;
 import com.github.jenya705.mcapi.util.PlayerUtils;
+import com.github.jenya705.mcapi.world.World;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -30,6 +33,8 @@ public interface ServerCore {
 
     OfflinePlayer getOfflinePlayer(UUID uuid);
 
+    World getWorld(String id);
+
     default Optional<? extends Player> getOptionalPlayer(String name) {
         return Optional.ofNullable(getPlayer(name));
     }
@@ -52,6 +57,10 @@ public interface ServerCore {
 
     default Optional<? extends OfflinePlayer> getOptionalOfflinePlayerId(String id) {
         return PlayerUtils.getOfflinePlayer(id, this);
+    }
+
+    default Optional<? extends World> getOptionalWorld(String id) {
+        return Optional.ofNullable(getWorld(id));
     }
 
     default Object loadFile(String file, FileType type) throws IOException {

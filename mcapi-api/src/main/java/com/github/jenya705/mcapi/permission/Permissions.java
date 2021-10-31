@@ -38,4 +38,10 @@ public class Permissions {
 
     public final String USER_SEND_MESSAGE = "user.send_message";
 
+    public final String BLOCK_GET = "block.get";
+
+    public final String WORLD_GET = "world.get";
+
+    public final String COMMAND_BLOCK_GET = "block.get.minecraft:command_block";
+
 }
