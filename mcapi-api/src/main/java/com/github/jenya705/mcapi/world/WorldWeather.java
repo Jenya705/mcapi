@@ -8,6 +8,6 @@ public enum WorldWeather {
     CLEAR,
     RAIN,
     THUNDER
-    ;
+
 
 }

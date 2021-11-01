@@ -8,6 +8,7 @@ public enum WorldDimension {
     OVERWORLD,
     NETHER,
     END,
-    UNKNOWN;
+    UNKNOWN
+
 
 }

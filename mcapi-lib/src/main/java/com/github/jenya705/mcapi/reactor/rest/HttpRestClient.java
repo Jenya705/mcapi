@@ -8,6 +8,9 @@ import com.github.jenya705.mcapi.command.Command;
 import com.github.jenya705.mcapi.entity.*;
 import com.github.jenya705.mcapi.entity.api.EntityError;
 import com.github.jenya705.mcapi.entity.api.EntityPermission;
+import com.github.jenya705.mcapi.inventory.Inventory;
+import com.github.jenya705.mcapi.inventory.ItemStack;
+import com.github.jenya705.mcapi.inventory.PlayerInventory;
 import com.github.jenya705.mcapi.reactor.ReactorNettyUtils;
 import com.github.jenya705.mcapi.selector.BotSelector;
 import com.github.jenya705.mcapi.selector.OfflinePlayerSelector;
@@ -182,6 +185,34 @@ public class HttpRestClient implements RestClient {
         return Mono.fromFuture(
                 CompletableFuture.runAsync(blockingThread::terminate)
         );
+    }
+
+    @Override
+    public Mono<? extends ItemStack> getBlockInventoryItem(String world, int x, int y, int z, int itemX, int itemY) {
+        return makeRequest(Routes.BLOCK_INVENTORY_ITEM, world, x, y, z, itemX, itemY)
+                .map(it -> application.fromJson(it, RestItemStack.class))
+                .map(it -> LazyItemStack.of(this, it));
+    }
+
+    @Override
+    public Mono<? extends ItemStack> getPlayerInventoryItem(PlayerID playerID, int itemX, int itemY) {
+        return makeRequest(Routes.PLAYER_INVENTORY_ITEM, playerID.getId(), itemX, itemY)
+                .map(it -> application.fromJson(it, RestItemStack.class))
+                .map(it -> LazyItemStack.of(this, it));
+    }
+
+    @Override
+    public Mono<? extends Inventory> getBlockInventory(String world, int x, int y, int z) {
+        return makeRequest(Routes.BLOCK_INVENTORY, world, x, y, z)
+                .map(it -> application.fromJson(it, RestInventory.class))
+                .map(it -> LazyBlockInventory.of(this, it, world, x, y, z));
+    }
+
+    @Override
+    public Mono<? extends PlayerInventory> getPlayerInventory(PlayerID playerID) {
+        return makeRequest(Routes.PLAYER_INVENTORY, playerID.getId())
+                .map(it -> application.fromJson(it, RestInventory.class))
+                .map(it -> LazyPlayerInventory.of(this, it, playerID));
     }
 
     public Mono<String> makeRequest(Route route, Object... args) {

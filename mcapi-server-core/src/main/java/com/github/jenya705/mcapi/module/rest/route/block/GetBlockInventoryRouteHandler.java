@@ -1,6 +1,8 @@
 package com.github.jenya705.mcapi.module.rest.route.block;
 
 import com.github.jenya705.mcapi.Routes;
+import com.github.jenya705.mcapi.block.Block;
+import com.github.jenya705.mcapi.error.BlockDataNotFoundException;
 import com.github.jenya705.mcapi.error.BlockNotFoundException;
 import com.github.jenya705.mcapi.error.WorldNotFoundException;
 import com.github.jenya705.mcapi.inventory.InventoryHolder;
@@ -31,14 +33,18 @@ public class GetBlockInventoryRouteHandler extends AbstractRouteHandler {
                 .needPermission(Permissions.BLOCK_INVENTORY_GET);
         InventoryHolder inventoryHolderBlock =
                 Optional.ofNullable(
-                        core()
-                                .getOptionalWorld(id)
-                                .orElseThrow(() -> WorldNotFoundException.create(id))
+                        Optional.ofNullable(
+                                core()
+                                        .getOptionalWorld(id)
+                                        .orElseThrow(() -> WorldNotFoundException.create(id))
+                        )
+                                .map(it -> it.getBlock(x, y, z))
+                                .orElseThrow(BlockNotFoundException::create)
                 )
+                        .map(Block::getBlockData)
                         .filter(it -> it instanceof InventoryHolder)
                         .map(it -> (InventoryHolder) it)
-                        .orElseThrow(BlockNotFoundException::create)
-                ;
+                        .orElseThrow(BlockDataNotFoundException::create);
         response.ok(inventoryHolderBlock.getInventory());
     }
 }

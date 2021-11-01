@@ -14,13 +14,23 @@ public class Routes {
 
     public final Route SEND_MESSAGE = Route.post("/player/{selector}/send");
 
-    public final Route PLAYER_LIST = Route.get("/players/list");
-
     public final Route BAN_PLAYER_SELECTOR = Route.put("/player/{selector}/ban");
 
     public final Route KICK_PLAYER_SELECTOR = Route.delete("/player/{selector}/kick");
 
     public final Route PLAYER_PERMISSION = Route.get("/player/{id}/permission/{permission}");
+
+    public final Route PLAYER_INVENTORY = Route.get("/player/{id}/inventory");
+
+    public final Route PLAYER_INVENTORY_ITEM = Route.get("/player/{id}/inventory/{itemX}/{itemY}");
+
+    public final Route LINK_REQUEST = Route.post("/player/{id}/link");
+
+    public final Route PLAYER_LIST = Route.get("/players/list");
+
+    public final Route OFFLINE_PLAYER = Route.get("/offline/{id}");
+
+    public final Route OFFLINE_PLAYER_BAN = Route.put("/offline/{selector}/ban");
 
     public final Route BOT_LINKED = Route.get("/bot/{selector}/linked");
 
@@ -32,12 +42,6 @@ public class Routes {
 
     public final Route COMMAND_DELETE = Route.delete("/command/{name}");
 
-    public final Route LINK_REQUEST = Route.post("/player/{id}/link");
-
-    public final Route OFFLINE_PLAYER = Route.get("/offline/{id}");
-
-    public final Route OFFLINE_PLAYER_BAN = Route.put("/offline/{selector}/ban");
-
     public final Route WORLD = Route.get("/world/{id}");
 
     public final Route BLOCK = Route.get("/world/{id}/block/{x}/{y}/{z}");
@@ -47,9 +51,5 @@ public class Routes {
     public final Route BLOCK_INVENTORY = Route.get("/world/{id}/block/{x}/{y}/{z}/data/inventory");
 
     public final Route BLOCK_INVENTORY_ITEM = Route.get("/world/{id}/block/{x}/{y}/{z}/data/inventory/{itemX}/{itemY}");
-
-    public final Route PLAYER_INVENTORY = Route.get("/player/{id}/inventory");
-
-    public final Route PLAYER_INVENTORY_ITEM = Route.get("/player/{id}/inventory/{itemX}/{itemY}");
 
 }

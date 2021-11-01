@@ -3,6 +3,9 @@ package com.github.jenya705.mcapi;
 import com.github.jenya705.mcapi.block.Block;
 import com.github.jenya705.mcapi.block.BlockData;
 import com.github.jenya705.mcapi.command.Command;
+import com.github.jenya705.mcapi.inventory.Inventory;
+import com.github.jenya705.mcapi.inventory.ItemStack;
+import com.github.jenya705.mcapi.inventory.PlayerInventory;
 import com.github.jenya705.mcapi.selector.BotSelector;
 import com.github.jenya705.mcapi.selector.OfflinePlayerSelector;
 import com.github.jenya705.mcapi.selector.PlayerSelector;
@@ -54,5 +57,13 @@ public interface RestClient {
     Mono<? extends Void> stop();
 
     Mono<? extends BlockData> getBlockData(String world, int x, int y, int z, String blockType);
+
+    Mono<? extends ItemStack> getBlockInventoryItem(String world, int x, int y, int z, int itemX, int itemY);
+
+    Mono<? extends ItemStack> getPlayerInventoryItem(PlayerID playerID, int itemX, int itemY);
+
+    Mono<? extends Inventory> getBlockInventory(String world, int x, int y, int z);
+
+    Mono<? extends PlayerInventory> getPlayerInventory(PlayerID playerID);
 
 }
