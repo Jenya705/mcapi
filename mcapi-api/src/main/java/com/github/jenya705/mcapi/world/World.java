@@ -16,4 +16,6 @@ public interface World {
 
     WorldDimension getWorldDimension();
 
+    WorldWeather getWorldWeather();
+
 }

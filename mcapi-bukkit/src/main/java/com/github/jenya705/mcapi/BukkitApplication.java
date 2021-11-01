@@ -11,6 +11,7 @@ import net.kyori.adventure.text.Component;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +36,6 @@ public class BukkitApplication extends JavaPlugin {
         application.addClass(BukkitServerCore.class);
         application.addClass(BukkitServerEventHandler.class);
         application.addClass(BukkitOfflinePlayerStorageImpl.class);
-        application.addClass(BukkitBlockDataRegistryImpl.class);
         paperFeatures();
         permissionManager();
         application.addBean(this);

@@ -3,10 +3,12 @@ package com.github.jenya705.mcapi.module.storage;
 import com.github.jenya705.mcapi.AbstractApplicationModule;
 import com.github.jenya705.mcapi.OnDisable;
 import com.github.jenya705.mcapi.OnStartup;
+import com.github.jenya705.mcapi.VanillaMaterial;
 import com.github.jenya705.mcapi.data.MapConfigData;
 import com.github.jenya705.mcapi.entity.PermissionEntity;
 import com.github.jenya705.mcapi.module.config.ConfigModule;
 import com.github.jenya705.mcapi.permission.DefaultPermission;
+import com.github.jenya705.mcapi.permission.Permissions;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -36,6 +38,14 @@ public class StorageModuleImpl extends AbstractApplicationModule implements Stor
                         defaultPermission.isEnabledDefault()
                 ));
             }
+        }
+        for (VanillaMaterial material: VanillaMaterial.values()) {
+            String materialPermission = Permissions.BLOCK_GET + "." + material.getKey();
+            if (permissions.containsKey(materialPermission)) continue;
+            addPermission(new PermissionEntity(
+                    materialPermission,
+                    true, true
+            ));
         }
     }
 

@@ -1,6 +1,8 @@
 package com.github.jenya705.mcapi.entity;
 
 import com.github.jenya705.mcapi.*;
+import com.github.jenya705.mcapi.inventory.Inventory;
+import com.github.jenya705.mcapi.inventory.PlayerInventory;
 import com.github.jenya705.mcapi.selector.PlayerSelector;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -41,6 +43,7 @@ public class LazyPlayer implements Player {
 
     private String name;
     private String type;
+    private PlayerInventory inventory;
 
     @Override
     public String getType() {
@@ -94,6 +97,10 @@ public class LazyPlayer implements Player {
                 .getPlayerLocation(PlayerID.of(getUuid()))
                 .blockOptional()
                 .orElseThrow();
+    }
+
+    public PlayerInventory getInventory() {
+        return null;
     }
 
     private void loadFullPlayer() {

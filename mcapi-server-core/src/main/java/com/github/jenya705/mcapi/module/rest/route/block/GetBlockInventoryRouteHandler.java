@@ -1,10 +1,9 @@
 package com.github.jenya705.mcapi.module.rest.route.block;
 
 import com.github.jenya705.mcapi.Routes;
-import com.github.jenya705.mcapi.block.Block;
-import com.github.jenya705.mcapi.error.BlockDataNotFoundException;
 import com.github.jenya705.mcapi.error.BlockNotFoundException;
 import com.github.jenya705.mcapi.error.WorldNotFoundException;
+import com.github.jenya705.mcapi.inventory.InventoryHolder;
 import com.github.jenya705.mcapi.module.rest.route.AbstractRouteHandler;
 import com.github.jenya705.mcapi.module.web.Request;
 import com.github.jenya705.mcapi.module.web.Response;
@@ -15,10 +14,10 @@ import java.util.Optional;
 /**
  * @author Jenya705
  */
-public class GetBlockDataRouteHandler extends AbstractRouteHandler {
+public class GetBlockInventoryRouteHandler extends AbstractRouteHandler {
 
-    public GetBlockDataRouteHandler() {
-        super(Routes.BLOCK_DATA);
+    public GetBlockInventoryRouteHandler() {
+        super(Routes.BLOCK_INVENTORY);
     }
 
     @Override
@@ -27,19 +26,19 @@ public class GetBlockDataRouteHandler extends AbstractRouteHandler {
         int x = request.paramOrException("x", int.class);
         int y = request.paramOrException("y", int.class);
         int z = request.paramOrException("z", int.class);
-        Block block = Optional.ofNullable(
-                core()
-                        .getOptionalWorld(id)
-                        .orElseThrow(() -> WorldNotFoundException.create(id))
-                        .getBlock(x, y, z)
-        ).orElseThrow(BlockNotFoundException::create);
         request
                 .bot()
-                .needPermission(Permissions.BLOCK_GET + "." + block.getMaterial().getKey());
-        response.ok(
-                Optional
-                        .ofNullable(block.getBlockData())
-                        .orElseThrow(BlockDataNotFoundException::create)
-        );
+                .needPermission(Permissions.BLOCK_INVENTORY_GET);
+        InventoryHolder inventoryHolderBlock =
+                Optional.ofNullable(
+                        core()
+                                .getOptionalWorld(id)
+                                .orElseThrow(() -> WorldNotFoundException.create(id))
+                )
+                        .filter(it -> it instanceof InventoryHolder)
+                        .map(it -> (InventoryHolder) it)
+                        .orElseThrow(BlockNotFoundException::create)
+                ;
+        response.ok(inventoryHolderBlock.getInventory());
     }
 }

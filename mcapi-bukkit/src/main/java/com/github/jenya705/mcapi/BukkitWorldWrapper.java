@@ -1,9 +1,10 @@
 package com.github.jenya705.mcapi;
 
 import com.github.jenya705.mcapi.block.Block;
-import com.github.jenya705.mcapi.block.BukkitBlockDataRegistry;
+import com.github.jenya705.mcapi.block.BukkitBlockWrapper;
 import com.github.jenya705.mcapi.world.World;
 import com.github.jenya705.mcapi.world.WorldDimension;
+import com.github.jenya705.mcapi.world.WorldWeather;
 import lombok.AllArgsConstructor;
 
 /**
@@ -58,5 +59,16 @@ public class BukkitWorldWrapper implements World {
             }
         }
         return WorldDimension.UNKNOWN;
+    }
+
+    @Override
+    public WorldWeather getWorldWeather() {
+        if (bukkitWorld.isThundering()) {
+            return WorldWeather.THUNDER;
+        }
+        if (bukkitWorld.hasStorm()) {
+            return WorldWeather.RAIN;
+        }
+        return WorldWeather.CLEAR;
     }
 }

@@ -14,10 +14,14 @@ class SampleGetWorld {
         application.start();
         World world = application
                 .rest()
-                .getWorld("the_nether")
+                .getWorld("overworld")
                 .block();
         if (world != null) {
-            System.out.printf("World dimension is %s", world.getWorldDimension().name());
+            System.out.printf(
+                    "World dimension is %s, weather conditions is %s",
+                    world.getWorldDimension().name(),
+                    world.getWorldWeather().name()
+            );
         }
         application.stop();
     }

@@ -26,7 +26,7 @@ class SampleGetLocation {
                 location.getX(),
                 location.getY(),
                 location.getZ(),
-                location.getWorld()
+                location.getWorld().getName()
         );
         application
                 .rest()

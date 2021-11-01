@@ -72,7 +72,8 @@ public class DefaultLibraryApplication implements LibraryApplication {
                SelectorEmptyException.class,
                TooManyOptionsException.class,
                WorldNotFoundException.class,
-               BlockNotFoundException.class
+               BlockNotFoundException.class,
+               BlockDataNotFoundException.class
        );
 
     }

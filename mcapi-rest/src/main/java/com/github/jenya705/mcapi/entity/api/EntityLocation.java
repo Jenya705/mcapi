@@ -23,9 +23,4 @@ public class EntityLocation implements Location {
     public RestLocation rest() {
         return RestLocation.from(this);
     }
-
-    public World getWorld() {
-        EntityUtils.throwEntityContextException();
-        return null;
-    }
 }

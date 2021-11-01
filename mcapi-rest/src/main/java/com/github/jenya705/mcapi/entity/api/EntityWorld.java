@@ -4,6 +4,7 @@ import com.github.jenya705.mcapi.Location;
 import com.github.jenya705.mcapi.block.Block;
 import com.github.jenya705.mcapi.world.World;
 import com.github.jenya705.mcapi.world.WorldDimension;
+import com.github.jenya705.mcapi.world.WorldWeather;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ public class EntityWorld implements World {
 
     private String name;
     private WorldDimension worldDimension;
+    private WorldWeather worldWeather;
 
     @Override
     public Block getBlock(Location location) {

@@ -1,8 +1,9 @@
-package com.github.jenya705.mcapi;
+package com.github.jenya705.mcapi.block;
 
-import com.github.jenya705.mcapi.block.Block;
-import com.github.jenya705.mcapi.block.BlockData;
-import com.github.jenya705.mcapi.block.BukkitBlockDataRegistry;
+import com.github.jenya705.mcapi.BukkitLocationWrapper;
+import com.github.jenya705.mcapi.Location;
+import com.github.jenya705.mcapi.Material;
+import com.github.jenya705.mcapi.VanillaMaterial;
 import lombok.AllArgsConstructor;
 
 /**

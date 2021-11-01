@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi;
 
 import com.github.jenya705.mcapi.block.BukkitBlockDataRegistry;
+import com.github.jenya705.mcapi.inventory.*;
 import com.github.jenya705.mcapi.world.World;
 import lombok.experimental.UtilityClass;
 import org.bukkit.entity.Player;
@@ -35,6 +36,18 @@ public class BukkitWrapper {
 
     public World world(org.bukkit.World world) {
         return BukkitWorldWrapper.of(world);
+    }
+
+    public ItemStack itemStack(org.bukkit.inventory.ItemStack itemStack) {
+        return BukkitItemStackWrapper.of(itemStack);
+    }
+
+    public Inventory inventory(org.bukkit.inventory.Inventory inventory) {
+        return BukkitInventoryWrapper.of(inventory);
+    }
+
+    public PlayerInventory playerInventory(org.bukkit.inventory.PlayerInventory playerInventory) {
+        return BukkitPlayerInventoryWrapper.of(playerInventory);
     }
 
 }

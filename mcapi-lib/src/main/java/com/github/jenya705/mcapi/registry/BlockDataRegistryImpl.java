@@ -2,7 +2,7 @@ package com.github.jenya705.mcapi.registry;
 
 import com.github.jenya705.mcapi.VanillaMaterial;
 import com.github.jenya705.mcapi.block.BlockData;
-import com.github.jenya705.mcapi.entity.block.CommandBlockData;
+import com.github.jenya705.mcapi.entity.api.EntityCommandBlock;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -16,7 +16,7 @@ public class BlockDataRegistryImpl implements BlockDataRegistry {
     private final Map<String, Class<? extends BlockData>> blockDataMap = new HashMap<>();
 
     public BlockDataRegistryImpl() {
-        addBlockDataClass(VanillaMaterial.COMMAND_BLOCK, CommandBlockData.class);
+        addBlockDataClass(VanillaMaterial.COMMAND_BLOCK, EntityCommandBlock.class);
     }
 
     @Override

@@ -18,6 +18,8 @@ import com.github.jenya705.mcapi.event.*;
 import com.github.jenya705.mcapi.form.FormComponent;
 import com.github.jenya705.mcapi.form.FormPlatformProvider;
 import com.github.jenya705.mcapi.form.component.ComponentMapParser;
+import com.github.jenya705.mcapi.inventory.Inventory;
+import com.github.jenya705.mcapi.inventory.ItemStack;
 import com.github.jenya705.mcapi.module.authorization.AuthorizationModule;
 import com.github.jenya705.mcapi.module.command.ApiCommandDeserializer;
 import com.github.jenya705.mcapi.module.command.CommandModule;
@@ -92,6 +94,8 @@ public class RestModule extends AbstractApplicationModule {
                 .tunnelJsonSerializer(World.class, RestWorld::from)
                 .tunnelJsonSerializer(Block.class, RestBlock::from)
                 .tunnelJsonSerializer(CommandBlock.class, RestCommandBlock::from)
+                .tunnelJsonSerializer(ItemStack.class, RestItemStack::from)
+                .tunnelJsonSerializer(Inventory.class, RestInventory::from)
                 .jsonDeserializer(Command.class, new ApiCommandDeserializer(commandModule))
                 .tunnelJsonDeserializer(
                         SubscribeRequest.class,

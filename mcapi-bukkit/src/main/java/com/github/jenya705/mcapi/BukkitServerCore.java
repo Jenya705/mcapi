@@ -42,9 +42,6 @@ public class BukkitServerCore extends AbstractJavaApplicationModule implements J
     @Bean
     private BukkitOfflinePlayerStorage offlinePlayerStorage;
 
-    @Bean
-    private BukkitBlockDataRegistry blockDataRegistry;
-
     @OnInitializing(priority = -1)
     public void initialize() {
         plugin.getDataFolder().mkdir();

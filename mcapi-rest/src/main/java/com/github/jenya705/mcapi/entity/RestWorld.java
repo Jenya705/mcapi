@@ -15,11 +15,13 @@ public class RestWorld {
 
     private String name;
     private String dimension;
+    private String weather;
 
     public static RestWorld from(World world) {
         return new RestWorld(
                 world.getName(),
-                world.getWorldDimension().name()
+                world.getWorldDimension().name(),
+                world.getWorldWeather().name()
         );
     }
 

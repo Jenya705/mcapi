@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.item;
+package com.github.jenya705.mcapi.inventory;
 
 import com.github.jenya705.mcapi.Material;
 
@@ -11,6 +11,6 @@ public interface ItemStack {
 
     int getAmount();
 
-    String getName();
+    String getCustomName();
 
 }

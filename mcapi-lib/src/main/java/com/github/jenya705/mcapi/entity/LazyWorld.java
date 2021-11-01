@@ -5,6 +5,7 @@ import com.github.jenya705.mcapi.RestClient;
 import com.github.jenya705.mcapi.block.Block;
 import com.github.jenya705.mcapi.world.World;
 import com.github.jenya705.mcapi.world.WorldDimension;
+import com.github.jenya705.mcapi.world.WorldWeather;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -28,6 +29,7 @@ public class LazyWorld implements World {
                 .restClient(restClient)
                 .name(world.getName())
                 .dimension(WorldDimension.valueOf(world.getDimension()))
+                .weather(WorldWeather.valueOf(world.getWeather()))
                 .build();
     }
 
@@ -36,6 +38,7 @@ public class LazyWorld implements World {
     private final String name;
 
     private WorldDimension dimension;
+    private WorldWeather weather;
 
     @Override
     public Block getBlock(Location location) {
@@ -61,11 +64,20 @@ public class LazyWorld implements World {
         return dimension;
     }
 
+    @Override
+    public WorldWeather getWorldWeather() {
+        if (weather == null) {
+            loadFullWorld();
+        }
+        return weather;
+    }
+
     private void loadFullWorld() {
         World world = restClient
                 .getWorld(name)
                 .blockOptional()
                 .orElseThrow();
         dimension = world.getWorldDimension();
+        weather = world.getWorldWeather();
     }
 }

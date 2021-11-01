@@ -12,6 +12,8 @@ import com.github.jenya705.mcapi.module.message.MessageDeserializerImpl;
 import com.github.jenya705.mcapi.module.rest.RestModule;
 import com.github.jenya705.mcapi.module.rest.route.SendMessageRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.block.GetBlockDataRouteHandler;
+import com.github.jenya705.mcapi.module.rest.route.block.GetBlockInventoryItemRouteHandler;
+import com.github.jenya705.mcapi.module.rest.route.block.GetBlockInventoryRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.block.GetBlockRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.bot.GetBotLinkedPlayersRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.bot.GetBotPermissionRouteHandler;
@@ -109,7 +111,11 @@ public class ServerApplication {
                 BanOfflinePlayerRouteHandler.class,
                 GetBlockRouteHandler.class,
                 GetWorldRouteHandler.class,
-                GetBlockDataRouteHandler.class
+                GetBlockDataRouteHandler.class,
+                GetBlockInventoryRouteHandler.class,
+                GetBlockInventoryItemRouteHandler.class,
+                GetPlayerInventoryRouteHandler.class,
+                GetPlayerInventoryItemRouteHandler.class
                 // End Routes
         );
     }

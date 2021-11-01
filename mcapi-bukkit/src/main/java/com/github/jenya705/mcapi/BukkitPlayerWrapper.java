@@ -1,5 +1,7 @@
 package com.github.jenya705.mcapi;
 
+import com.github.jenya705.mcapi.inventory.Inventory;
+import com.github.jenya705.mcapi.inventory.PlayerInventory;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 
@@ -12,9 +14,12 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements J
 
     private final Player player;
 
+    private final PlayerInventory inventory;
+
     public BukkitPlayerWrapper(Player player) {
         super(player);
         this.player = player;
+        inventory = BukkitWrapper.playerInventory(player.getInventory());
     }
 
     public static BukkitPlayerWrapper of(Player player) {
@@ -54,5 +59,10 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements J
     @Override
     public Location getLocation() {
         return BukkitWrapper.location(player.getLocation());
+    }
+
+    @Override
+    public PlayerInventory getInventory() {
+        return inventory;
     }
 }

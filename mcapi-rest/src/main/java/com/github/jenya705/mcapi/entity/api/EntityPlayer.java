@@ -3,6 +3,7 @@ package com.github.jenya705.mcapi.entity.api;
 import com.github.jenya705.mcapi.Location;
 import com.github.jenya705.mcapi.Player;
 import com.github.jenya705.mcapi.entity.RestPlayer;
+import com.github.jenya705.mcapi.inventory.PlayerInventory;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ public class EntityPlayer implements Player {
     private String type;
     private boolean online;
     private Location location;
+    private PlayerInventory inventory;
 
     @Override
     public void sendMessage(String message) {

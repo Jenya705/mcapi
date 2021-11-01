@@ -44,4 +44,14 @@ public class Permissions {
 
     public final String COMMAND_BLOCK_GET = "block.get.minecraft:command_block";
 
+    public final String CHEST_BLOCK_GET = "block.get.minecraft:chest";
+
+    public final String PLAYER_INVENTORY_GET = "user.get.inventory";
+
+    public final String PLAYER_ITEM_GET = "user.get.inventory.item";
+
+    public final String BLOCK_INVENTORY_GET = "block.get.inventory";
+
+    public final String BLOCK_ITEM_GET = "block.get.inventory.item";
+
 }

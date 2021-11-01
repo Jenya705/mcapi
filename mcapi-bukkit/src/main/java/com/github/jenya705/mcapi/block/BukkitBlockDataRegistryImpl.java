@@ -16,6 +16,7 @@ public class BukkitBlockDataRegistryImpl implements BukkitBlockDataRegistry {
 
     public BukkitBlockDataRegistryImpl() {
         addCreator(Material.COMMAND_BLOCK, BukkitCommandBlockWrapper::of);
+        addCreator(Material.CHEST, BukkitChestWrapper::of);
     }
 
     @Override

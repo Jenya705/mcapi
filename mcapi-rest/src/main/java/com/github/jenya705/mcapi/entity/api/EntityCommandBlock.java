@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.entity.block;
+package com.github.jenya705.mcapi.entity.api;
 
 import com.github.jenya705.mcapi.block.CommandBlock;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommandBlockData implements CommandBlock {
+public class EntityCommandBlock implements CommandBlock {
 
     private String command;
 

@@ -27,7 +27,13 @@ public enum DefaultPermission {
     USER_SEND_MESSAGE(Permissions.USER_SEND_MESSAGE, false, true, true),
     BLOCK_GET(Permissions.BLOCK_GET, true, false, true),
     WORLD_GET(Permissions.WORLD_GET, true, false, true),
-    COMMAND_BLOCK_GET(Permissions.COMMAND_BLOCK_GET, true, false, true);
+    COMMAND_BLOCK_GET(Permissions.COMMAND_BLOCK_GET, true, false, true),
+    CHEST_BLOCK_GET(Permissions.CHEST_BLOCK_GET, true, false, true),
+    PLAYER_INVENTORY_GET(Permissions.PLAYER_INVENTORY_GET, false, false, true),
+    PLAYER_ITEM_GET(Permissions.PLAYER_ITEM_GET, false, false, true),
+    BLOCK_INVENTORY_GET(Permissions.BLOCK_INVENTORY_GET, false, false, true),
+    BLOCK_ITEM_GET(Permissions.BLOCK_ITEM_GET, true, false, true)
+    ;
 
     private final String name;
     private final boolean global;
