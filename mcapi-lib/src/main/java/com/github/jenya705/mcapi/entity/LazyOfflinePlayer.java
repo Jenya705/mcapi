@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.entity;
 
-import com.github.jenya705.mcapi.DefaultMessage;
+import com.github.jenya705.mcapi.message.DefaultMessage;
 import com.github.jenya705.mcapi.OfflinePlayer;
 import com.github.jenya705.mcapi.PlayerID;
 import com.github.jenya705.mcapi.RestClient;

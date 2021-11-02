@@ -28,7 +28,7 @@ import java.util.function.Consumer;
 @Setter(AccessLevel.PROTECTED)
 public class HttpTunnelClient implements TunnelClient {
 
-    private final LibraryApplication application;
+    private final LibraryApplication<?, ?> application;
 
     private final Map<Class<?>, Set<Consumer<Object>>> eventHandlers = new HashMap<>();
     private final Map<String, Class<?>> eventTypes = new HashMap<>();
@@ -41,7 +41,7 @@ public class HttpTunnelClient implements TunnelClient {
 
     private final List<String> subscriptions = new ArrayList<>();
 
-    public HttpTunnelClient(LibraryApplication application) {
+    public HttpTunnelClient(LibraryApplication<?, ?> application) {
         this.application = application;
         application.onStart(() -> {
             if (disabled) return;

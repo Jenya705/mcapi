@@ -1,5 +1,6 @@
-package com.github.jenya705.mcapi;
+package com.github.jenya705.mcapi.message;
 
+import com.github.jenya705.mcapi.Message;
 import lombok.AllArgsConstructor;
 
 /**

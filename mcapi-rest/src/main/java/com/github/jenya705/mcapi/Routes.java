@@ -8,6 +8,8 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class Routes {
 
+    public final Route STATUS = Route.get("/status");
+
     public final Route PLAYER = Route.get("/player/{id}");
 
     public final Route PLAYER_LOCATION = Route.get("/player/{id}/location");

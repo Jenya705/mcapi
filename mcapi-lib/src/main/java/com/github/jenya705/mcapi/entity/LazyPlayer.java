@@ -1,13 +1,15 @@
 package com.github.jenya705.mcapi.entity;
 
 import com.github.jenya705.mcapi.*;
-import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.inventory.PlayerInventory;
+import com.github.jenya705.mcapi.message.ComponentMessage;
+import com.github.jenya705.mcapi.message.DefaultMessage;
 import com.github.jenya705.mcapi.selector.PlayerSelector;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import net.kyori.adventure.text.Component;
 
 import java.util.UUID;
 
@@ -17,7 +19,7 @@ import java.util.UUID;
 @Builder
 @Getter(AccessLevel.PROTECTED)
 @Setter(AccessLevel.PROTECTED)
-public class LazyPlayer implements Player {
+public class LazyPlayer implements JavaPlayer {
 
     public static LazyPlayer of(RestClient client, UUID uuid) {
         return LazyPlayer
@@ -97,6 +99,11 @@ public class LazyPlayer implements Player {
                 .getPlayerLocation(PlayerID.of(getUuid()))
                 .blockOptional()
                 .orElseThrow();
+    }
+
+    @Override
+    public void sendMessage(Component component) {
+        restClient.sendMessage(PlayerSelector.of(getUuid()), new ComponentMessage(component)).subscribe();
     }
 
     public PlayerInventory getInventory() {

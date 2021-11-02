@@ -3,8 +3,12 @@ package com.github.jenya705.mcapi.app;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.github.jenya705.mcapi.ApiError;
+import com.github.jenya705.mcapi.JavaRestClient;
 import com.github.jenya705.mcapi.RestClient;
 import com.github.jenya705.mcapi.TunnelClient;
+import com.github.jenya705.mcapi.reactor.rest.HttpRestClient;
+import com.github.jenya705.mcapi.reactor.rest.JavaHttpRestClient;
+import com.github.jenya705.mcapi.reactor.tunnel.HttpTunnelClient;
 import com.github.jenya705.mcapi.registry.BlockDataRegistry;
 import com.github.jenya705.mcapi.util.JacksonDeserializer;
 import com.github.jenya705.mcapi.util.JacksonSerializer;
@@ -16,10 +20,20 @@ import java.util.function.Function;
 /**
  * @author Jenya705
  */
-public interface LibraryApplication {
+public interface LibraryApplication<R extends RestClient, T extends TunnelClient> {
 
-    static LibraryApplication create(String ip, int port, String token) {
-        return new DefaultLibraryApplication(ip, port, token);
+    static LibraryApplication<RestClient, TunnelClient> create(String ip, int port, String token) {
+        return new DefaultLibraryApplication<>(
+                ip, port, token,
+                HttpRestClient::new, HttpTunnelClient::new
+        );
+    }
+
+    static LibraryApplication<JavaRestClient, TunnelClient> java(String ip, int port, String token) {
+        return new DefaultLibraryApplication<>(
+                ip, port, token,
+                JavaHttpRestClient::new, HttpTunnelClient::new
+        );
     }
 
     boolean isStarted();
@@ -28,9 +42,9 @@ public interface LibraryApplication {
 
     void onStart(Runnable runnable);
 
-    RestClient rest();
+    R rest();
 
-    TunnelClient tunnel();
+    T tunnel();
 
     String getIp();
 

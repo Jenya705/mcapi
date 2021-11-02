@@ -32,11 +32,11 @@ public class HttpRestClient implements RestClient {
 
     @Getter
     private final ReactorBlockingThread blockingThread = new ReactorBlockingThread();
-    private final LibraryApplication application;
+    private final LibraryApplication<?, ?> application;
 
     private HttpClient httpClient;
 
-    public HttpRestClient(LibraryApplication application) {
+    public HttpRestClient(LibraryApplication<?, ?> application) {
         this.application = application;
         application.onStart(() -> {
             httpClient = HttpClient
@@ -49,14 +49,14 @@ public class HttpRestClient implements RestClient {
     }
 
     @Override
-    public Mono<Player> getPlayer(PlayerID id) {
+    public Mono<? extends Player> getPlayer(PlayerID id) {
         return makeRequest(Routes.PLAYER, id.getId())
                 .map(it -> application.fromJson(it, RestPlayer.class))
                 .map(it -> LazyPlayer.of(this, it));
     }
 
     @Override
-    public Mono<Location> getPlayerLocation(PlayerID id) {
+    public Mono<? extends Location> getPlayerLocation(PlayerID id) {
         return makeRequest(Routes.PLAYER_LOCATION, id.getId())
                 .map(it -> application.fromJson(it, RestLocation.class))
                 .map(it -> LazyLocation.of(this, it));
@@ -68,7 +68,7 @@ public class HttpRestClient implements RestClient {
     }
 
     @Override
-    public Flux<Player> getOnlinePlayers() {
+    public Flux<? extends Player> getOnlinePlayers() {
         return makeRequest(Routes.PLAYER_LIST)
                 .map(it -> application.fromJson(it, RestPlayerList.class))
                 .map(RestPlayerList::getUuids)
@@ -87,7 +87,7 @@ public class HttpRestClient implements RestClient {
     }
 
     @Override
-    public Mono<Permission> getPlayerPermission(PlayerID id, String permissionName) {
+    public Mono<? extends Permission> getPlayerPermission(PlayerID id, String permissionName) {
         return makeRequest(Routes.PLAYER_PERMISSION, id.getId(), permissionName)
                 .map(it -> application.fromJson(it, RestPermission.class))
                 .map(it -> new EntityPermission(
@@ -98,7 +98,7 @@ public class HttpRestClient implements RestClient {
     }
 
     @Override
-    public Flux<OfflinePlayer> getLinkedPlayers(BotSelector selector) {
+    public Flux<? extends OfflinePlayer> getLinkedPlayers(BotSelector selector) {
         return makeRequest(Routes.BOT_LINKED, selector.asString())
                 .map(it -> application.fromJson(it, RestPlayerList.class))
                 .map(RestPlayerList::getUuids)
@@ -107,7 +107,7 @@ public class HttpRestClient implements RestClient {
     }
 
     @Override
-    public Mono<Permission> getBotPermission(BotSelector selector, String permissionName) {
+    public Mono<? extends Permission> getBotPermission(BotSelector selector, String permissionName) {
         return makeRequest(Routes.BOT_PERMISSION, selector.asString(), permissionName)
                 .map(it -> application.fromJson(it, RestPermission.class))
                 .map(it -> new EntityPermission(
@@ -118,7 +118,7 @@ public class HttpRestClient implements RestClient {
     }
 
     @Override
-    public Mono<Permission> getBotPermission(BotSelector selector, String permissionName, UUID target) {
+    public Mono<? extends Permission> getBotPermission(BotSelector selector, String permissionName, UUID target) {
         return makeRequest(Routes.BOT_TARGET_PERMISSION, selector.asString(), permissionName, target)
                 .map(it -> application.fromJson(it, RestPermission.class))
                 .map(it -> new EntityPermission(
@@ -144,7 +144,7 @@ public class HttpRestClient implements RestClient {
     }
 
     @Override
-    public Mono<OfflinePlayer> getOfflinePlayer(PlayerID id) {
+    public Mono<? extends OfflinePlayer> getOfflinePlayer(PlayerID id) {
         return makeRequest(Routes.OFFLINE_PLAYER, id.getId())
                 .map(it -> application.fromJson(it, RestOfflinePlayer.class))
                 .map(it -> LazyOfflinePlayer.of(this, it));

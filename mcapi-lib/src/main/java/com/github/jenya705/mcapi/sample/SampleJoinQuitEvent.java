@@ -13,7 +13,7 @@ import java.util.Scanner;
 class SampleJoinQuitEvent {
 
     public static void main(String[] args) {
-        LibraryApplication application = new DefaultLibraryApplication("localhost", 8080, "ce727c0a74024afdbd6ed9d03225d4e60000001630142908370"); // some token
+        LibraryApplication<?, ?> application = LibraryApplication.create("localhost", 8080, "ce727c0a74024afdbd6ed9d03225d4e60000001630142908370"); // some token
         application.start();
         application
                 .tunnel()

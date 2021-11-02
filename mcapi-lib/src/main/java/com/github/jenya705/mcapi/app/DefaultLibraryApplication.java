@@ -9,8 +9,6 @@ import com.github.jenya705.mcapi.InternalException;
 import com.github.jenya705.mcapi.RestClient;
 import com.github.jenya705.mcapi.TunnelClient;
 import com.github.jenya705.mcapi.error.*;
-import com.github.jenya705.mcapi.reactor.rest.HttpRestClient;
-import com.github.jenya705.mcapi.reactor.tunnel.HttpTunnelClient;
 import com.github.jenya705.mcapi.registry.BlockDataRegistry;
 import com.github.jenya705.mcapi.registry.BlockDataRegistryImpl;
 import lombok.Getter;
@@ -26,15 +24,15 @@ import java.util.function.Function;
  * @author Jenya705
  */
 @Getter
-public class DefaultLibraryApplication implements LibraryApplication {
+public class DefaultLibraryApplication<R extends RestClient, T extends TunnelClient> implements LibraryApplication<R, T> {
 
     private final Map<String, List<Function<ApiError, RuntimeException>>> exceptionBuilders = new HashMap<>();
     private final ObjectMapper jsonMapper = new ObjectMapper();
     private final List<Runnable> startHandlers = new ArrayList<>();
     private final BlockDataRegistry blockDataRegistry = new BlockDataRegistryImpl();
 
-    private final RestClient restClient;
-    private final TunnelClient tunnelClient;
+    private final R restClient;
+    private final T tunnelClient;
 
     private final String ip;
     private final int port;
@@ -42,13 +40,14 @@ public class DefaultLibraryApplication implements LibraryApplication {
 
     private boolean started;
 
-    public DefaultLibraryApplication(String ip, int port, String token) {
+    public DefaultLibraryApplication(String ip, int port, String token,
+                                     Function<LibraryApplication<R, T>, R> restClientBuilder,
+                                     Function<LibraryApplication<R, T>, T> tunnelClientBuilder) {
        this.ip = ip;
        this.port = port;
        this.token = token;
-
-       restClient = new HttpRestClient(this);
-       tunnelClient = new HttpTunnelClient(this);
+       restClient = restClientBuilder.apply(this);
+       tunnelClient = tunnelClientBuilder.apply(this);
 
        MCAPIErrorRegisterer.registerAllErrors(
                this,
@@ -76,6 +75,7 @@ public class DefaultLibraryApplication implements LibraryApplication {
                BlockDataNotFoundException.class
        );
 
+       DefaultSerializers.registerAll(this);
     }
 
     @Override
@@ -97,12 +97,12 @@ public class DefaultLibraryApplication implements LibraryApplication {
     }
 
     @Override
-    public RestClient rest() {
+    public R rest() {
         return restClient;
     }
 
     @Override
-    public TunnelClient tunnel() {
+    public T tunnel() {
         return tunnelClient;
     }
 
