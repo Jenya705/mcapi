@@ -1,7 +1,6 @@
 package com.github.jenya705.mcapi.sample;
 
 import com.github.jenya705.mcapi.PlayerID;
-import com.github.jenya705.mcapi.app.DefaultLibraryApplication;
 import com.github.jenya705.mcapi.app.LibraryApplication;
 import com.github.jenya705.mcapi.inventory.ItemStack;
 
@@ -15,7 +14,7 @@ class SampleGetPlayerInventoryItem {
         application.start();
         ItemStack itemStack = application
                 .rest()
-                .getPlayerInventoryItem(PlayerID.of("Jenya705"), 0, 0)
+                .getPlayerInventoryItem(PlayerID.of("Jenya705"), 0)
                 .block();
         if (itemStack != null) {
             System.out.printf(

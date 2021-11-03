@@ -3,6 +3,7 @@ package com.github.jenya705.mcapi.inventory;
 import com.github.jenya705.mcapi.Material;
 import com.github.jenya705.mcapi.VanillaMaterial;
 import lombok.AllArgsConstructor;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -10,7 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
  * @author Jenya705
  */
 @AllArgsConstructor
-public class BukkitItemStackWrapper implements ItemStack {
+public class BukkitItemStackWrapper implements JavaItemStack {
 
     private final org.bukkit.inventory.ItemStack itemStack;
 
@@ -33,9 +34,20 @@ public class BukkitItemStackWrapper implements ItemStack {
     public String getCustomName() {
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta.hasDisplayName()) {
+            Component displayName = itemMeta.displayName();
+            if (displayName == null) return null;
             return LegacyComponentSerializer
                     .legacyAmpersand()
-                    .serialize(itemStack.displayName());
+                    .serialize(displayName);
+        }
+        return null;
+    }
+
+    @Override
+    public Component customName() {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta.hasDisplayName()) {
+            return itemMeta.displayName();
         }
         return null;
     }

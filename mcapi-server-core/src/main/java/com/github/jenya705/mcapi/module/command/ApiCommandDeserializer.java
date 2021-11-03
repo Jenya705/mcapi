@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.github.jenya705.mcapi.command.Command;
 import com.github.jenya705.mcapi.command.CommandOption;
-import com.github.jenya705.mcapi.entity.api.command.EntityCommand;
+import com.github.jenya705.mcapi.entity.command.EntityCommand;
 import com.github.jenya705.mcapi.util.IteratorUtils;
 
 import java.io.IOException;

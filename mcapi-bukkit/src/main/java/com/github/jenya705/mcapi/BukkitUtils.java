@@ -1,6 +1,5 @@
 package com.github.jenya705.mcapi;
 
-import lombok.Setter;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;

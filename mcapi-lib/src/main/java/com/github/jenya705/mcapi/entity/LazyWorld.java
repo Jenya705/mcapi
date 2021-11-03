@@ -3,6 +3,7 @@ package com.github.jenya705.mcapi.entity;
 import com.github.jenya705.mcapi.Location;
 import com.github.jenya705.mcapi.RestClient;
 import com.github.jenya705.mcapi.block.Block;
+import com.github.jenya705.mcapi.rest.RestWorld;
 import com.github.jenya705.mcapi.world.World;
 import com.github.jenya705.mcapi.world.WorldDimension;
 import com.github.jenya705.mcapi.world.WorldWeather;

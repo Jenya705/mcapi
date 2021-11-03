@@ -1,13 +1,11 @@
 package com.github.jenya705.mcapi.module.database;
 
-import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.module.database.cache.CacheStorage;
 import com.github.jenya705.mcapi.module.database.safe.DatabaseGetter;
 
 import java.sql.ResultSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.function.Function;
 
 /**
  * @author Jenya705

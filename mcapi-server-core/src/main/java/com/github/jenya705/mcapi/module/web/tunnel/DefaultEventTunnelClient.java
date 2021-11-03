@@ -1,15 +1,15 @@
 package com.github.jenya705.mcapi.module.web.tunnel;
 
-import com.github.jenya705.mcapi.EventTunnelAuthorizationRequest;
-import com.github.jenya705.mcapi.SubscribeRequest;
 import com.github.jenya705.mcapi.BaseCommon;
+import com.github.jenya705.mcapi.EventTunnelAuthorizationRequest;
 import com.github.jenya705.mcapi.ServerApplication;
+import com.github.jenya705.mcapi.SubscribeRequest;
 import com.github.jenya705.mcapi.entity.AbstractBot;
-import com.github.jenya705.mcapi.entity.RestSubscribeRequest;
 import com.github.jenya705.mcapi.error.AuthorizationBadTokenException;
 import com.github.jenya705.mcapi.error.AuthorizationFormatException;
 import com.github.jenya705.mcapi.module.authorization.AuthorizationModule;
 import com.github.jenya705.mcapi.module.web.websocket.stateful.SimpleStatefulWebSocketConnection;
+import com.github.jenya705.mcapi.rest.RestSubscribeRequest;
 import lombok.Getter;
 
 import java.util.ArrayList;

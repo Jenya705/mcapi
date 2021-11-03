@@ -2,7 +2,7 @@ package com.github.jenya705.mcapi.builder.link;
 
 import com.github.jenya705.mcapi.LinkRequest;
 import com.github.jenya705.mcapi.builder.Buildable;
-import com.github.jenya705.mcapi.entity.api.EntityLinkRequest;
+import com.github.jenya705.mcapi.entity.EntityLinkRequest;
 
 import java.util.ArrayList;
 import java.util.Arrays;

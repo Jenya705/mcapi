@@ -2,6 +2,7 @@ package com.github.jenya705.mcapi.entity;
 
 import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.RestClient;
+import com.github.jenya705.mcapi.rest.RestCommandSender;
 import lombok.experimental.UtilityClass;
 
 import java.util.UUID;

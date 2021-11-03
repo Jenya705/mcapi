@@ -6,7 +6,6 @@ import com.github.jenya705.mcapi.OnInitializing;
 import com.github.jenya705.mcapi.OnStartup;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.data.loadable.CallbackLoadableConfigData;
-import com.github.jenya705.mcapi.data.loadable.CallbackLoadableConfigDataSerializer;
 import com.github.jenya705.mcapi.log.TimerTask;
 import com.github.jenya705.mcapi.module.rest.ObjectTunnelFunction;
 import com.github.jenya705.mcapi.util.CacheClassMap;

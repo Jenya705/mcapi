@@ -11,7 +11,8 @@ public class JavaServerApplication extends ServerApplication {
         super();
         addClasses(
                 JavaFormProvider.class,
-                JavaComponentMessageProvider.class
+                JavaComponentMessageProvider.class,
+                JavaRestModule.class
         );
         setPlatform(ServerPlatform.JAVA);
     }

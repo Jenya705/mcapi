@@ -1,10 +1,10 @@
 package com.github.jenya705.mcapi.command;
 
 import com.github.jenya705.mcapi.data.ConfigData;
-import com.github.jenya705.mcapi.module.config.Config;
 import com.github.jenya705.mcapi.data.loadable.Global;
 import com.github.jenya705.mcapi.data.loadable.Java;
 import com.github.jenya705.mcapi.data.loadable.Value;
+import com.github.jenya705.mcapi.module.config.Config;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

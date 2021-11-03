@@ -6,6 +6,7 @@ import com.github.jenya705.mcapi.RestClient;
 import com.github.jenya705.mcapi.VanillaMaterial;
 import com.github.jenya705.mcapi.block.Block;
 import com.github.jenya705.mcapi.block.BlockData;
+import com.github.jenya705.mcapi.rest.block.RestBlock;
 import lombok.Builder;
 import lombok.Getter;
 

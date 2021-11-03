@@ -3,7 +3,6 @@ package com.github.jenya705.mcapi.module.database;
 import com.github.jenya705.mcapi.AbstractApplicationModule;
 import com.github.jenya705.mcapi.OnDisable;
 import com.github.jenya705.mcapi.OnInitializing;
-import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.log.TimerTask;
 import com.github.jenya705.mcapi.module.config.ConfigModule;
@@ -16,12 +15,10 @@ import com.github.jenya705.mcapi.module.database.safe.StorageDatabaseGetter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.function.Function;
 
 /**
  * @author Jenya705

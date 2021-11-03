@@ -6,7 +6,6 @@ import com.github.jenya705.mcapi.data.GlobalContainer;
 import com.github.jenya705.mcapi.data.MapConfigData;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;

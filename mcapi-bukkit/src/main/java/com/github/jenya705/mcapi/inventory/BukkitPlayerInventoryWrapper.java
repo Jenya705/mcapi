@@ -5,9 +5,9 @@ import com.github.jenya705.mcapi.BukkitWrapper;
 /**
  * @author Jenya705
  */
-public class BukkitPlayerInventoryWrapper implements PlayerInventory {
+public class BukkitPlayerInventoryWrapper implements JavaPlayerInventory {
 
-    private final BukkitInventoryWrapper inventoryWrapper;
+    private final JavaInventory inventoryWrapper;
 
     private final org.bukkit.inventory.PlayerInventory bukkitPlayerInventory;
 
@@ -22,62 +22,57 @@ public class BukkitPlayerInventoryWrapper implements PlayerInventory {
     }
 
     @Override
-    public int getSizeX() {
-        return inventoryWrapper.getSizeX();
+    public int getSize() {
+        return inventoryWrapper.getSize();
     }
 
     @Override
-    public int getSizeY() {
-        return inventoryWrapper.getSizeY();
+    public JavaItemStack[] getAllItems() {
+        JavaItemStack[] allItems = new JavaItemStack[getSize()];
+        for (int i = 0; i < allItems.length; ++i) allItems[i] = getItem(i);
+        return allItems;
     }
 
     @Override
-    public ItemStack[] getAllItems() {
-        return inventoryWrapper.getAllItems();
+    public JavaItemStack getItem(int item) {
+        // because bukkit player inventory working not correct for mcapi
+        // we need to set real index (for bukkit) of item
+        int realIndex;
+        if (item < 27) realIndex=item+9;
+        else if (item < 36) realIndex=item-27;
+        else if (item < 40) realIndex=75-item;
+        else if (item == 40) return getOffHand();
+        else return getMainHand();
+        return inventoryWrapper.getItem(realIndex);
     }
 
     @Override
-    public ItemStack getItem(int x, int y) {
-        if (getSizeY() == y) {
-            switch (x) {
-                case 0: return getHelmet();
-                case 1: return getChestplate();
-                case 2: return getLeggings();
-                case 3: return getBoots();
-                case 4: return getMainHand();
-                case 5: return getOffHand();
-            }
-        }
-        return inventoryWrapper.getItem(x, y);
-    }
-
-    @Override
-    public ItemStack getHelmet() {
+    public JavaItemStack getHelmet() {
         return BukkitWrapper.itemStack(bukkitPlayerInventory.getHelmet());
     }
 
     @Override
-    public ItemStack getChestplate() {
+    public JavaItemStack getChestplate() {
         return BukkitWrapper.itemStack(bukkitPlayerInventory.getChestplate());
     }
 
     @Override
-    public ItemStack getLeggings() {
+    public JavaItemStack getLeggings() {
         return BukkitWrapper.itemStack(bukkitPlayerInventory.getLeggings());
     }
 
     @Override
-    public ItemStack getBoots() {
+    public JavaItemStack getBoots() {
         return BukkitWrapper.itemStack(bukkitPlayerInventory.getBoots());
     }
 
     @Override
-    public ItemStack getMainHand() {
+    public JavaItemStack getMainHand() {
         return BukkitWrapper.itemStack(bukkitPlayerInventory.getItemInMainHand());
     }
 
     @Override
-    public ItemStack getOffHand() {
+    public JavaItemStack getOffHand() {
         return BukkitWrapper.itemStack(bukkitPlayerInventory.getItemInOffHand());
     }
 

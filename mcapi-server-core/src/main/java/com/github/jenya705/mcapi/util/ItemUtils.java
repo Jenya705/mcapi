@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.util;
 
 import com.github.jenya705.mcapi.VanillaMaterial;
-import com.github.jenya705.mcapi.entity.api.EntityItemStack;
+import com.github.jenya705.mcapi.entity.inventory.EntityItemStack;
 import com.github.jenya705.mcapi.inventory.ItemStack;
 import lombok.experimental.UtilityClass;
 

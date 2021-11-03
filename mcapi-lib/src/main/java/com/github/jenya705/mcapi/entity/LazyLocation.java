@@ -2,7 +2,7 @@ package com.github.jenya705.mcapi.entity;
 
 import com.github.jenya705.mcapi.Location;
 import com.github.jenya705.mcapi.RestClient;
-import com.github.jenya705.mcapi.entity.api.EntityLocation;
+import com.github.jenya705.mcapi.rest.RestLocation;
 import lombok.experimental.UtilityClass;
 
 /**

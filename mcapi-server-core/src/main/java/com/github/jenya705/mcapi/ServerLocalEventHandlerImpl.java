@@ -1,11 +1,11 @@
 package com.github.jenya705.mcapi;
 
-import com.github.jenya705.mcapi.entity.api.event.EntityJoinEvent;
-import com.github.jenya705.mcapi.entity.api.event.EntityMessageEvent;
-import com.github.jenya705.mcapi.entity.api.event.EntityQuitEvent;
-import com.github.jenya705.mcapi.entity.event.RestJoinEvent;
-import com.github.jenya705.mcapi.entity.event.RestMessageEvent;
-import com.github.jenya705.mcapi.entity.event.RestQuitEvent;
+import com.github.jenya705.mcapi.entity.event.EntityJoinEvent;
+import com.github.jenya705.mcapi.entity.event.EntityMessageEvent;
+import com.github.jenya705.mcapi.entity.event.EntityQuitEvent;
+import com.github.jenya705.mcapi.rest.event.RestJoinEvent;
+import com.github.jenya705.mcapi.rest.event.RestMessageEvent;
+import com.github.jenya705.mcapi.rest.event.RestQuitEvent;
 
 /**
  * @author Jenya705

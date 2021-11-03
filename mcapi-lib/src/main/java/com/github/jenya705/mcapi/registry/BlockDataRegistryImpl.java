@@ -2,7 +2,7 @@ package com.github.jenya705.mcapi.registry;
 
 import com.github.jenya705.mcapi.VanillaMaterial;
 import com.github.jenya705.mcapi.block.BlockData;
-import com.github.jenya705.mcapi.entity.api.EntityCommandBlock;
+import com.github.jenya705.mcapi.entity.block.EntityCommandBlock;
 
 import java.util.HashMap;
 import java.util.Locale;

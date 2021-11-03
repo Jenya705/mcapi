@@ -37,14 +37,14 @@ public class MCAPIErrorRegisterer {
     }
 
     @SneakyThrows
-    public void registerError(LibraryApplication application, Class<? extends ApiError> errorClass) {
+    public void registerError(LibraryApplication<?, ?> application, Class<? extends ApiError> errorClass) {
         Triple<String, Integer, Function<ApiError, RuntimeException>> errorInfo = createBuilder(errorClass);
         application.addExceptionBuilder(errorInfo.getFirst(), errorInfo.getSecond(), errorInfo.getThird());
     }
 
     @SafeVarargs
     @SneakyThrows
-    public void registerAllErrors(LibraryApplication application, Class<? extends ApiError>... errorClasses) {
+    public void registerAllErrors(LibraryApplication<?, ?> application, Class<? extends ApiError>... errorClasses) {
         for (Class<? extends ApiError> errorClass: errorClasses) {
             registerError(application, errorClass);
         }

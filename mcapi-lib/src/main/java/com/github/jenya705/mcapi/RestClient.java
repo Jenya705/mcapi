@@ -58,9 +58,9 @@ public interface RestClient {
 
     Mono<? extends BlockData> getBlockData(String world, int x, int y, int z, String blockType);
 
-    Mono<? extends ItemStack> getBlockInventoryItem(String world, int x, int y, int z, int itemX, int itemY);
+    Mono<? extends ItemStack> getBlockInventoryItem(String world, int x, int y, int z, int item);
 
-    Mono<? extends ItemStack> getPlayerInventoryItem(PlayerID playerID, int itemX, int itemY);
+    Mono<? extends ItemStack> getPlayerInventoryItem(PlayerID playerID, int item);
 
     Mono<? extends Inventory> getBlockInventory(String world, int x, int y, int z);
 

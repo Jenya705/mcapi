@@ -5,15 +5,15 @@ import com.github.jenya705.mcapi.BukkitWrapper;
 /**
  * @author Jenya705
  */
-public class BukkitInventoryWrapper implements Inventory {
+public class BukkitInventoryWrapper implements JavaInventory {
 
     private final org.bukkit.inventory.Inventory bukkitInventory;
 
-    private final ItemStack[] cachedItemStacks;
+    private final JavaItemStack[] cachedItemStacks;
 
     public BukkitInventoryWrapper(org.bukkit.inventory.Inventory bukkitInventory) {
         this.bukkitInventory = bukkitInventory;
-        cachedItemStacks = new ItemStack[bukkitInventory.getSize()];
+        cachedItemStacks = new JavaItemStack[bukkitInventory.getSize()];
     }
 
     public static BukkitInventoryWrapper of(org.bukkit.inventory.Inventory bukkitInventory) {
@@ -22,17 +22,12 @@ public class BukkitInventoryWrapper implements Inventory {
     }
 
     @Override
-    public int getSizeX() {
-        return bukkitInventory.getSize() == 5 ? 5 : 9;
+    public int getSize() {
+        return bukkitInventory.getSize();
     }
 
     @Override
-    public int getSizeY() {
-        return bukkitInventory.getSize() == 5 ? 1 : bukkitInventory.getSize() / 9;
-    }
-
-    @Override
-    public ItemStack[] getAllItems() {
+    public JavaItemStack[] getAllItems() {
         for (int i = 0; i < bukkitInventory.getSize(); ++i) {
             cacheItemIfNeed(i);
         }
@@ -40,11 +35,10 @@ public class BukkitInventoryWrapper implements Inventory {
     }
 
     @Override
-    public ItemStack getItem(int x, int y) {
-        int index = y * getSizeX() + x;
-        if (index > bukkitInventory.getSize()) return null;
-        cacheItemIfNeed(index);
-        return cachedItemStacks[index];
+    public JavaItemStack getItem(int item) {
+        if (item > bukkitInventory.getSize()) return null;
+        cacheItemIfNeed(item);
+        return cachedItemStacks[item];
     }
 
     private void cacheItemIfNeed(int index) {

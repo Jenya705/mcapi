@@ -1,6 +1,5 @@
 package com.github.jenya705.mcapi.sample;
 
-import com.github.jenya705.mcapi.app.DefaultLibraryApplication;
 import com.github.jenya705.mcapi.app.LibraryApplication;
 
 /**

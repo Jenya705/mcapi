@@ -11,33 +11,27 @@ import java.util.UUID;
  */
 public interface JavaServerCore extends ServerCore {
 
-    Collection<? extends JavaPlayer> getJavaPlayers();
+    @Override
+    JavaPlayer getPlayer(String name);
 
-    JavaPlayer getJavaPlayer(String name);
+    @Override
+    JavaPlayer getPlayer(UUID uuid);
 
-    JavaPlayer getJavaPlayer(UUID uuid);
+    @Override
+    Collection<? extends JavaPlayer> getPlayers();
 
-    default Collection<? extends Player> getPlayers() {
-        return getJavaPlayers();
+    @Override
+    default Optional<? extends JavaPlayer> getOptionalPlayer(String name) {
+        return Optional.ofNullable(getPlayer(name));
     }
 
-    default Optional<? extends JavaPlayer> getOptionalJavaPlayer(String name) {
-        return Optional.ofNullable(getJavaPlayer(name));
+    @Override
+    default Optional<? extends JavaPlayer> getOptionalPlayer(UUID uuid) {
+        return Optional.ofNullable(getPlayer(uuid));
     }
 
-    default Optional<? extends JavaPlayer> getOptionalJavaPlayer(UUID uuid) {
-        return Optional.ofNullable(getJavaPlayer(uuid));
-    }
-
-    default Optional<? extends JavaPlayer> getOptionalJavaPlayerId(String id) {
+    @Override
+    default Optional<? extends JavaPlayer> getOptionalPlayerId(String id) {
         return PlayerUtils.getPlayer(id, this).map(player -> (JavaPlayer) player);
-    }
-
-    default Player getPlayer(String name) {
-        return getJavaPlayer(name);
-    }
-
-    default Player getPlayer(UUID uuid) {
-        return getJavaPlayer(uuid);
     }
 }

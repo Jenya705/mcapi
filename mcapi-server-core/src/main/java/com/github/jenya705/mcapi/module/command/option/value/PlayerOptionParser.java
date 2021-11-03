@@ -1,8 +1,8 @@
 package com.github.jenya705.mcapi.module.command.option.value;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.github.jenya705.mcapi.OfflinePlayer;
 import com.github.jenya705.mcapi.BaseCommon;
+import com.github.jenya705.mcapi.OfflinePlayer;
 import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.CommandValueOption;
 import com.github.jenya705.mcapi.command.types.PlayerOption;

@@ -1,7 +1,6 @@
 package com.github.jenya705.mcapi.sample;
 
 import com.github.jenya705.mcapi.Permission;
-import com.github.jenya705.mcapi.app.DefaultLibraryApplication;
 import com.github.jenya705.mcapi.app.LibraryApplication;
 import com.github.jenya705.mcapi.permission.Permissions;
 import com.github.jenya705.mcapi.selector.BotSelector;

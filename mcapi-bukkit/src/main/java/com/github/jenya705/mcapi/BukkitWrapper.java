@@ -1,6 +1,5 @@
 package com.github.jenya705.mcapi;
 
-import com.github.jenya705.mcapi.block.BukkitBlockDataRegistry;
 import com.github.jenya705.mcapi.inventory.*;
 import com.github.jenya705.mcapi.world.World;
 import lombok.experimental.UtilityClass;
@@ -12,7 +11,7 @@ import org.bukkit.entity.Player;
 @UtilityClass
 public class BukkitWrapper {
 
-    public CommandSender sender(org.bukkit.command.CommandSender sender) {
+    public JavaCommandSender sender(org.bukkit.command.CommandSender sender) {
         if (sender instanceof Player) {
             return BukkitPlayerWrapper.of((Player) sender);
         }
@@ -38,15 +37,15 @@ public class BukkitWrapper {
         return BukkitWorldWrapper.of(world);
     }
 
-    public ItemStack itemStack(org.bukkit.inventory.ItemStack itemStack) {
+    public JavaItemStack itemStack(org.bukkit.inventory.ItemStack itemStack) {
         return BukkitItemStackWrapper.of(itemStack);
     }
 
-    public Inventory inventory(org.bukkit.inventory.Inventory inventory) {
+    public JavaInventory inventory(org.bukkit.inventory.Inventory inventory) {
         return BukkitInventoryWrapper.of(inventory);
     }
 
-    public PlayerInventory playerInventory(org.bukkit.inventory.PlayerInventory playerInventory) {
+    public JavaPlayerInventory playerInventory(org.bukkit.inventory.PlayerInventory playerInventory) {
         return BukkitPlayerInventoryWrapper.of(playerInventory);
     }
 

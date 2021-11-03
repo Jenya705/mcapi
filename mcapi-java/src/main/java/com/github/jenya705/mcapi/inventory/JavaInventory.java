@@ -9,5 +9,5 @@ public interface JavaInventory extends Inventory {
     JavaItemStack[] getAllItems();
 
     @Override
-    JavaItemStack getItem(int x, int y);
+    JavaItemStack getItem(int item);
 }

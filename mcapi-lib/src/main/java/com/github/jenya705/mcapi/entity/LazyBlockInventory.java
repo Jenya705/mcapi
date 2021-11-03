@@ -3,6 +3,7 @@ package com.github.jenya705.mcapi.entity;
 import com.github.jenya705.mcapi.RestClient;
 import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.inventory.ItemStack;
+import com.github.jenya705.mcapi.rest.inventory.RestInventory;
 import lombok.Builder;
 
 /**
@@ -24,14 +25,12 @@ public class LazyBlockInventory implements Inventory {
                 .blockX(blockX)
                 .blockY(blockY)
                 .blockZ(blockZ)
-                .sizeX(inventory.getSizeX())
-                .sizeY(inventory.getSizeY())
+                .size(inventory.getSize())
                 .build();
     }
 
     private final RestClient restClient;
-    private final int sizeX;
-    private final int sizeY;
+    private final int size;
 
     private final int blockX;
     private final int blockY;
@@ -39,30 +38,23 @@ public class LazyBlockInventory implements Inventory {
     private final String world;
 
     @Override
-    public int getSizeX() {
-        return sizeX;
-    }
-
-    @Override
-    public int getSizeY() {
-        return sizeY;
+    public int getSize() {
+        return size;
     }
 
     @Override
     public ItemStack[] getAllItems() { // too expensive
-        ItemStack[] allItems = new ItemStack[getSizeX() * getSizeY()];
-        for (int x = 0; x < getSizeX(); ++x) {
-            for (int y = 0; y < getSizeY(); ++y) {
-                allItems[y * getSizeX() + x] = getItem(x, y);
-            }
+        ItemStack[] allItems = new ItemStack[getSize()];
+        for (int i = 0; i < getSize(); ++i) {
+            allItems[i] = getItem(i);
         }
         return allItems;
     }
 
     @Override
-    public ItemStack getItem(int x, int y) {
+    public ItemStack getItem(int index) {
         return restClient
-                .getBlockInventoryItem(world, blockX, blockY, blockZ, x, y)
+                .getBlockInventoryItem(world, blockX, blockY, blockZ, index)
                 .block();
     }
 }

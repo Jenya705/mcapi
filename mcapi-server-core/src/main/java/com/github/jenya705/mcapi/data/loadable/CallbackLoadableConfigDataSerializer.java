@@ -2,8 +2,6 @@ package com.github.jenya705.mcapi.data.loadable;
 
 import com.github.jenya705.mcapi.data.ConfigData;
 
-import java.lang.reflect.Field;
-
 /**
  * @author Jenya705
  */

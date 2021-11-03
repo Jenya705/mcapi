@@ -6,12 +6,14 @@ import com.github.jenya705.mcapi.block.Block;
 import com.github.jenya705.mcapi.block.BlockData;
 import com.github.jenya705.mcapi.command.Command;
 import com.github.jenya705.mcapi.entity.*;
-import com.github.jenya705.mcapi.entity.api.EntityError;
-import com.github.jenya705.mcapi.entity.api.EntityPermission;
 import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.inventory.ItemStack;
 import com.github.jenya705.mcapi.inventory.PlayerInventory;
 import com.github.jenya705.mcapi.reactor.ReactorNettyUtils;
+import com.github.jenya705.mcapi.rest.*;
+import com.github.jenya705.mcapi.rest.block.RestBlock;
+import com.github.jenya705.mcapi.rest.inventory.RestInventory;
+import com.github.jenya705.mcapi.rest.inventory.RestItemStack;
 import com.github.jenya705.mcapi.selector.BotSelector;
 import com.github.jenya705.mcapi.selector.OfflinePlayerSelector;
 import com.github.jenya705.mcapi.selector.PlayerSelector;
@@ -188,15 +190,15 @@ public class HttpRestClient implements RestClient {
     }
 
     @Override
-    public Mono<? extends ItemStack> getBlockInventoryItem(String world, int x, int y, int z, int itemX, int itemY) {
-        return makeRequest(Routes.BLOCK_INVENTORY_ITEM, world, x, y, z, itemX, itemY)
+    public Mono<? extends ItemStack> getBlockInventoryItem(String world, int x, int y, int z, int item) {
+        return makeRequest(Routes.BLOCK_INVENTORY_ITEM, world, x, y, z, item)
                 .map(it -> application.fromJson(it, RestItemStack.class))
                 .map(it -> LazyItemStack.of(this, it));
     }
 
     @Override
-    public Mono<? extends ItemStack> getPlayerInventoryItem(PlayerID playerID, int itemX, int itemY) {
-        return makeRequest(Routes.PLAYER_INVENTORY_ITEM, playerID.getId(), itemX, itemY)
+    public Mono<? extends ItemStack> getPlayerInventoryItem(PlayerID playerID, int item) {
+        return makeRequest(Routes.PLAYER_INVENTORY_ITEM, playerID.getId(), item)
                 .map(it -> application.fromJson(it, RestItemStack.class))
                 .map(it -> LazyItemStack.of(this, it));
     }

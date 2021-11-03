@@ -4,8 +4,6 @@ import com.github.jenya705.mcapi.HttpMethod;
 import com.github.jenya705.mcapi.Route;
 import com.github.jenya705.mcapi.module.web.websocket.WebSocketRouteHandler;
 
-import java.util.function.Predicate;
-
 /**
  * @author Jenya705
  */

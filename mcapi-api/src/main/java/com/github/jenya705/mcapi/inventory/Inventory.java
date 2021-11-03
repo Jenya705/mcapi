@@ -5,12 +5,10 @@ package com.github.jenya705.mcapi.inventory;
  */
 public interface Inventory {
 
-    int getSizeX();
-
-    int getSizeY();
+    int getSize();
 
     ItemStack[] getAllItems();
 
-    ItemStack getItem(int x, int y);
+    ItemStack getItem(int item);
 
 }

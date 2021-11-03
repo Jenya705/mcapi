@@ -1,9 +1,10 @@
 package com.github.jenya705.mcapi.entity;
 
-import com.github.jenya705.mcapi.message.DefaultMessage;
 import com.github.jenya705.mcapi.OfflinePlayer;
 import com.github.jenya705.mcapi.PlayerID;
 import com.github.jenya705.mcapi.RestClient;
+import com.github.jenya705.mcapi.message.DefaultMessage;
+import com.github.jenya705.mcapi.rest.RestOfflinePlayer;
 import com.github.jenya705.mcapi.selector.OfflinePlayerSelector;
 import lombok.Builder;
 

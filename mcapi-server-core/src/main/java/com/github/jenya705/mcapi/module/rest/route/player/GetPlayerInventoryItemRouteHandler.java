@@ -23,14 +23,13 @@ public class GetPlayerInventoryItemRouteHandler extends AbstractRouteHandler {
     public void handle(Request request, Response response) throws Exception {
         Player player = request
                 .paramOrException("id", Player.class);
-        int itemX = request.paramOrException("itemX", int.class);
-        int itemY = request.paramOrException("itemY", int.class);
+        int item = request.paramOrException("item", int.class);
         request
                 .bot()
                 .needPermission(Permissions.PLAYER_ITEM_GET, player);
         response.ok(
                 Optional
-                        .ofNullable(player.getInventory().getItem(itemX, itemY))
+                        .ofNullable(player.getInventory().getItem(item))
                         .orElse(ItemUtils.empty())
         );
     }

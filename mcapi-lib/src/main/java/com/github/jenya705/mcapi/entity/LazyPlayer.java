@@ -1,9 +1,11 @@
 package com.github.jenya705.mcapi.entity;
 
 import com.github.jenya705.mcapi.*;
+import com.github.jenya705.mcapi.inventory.JavaPlayerInventory;
 import com.github.jenya705.mcapi.inventory.PlayerInventory;
 import com.github.jenya705.mcapi.message.ComponentMessage;
 import com.github.jenya705.mcapi.message.DefaultMessage;
+import com.github.jenya705.mcapi.rest.RestPlayer;
 import com.github.jenya705.mcapi.selector.PlayerSelector;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -106,7 +108,7 @@ public class LazyPlayer implements JavaPlayer {
         restClient.sendMessage(PlayerSelector.of(getUuid()), new ComponentMessage(component)).subscribe();
     }
 
-    public PlayerInventory getInventory() {
+    public JavaPlayerInventory getInventory() {
         return null;
     }
 

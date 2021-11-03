@@ -24,7 +24,7 @@ public class Routes {
 
     public final Route PLAYER_INVENTORY = Route.get("/player/{id}/inventory");
 
-    public final Route PLAYER_INVENTORY_ITEM = Route.get("/player/{id}/inventory/{itemX}/{itemY}");
+    public final Route PLAYER_INVENTORY_ITEM = Route.get("/player/{id}/inventory/{item}");
 
     public final Route LINK_REQUEST = Route.post("/player/{id}/link");
 
@@ -52,6 +52,6 @@ public class Routes {
 
     public final Route BLOCK_INVENTORY = Route.get("/world/{id}/block/{x}/{y}/{z}/data/inventory");
 
-    public final Route BLOCK_INVENTORY_ITEM = Route.get("/world/{id}/block/{x}/{y}/{z}/data/inventory/{itemX}/{itemY}");
+    public final Route BLOCK_INVENTORY_ITEM = Route.get("/world/{id}/block/{x}/{y}/{z}/data/inventory/{item}");
 
 }

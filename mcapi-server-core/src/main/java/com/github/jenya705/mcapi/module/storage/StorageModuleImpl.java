@@ -4,7 +4,6 @@ import com.github.jenya705.mcapi.AbstractApplicationModule;
 import com.github.jenya705.mcapi.OnDisable;
 import com.github.jenya705.mcapi.OnStartup;
 import com.github.jenya705.mcapi.VanillaMaterial;
-import com.github.jenya705.mcapi.data.MapConfigData;
 import com.github.jenya705.mcapi.entity.PermissionEntity;
 import com.github.jenya705.mcapi.module.config.ConfigModule;
 import com.github.jenya705.mcapi.permission.DefaultPermission;

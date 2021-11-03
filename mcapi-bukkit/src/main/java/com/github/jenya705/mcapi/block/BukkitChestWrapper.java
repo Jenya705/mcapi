@@ -3,6 +3,7 @@ package com.github.jenya705.mcapi.block;
 import com.github.jenya705.mcapi.BukkitWrapper;
 import com.github.jenya705.mcapi.Player;
 import com.github.jenya705.mcapi.inventory.Inventory;
+import com.github.jenya705.mcapi.inventory.JavaInventory;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,11 +11,11 @@ import java.util.stream.Collectors;
 /**
  * @author Jenya705
  */
-public class BukkitChestWrapper implements Chest {
+public class BukkitChestWrapper implements JavaChest {
 
     private final org.bukkit.block.Chest chest;
 
-    private final Inventory inventoryWrapper;
+    private final JavaInventory inventoryWrapper;
 
     public BukkitChestWrapper(org.bukkit.block.Chest chest) {
         this.chest = chest;
@@ -40,7 +41,7 @@ public class BukkitChestWrapper implements Chest {
     }
 
     @Override
-    public Inventory getInventory() {
+    public JavaInventory getInventory() {
         return inventoryWrapper;
     }
 }

@@ -1,6 +1,5 @@
 package com.github.jenya705.mcapi.sample;
 
-import com.github.jenya705.mcapi.app.DefaultLibraryApplication;
 import com.github.jenya705.mcapi.app.LibraryApplication;
 import com.github.jenya705.mcapi.inventory.ItemStack;
 
@@ -14,7 +13,7 @@ class SampleGetBlockInventoryItem {
         application.start();
         ItemStack itemStack = application
                 .rest()
-                .getBlockInventoryItem("overworld", 0, 100, 0, 0, 0)
+                .getBlockInventoryItem("overworld", 0, 100, 0, 0)
                 .block();
         if (itemStack != null) {
             System.out.printf(

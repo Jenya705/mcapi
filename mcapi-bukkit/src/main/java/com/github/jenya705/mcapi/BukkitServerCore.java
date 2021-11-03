@@ -1,6 +1,5 @@
 package com.github.jenya705.mcapi;
 
-import com.github.jenya705.mcapi.block.BukkitBlockDataRegistry;
 import com.github.jenya705.mcapi.command.CommandExecutor;
 import com.github.jenya705.mcapi.permission.PermissionManagerHook;
 import com.github.jenya705.mcapi.world.World;
@@ -95,7 +94,7 @@ public class BukkitServerCore extends AbstractJavaApplicationModule implements J
     }
 
     @Override
-    public Collection<JavaPlayer> getJavaPlayers() {
+    public Collection<JavaPlayer> getPlayers() {
         return Bukkit
                 .getOnlinePlayers()
                 .stream()
@@ -104,12 +103,12 @@ public class BukkitServerCore extends AbstractJavaApplicationModule implements J
     }
 
     @Override
-    public JavaPlayer getJavaPlayer(String name) {
+    public JavaPlayer getPlayer(String name) {
         return BukkitWrapper.player(Bukkit.getPlayer(name));
     }
 
     @Override
-    public JavaPlayer getJavaPlayer(UUID uuid) {
+    public JavaPlayer getPlayer(UUID uuid) {
         return BukkitWrapper.player(Bukkit.getPlayer(uuid));
     }
 

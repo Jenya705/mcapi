@@ -2,16 +2,13 @@ package com.github.jenya705.mcapi.module.rest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.jenya705.mcapi.*;
-import com.github.jenya705.mcapi.ApiError;
 import com.github.jenya705.mcapi.block.Block;
 import com.github.jenya705.mcapi.block.CommandBlock;
 import com.github.jenya705.mcapi.command.*;
-import com.github.jenya705.mcapi.entity.*;
-import com.github.jenya705.mcapi.entity.api.EntityEventTunnelAuthorizationRequest;
-import com.github.jenya705.mcapi.entity.api.EntityLinkRequest;
-import com.github.jenya705.mcapi.entity.api.EntitySubscribeRequest;
-import com.github.jenya705.mcapi.entity.command.*;
-import com.github.jenya705.mcapi.entity.event.*;
+import com.github.jenya705.mcapi.entity.AbstractBot;
+import com.github.jenya705.mcapi.entity.EntityEventTunnelAuthorizationRequest;
+import com.github.jenya705.mcapi.entity.EntityLinkRequest;
+import com.github.jenya705.mcapi.entity.EntitySubscribeRequest;
 import com.github.jenya705.mcapi.error.JsonDeserializeException;
 import com.github.jenya705.mcapi.error.PlayerNotFoundException;
 import com.github.jenya705.mcapi.event.*;
@@ -20,11 +17,20 @@ import com.github.jenya705.mcapi.form.FormPlatformProvider;
 import com.github.jenya705.mcapi.form.component.ComponentMapParser;
 import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.inventory.ItemStack;
+import com.github.jenya705.mcapi.inventory.JavaItemStack;
 import com.github.jenya705.mcapi.module.authorization.AuthorizationModule;
 import com.github.jenya705.mcapi.module.command.ApiCommandDeserializer;
 import com.github.jenya705.mcapi.module.command.CommandModule;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.module.mapper.Mapper;
+import com.github.jenya705.mcapi.rest.*;
+import com.github.jenya705.mcapi.rest.block.RestBlock;
+import com.github.jenya705.mcapi.rest.block.RestCommandBlock;
+import com.github.jenya705.mcapi.rest.command.*;
+import com.github.jenya705.mcapi.rest.event.*;
+import com.github.jenya705.mcapi.rest.inventory.RestInventory;
+import com.github.jenya705.mcapi.rest.inventory.RestItemStack;
+import com.github.jenya705.mcapi.rest.inventory.RestJavaItemStack;
 import com.github.jenya705.mcapi.world.World;
 
 import java.util.Arrays;
@@ -94,7 +100,12 @@ public class RestModule extends AbstractApplicationModule {
                 .tunnelJsonSerializer(World.class, RestWorld::from)
                 .tunnelJsonSerializer(Block.class, RestBlock::from)
                 .tunnelJsonSerializer(CommandBlock.class, RestCommandBlock::from)
-                .tunnelJsonSerializer(ItemStack.class, RestItemStack::from)
+                .tunnelJsonSerializer(ItemStack.class, item -> {
+                    if (item instanceof JavaItemStack && app().getPlatform() == ServerPlatform.JAVA) {
+                        return RestJavaItemStack.from((JavaItemStack) item);
+                    }
+                    return RestItemStack.from(item);
+                })
                 .tunnelJsonSerializer(Inventory.class, RestInventory::from)
                 .jsonDeserializer(Command.class, new ApiCommandDeserializer(commandModule))
                 .tunnelJsonDeserializer(
