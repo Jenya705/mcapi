@@ -1,17 +1,16 @@
-package com.github.jenya705.mcapi.entity;
+package com.github.jenya705.mcapi.entity.java;
 
-import com.github.jenya705.mcapi.Location;
-import com.github.jenya705.mcapi.Player;
-import com.github.jenya705.mcapi.PlayerID;
-import com.github.jenya705.mcapi.RestClient;
+import com.github.jenya705.mcapi.*;
+import com.github.jenya705.mcapi.entity.LazyPlayer;
+import com.github.jenya705.mcapi.inventory.JavaPlayerInventory;
 import com.github.jenya705.mcapi.inventory.PlayerInventory;
+import com.github.jenya705.mcapi.message.ComponentMessage;
 import com.github.jenya705.mcapi.message.DefaultMessage;
 import com.github.jenya705.mcapi.rest.RestPlayer;
 import com.github.jenya705.mcapi.selector.PlayerSelector;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import net.kyori.adventure.text.Component;
 
 import java.util.UUID;
 
@@ -19,20 +18,18 @@ import java.util.UUID;
  * @author Jenya705
  */
 @Builder
-@Getter(AccessLevel.PROTECTED)
-@Setter(AccessLevel.PROTECTED)
-public class LazyPlayer implements Player {
+public class LazyJavaPlayer implements JavaPlayer {
 
-    public static LazyPlayer of(RestClient client, UUID uuid) {
-        return LazyPlayer
+    public static LazyJavaPlayer of(JavaRestClient client, UUID uuid) {
+        return LazyJavaPlayer
                 .builder()
                 .restClient(client)
                 .uuid(uuid)
                 .build();
     }
 
-    public static LazyPlayer of(RestClient client, RestPlayer player) {
-        return LazyPlayer
+    public static LazyJavaPlayer of(JavaRestClient client, RestPlayer player) {
+        return LazyJavaPlayer
                 .builder()
                 .restClient(client)
                 .uuid(player.getUuid())
@@ -41,13 +38,13 @@ public class LazyPlayer implements Player {
                 .build();
     }
 
-    private final RestClient restClient;
+    private final JavaRestClient restClient;
     @Getter
     private final UUID uuid;
 
     private String name;
     private String type;
-    private PlayerInventory inventory;
+    private JavaPlayerInventory inventory;
 
     @Override
     public String getType() {
@@ -104,20 +101,24 @@ public class LazyPlayer implements Player {
     }
 
     @Override
-    public PlayerInventory getInventory() {
+    public JavaPlayerInventory getInventory() {
         if (inventory == null) {
             inventory = restClient.getPlayerInventory(PlayerID.of(uuid)).block();
         }
         return inventory;
     }
 
+    @Override
+    public void sendMessage(Component component) {
+        restClient.sendMessage(PlayerSelector.of(uuid), new ComponentMessage(component)).subscribe();
+    }
+
     private void loadFullPlayer() {
-        Player loaded = restClient
+        JavaPlayer loaded = restClient
                 .getPlayer(PlayerID.of(uuid))
                 .blockOptional()
                 .orElseThrow();
         name = loaded.getName();
         type = loaded.getType();
     }
-
 }

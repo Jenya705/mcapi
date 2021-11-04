@@ -18,6 +18,7 @@ import com.github.jenya705.mcapi.selector.BotSelector;
 import com.github.jenya705.mcapi.selector.OfflinePlayerSelector;
 import com.github.jenya705.mcapi.selector.PlayerSelector;
 import com.github.jenya705.mcapi.world.World;
+import lombok.AccessLevel;
 import lombok.Getter;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -34,6 +35,7 @@ public class HttpRestClient implements RestClient {
 
     @Getter
     private final ReactorBlockingThread blockingThread = new ReactorBlockingThread();
+    @Getter(AccessLevel.PROTECTED)
     private final LibraryApplication<?, ?> application;
 
     private HttpClient httpClient;

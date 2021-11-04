@@ -33,7 +33,7 @@ public class BukkitItemStackWrapper implements JavaItemStack {
     @Override
     public String getCustomName() {
         ItemMeta itemMeta = itemStack.getItemMeta();
-        if (itemMeta.hasDisplayName()) {
+        if (itemMeta != null && itemMeta.hasDisplayName()) {
             Component displayName = itemMeta.displayName();
             if (displayName == null) return null;
             return LegacyComponentSerializer
@@ -46,7 +46,7 @@ public class BukkitItemStackWrapper implements JavaItemStack {
     @Override
     public Component customName() {
         ItemMeta itemMeta = itemStack.getItemMeta();
-        if (itemMeta.hasDisplayName()) {
+        if (itemMeta != null && itemMeta.hasDisplayName()) {
             return itemMeta.displayName();
         }
         return null;
