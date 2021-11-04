@@ -2,6 +2,7 @@ package com.github.jenya705.mcapi.registry;
 
 import com.github.jenya705.mcapi.VanillaMaterial;
 import com.github.jenya705.mcapi.block.BlockData;
+import com.github.jenya705.mcapi.entity.block.EntityChest;
 import com.github.jenya705.mcapi.entity.block.EntityCommandBlock;
 
 import java.util.HashMap;
@@ -17,6 +18,7 @@ public class BlockDataRegistryImpl implements BlockDataRegistry {
 
     public BlockDataRegistryImpl() {
         addBlockDataClass(VanillaMaterial.COMMAND_BLOCK, EntityCommandBlock.class);
+        addBlockDataClass(VanillaMaterial.CHEST, EntityChest.class);
     }
 
     @Override
