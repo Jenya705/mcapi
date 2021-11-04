@@ -1,7 +1,6 @@
 rootProject.name = 'mcapi'
 include 'mcapi-java'
 include 'mcapi-bukkit'
-include 'mcapi-lib'
 include 'mcapi-server-core-java'
 include 'mcapi-api'
 include 'mcapi-server-core'
