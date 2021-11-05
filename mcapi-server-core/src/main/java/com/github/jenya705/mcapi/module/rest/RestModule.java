@@ -3,6 +3,7 @@ package com.github.jenya705.mcapi.module.rest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.jenya705.mcapi.*;
 import com.github.jenya705.mcapi.block.Block;
+import com.github.jenya705.mcapi.block.Chest;
 import com.github.jenya705.mcapi.block.CommandBlock;
 import com.github.jenya705.mcapi.command.*;
 import com.github.jenya705.mcapi.entity.AbstractBot;
@@ -25,6 +26,7 @@ import com.github.jenya705.mcapi.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.module.mapper.Mapper;
 import com.github.jenya705.mcapi.rest.*;
 import com.github.jenya705.mcapi.rest.block.RestBlock;
+import com.github.jenya705.mcapi.rest.block.RestChest;
 import com.github.jenya705.mcapi.rest.block.RestCommandBlock;
 import com.github.jenya705.mcapi.rest.command.*;
 import com.github.jenya705.mcapi.rest.event.*;
@@ -106,6 +108,7 @@ public class RestModule extends AbstractApplicationModule {
                     }
                     return RestItemStack.from(item);
                 })
+                .tunnelJsonSerializer(Chest.class, RestChest::from)
                 .tunnelJsonSerializer(Inventory.class, RestInventory::from)
                 .jsonDeserializer(Command.class, new ApiCommandDeserializer(commandModule))
                 .tunnelJsonDeserializer(
