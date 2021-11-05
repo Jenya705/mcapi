@@ -20,7 +20,7 @@ public class RestChest {
     private UUID[] watchers;
     private RestInventory inventory;
 
-    public RestChest from(Chest chest) {
+    public static RestChest from(Chest chest) {
         return new RestChest(
                 chest
                         .getWatchers()
