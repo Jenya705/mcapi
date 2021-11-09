@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi;
+package com.github.jenya705.mcapi.module.rest;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -11,9 +11,9 @@ import java.io.IOException;
 /**
  * @author Jenya705
  */
-public class ComponentJsonSerializer extends StdSerializer<Component> {
+public class ComponentSerializer extends StdSerializer<Component> {
 
-    public ComponentJsonSerializer() {
+    public ComponentSerializer() {
         super(Component.class);
     }
 

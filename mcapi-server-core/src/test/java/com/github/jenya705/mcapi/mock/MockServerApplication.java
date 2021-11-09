@@ -65,7 +65,6 @@ public class MockServerApplication extends ServerApplication {
         addClass(MockServerCore.class);
         change(DatabaseModule.class, MockDatabaseModule.class);
         change(WebServer.class, MockWebServer.class);
-        setPlatform(ServerPlatform.TESTING);
     }
 
     @OnInitializing(priority = Integer.MIN_VALUE)

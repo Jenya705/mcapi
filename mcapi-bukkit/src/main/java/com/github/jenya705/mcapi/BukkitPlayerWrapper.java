@@ -1,27 +1,26 @@
 package com.github.jenya705.mcapi;
 
-import com.github.jenya705.mcapi.inventory.JavaPlayerInventory;
+import com.github.jenya705.mcapi.inventory.PlayerInventory;
 import net.kyori.adventure.text.Component;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
 /**
  * @author Jenya705
  */
-public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements JavaPlayer {
+public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements Player {
 
-    private final Player player;
+    private final org.bukkit.entity.Player player;
 
-    private final JavaPlayerInventory inventory;
+    private final PlayerInventory inventory;
 
-    public BukkitPlayerWrapper(Player player) {
+    public BukkitPlayerWrapper(org.bukkit.entity.Player player) {
         super(player);
         this.player = player;
         inventory = BukkitWrapper.playerInventory(player.getInventory());
     }
 
-    public static BukkitPlayerWrapper of(Player player) {
+    public static BukkitPlayerWrapper of(org.bukkit.entity.Player player) {
         return player == null ? null : new BukkitPlayerWrapper(player);
     }
 
@@ -61,7 +60,7 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements J
     }
 
     @Override
-    public JavaPlayerInventory getInventory() {
+    public PlayerInventory getInventory() {
         return inventory;
     }
 }

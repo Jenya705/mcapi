@@ -55,7 +55,7 @@ public class ConfigModuleImpl extends AbstractApplicationModule implements Confi
                 .serializer(Pattern.class, Pattern::pattern)
                 .deserializer(Pattern.class, obj -> Pattern.compile(String.valueOf(obj)))
                 .rawSerializer(ConfigData.class)
-                .deserializer(ConfigData.class, obj -> createConfig((Map<String, Object>) obj));
+                .deserializer(ConfigData.class, obj -> createConfig((Map<String, Object>) obj))
         ;
         TimerTask task = TimerTask.start(log, "Loading config...");
         config = createConfig(core().loadConfig("config"));
@@ -81,7 +81,7 @@ public class ConfigModuleImpl extends AbstractApplicationModule implements Confi
 
     @Override
     public ConfigData createConfig(Map<String, Object> data) {
-        return new CallbackLoadableConfigData(data, app().getPlatform(), new LoadableConfigModuleSerializerImpl(this));
+        return new CallbackLoadableConfigData(data, new LoadableConfigModuleSerializerImpl(this));
     }
 
     @Override

@@ -5,9 +5,9 @@ import com.github.jenya705.mcapi.BukkitWrapper;
 /**
  * @author Jenya705
  */
-public class BukkitPlayerInventoryWrapper implements JavaPlayerInventory {
+public class BukkitPlayerInventoryWrapper implements PlayerInventory {
 
-    private final JavaInventory inventoryWrapper;
+    private final Inventory inventoryWrapper;
 
     private final org.bukkit.inventory.PlayerInventory bukkitPlayerInventory;
 
@@ -27,14 +27,14 @@ public class BukkitPlayerInventoryWrapper implements JavaPlayerInventory {
     }
 
     @Override
-    public JavaItemStack[] getAllItems() {
-        JavaItemStack[] allItems = new JavaItemStack[getSize()];
+    public ItemStack[] getAllItems() {
+        ItemStack[] allItems = new ItemStack[getSize()];
         for (int i = 0; i < allItems.length; ++i) allItems[i] = getItem(i);
         return allItems;
     }
 
     @Override
-    public JavaItemStack getItem(int item) {
+    public ItemStack getItem(int item) {
         // because bukkit player inventory working not correct for mcapi
         // we need to set real index (for bukkit) of item
         int realIndex;
@@ -47,32 +47,32 @@ public class BukkitPlayerInventoryWrapper implements JavaPlayerInventory {
     }
 
     @Override
-    public JavaItemStack getHelmet() {
+    public ItemStack getHelmet() {
         return BukkitWrapper.itemStack(bukkitPlayerInventory.getHelmet());
     }
 
     @Override
-    public JavaItemStack getChestplate() {
+    public ItemStack getChestplate() {
         return BukkitWrapper.itemStack(bukkitPlayerInventory.getChestplate());
     }
 
     @Override
-    public JavaItemStack getLeggings() {
+    public ItemStack getLeggings() {
         return BukkitWrapper.itemStack(bukkitPlayerInventory.getLeggings());
     }
 
     @Override
-    public JavaItemStack getBoots() {
+    public ItemStack getBoots() {
         return BukkitWrapper.itemStack(bukkitPlayerInventory.getBoots());
     }
 
     @Override
-    public JavaItemStack getMainHand() {
+    public ItemStack getMainHand() {
         return BukkitWrapper.itemStack(bukkitPlayerInventory.getItemInMainHand());
     }
 
     @Override
-    public JavaItemStack getOffHand() {
+    public ItemStack getOffHand() {
         return BukkitWrapper.itemStack(bukkitPlayerInventory.getItemInOffHand());
     }
 

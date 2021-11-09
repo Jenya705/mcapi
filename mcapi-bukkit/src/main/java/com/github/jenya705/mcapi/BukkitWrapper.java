@@ -3,7 +3,6 @@ package com.github.jenya705.mcapi;
 import com.github.jenya705.mcapi.inventory.*;
 import com.github.jenya705.mcapi.world.World;
 import lombok.experimental.UtilityClass;
-import org.bukkit.entity.Player;
 
 /**
  * @author Jenya705
@@ -11,21 +10,21 @@ import org.bukkit.entity.Player;
 @UtilityClass
 public class BukkitWrapper {
 
-    public JavaCommandSender sender(org.bukkit.command.CommandSender sender) {
+    public CommandSender sender(org.bukkit.command.CommandSender sender) {
         if (sender instanceof Player) {
-            return BukkitPlayerWrapper.of((Player) sender);
+            return BukkitPlayerWrapper.of((org.bukkit.entity.Player) sender);
         }
         return BukkitCommandSenderWrapper.of(sender);
     }
 
     public OfflinePlayer offlinePlayer(org.bukkit.OfflinePlayer player) {
         if (player instanceof Player && player.isOnline()) {
-            return BukkitPlayerWrapper.of((Player) player);
+            return BukkitPlayerWrapper.of((org.bukkit.entity.Player) player);
         }
         return BukkitOfflinePlayerWrapper.of(player);
     }
 
-    public JavaPlayer player(Player player) {
+    public Player player(org.bukkit.entity.Player player) {
         return BukkitPlayerWrapper.of(player);
     }
 
@@ -37,15 +36,15 @@ public class BukkitWrapper {
         return BukkitWorldWrapper.of(world);
     }
 
-    public JavaItemStack itemStack(org.bukkit.inventory.ItemStack itemStack) {
+    public ItemStack itemStack(org.bukkit.inventory.ItemStack itemStack) {
         return BukkitItemStackWrapper.of(itemStack);
     }
 
-    public JavaInventory inventory(org.bukkit.inventory.Inventory inventory) {
+    public Inventory inventory(org.bukkit.inventory.Inventory inventory) {
         return BukkitInventoryWrapper.of(inventory);
     }
 
-    public JavaPlayerInventory playerInventory(org.bukkit.inventory.PlayerInventory playerInventory) {
+    public PlayerInventory playerInventory(org.bukkit.inventory.PlayerInventory playerInventory) {
         return BukkitPlayerInventoryWrapper.of(playerInventory);
     }
 

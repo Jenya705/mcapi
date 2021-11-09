@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 /**
  * @author Jenya705
  */
-public class BukkitServerCore extends AbstractJavaApplicationModule implements JavaServerCore {
+public class BukkitServerCore extends AbstractApplicationModule implements ServerCore {
 
     private static final Yaml yaml = generateYaml();
 
@@ -94,7 +94,7 @@ public class BukkitServerCore extends AbstractJavaApplicationModule implements J
     }
 
     @Override
-    public Collection<JavaPlayer> getPlayers() {
+    public Collection<Player> getPlayers() {
         return Bukkit
                 .getOnlinePlayers()
                 .stream()
@@ -103,12 +103,12 @@ public class BukkitServerCore extends AbstractJavaApplicationModule implements J
     }
 
     @Override
-    public JavaPlayer getPlayer(String name) {
+    public Player getPlayer(String name) {
         return BukkitWrapper.player(Bukkit.getPlayer(name));
     }
 
     @Override
-    public JavaPlayer getPlayer(UUID uuid) {
+    public Player getPlayer(UUID uuid) {
         return BukkitWrapper.player(Bukkit.getPlayer(uuid));
     }
 

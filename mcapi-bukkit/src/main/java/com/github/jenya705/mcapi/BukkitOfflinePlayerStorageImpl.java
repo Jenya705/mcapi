@@ -18,7 +18,7 @@ import java.util.UUID;
  * @author Jenya705
  */
 @Slf4j
-public class BukkitOfflinePlayerStorageImpl extends AbstractJavaApplicationModule implements BukkitOfflinePlayerStorage, Listener {
+public class BukkitOfflinePlayerStorageImpl extends AbstractApplicationModule implements BukkitOfflinePlayerStorage, Listener {
 
     private final Map<String, UUID> nickUUIDMap = new HashMap<>();
 

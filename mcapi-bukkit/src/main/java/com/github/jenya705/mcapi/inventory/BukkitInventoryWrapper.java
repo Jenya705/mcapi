@@ -5,15 +5,15 @@ import com.github.jenya705.mcapi.BukkitWrapper;
 /**
  * @author Jenya705
  */
-public class BukkitInventoryWrapper implements JavaInventory {
+public class BukkitInventoryWrapper implements Inventory {
 
     private final org.bukkit.inventory.Inventory bukkitInventory;
 
-    private final JavaItemStack[] cachedItemStacks;
+    private final ItemStack[] cachedItemStacks;
 
     public BukkitInventoryWrapper(org.bukkit.inventory.Inventory bukkitInventory) {
         this.bukkitInventory = bukkitInventory;
-        cachedItemStacks = new JavaItemStack[bukkitInventory.getSize()];
+        cachedItemStacks = new ItemStack[bukkitInventory.getSize()];
     }
 
     public static BukkitInventoryWrapper of(org.bukkit.inventory.Inventory bukkitInventory) {
@@ -27,7 +27,7 @@ public class BukkitInventoryWrapper implements JavaInventory {
     }
 
     @Override
-    public JavaItemStack[] getAllItems() {
+    public ItemStack[] getAllItems() {
         for (int i = 0; i < bukkitInventory.getSize(); ++i) {
             cacheItemIfNeed(i);
         }
@@ -35,7 +35,7 @@ public class BukkitInventoryWrapper implements JavaInventory {
     }
 
     @Override
-    public JavaItemStack getItem(int item) {
+    public ItemStack getItem(int item) {
         if (item > bukkitInventory.getSize()) return null;
         cacheItemIfNeed(item);
         return cachedItemStacks[item];

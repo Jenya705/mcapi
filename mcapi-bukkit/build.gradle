@@ -27,9 +27,7 @@ repositories {
 
 dependencies {
     implementation project(':mcapi-server-core')
-    implementation project(':mcapi-server-core-java')
     implementation project(':mcapi-api')
-    implementation project(':mcapi-java')
     compileOnly 'io.papermc.paper:paper-api:1.17-R0.1-SNAPSHOT'
     implementation "net.kyori:adventure-text-minimessage:4.1.0-SNAPSHOT"
     compileOnly 'org.slf4j:slf4j-api:1.7.32'

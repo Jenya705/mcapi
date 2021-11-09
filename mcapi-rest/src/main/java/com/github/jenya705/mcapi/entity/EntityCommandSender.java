@@ -5,6 +5,7 @@ import com.github.jenya705.mcapi.rest.RestCommandSender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.kyori.adventure.text.Component;
 
 /**
  * @author Jenya705
@@ -19,6 +20,11 @@ public class EntityCommandSender implements CommandSender {
 
     @Override
     public void sendMessage(String message) {
+        EntityUtils.throwEntityContextException();
+    }
+
+    @Override
+    public void sendMessage(Component component) {
         EntityUtils.throwEntityContextException();
     }
 

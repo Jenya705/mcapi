@@ -7,6 +7,7 @@ import com.github.jenya705.mcapi.rest.RestPlayer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.kyori.adventure.text.Component;
 
 import java.util.UUID;
 
@@ -27,6 +28,11 @@ public class EntityPlayer implements Player {
 
     @Override
     public void sendMessage(String message) {
+        EntityUtils.throwEntityContextException();
+    }
+
+    @Override
+    public void sendMessage(Component component) {
         EntityUtils.throwEntityContextException();
     }
 

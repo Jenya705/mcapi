@@ -3,7 +3,6 @@ package com.github.jenya705.mcapi;
 import lombok.AllArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
@@ -11,11 +10,11 @@ import org.bukkit.entity.Player;
  * @author Jenya705
  */
 @AllArgsConstructor
-public class BukkitCommandSenderWrapper implements JavaCommandSender {
+public class BukkitCommandSenderWrapper implements CommandSender {
 
-    private final CommandSender sender;
+    private final org.bukkit.command.CommandSender sender;
 
-    public static BukkitCommandSenderWrapper of(CommandSender sender) {
+    public static BukkitCommandSenderWrapper of(org.bukkit.command.CommandSender sender) {
         return sender == null ? null : new BukkitCommandSenderWrapper(sender);
     }
 

@@ -3,8 +3,8 @@ targetCompatibility = JavaVersion.VERSION_11
 
 dependencies {
     implementation project(":mcapi-api")
-    implementation project(":mcapi-java")
     implementation project(":mcapi-rest")
+    implementation 'net.kyori:adventure-text-serializer-gson:4.8.1'
     implementation 'org.slf4j:slf4j-api:1.7.32'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.12.5'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.5'

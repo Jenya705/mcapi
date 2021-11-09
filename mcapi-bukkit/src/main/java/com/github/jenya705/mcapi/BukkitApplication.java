@@ -6,13 +6,9 @@ import com.github.jenya705.mcapi.utils.FailureOperation;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -28,12 +24,12 @@ public class BukkitApplication extends JavaPlugin {
 
     private boolean asyncTab;
 
-    private JavaServerApplication application;
+    private ServerApplication application;
 
     @Override
     public void onEnable() {
         BukkitUtils.setPlugin(this);
-        application = new JavaServerApplication();
+        application = new ServerApplication();
         application.addClass(BukkitServerCore.class);
         application.addClass(BukkitServerEventHandler.class);
         application.addClass(BukkitOfflinePlayerStorageImpl.class);

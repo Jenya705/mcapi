@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi;
 
+import com.github.jenya705.mcapi.form.ComponentFormProvider;
 import com.github.jenya705.mcapi.form.component.ComponentMapParserImpl;
 import com.github.jenya705.mcapi.module.authorization.AuthorizationModuleImpl;
 import com.github.jenya705.mcapi.module.command.CommandModuleImpl;
@@ -63,10 +64,6 @@ public class ServerApplication {
     private boolean debug = false;
 
     @Getter
-    @Setter
-    private ServerPlatform platform;
-
-    @Getter
     @Bean
     private ServerCore core;
     @Getter
@@ -93,6 +90,7 @@ public class ServerApplication {
                 ServerLocalEventHandlerImpl.class,
                 MessageDeserializerImpl.class,
                 ComponentMapParserImpl.class,
+                ComponentFormProvider.class,
                 // Routes
                 GetPlayerLocationRouteHandler.class,
                 GetPlayerRouteHandler.class,
@@ -124,12 +122,6 @@ public class ServerApplication {
         log.info("Plugin is under heavy development! All api is subject to change!");
         log.info("If you find a bug, consider to issue it on https://github.com/Jenya705/mcapi/issues");
         log.info("Plugin wiki: https://github.com/Jenya705/mcapi/wiki");
-        log.info(
-                "Server running on {} platform",
-                getPlatform() == null ?
-                        "unknown" :
-                        getPlatform().name().toLowerCase(Locale.ROOT)
-        );
         addBean(this);
         Map<Integer, Set<Pair<Object, Method>>> initializingMethods = new HashMap<>();
         Map<Integer, Set<Pair<Object, Method>>> startupMethods = new HashMap<>();

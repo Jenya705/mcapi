@@ -18,7 +18,6 @@ import com.github.jenya705.mcapi.form.FormPlatformProvider;
 import com.github.jenya705.mcapi.form.component.ComponentMapParser;
 import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.inventory.ItemStack;
-import com.github.jenya705.mcapi.inventory.JavaItemStack;
 import com.github.jenya705.mcapi.module.authorization.AuthorizationModule;
 import com.github.jenya705.mcapi.module.command.ApiCommandDeserializer;
 import com.github.jenya705.mcapi.module.command.CommandModule;
@@ -32,8 +31,8 @@ import com.github.jenya705.mcapi.rest.command.*;
 import com.github.jenya705.mcapi.rest.event.*;
 import com.github.jenya705.mcapi.rest.inventory.RestInventory;
 import com.github.jenya705.mcapi.rest.inventory.RestItemStack;
-import com.github.jenya705.mcapi.rest.inventory.RestJavaItemStack;
 import com.github.jenya705.mcapi.world.World;
+import net.kyori.adventure.text.Component;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -102,15 +101,11 @@ public class RestModule extends AbstractApplicationModule {
                 .tunnelJsonSerializer(World.class, RestWorld::from)
                 .tunnelJsonSerializer(Block.class, RestBlock::from)
                 .tunnelJsonSerializer(CommandBlock.class, RestCommandBlock::from)
-                .tunnelJsonSerializer(ItemStack.class, item -> {
-                    if (item instanceof JavaItemStack && app().getPlatform() == ServerPlatform.JAVA) {
-                        return RestJavaItemStack.from((JavaItemStack) item);
-                    }
-                    return RestItemStack.from(item);
-                })
+                .tunnelJsonSerializer(ItemStack.class, RestItemStack::from)
                 .tunnelJsonSerializer(Chest.class, RestChest::from)
                 .tunnelJsonSerializer(Inventory.class, RestInventory::from)
                 .jsonDeserializer(Command.class, new ApiCommandDeserializer(commandModule))
+                .jsonSerializer(Component.class, new ComponentSerializer())
                 .tunnelJsonDeserializer(
                         SubscribeRequest.class,
                         RestSubscribeRequest.class,

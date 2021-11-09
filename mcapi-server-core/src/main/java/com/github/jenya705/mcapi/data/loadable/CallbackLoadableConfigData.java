@@ -1,6 +1,5 @@
 package com.github.jenya705.mcapi.data.loadable;
 
-import com.github.jenya705.mcapi.ServerPlatform;
 import com.github.jenya705.mcapi.data.GlobalConfigData;
 import com.github.jenya705.mcapi.data.GlobalContainer;
 import com.github.jenya705.mcapi.data.MapConfigData;
@@ -22,16 +21,6 @@ public class CallbackLoadableConfigData extends GlobalConfigData implements Load
 
     public CallbackLoadableConfigData(Map<String, Object> data, Map<String, Object> globals, CallbackLoadableConfigDataSerializer serializer) {
         super(data, globals);
-        this.serializer = serializer;
-    }
-
-    public CallbackLoadableConfigData(Map<String, Object> data, Map<String, Object> globals, ServerPlatform platform, CallbackLoadableConfigDataSerializer serializer) {
-        super(data, globals, platform);
-        this.serializer = serializer;
-    }
-
-    public CallbackLoadableConfigData(Map<String, Object> data, ServerPlatform platform, CallbackLoadableConfigDataSerializer serializer) {
-        super(data, platform);
         this.serializer = serializer;
     }
 
@@ -70,18 +59,7 @@ public class CallbackLoadableConfigData extends GlobalConfigData implements Load
                 if (endValue == null) {
                     // not assigned
                     if (!value.required()) continue; // not required to assign
-                    Object fieldValue;
-                    Java javaValue = field.getAnnotation(Java.class);
-                    Bedrock bedrockValue = field.getAnnotation(Bedrock.class);
-                    if (getPlatform() == ServerPlatform.JAVA && javaValue != null) {
-                        fieldValue = javaValue.value();
-                    }
-                    else if (getPlatform() == ServerPlatform.BEDROCK && bedrockValue != null) {
-                        fieldValue = bedrockValue.value();
-                    }
-                    else {
-                        fieldValue = field.get(object);
-                    }
+                    Object fieldValue = field.get(object);
                     if (global == null) {
                         set(name, serializer.serialize(fieldValue, this, name));
                     }
@@ -106,6 +84,6 @@ public class CallbackLoadableConfigData extends GlobalConfigData implements Load
 
     @Override
     public MapConfigData createSelf(Map<String, Object> from) {
-        return new CallbackLoadableConfigData(from, getGlobals(), getPlatform(), getSerializer());
+        return new CallbackLoadableConfigData(from, getGlobals(), getSerializer());
     }
 }

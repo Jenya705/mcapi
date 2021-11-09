@@ -5,6 +5,8 @@ import com.github.jenya705.mcapi.inventory.ItemStack;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 /**
  * @author Jenya705
@@ -16,5 +18,16 @@ public class EntityItemStack implements ItemStack {
 
     private Material material;
     private int amount;
-    private String customName;
+    private Component customName;
+
+    public String getCustomName() {
+        return LegacyComponentSerializer
+                .legacySection()
+                .serialize(customName);
+    }
+
+    @Override
+    public Component customName() {
+        return customName;
+    }
 }

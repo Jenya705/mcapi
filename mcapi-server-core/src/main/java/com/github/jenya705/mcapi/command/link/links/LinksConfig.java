@@ -3,7 +3,6 @@ package com.github.jenya705.mcapi.command.link.links;
 import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutorConfig;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.data.loadable.Global;
-import com.github.jenya705.mcapi.data.loadable.Java;
 import com.github.jenya705.mcapi.data.loadable.Value;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,8 +21,7 @@ public class LinksConfig extends AdvancedCommandExecutorConfig {
 
     @Value
     @Global("linkListElementRepresentation")
-    @Java("&7- &e%name% &7- <click:run_command:/mcapi linkMenu permission %bot_id%>&9[Permissions]</click> <click:run_command:/mcapi linkMenu unlink %bot_id%>&c[Unlink]</click>")
-    private String listElement = "&7- &e%name%";
+    private String listElement = "&7- &e%name% &7- <click:run_command:/mcapi linkMenu permission %bot_id%>&9[Permissions]</click> <click:run_command:/mcapi linkMenu unlink %bot_id%>&c[Unlink]</click>";
 
     @Value
     @Global("listsDelimiter")

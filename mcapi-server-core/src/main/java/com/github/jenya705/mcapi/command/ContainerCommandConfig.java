@@ -2,7 +2,6 @@ package com.github.jenya705.mcapi.command;
 
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.data.loadable.Global;
-import com.github.jenya705.mcapi.data.loadable.Java;
 import com.github.jenya705.mcapi.data.loadable.Value;
 import com.github.jenya705.mcapi.module.config.Config;
 import lombok.Getter;
@@ -27,8 +26,7 @@ public class ContainerCommandConfig extends Config {
     private String helpLayout = "&eHelp:\n%list%";
 
     @Value
-    @Java("&7- <click:suggest_command:%command%>&e%name%</click>")
-    private String helpElement = "&7- &e%name%";
+    private String helpElement = "&7- <click:suggest_command:%command%>&e%name%</click>";
 
     @Value
     @Global("listsDelimiter")

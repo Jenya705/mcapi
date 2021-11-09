@@ -6,7 +6,7 @@ import net.kyori.adventure.text.event.ClickEvent;
 /**
  * @author Jenya705
  */
-public class JavaFormBuilder implements FormBuilder {
+public class ComponentFormBuilder implements FormBuilder {
 
     private Component message = Component.empty();
 
@@ -39,6 +39,6 @@ public class JavaFormBuilder implements FormBuilder {
 
     @Override
     public Form build() {
-        return new JavaForm(message);
+        return new ComponentForm(message);
     }
 }

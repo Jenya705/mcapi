@@ -15,6 +15,7 @@ import com.github.jenya705.mcapi.module.mapper.JacksonProvider;
 import com.github.jenya705.mcapi.module.mapper.Mapper;
 import com.github.jenya705.mcapi.util.ExceptionableFunction;
 import lombok.SneakyThrows;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -50,6 +51,9 @@ public class MessageDeserializerImpl extends StdDeserializer<TypedMessage> imple
         addMessageType("default", node -> new DefaultMessage(node.asText()));
         addMessageType("form", node -> new FormMessage(
                 jacksonProvider.getMapper().treeToValue(node, Form.class), formProvider
+        ));
+        addMessageType("component", obj -> new ComponentMessage(
+                GsonComponentSerializer.gson().deserialize(obj.toString())
         ));
     }
 

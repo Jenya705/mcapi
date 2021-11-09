@@ -11,7 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
  * @author Jenya705
  */
 @AllArgsConstructor
-public class BukkitItemStackWrapper implements JavaItemStack {
+public class BukkitItemStackWrapper implements ItemStack {
 
     private final org.bukkit.inventory.ItemStack itemStack;
 
