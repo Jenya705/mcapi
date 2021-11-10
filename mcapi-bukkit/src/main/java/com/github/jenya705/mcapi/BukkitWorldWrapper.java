@@ -46,19 +46,12 @@ public class BukkitWorldWrapper implements World {
 
     @Override
     public WorldDimension getWorldDimension() {
-        org.bukkit.World.Environment environment = bukkitWorld.getEnvironment();
-        switch (environment) {
-            case NORMAL -> {
-                return WorldDimension.OVERWORLD;
-            }
-            case NETHER -> {
-                return WorldDimension.NETHER;
-            }
-            case THE_END -> {
-                return WorldDimension.END;
-            }
-        }
-        return WorldDimension.UNKNOWN;
+        return switch (bukkitWorld.getEnvironment()) {
+            case NORMAL -> WorldDimension.OVERWORLD;
+            case NETHER -> WorldDimension.NETHER;
+            case THE_END -> WorldDimension.END;
+            default -> WorldDimension.UNKNOWN;
+        };
     }
 
     @Override
