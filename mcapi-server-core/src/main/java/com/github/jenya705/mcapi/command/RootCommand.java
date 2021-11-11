@@ -34,7 +34,7 @@ public class RootCommand extends AbstractApplicationModule implements Supplier<C
     @SneakyThrows
     @Override
     public ContainerCommandExecutor get() {
-        ContainerCommandExecutor container = new ContainerCommandExecutor(app(), "mcapi.command", "mcapi");
+        ContainerCommandExecutor container = new ContainerCommandExecutor(app(), permission, name);
         container
                 .tree()
                 .branch("bot", branch -> branch
