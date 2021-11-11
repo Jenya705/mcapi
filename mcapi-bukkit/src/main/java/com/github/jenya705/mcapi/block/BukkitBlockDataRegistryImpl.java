@@ -1,6 +1,8 @@
 package com.github.jenya705.mcapi.block;
 
-import com.github.jenya705.mcapi.BukkitUtils;
+import com.github.jenya705.mcapi.block.data.BukkitBarrelWrapper;
+import com.github.jenya705.mcapi.block.data.BukkitChestWrapper;
+import com.github.jenya705.mcapi.block.data.BukkitCommandBlockWrapper;
 import org.bukkit.Material;
 
 import java.util.HashMap;
@@ -12,25 +14,24 @@ import java.util.function.Function;
  */
 public class BukkitBlockDataRegistryImpl implements BukkitBlockDataRegistry {
 
-    private final Map<org.bukkit.Material, Function<org.bukkit.block.BlockState, BlockData>> blockDataCreators = new HashMap<>();
+    private final Map<org.bukkit.Material, Function<org.bukkit.block.Block, BlockData>> blockDataCreators = new HashMap<>();
 
     public BukkitBlockDataRegistryImpl() {
         addCreator(Material.COMMAND_BLOCK, BukkitCommandBlockWrapper::of);
         addCreator(Material.CHEST, BukkitChestWrapper::of);
+        addCreator(Material.BARREL, BukkitBarrelWrapper::of);
     }
 
     @Override
     public BlockData getData(org.bukkit.block.Block block) {
-        Function<org.bukkit.block.BlockState, BlockData> creator =
+        Function<org.bukkit.block.Block, BlockData> creator =
                 blockDataCreators.get(block.getType());
         if (creator == null) return null;
-        return creator.apply(
-                BukkitUtils.notAsyncSupplier(block::getState)
-        );
+        return creator.apply(block);
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends org.bukkit.block.BlockState> void addCreator(
+    private <T extends org.bukkit.block.Block> void addCreator(
             org.bukkit.Material material,
             Function<T, BlockData> creator
     ) {

@@ -23,7 +23,7 @@ public class BukkitPlayerInventoryWrapper implements PlayerInventory {
 
     @Override
     public int getSize() {
-        return inventoryWrapper.getSize();
+        return inventoryWrapper.getSize() + 1;
     }
 
     @Override

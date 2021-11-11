@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi;
 
+import com.github.jenya705.mcapi.block.BlockFace;
 import com.github.jenya705.mcapi.inventory.*;
 import com.github.jenya705.mcapi.world.World;
 import lombok.experimental.UtilityClass;
@@ -46,6 +47,16 @@ public class BukkitWrapper {
 
     public PlayerInventory playerInventory(org.bukkit.inventory.PlayerInventory playerInventory) {
         return BukkitPlayerInventoryWrapper.of(playerInventory);
+    }
+
+    public BlockFace blockFace(org.bukkit.block.BlockFace blockFace) {
+        return switch (blockFace) {
+            case EAST -> BlockFace.EAST;
+            case WEST -> BlockFace.WEST;
+            case NORTH -> BlockFace.NORTH;
+            case SOUTH -> BlockFace.SOUTH;
+            default -> null;
+        };
     }
 
 }

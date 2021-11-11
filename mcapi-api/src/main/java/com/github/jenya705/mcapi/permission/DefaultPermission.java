@@ -29,6 +29,7 @@ public enum DefaultPermission {
     WORLD_GET(Permissions.WORLD_GET, true, false, true),
     COMMAND_BLOCK_GET(Permissions.COMMAND_BLOCK_GET, true, false, true),
     CHEST_BLOCK_GET(Permissions.CHEST_BLOCK_GET, true, false, true),
+    BARREL_BLOCK_GET(Permissions.BARREL_BLOCK_GET, true, false, true),
     PLAYER_INVENTORY_GET(Permissions.PLAYER_INVENTORY_GET, false, false, true),
     PLAYER_ITEM_GET(Permissions.PLAYER_ITEM_GET, false, false, true),
     BLOCK_INVENTORY_GET(Permissions.BLOCK_INVENTORY_GET, false, false, true),

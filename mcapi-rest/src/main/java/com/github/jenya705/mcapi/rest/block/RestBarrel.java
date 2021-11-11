@@ -3,7 +3,7 @@ package com.github.jenya705.mcapi.rest.block;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jenya705.mcapi.Player;
-import com.github.jenya705.mcapi.block.Chest;
+import com.github.jenya705.mcapi.block.Barrel;
 import com.github.jenya705.mcapi.rest.inventory.RestInventory;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +17,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RestChest {
+public class RestBarrel {
 
     private UUID[] watchers;
     private RestInventory inventory;
@@ -26,15 +26,15 @@ public class RestChest {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String direction;
 
-    public static RestChest from(Chest chest) {
-        return new RestChest(
-                chest
+    public static RestBarrel from(Barrel barrel) {
+        return new RestBarrel(
+                barrel
                         .getWatchers()
                         .stream()
                         .map(Player::getUuid)
                         .toArray(UUID[]::new),
-                RestInventory.from(chest.getInventory()),
-                chest.getDirection() == null ? null : chest.getDirection().name()
+                RestInventory.from(barrel.getInventory()),
+                barrel.getDirection() == null ? null : barrel.getDirection().name()
         );
     }
 }
