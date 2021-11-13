@@ -33,7 +33,7 @@ public class BukkitUtils {
             return supplier.get();
         }
         AtomicReference<T> atomicValue = new AtomicReference<>();
-        notAsyncTask(() -> {
+        Bukkit.getServer().getScheduler().runTask(plugin, () -> {
             atomicValue.set(supplier.get());
             synchronized (atomicValue) {
                 atomicValue.notifyAll();

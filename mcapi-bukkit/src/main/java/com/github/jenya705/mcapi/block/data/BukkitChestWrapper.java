@@ -1,16 +1,13 @@
 package com.github.jenya705.mcapi.block.data;
 
-import com.github.jenya705.mcapi.BukkitWrapper;
-import com.github.jenya705.mcapi.Player;
-import com.github.jenya705.mcapi.block.*;
+import com.github.jenya705.mcapi.block.BukkitDirectionalWrapper;
+import com.github.jenya705.mcapi.block.BukkitInventoryHolderWrapper;
+import com.github.jenya705.mcapi.block.BukkitWatchableWrapper;
+import com.github.jenya705.mcapi.block.Chest;
 import com.github.jenya705.mcapi.block.state.CapturedState;
 import com.github.jenya705.mcapi.block.state.SharedCapturedState;
-import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.inventory.InventoryHolder;
 import lombok.experimental.Delegate;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Jenya705

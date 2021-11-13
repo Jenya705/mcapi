@@ -1,7 +1,5 @@
 package com.github.jenya705.mcapi.block.data;
 
-import com.github.jenya705.mcapi.BukkitWrapper;
-import com.github.jenya705.mcapi.block.BlockFace;
 import com.github.jenya705.mcapi.block.BukkitDirectionalWrapper;
 import com.github.jenya705.mcapi.block.CommandBlock;
 import com.github.jenya705.mcapi.block.state.CapturedState;

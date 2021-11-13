@@ -1,6 +1,9 @@
 package com.github.jenya705.mcapi.mock;
 
-import com.github.jenya705.mcapi.*;
+import com.github.jenya705.mcapi.Bean;
+import com.github.jenya705.mcapi.OnInitializing;
+import com.github.jenya705.mcapi.Player;
+import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.entity.EntityLocation;
 import com.github.jenya705.mcapi.entity.EntityPlayer;
 import com.github.jenya705.mcapi.mock.database.MockDatabaseModule;
