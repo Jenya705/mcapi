@@ -1,7 +1,6 @@
 package com.github.jenya705.mcapi.block;
 
 import com.github.jenya705.mcapi.BukkitWrapper;
-import com.github.jenya705.mcapi.block.data.Directional;
 import lombok.Getter;
 
 /**

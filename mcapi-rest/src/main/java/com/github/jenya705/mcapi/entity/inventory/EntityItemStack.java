@@ -21,9 +21,10 @@ public class EntityItemStack implements ItemStack {
     private Component customName;
 
     public String getCustomName() {
-        return LegacyComponentSerializer
-                .legacySection()
-                .serialize(customName);
+        return customName == null ? null :
+                LegacyComponentSerializer
+                        .legacyAmpersand()
+                        .serialize(customName);
     }
 
     @Override

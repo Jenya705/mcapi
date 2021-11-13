@@ -1,9 +1,6 @@
 package com.github.jenya705.mcapi.block.data;
 
-import com.github.jenya705.mcapi.block.Barrel;
-import com.github.jenya705.mcapi.block.BukkitDirectionalWrapper;
-import com.github.jenya705.mcapi.block.BukkitInventoryHolderWrapper;
-import com.github.jenya705.mcapi.block.BukkitWatchableWrapper;
+import com.github.jenya705.mcapi.block.*;
 import com.github.jenya705.mcapi.block.state.CapturedState;
 import com.github.jenya705.mcapi.block.state.SharedCapturedState;
 import com.github.jenya705.mcapi.inventory.InventoryHolder;

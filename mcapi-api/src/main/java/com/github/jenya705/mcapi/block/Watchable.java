@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.block.data;
+package com.github.jenya705.mcapi.block;
 
 import com.github.jenya705.mcapi.Player;
 

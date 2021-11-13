@@ -1,8 +1,9 @@
-package com.github.jenya705.mcapi.block;
+package com.github.jenya705.mcapi.block.data;
 
-import com.github.jenya705.mcapi.block.data.Directional;
-import com.github.jenya705.mcapi.block.data.Liter;
-import com.github.jenya705.mcapi.block.data.Watchable;
+import com.github.jenya705.mcapi.block.BlockData;
+import com.github.jenya705.mcapi.block.Directional;
+import com.github.jenya705.mcapi.block.Liter;
+import com.github.jenya705.mcapi.block.Watchable;
 import com.github.jenya705.mcapi.inventory.FurnaceInventory;
 import com.github.jenya705.mcapi.inventory.InventoryHolder;
 

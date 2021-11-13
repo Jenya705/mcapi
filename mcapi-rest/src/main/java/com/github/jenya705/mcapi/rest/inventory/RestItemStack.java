@@ -6,6 +6,7 @@ import com.github.jenya705.mcapi.inventory.ItemStack;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.kyori.adventure.text.Component;
 
 /**
  * @author Jenya705
@@ -20,13 +21,13 @@ public class RestItemStack {
 
     @JsonProperty
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String customName;
+    private Component customName;
 
     public static RestItemStack from(ItemStack itemStack) {
         return new RestItemStack(
                 itemStack.getMaterial().getKey(),
                 itemStack.getAmount(),
-                itemStack.getCustomName()
+                itemStack.customName()
         );
     }
 

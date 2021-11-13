@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.block.data;
+package com.github.jenya705.mcapi.block;
 
 /**
  * @author Jenya705
@@ -6,7 +6,5 @@ package com.github.jenya705.mcapi.block.data;
 public interface Liter {
 
     boolean isLit();
-
-    void setLit(boolean lit);
 
 }

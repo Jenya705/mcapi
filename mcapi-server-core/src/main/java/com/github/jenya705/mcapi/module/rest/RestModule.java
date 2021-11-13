@@ -2,10 +2,11 @@ package com.github.jenya705.mcapi.module.rest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.jenya705.mcapi.*;
-import com.github.jenya705.mcapi.block.Barrel;
 import com.github.jenya705.mcapi.block.Block;
-import com.github.jenya705.mcapi.block.Chest;
-import com.github.jenya705.mcapi.block.CommandBlock;
+import com.github.jenya705.mcapi.block.data.Barrel;
+import com.github.jenya705.mcapi.block.data.Chest;
+import com.github.jenya705.mcapi.block.data.CommandBlock;
+import com.github.jenya705.mcapi.block.data.Furnace;
 import com.github.jenya705.mcapi.command.*;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.entity.EntityEventTunnelAuthorizationRequest;
@@ -25,10 +26,7 @@ import com.github.jenya705.mcapi.module.command.CommandModule;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.module.mapper.Mapper;
 import com.github.jenya705.mcapi.rest.*;
-import com.github.jenya705.mcapi.rest.block.RestBarrel;
-import com.github.jenya705.mcapi.rest.block.RestBlock;
-import com.github.jenya705.mcapi.rest.block.RestChest;
-import com.github.jenya705.mcapi.rest.block.RestCommandBlock;
+import com.github.jenya705.mcapi.rest.block.*;
 import com.github.jenya705.mcapi.rest.command.*;
 import com.github.jenya705.mcapi.rest.event.*;
 import com.github.jenya705.mcapi.rest.inventory.RestInventory;
@@ -107,6 +105,7 @@ public class RestModule extends AbstractApplicationModule {
                 .tunnelJsonSerializer(Chest.class, RestChest::from)
                 .tunnelJsonSerializer(Inventory.class, RestInventory::from)
                 .tunnelJsonSerializer(Barrel.class, RestBarrel::from)
+                .tunnelJsonSerializer(Furnace.class, RestFurnace::from)
                 .jsonDeserializer(Command.class, new ApiCommandDeserializer(commandModule))
                 .jsonSerializer(Component.class, new ComponentSerializer())
                 .tunnelJsonDeserializer(

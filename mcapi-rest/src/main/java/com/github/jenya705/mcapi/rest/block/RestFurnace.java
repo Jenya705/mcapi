@@ -1,9 +1,7 @@
 package com.github.jenya705.mcapi.rest.block;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jenya705.mcapi.Player;
-import com.github.jenya705.mcapi.block.data.Barrel;
+import com.github.jenya705.mcapi.block.data.Furnace;
 import com.github.jenya705.mcapi.rest.inventory.RestInventory;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,24 +15,29 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RestBarrel {
+public class RestFurnace {
 
-    private UUID[] watchers;
     private RestInventory inventory;
-
-    @JsonProperty
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private UUID[] watchers;
     private String direction;
+    private int burnTime;
+    private int cookTimeTotal;
+    private int cookTime;
+    private boolean lit;
 
-    public static RestBarrel from(Barrel barrel) {
-        return new RestBarrel(
-                barrel
+    public static RestFurnace from(Furnace furnace) {
+        return new RestFurnace(
+                RestInventory.from(furnace.getInventory()),
+                furnace
                         .getWatchers()
                         .stream()
                         .map(Player::getUuid)
                         .toArray(UUID[]::new),
-                RestInventory.from(barrel.getInventory()),
-                barrel.getDirection() == null ? null : barrel.getDirection().name()
+                furnace.getDirection().name(),
+                furnace.getBurnTime(),
+                furnace.getCookTimeTotal(),
+                furnace.getCookTime(),
+                furnace.isLit()
         );
     }
 }
