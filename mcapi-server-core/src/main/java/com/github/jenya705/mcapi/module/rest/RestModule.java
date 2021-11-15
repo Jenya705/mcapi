@@ -3,10 +3,7 @@ package com.github.jenya705.mcapi.module.rest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.jenya705.mcapi.*;
 import com.github.jenya705.mcapi.block.Block;
-import com.github.jenya705.mcapi.block.data.Barrel;
-import com.github.jenya705.mcapi.block.data.Chest;
-import com.github.jenya705.mcapi.block.data.CommandBlock;
-import com.github.jenya705.mcapi.block.data.Furnace;
+import com.github.jenya705.mcapi.block.data.*;
 import com.github.jenya705.mcapi.command.*;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.entity.EntityEventTunnelAuthorizationRequest;
@@ -106,6 +103,7 @@ public class RestModule extends AbstractApplicationModule {
                 .tunnelJsonSerializer(Inventory.class, RestInventory::from)
                 .tunnelJsonSerializer(Barrel.class, RestBarrel::from)
                 .tunnelJsonSerializer(Furnace.class, RestFurnace::from)
+                .tunnelJsonSerializer(Campfire.class, RestCampfire::from)
                 .jsonDeserializer(Command.class, new ApiCommandDeserializer(commandModule))
                 .jsonSerializer(Component.class, new ComponentSerializer())
                 .tunnelJsonDeserializer(

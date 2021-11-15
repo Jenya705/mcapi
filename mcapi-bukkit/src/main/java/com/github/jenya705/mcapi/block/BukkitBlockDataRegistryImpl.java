@@ -1,9 +1,6 @@
 package com.github.jenya705.mcapi.block;
 
-import com.github.jenya705.mcapi.block.data.BukkitBarrelWrapper;
-import com.github.jenya705.mcapi.block.data.BukkitChestWrapper;
-import com.github.jenya705.mcapi.block.data.BukkitCommandBlockWrapper;
-import com.github.jenya705.mcapi.block.data.BukkitFurnaceWrapper;
+import com.github.jenya705.mcapi.block.data.*;
 import org.bukkit.Material;
 
 import java.util.HashMap;
@@ -24,6 +21,7 @@ public class BukkitBlockDataRegistryImpl implements BukkitBlockDataRegistry {
         addCreator(Material.FURNACE, BukkitFurnaceWrapper::of);
         addCreator(Material.BLAST_FURNACE, BukkitFurnaceWrapper::of);
         addCreator(Material.SMOKER, BukkitFurnaceWrapper::of);
+        addCreator(Material.CAMPFIRE, BukkitCampfireWrapper::of);
     }
 
     @Override
