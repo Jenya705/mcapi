@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi.utils;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -9,17 +10,24 @@ import java.util.function.Supplier;
  * @author Jenya705
  */
 @Getter
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class FailureOperation {
+
+    private static final FailureOperation FAILED = new FailureOperation(false);
+    private static final FailureOperation SUCCESS = new FailureOperation(true);
 
     private final boolean success;
 
+    public static FailureOperation of(boolean success) {
+        return success ? success() : failed();
+    }
+
     public static FailureOperation success() {
-        return new FailureOperation(true);
+        return SUCCESS;
     }
 
     public static FailureOperation failed() {
-        return new FailureOperation(false);
+        return FAILED;
     }
 
     public FailureOperation ifSuccess(Supplier<Boolean> supplier) {

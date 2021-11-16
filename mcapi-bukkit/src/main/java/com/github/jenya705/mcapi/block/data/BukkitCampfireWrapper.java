@@ -1,9 +1,6 @@
 package com.github.jenya705.mcapi.block.data;
 
-import com.github.jenya705.mcapi.block.BukkitDirectionalWrapper;
-import com.github.jenya705.mcapi.block.BukkitWaterloggedWrapper;
-import com.github.jenya705.mcapi.block.Directional;
-import com.github.jenya705.mcapi.block.Waterlogged;
+import com.github.jenya705.mcapi.block.*;
 import com.github.jenya705.mcapi.block.state.CapturedState;
 import com.github.jenya705.mcapi.block.state.SharedCapturedState;
 import com.github.jenya705.mcapi.inventory.BukkitCampfireInventoryWrapper;
@@ -19,6 +16,8 @@ public class BukkitCampfireWrapper implements Campfire {
     private final Directional directionalDelegate;
     @Delegate
     private final Waterlogged waterloggedDelegate;
+    @Delegate
+    private final Liter literDelegate;
 
     private final Inventory campfireInventory;
 
@@ -31,17 +30,13 @@ public class BukkitCampfireWrapper implements Campfire {
         state = new SharedCapturedState(block);
         directionalDelegate = new BukkitDirectionalWrapper(block);
         waterloggedDelegate = new BukkitWaterloggedWrapper(block);
+        literDelegate = new BukkitLiterWrapper(block);
         campfireInventory = new BukkitCampfireInventoryWrapper(state);
     }
 
     public static Campfire of(org.bukkit.block.Block block) {
         if (block == null) return null;
         return new BukkitCampfireWrapper(block);
-    }
-
-    @Override
-    public boolean isLit() {
-        return data().isLit();
     }
 
     @Override

@@ -7,4 +7,6 @@ public interface Liter {
 
     boolean isLit();
 
+    void setLit(boolean lit);
+
 }

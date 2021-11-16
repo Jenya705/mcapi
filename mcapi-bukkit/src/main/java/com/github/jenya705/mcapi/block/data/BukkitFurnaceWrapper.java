@@ -1,9 +1,6 @@
 package com.github.jenya705.mcapi.block.data;
 
-import com.github.jenya705.mcapi.block.BukkitDirectionalWrapper;
-import com.github.jenya705.mcapi.block.BukkitWatchableWrapper;
-import com.github.jenya705.mcapi.block.Directional;
-import com.github.jenya705.mcapi.block.Watchable;
+import com.github.jenya705.mcapi.block.*;
 import com.github.jenya705.mcapi.block.state.CapturedState;
 import com.github.jenya705.mcapi.block.state.SharedCapturedState;
 import com.github.jenya705.mcapi.inventory.BukkitFurnaceInventoryWrapper;
@@ -21,6 +18,8 @@ public class BukkitFurnaceWrapper implements Furnace {
     private final Directional directionalDelegate;
     @Delegate
     private final Watchable watchableDelegate;
+    @Delegate
+    private Liter literDelegate;
 
     private FurnaceInventory inventory;
 
@@ -32,16 +31,12 @@ public class BukkitFurnaceWrapper implements Furnace {
         this.state = state;
         directionalDelegate = new BukkitDirectionalWrapper(block);
         watchableDelegate = new BukkitWatchableWrapper(state);
+        literDelegate = new BukkitLiterWrapper(block);
     }
 
     public static BukkitFurnaceWrapper of(org.bukkit.block.Block block) {
         if (block == null) return null;
         return new BukkitFurnaceWrapper(block);
-    }
-
-    @Override
-    public boolean isLit() {
-        return state().getBurnTime() > 0;
     }
 
     @Override

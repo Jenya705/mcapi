@@ -22,6 +22,7 @@ public class BukkitBlockDataRegistryImpl implements BukkitBlockDataRegistry {
         addCreator(Material.BLAST_FURNACE, BukkitFurnaceWrapper::of);
         addCreator(Material.SMOKER, BukkitFurnaceWrapper::of);
         addCreator(Material.CAMPFIRE, BukkitCampfireWrapper::of);
+        addCreator(Material.BREWING_STAND, BukkitBrewingStandWrapper::of);
     }
 
     @Override
