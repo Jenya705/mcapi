@@ -21,5 +21,6 @@ public class EntityChest implements Chest {
     private List<? extends Player> watchers;
     private Inventory inventory;
     private BlockFace direction;
+    private boolean waterlogged;
 
 }

@@ -17,12 +17,15 @@ public class BukkitChestWrapper implements Chest {
     private final Watchable watchableDelegate;
     @Delegate
     private final Directional directionalDelegate;
+    @Delegate
+    private final Waterlogged waterloggedDelegate;
 
     public BukkitChestWrapper(org.bukkit.block.Block bukkitChest) {
         CapturedState state = new SharedCapturedState(bukkitChest);
         inventoryHolderDelegate = new BukkitInventoryHolderWrapper(state);
         watchableDelegate = new BukkitWatchableWrapper(state);
         directionalDelegate = new BukkitDirectionalWrapper(bukkitChest);
+        waterloggedDelegate = new BukkitWaterloggedWrapper(bukkitChest);
     }
 
     public static BukkitChestWrapper of(org.bukkit.block.Block chest) {

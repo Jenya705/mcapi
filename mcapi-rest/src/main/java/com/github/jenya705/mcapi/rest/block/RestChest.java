@@ -21,6 +21,7 @@ public class RestChest {
 
     private UUID[] watchers;
     private RestInventory inventory;
+    private boolean waterlogged;
 
     @JsonProperty
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -34,6 +35,7 @@ public class RestChest {
                         .map(Player::getUuid)
                         .toArray(UUID[]::new),
                 RestInventory.from(chest.getInventory()),
+                chest.isWaterlogged(),
                 chest.getDirection() == null ? null : chest.getDirection().name()
         );
     }
