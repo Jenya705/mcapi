@@ -56,4 +56,8 @@ public class Permissions {
 
     public final String BLOCK_ITEM_GET = "block.get.inventory.item";
 
+    public final String PLAYER_ENDER_CHEST_GET = "user.get.ender";
+
+    public final String PLAYER_ENDER_CHEST_ITEM_GET = "user.get.ender.item";
+
 }
