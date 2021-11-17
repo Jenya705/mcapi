@@ -22,7 +22,7 @@ public class GetOfflinePlayerRouteHandler extends AbstractRouteHandler {
         AbstractBot bot = request.bot();
         OfflinePlayer offlinePlayer = request
                 .paramOrException("id", OfflinePlayer.class);
-        bot.needPermission(Permissions.USER_GET, offlinePlayer);
+        bot.needPermission(Permissions.PLAYER_GET, offlinePlayer);
         response.ok(offlinePlayer);
     }
 }

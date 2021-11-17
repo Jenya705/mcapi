@@ -25,7 +25,7 @@ public class PlayerPermissionRouteHandler extends AbstractRouteHandler {
                 .paramOrException("permission");
         request
                 .bot()
-                .needPermission(Permissions.USER_HAS_PERMISSION, player);
+                .needPermission(Permissions.PLAYER_HAS_PERMISSION, player);
         response.ok(new EntityPermission(
                 player.hasPermission(permissionName),
                 permissionName,

@@ -33,7 +33,7 @@ public class BanPlayerRouteHandler extends AbstractRouteHandler {
                         request.paramOrException("selector"),
                         bot
                 );
-        bot.needPermission(Permissions.USER_BAN, players);
+        bot.needPermission(Permissions.PLAYER_BAN, players);
         TypedMessage message = request
                 .bodyOrException(TypedMessage.class);
         players.forEach(player ->

@@ -33,7 +33,7 @@ public class KickPlayerRouteHandler extends AbstractRouteHandler {
                         request.paramOrException("selector"),
                         bot
                 );
-        bot.needPermission(Permissions.USER_KICK, players);
+        bot.needPermission(Permissions.PLAYER_KICK, players);
         TypedMessage message = request
                 .bodyOrException(TypedMessage.class);
         players.forEach(player ->

@@ -22,7 +22,7 @@ public class GetPlayerRouteHandler extends AbstractRouteHandler {
                 .paramOrException("id", Player.class);
         request
                 .bot()
-                .needPermission(Permissions.USER_GET, player);
+                .needPermission(Permissions.PLAYER_GET, player);
         response.ok(player);
     }
 }

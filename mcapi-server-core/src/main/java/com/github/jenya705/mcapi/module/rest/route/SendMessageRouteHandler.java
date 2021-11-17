@@ -31,7 +31,7 @@ public class SendMessageRouteHandler extends AbstractRouteHandler {
                         request.paramOrException("selector"),
                         bot
                 );
-        bot.needPermission(Permissions.USER_SEND_MESSAGE, players);
+        bot.needPermission(Permissions.PLAYER_SEND_MESSAGE, players);
         Message message = request
                 .bodyOrException(Message.class);
         players.forEach(message::send);

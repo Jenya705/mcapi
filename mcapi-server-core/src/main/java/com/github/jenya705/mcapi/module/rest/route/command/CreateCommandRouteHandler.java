@@ -25,7 +25,7 @@ public class CreateCommandRouteHandler extends AbstractRouteHandler {
     @Override
     public void handle(Request request, Response response) {
         AbstractBot bot = request.bot();
-        bot.needPermission(Permissions.USER_COMMAND_CREATE);
+        bot.needPermission(Permissions.PLAYER_COMMAND_CREATE);
         Command command = request
                 .bodyOrException(Command.class);
         commandModule.registerCommand(command, bot);

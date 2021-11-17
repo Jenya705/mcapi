@@ -23,7 +23,7 @@ public class GetPlayerListRouteHandler extends AbstractRouteHandler {
     public void handle(Request request, Response response) {
         request
                 .bot()
-                .needPermission(Permissions.USER_LIST);
+                .needPermission(Permissions.PLAYER_LIST);
         response.ok(new RestPlayerList(
                 core()
                         .getPlayers()

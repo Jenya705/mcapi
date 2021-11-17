@@ -8,13 +8,13 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class Permissions {
 
-    public final String USER_GET = "user.get";
+    public final String PLAYER_GET = "player.get";
 
-    public final String USER_GET_LOCATION = "user.get.location";
+    public final String PLAYER_GET_LOCATION = "player.get.location";
 
-    public final String USER_LIST = "user.list";
+    public final String PLAYER_LIST = "player.list";
 
-    public final String USER_HAS_PERMISSION = "user.has_permission";
+    public final String PLAYER_HAS_PERMISSION = "player.has_permission";
 
     public final String EVENT_TUNNEL_MESSAGE = "event_tunnel.message";
 
@@ -30,13 +30,13 @@ public class Permissions {
 
     public final String LINK_REQUEST = "link.request";
 
-    public final String USER_COMMAND_CREATE = "user.command.create";
+    public final String PLAYER_COMMAND_CREATE = "player.command.create";
 
-    public final String USER_KICK = "user.kick";
+    public final String PLAYER_KICK = "player.kick";
 
-    public final String USER_BAN = "user.ban";
+    public final String PLAYER_BAN = "player.ban";
 
-    public final String USER_SEND_MESSAGE = "user.send_message";
+    public final String PLAYER_SEND_MESSAGE = "player.send_message";
 
     public final String BLOCK_GET = "block.get";
 
@@ -48,16 +48,16 @@ public class Permissions {
 
     public final String BARREL_BLOCK_GET = "block.get.minecraft:barrel";
 
-    public final String PLAYER_INVENTORY_GET = "user.get.inventory";
+    public final String PLAYER_INVENTORY_GET = "player.get.inventory";
 
-    public final String PLAYER_ITEM_GET = "user.get.inventory.item";
+    public final String PLAYER_ITEM_GET = "player.get.inventory.item";
 
     public final String BLOCK_INVENTORY_GET = "block.get.inventory";
 
     public final String BLOCK_ITEM_GET = "block.get.inventory.item";
 
-    public final String PLAYER_ENDER_CHEST_GET = "user.get.ender";
+    public final String PLAYER_ENDER_CHEST_GET = "player.get.ender";
 
-    public final String PLAYER_ENDER_CHEST_ITEM_GET = "user.get.ender.item";
+    public final String PLAYER_ENDER_CHEST_ITEM_GET = "player.get.ender.item";
 
 }
