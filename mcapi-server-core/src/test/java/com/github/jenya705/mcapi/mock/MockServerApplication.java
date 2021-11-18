@@ -23,6 +23,7 @@ public class MockServerApplication extends ServerApplication {
                     "player",
                     true,
                     new EntityLocation(0, 10, 0, null),
+                    null,
                     null
             )),
             createMockPlayer(new EntityPlayer(
@@ -31,6 +32,7 @@ public class MockServerApplication extends ServerApplication {
                     "player",
                     true,
                     new EntityLocation(-3, 10, 3, null),
+                    null,
                     null
             )),
             createMockPlayer(new EntityPlayer(
@@ -39,6 +41,7 @@ public class MockServerApplication extends ServerApplication {
                     "player",
                     true,
                     new EntityLocation(8, 20, 4, null),
+                    null,
                     null
             )),
             createMockPlayer(new EntityPlayer(
@@ -47,6 +50,7 @@ public class MockServerApplication extends ServerApplication {
                     "player",
                     true,
                     new EntityLocation(1, 11, 2, null),
+                    null,
                     null
             ))
     );

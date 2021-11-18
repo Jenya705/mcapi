@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi;
 
+import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.inventory.PlayerInventory;
 import net.kyori.adventure.text.Component;
 
@@ -13,10 +14,12 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements P
     private final org.bukkit.entity.Player player;
 
     private final PlayerInventory inventory;
+    private final Inventory enderChest;
 
     public BukkitPlayerWrapper(org.bukkit.entity.Player player) {
         super(player);
         this.player = player;
+        enderChest = BukkitWrapper.inventory(player.getEnderChest());
         inventory = BukkitWrapper.playerInventory(player.getInventory());
     }
 
@@ -62,5 +65,10 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements P
     @Override
     public PlayerInventory getInventory() {
         return inventory;
+    }
+
+    @Override
+    public Inventory getEnderChest() {
+        return enderChest;
     }
 }

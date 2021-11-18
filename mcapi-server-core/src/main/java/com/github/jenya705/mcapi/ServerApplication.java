@@ -113,7 +113,9 @@ public class ServerApplication {
                 GetBlockInventoryRouteHandler.class,
                 GetBlockInventoryItemRouteHandler.class,
                 GetPlayerInventoryRouteHandler.class,
-                GetPlayerInventoryItemRouteHandler.class
+                GetPlayerInventoryItemRouteHandler.class,
+                GetPlayerEnderChestRouteHandler.class,
+                GetPlayerEnderChestItemRouteHandler.class
                 // End Routes
         );
     }
