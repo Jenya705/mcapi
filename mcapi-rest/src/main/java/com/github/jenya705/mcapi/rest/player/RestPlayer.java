@@ -21,6 +21,7 @@ public class RestPlayer {
     private float yaw;
     private float pitch;
     private String gameMode;
+    private RestPlayerAbilities abilities;
 
     public static RestPlayer from(Player player) {
         return new RestPlayer(
@@ -29,7 +30,8 @@ public class RestPlayer {
                 player.getType(),
                 player.getYaw(),
                 player.getPitch(),
-                player.getGameMode().name()
+                player.getGameMode().name(),
+                RestPlayerAbilities.from(player.getAbilities())
         );
     }
 

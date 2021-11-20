@@ -23,6 +23,7 @@ import com.github.jenya705.mcapi.module.command.CommandModule;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.module.mapper.Mapper;
 import com.github.jenya705.mcapi.player.Player;
+import com.github.jenya705.mcapi.player.PlayerAbilities;
 import com.github.jenya705.mcapi.rest.*;
 import com.github.jenya705.mcapi.rest.block.*;
 import com.github.jenya705.mcapi.rest.command.*;
@@ -30,6 +31,7 @@ import com.github.jenya705.mcapi.rest.event.*;
 import com.github.jenya705.mcapi.rest.inventory.RestInventory;
 import com.github.jenya705.mcapi.rest.inventory.RestItemStack;
 import com.github.jenya705.mcapi.rest.player.RestPlayer;
+import com.github.jenya705.mcapi.rest.player.RestPlayerAbilities;
 import com.github.jenya705.mcapi.world.World;
 import net.kyori.adventure.text.Component;
 
@@ -108,6 +110,7 @@ public class RestModule extends AbstractApplicationModule {
                 .tunnelJsonSerializer(Campfire.class, RestCampfire::from)
                 .tunnelJsonSerializer(BrewingStand.class, RestBrewingStand::from)
                 .tunnelJsonSerializer(EnderChest.class, RestEnderChest::from)
+                .tunnelJsonSerializer(PlayerAbilities.class, RestPlayerAbilities::from)
                 .jsonDeserializer(Command.class, new ApiCommandDeserializer(commandModule))
                 .jsonSerializer(Component.class, new ComponentSerializer())
                 .tunnelJsonDeserializer(
