@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.util;
 
 import com.github.jenya705.mcapi.OfflinePlayer;
-import com.github.jenya705.mcapi.Player;
+import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.ServerCore;
 import com.github.jenya705.mcapi.error.PlayerIdFormatException;
 import lombok.experimental.UtilityClass;

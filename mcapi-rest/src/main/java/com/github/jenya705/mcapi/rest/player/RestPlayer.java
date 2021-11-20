@@ -1,6 +1,6 @@
-package com.github.jenya705.mcapi.rest;
+package com.github.jenya705.mcapi.rest.player;
 
-import com.github.jenya705.mcapi.Player;
+import com.github.jenya705.mcapi.player.Player;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,12 +18,18 @@ public class RestPlayer {
     private String name;
     private UUID uuid;
     private String type;
+    private float yaw;
+    private float pitch;
+    private String gameMode;
 
     public static RestPlayer from(Player player) {
         return new RestPlayer(
                 player.getName(),
                 player.getUuid(),
-                player.getType()
+                player.getType(),
+                player.getYaw(),
+                player.getPitch(),
+                player.getGameMode().name()
         );
     }
 

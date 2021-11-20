@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.entity.event;
 
-import com.github.jenya705.mcapi.Player;
+import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.event.UnlinkEvent;
 import com.github.jenya705.mcapi.rest.event.RestUnlinkEvent;
 import lombok.AllArgsConstructor;

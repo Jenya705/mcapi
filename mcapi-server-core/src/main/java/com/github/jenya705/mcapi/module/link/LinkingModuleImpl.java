@@ -19,6 +19,7 @@ import com.github.jenya705.mcapi.module.config.ConfigModule;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.module.localization.LocalizationModule;
 import com.github.jenya705.mcapi.module.storage.StorageModule;
+import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.rest.event.RestLinkEvent;
 import com.github.jenya705.mcapi.rest.event.RestUnlinkEvent;
 import com.github.jenya705.mcapi.util.ListUtils;

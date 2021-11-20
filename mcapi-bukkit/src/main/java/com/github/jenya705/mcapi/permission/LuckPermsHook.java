@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.permission;
 
-import com.github.jenya705.mcapi.Player;
+import com.github.jenya705.mcapi.player.Player;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.model.user.User;

@@ -2,6 +2,7 @@ package com.github.jenya705.mcapi;
 
 import com.github.jenya705.mcapi.command.CommandExecutor;
 import com.github.jenya705.mcapi.permission.PermissionManagerHook;
+import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.world.World;
 import lombok.Cleanup;
 import org.bukkit.Bukkit;

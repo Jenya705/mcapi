@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.rest.block;
 
-import com.github.jenya705.mcapi.Player;
+import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.block.data.BrewingStand;
 import com.github.jenya705.mcapi.rest.inventory.RestInventory;
 import lombok.AllArgsConstructor;

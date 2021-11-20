@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.module.link;
 
 import com.github.jenya705.mcapi.LinkRequest;
-import com.github.jenya705.mcapi.Player;
+import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.command.RootCommand;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.entity.BotEntity;

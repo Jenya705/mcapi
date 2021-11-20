@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.permission;
 
-import com.github.jenya705.mcapi.Player;
+import com.github.jenya705.mcapi.player.Player;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 

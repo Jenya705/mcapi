@@ -22,12 +22,14 @@ import com.github.jenya705.mcapi.module.command.ApiCommandDeserializer;
 import com.github.jenya705.mcapi.module.command.CommandModule;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.module.mapper.Mapper;
+import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.rest.*;
 import com.github.jenya705.mcapi.rest.block.*;
 import com.github.jenya705.mcapi.rest.command.*;
 import com.github.jenya705.mcapi.rest.event.*;
 import com.github.jenya705.mcapi.rest.inventory.RestInventory;
 import com.github.jenya705.mcapi.rest.inventory.RestItemStack;
+import com.github.jenya705.mcapi.rest.player.RestPlayer;
 import com.github.jenya705.mcapi.world.World;
 import net.kyori.adventure.text.Component;
 

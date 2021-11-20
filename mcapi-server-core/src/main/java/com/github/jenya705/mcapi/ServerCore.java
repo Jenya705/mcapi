@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi;
 
 import com.github.jenya705.mcapi.command.CommandExecutor;
+import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.util.PlayerUtils;
 import com.github.jenya705.mcapi.world.World;
 

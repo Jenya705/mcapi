@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.command.bot.delete;
 
 import com.github.jenya705.mcapi.CommandSender;
-import com.github.jenya705.mcapi.Player;
+import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutor;

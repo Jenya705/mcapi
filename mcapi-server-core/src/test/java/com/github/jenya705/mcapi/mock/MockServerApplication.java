@@ -2,10 +2,10 @@ package com.github.jenya705.mcapi.mock;
 
 import com.github.jenya705.mcapi.Bean;
 import com.github.jenya705.mcapi.OnInitializing;
-import com.github.jenya705.mcapi.Player;
+import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.entity.EntityLocation;
-import com.github.jenya705.mcapi.entity.EntityPlayer;
+import com.github.jenya705.mcapi.entity.player.EntityPlayer;
 import com.github.jenya705.mcapi.mock.database.MockDatabaseModule;
 import com.github.jenya705.mcapi.mock.web.MockWebServer;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
@@ -24,6 +24,10 @@ public class MockServerApplication extends ServerApplication {
                     true,
                     new EntityLocation(0, 10, 0, null),
                     null,
+                    null,
+                    0f,
+                    0f,
+                    null,
                     null
             )),
             createMockPlayer(new EntityPlayer(
@@ -32,6 +36,10 @@ public class MockServerApplication extends ServerApplication {
                     "player",
                     true,
                     new EntityLocation(-3, 10, 3, null),
+                    null,
+                    null,
+                    0f,
+                    0f,
                     null,
                     null
             )),
@@ -42,6 +50,10 @@ public class MockServerApplication extends ServerApplication {
                     true,
                     new EntityLocation(8, 20, 4, null),
                     null,
+                    null,
+                    0f,
+                    0f,
+                    null,
                     null
             )),
             createMockPlayer(new EntityPlayer(
@@ -50,6 +62,10 @@ public class MockServerApplication extends ServerApplication {
                     "player",
                     true,
                     new EntityLocation(1, 11, 2, null),
+                    null,
+                    null,
+                    0f,
+                    0f,
                     null,
                     null
             ))

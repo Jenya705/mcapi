@@ -9,6 +9,7 @@ import com.github.jenya705.mcapi.data.loadable.Value;
 import com.github.jenya705.mcapi.module.config.Config;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.module.localization.LocalizationModule;
+import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.stringful.StringfulIterator;
 import lombok.Getter;
 import lombok.Setter;

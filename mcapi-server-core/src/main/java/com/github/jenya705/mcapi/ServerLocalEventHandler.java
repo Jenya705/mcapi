@@ -1,5 +1,7 @@
 package com.github.jenya705.mcapi;
 
+import com.github.jenya705.mcapi.player.Player;
+
 /**
  * @author Jenya705
  */

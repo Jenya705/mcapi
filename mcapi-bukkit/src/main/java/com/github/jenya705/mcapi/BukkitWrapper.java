@@ -2,6 +2,9 @@ package com.github.jenya705.mcapi;
 
 import com.github.jenya705.mcapi.block.BlockFace;
 import com.github.jenya705.mcapi.inventory.*;
+import com.github.jenya705.mcapi.player.BukkitPlayerWrapper;
+import com.github.jenya705.mcapi.player.GameMode;
+import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.world.World;
 import lombok.experimental.UtilityClass;
 
@@ -57,6 +60,10 @@ public class BukkitWrapper {
             case SOUTH -> BlockFace.SOUTH;
             default -> null;
         };
+    }
+
+    public GameMode gamemode(org.bukkit.GameMode gameMode) {
+        return GameMode.valueOf(gameMode.name());
     }
 
 }

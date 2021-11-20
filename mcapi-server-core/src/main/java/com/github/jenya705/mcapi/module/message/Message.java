@@ -2,7 +2,7 @@ package com.github.jenya705.mcapi.module.message;
 
 import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.OfflinePlayer;
-import com.github.jenya705.mcapi.Player;
+import com.github.jenya705.mcapi.player.Player;
 
 /**
  * @author Jenya705

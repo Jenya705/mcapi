@@ -1,5 +1,8 @@
-package com.github.jenya705.mcapi;
+package com.github.jenya705.mcapi.player;
 
+import com.github.jenya705.mcapi.CommandSender;
+import com.github.jenya705.mcapi.Location;
+import com.github.jenya705.mcapi.OfflinePlayer;
 import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.inventory.PlayerInventory;
 
@@ -15,6 +18,14 @@ public interface Player extends CommandSender, OfflinePlayer {
     PlayerInventory getInventory();
 
     Inventory getEnderChest();
+
+    float getYaw();
+
+    float getPitch();
+
+    GameMode getGameMode();
+
+    PlayerAbilities getAbilities();
 
     @Override
     default String getId() {

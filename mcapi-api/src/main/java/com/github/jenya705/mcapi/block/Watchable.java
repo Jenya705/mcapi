@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.block;
 
-import com.github.jenya705.mcapi.Player;
+import com.github.jenya705.mcapi.player.Player;
 
 import java.util.List;
 
