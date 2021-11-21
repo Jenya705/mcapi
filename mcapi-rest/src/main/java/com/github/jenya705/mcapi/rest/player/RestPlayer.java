@@ -34,7 +34,7 @@ public class RestPlayer {
     private float foodSaturationLevel;
     private float health;
     private RestLocation spawn;
-    private int getXpLevel;
+    private int xpLevel;
     private int xpPercentage;
 
     public static RestPlayer from(Player player) {
