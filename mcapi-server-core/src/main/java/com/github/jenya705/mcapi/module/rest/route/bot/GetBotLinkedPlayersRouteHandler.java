@@ -9,7 +9,7 @@ import com.github.jenya705.mcapi.module.rest.route.AbstractRouteHandler;
 import com.github.jenya705.mcapi.module.selector.SelectorProvider;
 import com.github.jenya705.mcapi.module.web.Request;
 import com.github.jenya705.mcapi.module.web.Response;
-import com.github.jenya705.mcapi.rest.RestPlayerList;
+import com.github.jenya705.mcapi.rest.player.RestPlayerList;
 import com.github.jenya705.mcapi.util.Selector;
 
 import java.util.UUID;

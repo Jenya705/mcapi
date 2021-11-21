@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.rest;
+package com.github.jenya705.mcapi.rest.player;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

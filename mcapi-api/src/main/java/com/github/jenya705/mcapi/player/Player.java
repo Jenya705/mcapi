@@ -27,6 +27,30 @@ public interface Player extends CommandSender, OfflinePlayer {
 
     PlayerAbilities getAbilities();
 
+    float getAbsorptionAmount();
+
+    int getAirLeft();
+
+    float getFallDistance();
+
+    boolean isFalling();
+
+    int getFireTicks();
+
+    int getFoodLevel();
+
+    float getFoodExhaustionLevel();
+
+    float getFoodSaturationLevel();
+
+    float getHealth();
+
+    Location getSpawn();
+
+    int getXpLevel();
+
+    int getXpPercentage();
+
     @Override
     default String getId() {
         return getUuid().toString();

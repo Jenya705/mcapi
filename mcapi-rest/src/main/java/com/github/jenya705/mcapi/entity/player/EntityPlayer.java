@@ -19,6 +19,7 @@ import java.util.UUID;
  * @author Jenya705
  */
 @Data
+@Deprecated
 @NoArgsConstructor
 @AllArgsConstructor
 public class EntityPlayer implements Player {
@@ -59,6 +60,66 @@ public class EntityPlayer implements Player {
     @Override
     public void kick(String reason) {
         EntityUtils.throwEntityContextException();
+    }
+
+    @Override
+    public float getAbsorptionAmount() {
+        return 0;
+    }
+
+    @Override
+    public int getAirLeft() {
+        return 0;
+    }
+
+    @Override
+    public float getFallDistance() {
+        return 0;
+    }
+
+    @Override
+    public boolean isFalling() {
+        return false;
+    }
+
+    @Override
+    public int getFireTicks() {
+        return 0;
+    }
+
+    @Override
+    public int getFoodLevel() {
+        return 0;
+    }
+
+    @Override
+    public float getFoodExhaustionLevel() {
+        return 0;
+    }
+
+    @Override
+    public float getFoodSaturationLevel() {
+        return 0;
+    }
+
+    @Override
+    public float getHealth() {
+        return 0;
+    }
+
+    @Override
+    public Location getSpawn() {
+        return null;
+    }
+
+    @Override
+    public int getXpLevel() {
+        return 0;
+    }
+
+    @Override
+    public int getXpPercentage() {
+        return 0;
     }
 
     public RestPlayer rest() {
