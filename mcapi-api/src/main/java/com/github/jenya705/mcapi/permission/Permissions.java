@@ -48,6 +48,18 @@ public class Permissions {
 
     public final String BARREL_BLOCK_GET = "block.get.minecraft:barrel";
 
+    public final String FURNACE_BLOCK_GET = "block.get.minecraft:furnace";
+
+    public final String SMOKER_BLOCK_GET = "block.get.minecraft:smoker";
+
+    public final String BLAST_FURNACE_BLOCK_GET = "block.get.minecraft:blast_furnace";
+
+    public final String BREWING_STAND_BLOCK_GET = "block.get.minecraft:brewing_stand";
+
+    public final String CAMPFIRE_BLOCK_GET = "block.get.minecraft:campfire";
+
+    public final String ENDER_CHEST_BLOCK_GET = "block.get.minecraft:ender_chest";
+
     public final String PLAYER_INVENTORY_GET = "player.get.inventory";
 
     public final String PLAYER_ITEM_GET = "player.get.inventory.item";
