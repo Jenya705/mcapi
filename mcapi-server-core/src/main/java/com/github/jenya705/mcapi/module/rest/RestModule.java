@@ -5,6 +5,8 @@ import com.github.jenya705.mcapi.*;
 import com.github.jenya705.mcapi.block.Block;
 import com.github.jenya705.mcapi.block.data.*;
 import com.github.jenya705.mcapi.command.*;
+import com.github.jenya705.mcapi.enchantment.Enchantment;
+import com.github.jenya705.mcapi.enchantment.ItemEnchantment;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.entity.EntityEventTunnelAuthorizationRequest;
 import com.github.jenya705.mcapi.entity.EntityLinkRequest;
@@ -27,6 +29,8 @@ import com.github.jenya705.mcapi.player.PlayerAbilities;
 import com.github.jenya705.mcapi.rest.*;
 import com.github.jenya705.mcapi.rest.block.*;
 import com.github.jenya705.mcapi.rest.command.*;
+import com.github.jenya705.mcapi.rest.enchantment.RestEnchantment;
+import com.github.jenya705.mcapi.rest.enchantment.RestItemEnchantment;
 import com.github.jenya705.mcapi.rest.event.*;
 import com.github.jenya705.mcapi.rest.inventory.RestInventory;
 import com.github.jenya705.mcapi.rest.inventory.RestItemStack;
@@ -111,6 +115,8 @@ public class RestModule extends AbstractApplicationModule {
                 .tunnelJsonSerializer(BrewingStand.class, RestBrewingStand::from)
                 .tunnelJsonSerializer(EnderChest.class, RestEnderChest::from)
                 .tunnelJsonSerializer(PlayerAbilities.class, RestPlayerAbilities::from)
+                .tunnelJsonSerializer(Enchantment.class, RestEnchantment::from)
+                .tunnelJsonSerializer(ItemEnchantment.class, RestItemEnchantment::from)
                 .jsonDeserializer(Command.class, new ApiCommandDeserializer(commandModule))
                 .jsonSerializer(Component.class, new ComponentSerializer())
                 .tunnelJsonDeserializer(

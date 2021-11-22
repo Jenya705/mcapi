@@ -1,6 +1,10 @@
 package com.github.jenya705.mcapi;
 
 import com.github.jenya705.mcapi.block.BlockFace;
+import com.github.jenya705.mcapi.enchantment.BukkitEnchantmentWrapper;
+import com.github.jenya705.mcapi.enchantment.BukkitItemEnchantmentWrapper;
+import com.github.jenya705.mcapi.enchantment.Enchantment;
+import com.github.jenya705.mcapi.enchantment.ItemEnchantment;
 import com.github.jenya705.mcapi.inventory.*;
 import com.github.jenya705.mcapi.player.BukkitPlayerWrapper;
 import com.github.jenya705.mcapi.player.GameMode;
@@ -64,6 +68,14 @@ public class BukkitWrapper {
 
     public GameMode gamemode(org.bukkit.GameMode gameMode) {
         return GameMode.valueOf(gameMode.name());
+    }
+
+    public Enchantment enchantment(org.bukkit.enchantments.Enchantment enchantment) {
+        return BukkitEnchantmentWrapper.of(enchantment);
+    }
+
+    public ItemEnchantment itemEnchantment(org.bukkit.enchantments.Enchantment enchantment, int level) {
+        return BukkitItemEnchantmentWrapper.of(enchantment, level);
     }
 
 }
