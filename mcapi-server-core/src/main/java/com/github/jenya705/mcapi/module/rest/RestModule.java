@@ -114,6 +114,7 @@ public class RestModule extends AbstractApplicationModule {
                 .tunnelJsonSerializer(Campfire.class, RestCampfire::from)
                 .tunnelJsonSerializer(BrewingStand.class, RestBrewingStand::from)
                 .tunnelJsonSerializer(EnderChest.class, RestEnderChest::from)
+                .tunnelJsonSerializer(Stairs.class, RestStairs::from)
                 .tunnelJsonSerializer(PlayerAbilities.class, RestPlayerAbilities::from)
                 .tunnelJsonSerializer(Enchantment.class, RestEnchantment::from)
                 .tunnelJsonSerializer(ItemEnchantment.class, RestItemEnchantment::from)

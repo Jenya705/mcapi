@@ -1,6 +1,8 @@
 package com.github.jenya705.mcapi;
 
 import com.github.jenya705.mcapi.block.BlockFace;
+import com.github.jenya705.mcapi.block.Half;
+import com.github.jenya705.mcapi.block.Shape;
 import com.github.jenya705.mcapi.enchantment.BukkitEnchantmentWrapper;
 import com.github.jenya705.mcapi.enchantment.BukkitItemEnchantmentWrapper;
 import com.github.jenya705.mcapi.enchantment.Enchantment;
@@ -11,6 +13,8 @@ import com.github.jenya705.mcapi.player.GameMode;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.world.World;
 import lombok.experimental.UtilityClass;
+import org.bukkit.block.data.Bisected;
+import org.bukkit.block.data.type.Stairs;
 
 /**
  * @author Jenya705
@@ -76,6 +80,14 @@ public class BukkitWrapper {
 
     public ItemEnchantment itemEnchantment(org.bukkit.enchantments.Enchantment enchantment, int level) {
         return BukkitItemEnchantmentWrapper.of(enchantment, level);
+    }
+
+    public Half half(Bisected.Half half) {
+        return Half.valueOf(half.name());
+    }
+
+    public Shape shape(Stairs.Shape shape) {
+        return Shape.valueOf(shape.name());
     }
 
 }
