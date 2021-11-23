@@ -1,5 +1,7 @@
 package com.github.jenya705.mcapi;
 
+import com.github.jenya705.mcapi.event.DefaultEventLoop;
+import com.github.jenya705.mcapi.event.EventLoop;
 import com.github.jenya705.mcapi.form.ComponentFormProvider;
 import com.github.jenya705.mcapi.form.component.ComponentMapParserImpl;
 import com.github.jenya705.mcapi.module.authorization.AuthorizationModuleImpl;
@@ -32,6 +34,7 @@ import com.github.jenya705.mcapi.module.web.reactor.ReactorServer;
 import com.github.jenya705.mcapi.module.web.tunnel.DefaultEventTunnel;
 import com.github.jenya705.mcapi.module.web.tunnel.EventTunnel;
 import com.github.jenya705.mcapi.util.Pair;
+import com.github.jenya705.mcapi.worker.ExecutorServiceWorker;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -71,7 +74,10 @@ public class ServerApplication {
     private EventTunnel eventTunnel;
     @Getter
     @Bean
-    private ServerLocalEventHandler serverLocalEventHandler;
+    private ExecutorServiceWorker worker;
+    @Getter
+    @Bean
+    private EventLoop eventLoop;
 
     public ServerApplication() {
         addClasses(
@@ -87,10 +93,12 @@ public class ServerApplication {
                 RestModule.class,
                 ServerSelectorProvider.class,
                 DefaultEventTunnel.class,
-                ServerLocalEventHandlerImpl.class,
+                EventBroadcaster.class,
                 MessageDeserializerImpl.class,
                 ComponentMapParserImpl.class,
                 ComponentFormProvider.class,
+                ExecutorServiceWorker.class,
+                DefaultEventLoop.class,
                 // Routes
                 GetPlayerLocationRouteHandler.class,
                 GetPlayerRouteHandler.class,

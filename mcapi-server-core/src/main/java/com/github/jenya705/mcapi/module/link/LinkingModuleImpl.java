@@ -1,16 +1,16 @@
 package com.github.jenya705.mcapi.module.link;
 
-import com.github.jenya705.mcapi.*;
+import com.github.jenya705.mcapi.AbstractApplicationModule;
+import com.github.jenya705.mcapi.Bean;
+import com.github.jenya705.mcapi.LinkRequest;
+import com.github.jenya705.mcapi.OnStartup;
 import com.github.jenya705.mcapi.command.CommandsUtils;
 import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.entity.BotPermissionEntity;
 import com.github.jenya705.mcapi.entity.event.EntityLinkEvent;
 import com.github.jenya705.mcapi.entity.event.EntityUnlinkEvent;
-import com.github.jenya705.mcapi.error.BotCommandNotExistException;
-import com.github.jenya705.mcapi.error.LinkRequestExistException;
-import com.github.jenya705.mcapi.error.LinkRequestPermissionIsGlobalException;
-import com.github.jenya705.mcapi.error.LinkRequestPermissionNotFoundException;
+import com.github.jenya705.mcapi.error.*;
 import com.github.jenya705.mcapi.form.FormComponent;
 import com.github.jenya705.mcapi.form.FormPlatformProvider;
 import com.github.jenya705.mcapi.form.component.*;
@@ -179,7 +179,7 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
 
     @Override
     public void unlink(int id, Player player) {
-        DatabaseModule.async.submit(() -> {
+        worker().invoke(() -> {
             BotLinkEntity link = databaseModule
                     .storage()
                     .findLink(id, player.getUuid());
@@ -251,7 +251,7 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
                                 )
                         ))
         );
-        DatabaseModule.async.submit(() -> {
+        worker().invoke(() -> {
             finalLinkObject
                     .getOptionalPermissions()
                     .entrySet()
@@ -295,6 +295,12 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
     }
 
     private void validateLinkRequest(AbstractBot bot, Player player, LinkRequest request) {
+        ReactiveUtils.ifTrueThrow(
+                databaseModule
+                        .storage()
+                        .findLink(bot.getEntity().getId(), player.getUuid()) != null,
+                LinkExistException::create
+        );
         ReactiveUtils.ifTrueThrow(
                 getPlayerLinks(player)
                         .stream()

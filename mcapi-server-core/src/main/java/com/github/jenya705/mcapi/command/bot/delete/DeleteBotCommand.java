@@ -27,7 +27,7 @@ public class DeleteBotCommand extends AdvancedCommandExecutor<DeleteBotArguments
 
     @Override
     public void onCommand(CommandSender sender, DeleteBotArguments args, String permission) {
-        DatabaseModule.async.submit(() -> {
+        worker().invoke(() -> {
             BotEntity botEntity = databaseModule
                     .storage()
                     .findBotByToken(args.getToken());

@@ -38,7 +38,8 @@ public class SubscriptionsEventTunnelsCommand extends AdvancedCommandExecutor<Su
                 .storage()
                 .findBotByToken(args.getToken());
         UUID executorUuid = sender instanceof Player ? ((Player) sender).getUuid() : null;
-        if (!bot.getOwner().equals(executorUuid) && !hasPermission(sender, permission, "others")) {
+        if (bot == null || (
+                !bot.getOwner().equals(executorUuid) && !hasPermission(sender, permission, "others"))) {
             sendMessage(sender, config.getNotPermitted());
             return;
         }

@@ -47,7 +47,7 @@ public class CreateBotCommand extends AdvancedCommandExecutor<CreateBotArguments
         getPlayer(sender, args.getPlayer())
                 .ifPresentOrElse(
                         (player) ->
-                                DatabaseModule.async.submit(() -> {
+                                worker().invoke(() -> {
                                     String generatedToken = TokenUtils.generateToken();
                                     if (!databaseModule
                                             .storage()

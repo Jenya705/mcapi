@@ -1,8 +1,6 @@
 package com.github.jenya705.mcapi;
 
-import com.github.jenya705.mcapi.block.BlockFace;
-import com.github.jenya705.mcapi.block.Half;
-import com.github.jenya705.mcapi.block.Shape;
+import com.github.jenya705.mcapi.block.*;
 import com.github.jenya705.mcapi.enchantment.BukkitEnchantmentWrapper;
 import com.github.jenya705.mcapi.enchantment.BukkitItemEnchantmentWrapper;
 import com.github.jenya705.mcapi.enchantment.Enchantment;
@@ -23,14 +21,14 @@ import org.bukkit.block.data.type.Stairs;
 public class BukkitWrapper {
 
     public CommandSender sender(org.bukkit.command.CommandSender sender) {
-        if (sender instanceof Player) {
+        if (sender instanceof org.bukkit.entity.Player) {
             return BukkitPlayerWrapper.of((org.bukkit.entity.Player) sender);
         }
         return BukkitCommandSenderWrapper.of(sender);
     }
 
     public OfflinePlayer offlinePlayer(org.bukkit.OfflinePlayer player) {
-        if (player instanceof Player && player.isOnline()) {
+        if (player instanceof org.bukkit.entity.Player && player.isOnline()) {
             return BukkitPlayerWrapper.of((org.bukkit.entity.Player) player);
         }
         return BukkitOfflinePlayerWrapper.of(player);
@@ -46,6 +44,10 @@ public class BukkitWrapper {
 
     public World world(org.bukkit.World world) {
         return BukkitWorldWrapper.of(world);
+    }
+
+    public Block block(org.bukkit.block.Block block) {
+        return BukkitBlockWrapper.of(block);
     }
 
     public ItemStack itemStack(org.bukkit.inventory.ItemStack itemStack) {

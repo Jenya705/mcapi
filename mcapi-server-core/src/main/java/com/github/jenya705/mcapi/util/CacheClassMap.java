@@ -46,7 +46,7 @@ public class CacheClassMap<T> implements Map<Class<?>, T> {
     public T put(Class<?> key, T value) {
         map.put(key, value);
         for (Map.Entry<Class<?>, Class<?>> entry : cache.entrySet()) {
-            if (entry.getValue() == key) {
+            if (key.isAssignableFrom(entry.getKey())) {
                 cache.remove(entry.getKey());
             }
         }

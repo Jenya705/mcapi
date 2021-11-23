@@ -30,7 +30,7 @@ public class CacheStorageImpl extends AbstractApplicationModule implements Cache
     public CacheStorageImpl(ServerApplication application, CacheConfig config) {
         super(application);
         databaseModule = bean(DatabaseModule.class);
-        futureCacheStorage = new FutureCacheStorageImpl(this, databaseModule);
+        futureCacheStorage = new FutureCacheStorageImpl(application, this, databaseModule);
         botTokens = new ConcurrentHashMap<>();
         botCache = CacheBuilder.newBuilder()
                 .removalListener(notification -> {

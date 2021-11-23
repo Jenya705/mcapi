@@ -232,13 +232,13 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
     @SneakyThrows
     public BotLinkEntity findLink(int botId, UUID target) {
         BotLinkEntity link = cache()
-                .getCachedLinks(botId)
+                .getCachedLinksWithNullSafety(botId)
                 .stream()
                 .filter(it -> it.getTarget().equals(target))
                 .findAny()
                 .orElseGet(() ->
                         cache()
-                                .getCachedLinks(target)
+                                .getCachedLinksWithNullSafety(target)
                                 .stream()
                                 .filter(it -> it.getBotId() == botId)
                                 .findAny()
@@ -291,10 +291,10 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
     @Override
     public void delete(BotEntity botEntity) {
         cache()
-                .getCachedLinks(botEntity.getId())
+                .getCachedLinksWithNullSafety(botEntity.getId())
                 .forEach(it -> cache().unCache(it));
         cache()
-                .getCachedPermissions(botEntity.getId())
+                .getCachedPermissionsWithNullSafety(botEntity.getId())
                 .forEach(it -> cache().unCache(it));
         cache()
                 .unCache(botEntity);

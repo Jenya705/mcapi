@@ -43,8 +43,9 @@ public class LinkUnlinkCommand extends MenuCommand implements BaseCommon {
     }
 
     public LinkUnlinkCommand(ServerApplication application) {
+        super(application);
         this.application = application;
-        autoBeans();
+        linkingModule = bean(LinkingModule.class);
     }
 
     @Override

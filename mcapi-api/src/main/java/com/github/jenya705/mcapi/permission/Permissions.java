@@ -28,6 +28,10 @@ public class Permissions {
 
     public final String EVENT_TUNNEL_QUIT = "event_tunnel.quit";
 
+    public final String EVENT_TUNNEL_BLOCK_BREAK = "event_tunnel.block_break";
+
+    public final String EVENT_TUNNEL_BLOCK_PLACE = "event_tunnel.block_place";
+
     public final String LINK_REQUEST = "link.request";
 
     public final String PLAYER_COMMAND_CREATE = "player.command.create";

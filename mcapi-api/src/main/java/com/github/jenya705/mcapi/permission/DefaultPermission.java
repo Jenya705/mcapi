@@ -20,6 +20,8 @@ public enum DefaultPermission {
     EVENT_TUNNEL_UNLINK(Permissions.EVENT_TUNNEL_UNLINK, true, false, true),
     EVENT_TUNNEL_JOIN(Permissions.EVENT_TUNNEL_JOIN, true, false, true),
     EVENT_TUNNEL_QUIT(Permissions.EVENT_TUNNEL_QUIT, true, false, true),
+    EVENT_TUNNEL_BLOCK_BREAK(Permissions.EVENT_TUNNEL_BLOCK_BREAK, false, false, false),
+    EVENT_TUNNEL_BLOCK_PLACE(Permissions.EVENT_TUNNEL_BLOCK_PLACE, false, false, false),
     LINK_REQUEST(Permissions.LINK_REQUEST, true, false, true),
     PLAYER_COMMAND_CREATE(Permissions.PLAYER_COMMAND_CREATE, true, false, true),
     PLAYER_KICK(Permissions.PLAYER_KICK, false, true, false),

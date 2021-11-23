@@ -70,7 +70,7 @@ public class UnlinkCommand extends AdvancedCommandExecutor<UnlinkArguments> {
         }
         getPlayer(sender, args.getPlayer())
                 .ifPresentOrElse(
-                        (player) -> DatabaseModule.async.submit(() -> {
+                        (player) -> worker().invoke(() -> {
                             if (!databaseModule.storage().isExistBotWithName(args.getBotName())) {
                                 sendMessage(sender, config.getNotLinked());
                                 return;

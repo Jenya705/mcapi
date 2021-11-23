@@ -25,6 +25,7 @@ public class LinkEndCommand extends MenuCommand implements BaseCommon {
     }
 
     public LinkEndCommand(ServerApplication application) {
+        super(application);
         this.application = application;
         linkingModule = bean(LinkingModule.class);
     }

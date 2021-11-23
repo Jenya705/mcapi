@@ -52,7 +52,9 @@ public class CallbackLoadableConfigData extends GlobalConfigData implements Load
                 String name = value.key().isEmpty() ? field.getName() : value.key();
                 Object endValue = getObject(name).orElse(null);
                 field.setAccessible(true);
-                if (global != null && GlobalContainer.inheritKey.equals(endValue)) {
+                if (global != null &&
+                        endValue instanceof String &&
+                        ((String) endValue).startsWith(GlobalContainer.inheritKey)) {
                     // global value used
                     endValue = global(global.value()).orElse(null);
                 }
@@ -65,7 +67,7 @@ public class CallbackLoadableConfigData extends GlobalConfigData implements Load
                     }
                     else {
                         global(global.value(), serializer.serialize(fieldValue, this, name));
-                        set(name, GlobalContainer.inheritKey);
+                        set(name, GlobalContainer.inheritKey + global.value());
                     }
                     endValue = fieldValue; // specific platform need to be set
                 }

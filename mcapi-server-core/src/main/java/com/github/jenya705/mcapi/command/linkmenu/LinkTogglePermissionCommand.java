@@ -25,6 +25,7 @@ public class LinkTogglePermissionCommand extends MenuCommand implements BaseComm
     }
 
     public LinkTogglePermissionCommand(ServerApplication application) {
+        super(application);
         this.application = application;
         linkingModule = bean(LinkingModule.class);
     }

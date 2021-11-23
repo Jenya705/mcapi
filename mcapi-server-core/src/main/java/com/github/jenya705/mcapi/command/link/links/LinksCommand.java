@@ -31,7 +31,7 @@ public class LinksCommand extends AdvancedCommandExecutor<LinksArguments> {
     public void onCommand(CommandSender sender, LinksArguments args, String permission) {
         getPlayer(sender, args.getPlayer())
                 .ifPresentOrElse(
-                        player -> DatabaseModule.async.submit(() ->
+                        player -> worker().invoke(() ->
                                 sendListMessage(
                                         sender,
                                         config.getListLayout(),

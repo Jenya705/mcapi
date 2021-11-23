@@ -55,6 +55,7 @@ public class LinkPermissionCommand extends MenuCommand implements BaseCommon {
     }
 
     public LinkPermissionCommand(ServerApplication application) {
+        super(application);
         this.application = application;
         autoBeans();
     }
@@ -64,7 +65,7 @@ public class LinkPermissionCommand extends MenuCommand implements BaseCommon {
         if (!args.hasNext(1) || !(sender instanceof Player)) return;
         Player player = (Player) sender;
         int botId = Integer.parseInt(args.next());
-        DatabaseModule.async.submit(() ->
+        worker().invoke(() ->
                 player.sendMessage(
                         CommandsUtils.listMessage(
                                 config.getListLayout(),

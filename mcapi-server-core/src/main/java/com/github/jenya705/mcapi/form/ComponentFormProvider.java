@@ -17,6 +17,7 @@ public class ComponentFormProvider implements FormPlatformProvider {
         if (form instanceof ComponentForm) {
             ComponentForm platformForm = (ComponentForm) form;
             sender.sendMessage(platformForm.getMessage());
+            return;
         }
         throw new IllegalArgumentException("Form is not Component form");
     }

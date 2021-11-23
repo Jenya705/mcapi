@@ -1,10 +1,11 @@
 package com.github.jenya705.mcapi.module.database.cache;
 
+import com.github.jenya705.mcapi.AbstractApplicationModule;
+import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.entity.BotEntity;
 import com.github.jenya705.mcapi.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.entity.BotPermissionEntity;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
-import lombok.AllArgsConstructor;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -13,11 +14,16 @@ import java.util.function.Consumer;
 /**
  * @author Jenya705
  */
-@AllArgsConstructor
-public class FutureCacheStorageImpl implements FutureCacheStorage {
+public class FutureCacheStorageImpl extends AbstractApplicationModule implements FutureCacheStorage {
 
     private final CacheStorage cacheStorage;
     private final DatabaseModule databaseModule;
+
+    public FutureCacheStorageImpl(ServerApplication application, CacheStorage cacheStorage, DatabaseModule databaseModule) {
+        super(application);
+        this.cacheStorage = cacheStorage;
+        this.databaseModule = databaseModule;
+    }
 
     @Override
     public FutureCacheStorage withFuture() {
@@ -28,7 +34,7 @@ public class FutureCacheStorageImpl implements FutureCacheStorage {
     public BotEntity getCachedBot(String token) {
         BotEntity bot = cacheStorage.getCachedBot(token);
         if (bot == null) {
-            DatabaseModule.async.submit(() ->
+            worker().invoke(() ->
                     cacheStorage.cache(
                             databaseModule
                                     .storage()
@@ -43,7 +49,7 @@ public class FutureCacheStorageImpl implements FutureCacheStorage {
     public BotEntity getCachedBot(int id) {
         BotEntity bot = cacheStorage.getCachedBot(id);
         if (bot == null) {
-            DatabaseModule.async.submit(() ->
+            worker().invoke(() ->
                     cacheStorage.cache(
                             databaseModule
                                     .storage()
@@ -90,7 +96,7 @@ public class FutureCacheStorageImpl implements FutureCacheStorage {
     private Collection<BotLinkEntity> getCachedLinksOrApply(UUID target, Consumer<BotLinkEntity> linkConsumer) {
         Collection<BotLinkEntity> links = cacheStorage.getCachedLinks(target);
         if (links == null) {
-            DatabaseModule.async.submit(() ->
+            worker().invoke(() ->
                     databaseModule
                             .storage()
                             .findLinksByTarget(target)
@@ -103,7 +109,7 @@ public class FutureCacheStorageImpl implements FutureCacheStorage {
     private Collection<BotLinkEntity> getCachedLinksOrApply(int botId, Consumer<BotLinkEntity> linkConsumer) {
         Collection<BotLinkEntity> links = cacheStorage.getCachedLinks(botId);
         if (links == null) {
-            DatabaseModule.async.submit(() ->
+            worker().invoke(() ->
                     databaseModule
                             .storage()
                             .findLinksById(botId)
@@ -117,7 +123,7 @@ public class FutureCacheStorageImpl implements FutureCacheStorage {
     public Collection<BotPermissionEntity> getCachedPermissions(int botId) {
         Collection<BotPermissionEntity> permissions = cacheStorage.getCachedPermissions(botId);
         if (permissions == null) {
-            DatabaseModule.async.submit(() ->
+            worker().invoke(() ->
                     databaseModule
                             .storage()
                             .findPermissionsById(botId)
