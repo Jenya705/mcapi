@@ -16,16 +16,16 @@ import lombok.ToString;
 public class CacheConfig extends Config {
 
     @Value
-    private int botCacheSize = 10;
+    private int botCacheSize = 500;
 
     @Value
-    private int botLinksCacheSize = 10;
+    private int botLinksCacheSize = 500;
 
     @Value
-    private int targetLinksCacheSize = 10;
+    private int targetLinksCacheSize = 500;
 
     @Value
-    private int permissionCacheSize = 10;
+    private int permissionCacheSize = 500;
 
     public CacheConfig(ConfigData configData) {
         load(configData);

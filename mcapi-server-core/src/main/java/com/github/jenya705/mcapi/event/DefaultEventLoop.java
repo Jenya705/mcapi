@@ -6,6 +6,7 @@ import com.github.jenya705.mcapi.util.CacheClassMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 import java.util.function.Consumer;
 
 /**
@@ -13,7 +14,7 @@ import java.util.function.Consumer;
  */
 public class DefaultEventLoop extends AbstractApplicationModule implements EventLoop {
 
-    private final CacheClassMap<Collection<Consumer<Object>>> handlers = new CacheClassMap<>();
+    private final Map<Class<?>, Collection<Consumer<Object>>> handlers = new CacheClassMap<>();
 
     @Override
     @SuppressWarnings("unchecked")

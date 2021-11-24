@@ -27,6 +27,7 @@ public class BukkitBlockDataRegistryImpl implements BukkitBlockDataRegistry {
 
         for (Material material: Material.values()) {
             if (material.name().endsWith("STAIRS")) addCreator(material, BukkitStairsWrapper::of);
+            if (material.name().endsWith("SLAB")) addCreator(material, BukkitSlabWrapper::of);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi.module.mapper;
 
+import com.fasterxml.jackson.databind.DatabindContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;

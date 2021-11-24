@@ -28,8 +28,8 @@ public class ConfigModuleImpl extends AbstractApplicationModule implements Confi
     private ConfigData config;
     private GlobalConfig global;
 
-    private final CacheClassMap<ObjectTunnelFunction<Object, ?>> deserializers = new CacheClassMap<>();
-    private final CacheClassMap<ObjectTunnelFunction<?, Object>> serializers = new CacheClassMap<>();
+    private final Map<Class<?>, ObjectTunnelFunction<Object, ?>> deserializers = new CacheClassMap<>();
+    private final Map<Class<?>, ObjectTunnelFunction<?, Object>> serializers = new CacheClassMap<>();
 
     @SuppressWarnings("unchecked")
     @OnInitializing(priority = 0)
