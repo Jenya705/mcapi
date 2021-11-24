@@ -13,6 +13,7 @@ import com.github.jenya705.mcapi.module.config.ConfigModule;
 import com.github.jenya705.mcapi.module.mapper.Mapper;
 import com.github.jenya705.mcapi.stringful.ArrayStringfulIterator;
 import com.github.jenya705.mcapi.stringful.StringfulIterator;
+import com.github.jenya705.mcapi.util.PatternUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
@@ -20,6 +21,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Jenya705
@@ -188,8 +190,7 @@ public class CommandModuleImpl extends AbstractApplicationModule implements Comm
     }
 
     private boolean isCommandNameRight(String commandName) {
-        Matcher matcher = config.getCommandNamePattern().matcher(commandName);
-        return matcher.find() && matcher.end() == commandName.length();
+        return PatternUtils.validateAllString(config.getCommandNamePattern(), commandName);
     }
 
     private void validateCommandName(String commandName) {

@@ -5,6 +5,7 @@ import com.github.jenya705.mcapi.event.EventLoop;
 import com.github.jenya705.mcapi.form.ComponentFormProvider;
 import com.github.jenya705.mcapi.form.component.ComponentMapParserImpl;
 import com.github.jenya705.mcapi.module.authorization.AuthorizationModuleImpl;
+import com.github.jenya705.mcapi.module.bot.BotManagementImpl;
 import com.github.jenya705.mcapi.module.command.CommandModuleImpl;
 import com.github.jenya705.mcapi.module.config.ConfigModuleImpl;
 import com.github.jenya705.mcapi.module.database.DatabaseModuleImpl;
@@ -99,6 +100,7 @@ public class ServerApplication {
                 ComponentFormProvider.class,
                 ExecutorServiceWorker.class,
                 DefaultEventLoop.class,
+                BotManagementImpl.class,
                 // Routes
                 GetPlayerLocationRouteHandler.class,
                 GetPlayerRouteHandler.class,
@@ -285,6 +287,9 @@ public class ServerApplication {
                 cachedBeans.put(clazz, obj);
                 return (T) obj;
             }
+        }
+        if (isDebug()) {
+            log.warn("Trying to get not exist bean:", new RuntimeException());
         }
         return null;
     }

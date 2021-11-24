@@ -5,7 +5,7 @@ import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.data.ConfigData;
-import com.github.jenya705.mcapi.entity.BotEntity;
+import com.github.jenya705.mcapi.module.bot.BotManagement;
 import com.github.jenya705.mcapi.module.config.ConfigModule;
 import com.github.jenya705.mcapi.module.config.GlobalConfig;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
@@ -24,6 +24,7 @@ public class CreateBotCommand extends AdvancedCommandExecutor<CreateBotArguments
 
     private final GlobalConfig globalConfig = bean(ConfigModule.class).global();
     private final DatabaseModule databaseModule = bean(DatabaseModule.class);
+    private final BotManagement botManagement = bean(BotManagement.class);
 
     public CreateBotCommand(ServerApplication application) {
         super(application, CreateBotArguments.class);
@@ -49,21 +50,20 @@ public class CreateBotCommand extends AdvancedCommandExecutor<CreateBotArguments
                         (player) ->
                                 worker().invoke(() -> {
                                     String generatedToken = TokenUtils.generateToken();
-                                    if (!databaseModule
+                                    boolean canCreateBot = databaseModule
                                             .storage()
                                             .canCreateBot(args.getName(), globalConfig)
-                                    ) {
+                                            &&
+                                            botManagement
+                                                    .addBot(
+                                                            args.getName(),
+                                                            player.getUuid(),
+                                                            generatedToken
+                                                    );
+                                    if (!canCreateBot) {
                                         sendMessage(sender, config.getBotWithNameExist());
                                         return;
                                     }
-                                    databaseModule
-                                            .storage()
-                                            .save(BotEntity.builder()
-                                                    .name(args.getName())
-                                                    .token(generatedToken)
-                                                    .owner(player.getUuid())
-                                                    .build()
-                                            );
                                     sendMessage(sender,
                                             config.getSuccess(),
                                             "%token%", generatedToken
