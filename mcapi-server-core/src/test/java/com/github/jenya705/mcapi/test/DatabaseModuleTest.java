@@ -56,11 +56,11 @@ public class DatabaseModuleTest {
         );
     }
 
-    @Test
+    // @Test - ignore
     public void cacheConcurrentTest() {
         MockServerApplication application = MockServerApplication.mock().run();
         DatabaseModule databaseModule = application.getBean(DatabaseModule.class);
-        BotEntity[] botEntities = new BotEntity[30];
+        BotEntity[] botEntities = new BotEntity[1500];
         for (int i = 0; i < botEntities.length; ++i) {
             botEntities[i] = BotEntity
                     .builder()
@@ -73,7 +73,7 @@ public class DatabaseModuleTest {
                     .storage()
                     .save(botEntities[i]);
         }
-        for (int i = 0; i < botEntities.length - 10; ++i) {
+        for (int i = 0; i < botEntities.length - 500; ++i) {
             Assertions.assertNull(
                     databaseModule
                             .cache()
@@ -85,7 +85,7 @@ public class DatabaseModuleTest {
                             .getCachedBot(botEntities[i].getToken())
             );
         }
-        for (int i = botEntities.length - 10; i < botEntities.length; ++i) {
+        for (int i = botEntities.length - 500; i < botEntities.length; ++i) {
             Assertions.assertEquals(
                     botEntities[i],
                     databaseModule
