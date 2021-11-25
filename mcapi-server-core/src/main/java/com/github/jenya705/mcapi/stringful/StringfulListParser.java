@@ -35,7 +35,8 @@ public class StringfulListParser implements StringfulParser<List<Object>> {
                 stringfulIterator,
                 new ArrayList<>(),
                 dataValues,
-                requiredStart
+                requiredStart,
+                null
         );
     }
 

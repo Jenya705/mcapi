@@ -8,6 +8,8 @@ public enum BlockFace {
     SOUTH,
     WEST,
     EAST,
-    NORTH
+    NORTH,
+    UP,
+    DOWN
 
 }

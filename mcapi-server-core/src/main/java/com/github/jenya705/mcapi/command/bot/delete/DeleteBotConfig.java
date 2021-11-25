@@ -20,7 +20,7 @@ public class DeleteBotConfig extends AdvancedCommandExecutorConfig {
     private String success = "&cBot deleted";
 
     @Value
-    private String confirm = "&c&lWARNING! &eBot will permanently deleted! Add confirm to command to confirm";
+    private String confirm = "&c&lWARNING! &eBot will permanently deleted! Add confirm to the command to confirm";
 
     @Value
     @Global("notPermitted")

@@ -68,6 +68,8 @@ public class BukkitWrapper {
             case WEST -> BlockFace.WEST;
             case NORTH -> BlockFace.NORTH;
             case SOUTH -> BlockFace.SOUTH;
+            case UP -> BlockFace.UP;
+            case DOWN -> BlockFace.DOWN;
             default -> null;
         };
     }
