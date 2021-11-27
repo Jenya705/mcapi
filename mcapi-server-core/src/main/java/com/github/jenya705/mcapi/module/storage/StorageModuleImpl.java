@@ -39,12 +39,15 @@ public class StorageModuleImpl extends AbstractApplicationModule implements Stor
             }
         }
         for (VanillaMaterial material: VanillaMaterial.values()) {
-            String materialPermission = Permissions.BLOCK_GET + "." + material.getKey();
-            if (permissions.containsKey(materialPermission)) continue;
-            addPermission(new PermissionEntity(
-                    materialPermission,
-                    true, true
-            ));
+            addPermissionsIfNotExist(
+                    true, true,
+                    Permissions.BLOCK_GET + "." + material.getKey(),
+                    Permissions.BLOCK_DATA + "." + material.getKey()
+            );
+            addPermissionsIfNotExist(
+                    true, false,
+                    Permissions.BLOCK_DATA_FIELD + "." + material.getKey()
+            );
         }
     }
 
@@ -104,4 +107,16 @@ public class StorageModuleImpl extends AbstractApplicationModule implements Stor
         addPermission(new PermissionEntity(permissionEntity.getPermission() + ".@r", true, permissionEntity.isEnabled()));
         addPermission(new PermissionEntity(permissionEntity.getPermission() + ".@l", true, permissionEntity.isEnabled()));
     }
+
+    private void addPermissionsIfNotExist(boolean global, boolean enabled, String... permissions) {
+        for (String permission: permissions) {
+            if (!this.permissions.containsKey(permission)) {
+                addPermission(new PermissionEntity(
+                        permission,
+                        global, enabled
+                ));
+            }
+        }
+    }
+
 }

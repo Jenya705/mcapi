@@ -5,6 +5,7 @@ import com.github.jenya705.mcapi.event.EventLoop;
 import com.github.jenya705.mcapi.form.ComponentFormProvider;
 import com.github.jenya705.mcapi.form.component.ComponentMapParserImpl;
 import com.github.jenya705.mcapi.module.authorization.AuthorizationModuleImpl;
+import com.github.jenya705.mcapi.module.block.BlockDataModuleImpl;
 import com.github.jenya705.mcapi.module.bot.BotManagementImpl;
 import com.github.jenya705.mcapi.module.command.CommandModuleImpl;
 import com.github.jenya705.mcapi.module.config.ConfigModuleImpl;
@@ -15,10 +16,7 @@ import com.github.jenya705.mcapi.module.mapper.MapperImpl;
 import com.github.jenya705.mcapi.module.message.MessageDeserializerImpl;
 import com.github.jenya705.mcapi.module.rest.RestModule;
 import com.github.jenya705.mcapi.module.rest.route.SendMessageRouteHandler;
-import com.github.jenya705.mcapi.module.rest.route.block.GetBlockDataRouteHandler;
-import com.github.jenya705.mcapi.module.rest.route.block.GetBlockInventoryItemRouteHandler;
-import com.github.jenya705.mcapi.module.rest.route.block.GetBlockInventoryRouteHandler;
-import com.github.jenya705.mcapi.module.rest.route.block.GetBlockRouteHandler;
+import com.github.jenya705.mcapi.module.rest.route.block.*;
 import com.github.jenya705.mcapi.module.rest.route.bot.GetBotLinkedPlayersRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.bot.GetBotPermissionRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.bot.GetBotTargetPermissionRouteHandler;
@@ -101,6 +99,7 @@ public class ServerApplication {
                 ExecutorServiceWorker.class,
                 DefaultEventLoop.class,
                 BotManagementImpl.class,
+                BlockDataModuleImpl.class,
                 // Routes
                 GetPlayerLocationRouteHandler.class,
                 GetPlayerRouteHandler.class,
@@ -125,7 +124,8 @@ public class ServerApplication {
                 GetPlayerInventoryRouteHandler.class,
                 GetPlayerInventoryItemRouteHandler.class,
                 GetPlayerEnderChestRouteHandler.class,
-                GetPlayerEnderChestItemRouteHandler.class
+                GetPlayerEnderChestItemRouteHandler.class,
+                SetBlockDataFieldRouteHandler.class
                 // End Routes
         );
     }

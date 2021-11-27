@@ -1,6 +1,8 @@
 package com.github.jenya705.mcapi.block;
 
+import com.github.jenya705.mcapi.BukkitUtils;
 import lombok.AllArgsConstructor;
+import org.bukkit.Material;
 
 /**
  * @author Jenya705
@@ -17,7 +19,9 @@ public class BukkitWaterloggedWrapper implements Waterlogged {
 
     @Override
     public void setWaterlogged(boolean waterlogged) {
-        data().setWaterlogged(waterlogged);
+        org.bukkit.block.data.Waterlogged data = data();
+        data.setWaterlogged(waterlogged);
+        BukkitUtils.notAsyncTask(() -> block.setBlockData(data));
     }
 
     private org.bukkit.block.data.Waterlogged data() {

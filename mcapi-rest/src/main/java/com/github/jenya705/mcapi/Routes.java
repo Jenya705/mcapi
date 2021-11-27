@@ -54,6 +54,8 @@ public class Routes {
 
     public final Route BLOCK_INVENTORY_ITEM = Route.get("/world/{id}/block/{x}/{y}/{z}/data/inventory/{item}");
 
+    public final Route BLOCK_DATA_FIELD = Route.put("/world/{id}/block/{x}/{y}/{z}/data/{name}");
+
     public final Route PLAYER_ENDER_CHEST = Route.get("/player/{id}/ender");
 
     public final Route PLAYER_ENDER_CHEST_ITEM = Route.get("/player/{id}/ender/{item}");

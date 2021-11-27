@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi.block;
 
+import com.github.jenya705.mcapi.BukkitUtils;
 import lombok.AllArgsConstructor;
 
 /**
@@ -17,7 +18,9 @@ public class BukkitLiterWrapper implements Liter {
 
     @Override
     public void setLit(boolean lit) {
-        data().setLit(lit);
+        org.bukkit.block.data.Lightable data = data();
+        data.setLit(lit);
+        BukkitUtils.notAsyncTask(() -> block.setBlockData(data));
     }
 
     private org.bukkit.block.data.Lightable data() {

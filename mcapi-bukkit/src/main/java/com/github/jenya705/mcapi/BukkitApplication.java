@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi;
 
+import com.github.jenya705.mcapi.module.mapper.Mapper;
 import com.github.jenya705.mcapi.permission.LuckPermsHook;
 import com.github.jenya705.mcapi.permission.VaultPermissionHook;
 import com.github.jenya705.mcapi.utils.FailureOperation;
