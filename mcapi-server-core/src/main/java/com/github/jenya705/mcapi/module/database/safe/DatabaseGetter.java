@@ -16,6 +16,8 @@ public interface DatabaseGetter {
 
     BotEntity getBot(int id);
 
+    Collection<BotEntity> getBotsByOwner(UUID owner);
+
     Collection<BotLinkEntity> getLinks(UUID target);
 
     Collection<BotLinkEntity> getLinks(int botId);

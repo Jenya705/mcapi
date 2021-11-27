@@ -5,6 +5,7 @@ import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.bot.create.CreateBotCommand;
 import com.github.jenya705.mcapi.command.bot.delete.DeleteBotCommand;
 import com.github.jenya705.mcapi.command.bot.list.ListBotCommand;
+import com.github.jenya705.mcapi.command.bot.permission.list.PermissionListBotCommand;
 import com.github.jenya705.mcapi.command.link.links.LinksCommand;
 import com.github.jenya705.mcapi.command.link.unlink.UnlinkCommand;
 import com.github.jenya705.mcapi.command.linkmenu.LinkEndCommand;
@@ -41,6 +42,9 @@ public class RootCommand extends AbstractApplicationModule implements Supplier<C
                         .leaf("create", new CreateBotCommand(app()))
                         .leaf("list", new ListBotCommand(app()))
                         .leaf("delete", new DeleteBotCommand(app()))
+                        .branch("permission", permissionBranch -> permissionBranch
+                                .leaf("list", new PermissionListBotCommand(app()))
+                        )
                 )
                 .branch("tunnel", branch -> branch
                         .leaf("connected", new ConnectedEventTunnelsCommand(app()))

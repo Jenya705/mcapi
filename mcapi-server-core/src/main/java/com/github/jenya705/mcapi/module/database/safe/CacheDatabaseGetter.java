@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 
 import java.util.Collection;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * @author Jenya705
@@ -25,6 +26,11 @@ public class CacheDatabaseGetter implements DatabaseGetter {
     @Override
     public BotEntity getBot(int id) {
         return cacheStorage.getCachedBot(id);
+    }
+
+    @Override
+    public Collection<BotEntity> getBotsByOwner(UUID owner) {
+        return cacheStorage.getCachedBots(owner);
     }
 
     @Override

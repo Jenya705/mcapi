@@ -12,4 +12,9 @@ public class CommandTabImpl implements CommandTab {
 
     private final String name;
     private final String tooltip;
+
+    public static CommandTabImpl of(String name) {
+        return new CommandTabImpl(name, null);
+    }
+
 }

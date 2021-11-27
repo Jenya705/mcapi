@@ -16,6 +16,7 @@ import com.github.jenya705.mcapi.stringful.StringfulParserImpl;
 import com.github.jenya705.mcapi.util.PlayerUtils;
 import lombok.AccessLevel;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,6 +29,7 @@ import java.util.function.Supplier;
 /**
  * @author Jenya705
  */
+@Slf4j
 public abstract class AdvancedCommandExecutor<T> extends AbstractApplicationModule implements CommandExecutor {
 
     private final DatabaseModule databaseModule;
@@ -50,7 +52,7 @@ public abstract class AdvancedCommandExecutor<T> extends AbstractApplicationModu
     public void onCommand(CommandSender sender, StringfulIterator args, String permission) {
         parser.create(args)
                 .ifPresent(data -> onCommand(sender, data, permission))
-                .ifFailed(error -> handleOnError(error, sender, config));
+                .ifFailed(error -> handleOnError(app(), error, sender, config));
     }
 
     public abstract void onCommand(CommandSender sender, T args, String permission);
@@ -157,7 +159,10 @@ public abstract class AdvancedCommandExecutor<T> extends AbstractApplicationModu
         return this;
     }
 
-    public static void handleOnError(StringfulParseError error, CommandSender sender, AdvancedCommandExecutorConfig config) {
+    public static void handleOnError(ServerApplication application, StringfulParseError error, CommandSender sender, AdvancedCommandExecutorConfig config) {
+        if (application.isDebug() && error.causedBy() != null) {
+            log.warn("Exception during command execution: ", error.causedBy());
+        }
         if (error.isNotEnoughArguments()) {
             sender.sendMessage(CommandsUtils.placeholderMessage(
                     config.getNotEnoughArguments()

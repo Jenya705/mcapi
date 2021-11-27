@@ -34,6 +34,7 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
     private final String findBotByToken;
     private final String findBotsByOwner;
     private final String findBotsPageByOwner;
+    private final String findPermissionsPageById;
     private final String findBotsByName;
     private final String findPermission;
     private final String findPermissionsById;
@@ -65,6 +66,7 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
         findBotByToken = loadScript("find_bot_by_token");
         findBotsByOwner = loadScript("find_bots_by_owner");
         findBotsPageByOwner = loadScript("find_page_ordered_bots_by_owner");
+        findPermissionsPageById = loadScript("find_page_ordered_permissions_by_id");
         findBotsByName = loadScript("find_bots_by_name");
         findPermission = loadScript("find_permission");
         findPermissionsById = loadScript("find_permissions_by_id");
@@ -148,6 +150,17 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
                         owner.getLeastSignificantBits(),
                         size,
                         page * size
+                )
+        );
+    }
+
+    @Override
+    @SneakyThrows
+    public List<BotPermissionEntity> findPermissionsPageById(int id, int page, int size) {
+        return BotPermissionEntity.mapResultSet(
+                databaseModule.query(
+                        findPermissionsPageById,
+                        id, size, page * size
                 )
         );
     }

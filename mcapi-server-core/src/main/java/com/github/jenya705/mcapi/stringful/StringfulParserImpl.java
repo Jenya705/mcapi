@@ -39,6 +39,7 @@ public class StringfulParserImpl<T> implements StringfulParser<T> {
     }
 
     protected void generateForReflectionObject(StringfulReflectionObject reflectionObject) {
+        reflectionObject.setAccessible(true);
         Others othersAnnotation = reflectionObject.getAnnotation(Others.class);
         if (othersAnnotation != null) {
             generateForOthersObject(reflectionObject);

@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi.module.database;
 
+import com.github.jenya705.mcapi.Permission;
 import com.github.jenya705.mcapi.entity.BotEntity;
 import com.github.jenya705.mcapi.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.entity.BotPermissionEntity;
@@ -24,6 +25,8 @@ public interface DatabaseStorage {
     List<BotEntity> findAllBots();
 
     List<BotEntity> findBotsPageByOwner(UUID owner, int page, int size);
+
+    List<BotPermissionEntity> findPermissionsPageById(int id, int page, int size);
 
     List<BotEntity> findBotsByName(String name);
 

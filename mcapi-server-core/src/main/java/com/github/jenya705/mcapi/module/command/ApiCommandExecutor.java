@@ -75,7 +75,7 @@ public class ApiCommandExecutor extends AbstractApplicationModule implements Com
                                         RestCommandInteractionEvent.type
                                 )
                 )
-                .ifFailed(error -> AdvancedCommandExecutor.handleOnError(error, sender, config));
+                .ifFailed(error -> AdvancedCommandExecutor.handleOnError(app(), error, sender, config));
     }
 
     @Override

@@ -28,6 +28,11 @@ public class StorageDatabaseGetter implements DatabaseGetter {
     }
 
     @Override
+    public Collection<BotEntity> getBotsByOwner(UUID owner) {
+        return databaseStorage.findBotsByOwner(owner);
+    }
+
+    @Override
     public Collection<BotLinkEntity> getLinks(UUID target) {
         return databaseStorage.findLinksByTarget(target);
     }

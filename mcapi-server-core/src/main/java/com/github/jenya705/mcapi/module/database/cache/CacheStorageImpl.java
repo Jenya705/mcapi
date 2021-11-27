@@ -11,6 +11,7 @@ import com.google.common.cache.CacheBuilder;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * @author Jenya705
@@ -53,6 +54,16 @@ public class CacheStorageImpl extends AbstractApplicationModule implements Cache
     @Override
     public FutureCacheStorage withFuture() {
         return futureCacheStorage;
+    }
+
+    @Override
+    public Collection<BotEntity> getCachedBots(UUID owner) {
+        return botCache
+                .asMap()
+                .values()
+                .stream()
+                .filter(it -> it.getOwner().equals(owner))
+                .collect(Collectors.toList());
     }
 
     @Override

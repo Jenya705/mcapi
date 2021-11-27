@@ -2,6 +2,7 @@ package com.github.jenya705.mcapi.module.database;
 
 import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.entity.BotEntity;
+import com.github.jenya705.mcapi.entity.BotPermissionEntity;
 import lombok.SneakyThrows;
 
 import java.io.IOException;
@@ -27,6 +28,17 @@ public class MySqlDatabaseStorage extends DatabaseStorageImpl {
                         owner.getLeastSignificantBits(),
                         page * size,
                         size
+                )
+        );
+    }
+
+    @Override
+    @SneakyThrows
+    public List<BotPermissionEntity> findPermissionsPageById(int id, int page, int size) {
+        return BotPermissionEntity.mapResultSet(
+                getDatabaseModule().query(
+                        getFindPermissionsPageById(),
+                        id, page * size, size
                 )
         );
     }

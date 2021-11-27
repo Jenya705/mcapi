@@ -61,6 +61,19 @@ public class FutureCacheStorageImpl extends AbstractApplicationModule implements
     }
 
     @Override
+    public Collection<BotEntity> getCachedBots(UUID owner) {
+        Collection<BotEntity> botEntities = cacheStorage.getCachedBots(owner);
+        if (botEntities == null) {
+            worker().invoke(() -> databaseModule
+                    .storage()
+                    .findBotsByOwner(owner)
+                    .forEach(this::cache)
+            );
+        }
+        return botEntities;
+    }
+
+    @Override
     public Collection<BotLinkEntity> getCachedLinks(UUID target) {
         return getCachedLinksOrApply(target, cacheStorage::cache);
     }

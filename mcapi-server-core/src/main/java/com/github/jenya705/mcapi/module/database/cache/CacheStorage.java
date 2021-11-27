@@ -17,6 +17,8 @@ public interface CacheStorage {
 
     BotEntity getCachedBot(int id);
 
+    Collection<BotEntity> getCachedBots(UUID owner);
+
     Collection<BotLinkEntity> getCachedLinks(UUID target);
 
     Collection<BotLinkEntity> getCachedLinks(int botId);
