@@ -4,6 +4,7 @@ import com.github.jenya705.mcapi.event.DefaultEventLoop;
 import com.github.jenya705.mcapi.event.EventLoop;
 import com.github.jenya705.mcapi.form.ComponentFormProvider;
 import com.github.jenya705.mcapi.form.component.ComponentMapParserImpl;
+import com.github.jenya705.mcapi.ignore.IgnoreManager;
 import com.github.jenya705.mcapi.module.authorization.AuthorizationModuleImpl;
 import com.github.jenya705.mcapi.module.block.BlockDataModuleImpl;
 import com.github.jenya705.mcapi.module.bot.BotManagementImpl;
@@ -34,6 +35,7 @@ import com.github.jenya705.mcapi.module.web.tunnel.DefaultEventTunnel;
 import com.github.jenya705.mcapi.module.web.tunnel.EventTunnel;
 import com.github.jenya705.mcapi.util.Pair;
 import com.github.jenya705.mcapi.worker.ExecutorServiceWorker;
+import com.github.jenya705.mcapi.worker.Worker;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -73,7 +75,7 @@ public class ServerApplication {
     private EventTunnel eventTunnel;
     @Getter
     @Bean
-    private ExecutorServiceWorker worker;
+    private Worker worker;
     @Getter
     @Bean
     private EventLoop eventLoop;
@@ -100,6 +102,7 @@ public class ServerApplication {
                 DefaultEventLoop.class,
                 BotManagementImpl.class,
                 BlockDataModuleImpl.class,
+                IgnoreManager.class,
                 // Routes
                 GetPlayerLocationRouteHandler.class,
                 GetPlayerRouteHandler.class,
@@ -154,9 +157,19 @@ public class ServerApplication {
         }
         initialized = true;
         injectBeans();
-        runMethods(initializingMethods, "initialize", true);
+        runMethods(
+                initializingMethods,
+                "initialize",
+                ApplicationClassActionEvent.Action.INIT,
+                true
+        );
         if (!enabled) return;
-        runMethods(startupMethods, "startup", true);
+        runMethods(
+                startupMethods,
+                "startup",
+                ApplicationClassActionEvent.Action.START,
+                true
+        );
         if (debug) {
             log.info("Debug mode enabled");
         }
@@ -225,7 +238,7 @@ public class ServerApplication {
         }
     }
 
-    protected void runMethods(Map<Integer, Set<Pair<Object, Method>>> methods, String procedureName, boolean onFailedDisable) {
+    protected void runMethods(Map<Integer, Set<Pair<Object, Method>>> methods, String procedureName, ApplicationClassActionEvent.Action action, boolean onFailedDisable) {
         List<Set<Pair<Object, Method>>> sortedMethods =
                 methods
                         .entrySet()
@@ -236,6 +249,11 @@ public class ServerApplication {
         for (Set<Pair<Object, Method>> methodsPriority : sortedMethods) {
             for (Pair<Object, Method> methodPair : methodsPriority) {
                 try {
+                    ApplicationClassActionEvent event = new ApplicationClassActionEvent(
+                            methodPair.getLeft().getClass(), action
+                    );
+                    eventLoop.invoke(event);
+                    if (event.isCancelled()) continue;
                     methodPair.getRight().setAccessible(true);
                     methodPair.getRight().invoke(methodPair.getLeft());
                 } catch (Throwable e) {
@@ -269,7 +287,12 @@ public class ServerApplication {
                 currentClass = currentClass.getSuperclass();
             }
         }
-        runMethods(endMethods, "stop", false);
+        runMethods(
+                endMethods,
+                "stop",
+                ApplicationClassActionEvent.Action.STOP,
+                false
+        );
         initialized = false;
         enabled = false;
     }

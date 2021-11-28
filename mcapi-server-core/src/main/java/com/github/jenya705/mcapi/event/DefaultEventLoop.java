@@ -19,7 +19,7 @@ public class DefaultEventLoop extends AbstractApplicationModule implements Event
     @Override
     @SuppressWarnings("unchecked")
     public <T> EventLoop handler(Class<? extends T> clazz, Consumer<T> handler) {
-        handlers.putIfAbsent(clazz, new ArrayList<>());
+        handlers.computeIfAbsent(clazz, k -> new ArrayList<>());
         handlers.get(clazz).add(obj -> handler.accept((T) obj));
         return this;
     }

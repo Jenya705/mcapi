@@ -3,10 +3,7 @@ package com.github.jenya705.mcapi.util;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Jenya705
@@ -45,7 +42,7 @@ public class CacheClassMap<T> implements Map<Class<?>, T> {
     @Override
     public T put(Class<?> key, T value) {
         map.put(key, value);
-        for (Map.Entry<Class<?>, Class<?>> entry : cache.entrySet()) {
+        for (Map.Entry<Class<?>, Class<?>> entry : new HashSet<>(cache.entrySet())) {
             if (key.isAssignableFrom(entry.getKey())) {
                 cache.remove(entry.getKey());
             }
@@ -55,7 +52,7 @@ public class CacheClassMap<T> implements Map<Class<?>, T> {
 
     @Override
     public T remove(Object key) {
-        for (Map.Entry<Class<?>, Class<?>> entry : cache.entrySet()) {
+        for (Map.Entry<Class<?>, Class<?>> entry : new HashSet<>(cache.entrySet())) {
             if (entry.getValue() == key) {
                 cache.remove(entry.getKey());
             }
@@ -66,8 +63,10 @@ public class CacheClassMap<T> implements Map<Class<?>, T> {
     @Override
     public void putAll(@NotNull Map<? extends Class<?>, ? extends T> m) {
         map.putAll(m);
-        for (Map.Entry<Class<?>, Class<?>> entry : cache.entrySet()) {
-            if (m.containsKey(entry.getValue())) cache.remove(entry.getKey());
+        for (Map.Entry<Class<?>, Class<?>> entry : new HashSet<>(cache.entrySet())) {
+            if (m.containsKey(entry.getValue())) {
+                cache.remove(entry.getKey());
+            }
         }
     }
 
