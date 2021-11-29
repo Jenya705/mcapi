@@ -2,9 +2,9 @@ package com.github.jenya705.mcapi.module.block;
 
 import com.github.jenya705.mcapi.AbstractApplicationModule;
 import com.github.jenya705.mcapi.Bean;
-import com.github.jenya705.mcapi.block.BlockData;
-import com.github.jenya705.mcapi.block.Liter;
-import com.github.jenya705.mcapi.block.Waterlogged;
+import com.github.jenya705.mcapi.block.*;
+import com.github.jenya705.mcapi.block.data.Slab;
+import com.github.jenya705.mcapi.block.data.Stairs;
 import com.github.jenya705.mcapi.error.FieldSetterNotExistException;
 import com.github.jenya705.mcapi.module.mapper.Mapper;
 
@@ -27,6 +27,10 @@ public class BlockDataModuleImpl extends AbstractApplicationModule implements Bl
         this
                 .field("waterlogged", Waterlogged.class, boolean.class, Waterlogged::setWaterlogged)
                 .field("lit", Liter.class, boolean.class, Liter::setLit)
+                .field("facing", Directional.class, BlockFace.class, Directional::setDirection)
+                .field("half", Bisected.class, Half.class, Bisected::setHalf)
+                .field("slabType", Slab.class, Slab.SlabType.class, Slab::setType)
+                .field("stairsShape", Stairs.class, Shape.class, Stairs::setShape)
         ;
     }
 

@@ -7,4 +7,6 @@ public interface Bisected {
 
     Half getHalf();
 
+    void setHalf(Half half);
+
 }

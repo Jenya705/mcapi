@@ -20,7 +20,7 @@ public class ApplicationClassActionEvent {
         STOP
     }
 
-    private final Class<?> beanClass;
+    private final Object bean;
     private final Action action;
 
     private boolean cancelled = false;

@@ -1,15 +1,17 @@
 package com.github.jenya705.mcapi.block;
 
-import com.github.jenya705.mcapi.BukkitUtils;
-import lombok.AllArgsConstructor;
+import org.bukkit.block.Block;
 
 /**
  * @author Jenya705
  */
-@AllArgsConstructor
-public class BukkitLiterWrapper implements Liter {
+public class BukkitLiterWrapper
+        extends AbstractBukkitBlockData<org.bukkit.block.data.Lightable>
+        implements Liter {
 
-    private final org.bukkit.block.Block block;
+    public BukkitLiterWrapper(Block block) {
+        super(block);
+    }
 
     @Override
     public boolean isLit() {
@@ -18,13 +20,7 @@ public class BukkitLiterWrapper implements Liter {
 
     @Override
     public void setLit(boolean lit) {
-        org.bukkit.block.data.Lightable data = data();
-        data.setLit(lit);
-        BukkitUtils.notAsyncTask(() -> block.setBlockData(data));
-    }
-
-    private org.bukkit.block.data.Lightable data() {
-        return (org.bukkit.block.data.Lightable) block.getBlockData();
+        updateData(it -> it.setLit(lit));
     }
 
 }

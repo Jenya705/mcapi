@@ -8,7 +8,9 @@ import lombok.experimental.Delegate;
 /**
  * @author Jenya705
  */
-public class BukkitStairsWrapper implements Stairs {
+public class BukkitStairsWrapper
+        extends AbstractBukkitBlockData<org.bukkit.block.data.type.Stairs>
+        implements Stairs {
 
     @Delegate
     private final Bisected bisectedDelegate;
@@ -16,18 +18,21 @@ public class BukkitStairsWrapper implements Stairs {
     private final Directional directionalDelegate;
     @Delegate
     private final Waterlogged waterloggedDelegate;
-    @Getter
-    private final Shape shape;
 
     public BukkitStairsWrapper(org.bukkit.block.Block block) {
+        super(block);
         bisectedDelegate = new BukkitBisectedWrapper(block);
         directionalDelegate = new BukkitDirectionalWrapper(block);
         waterloggedDelegate = new BukkitWaterloggedWrapper(block);
-        shape = BukkitWrapper.shape(
-                ((org.bukkit.block.data.type.Stairs)
-                        block.getBlockData())
-                        .getShape()
-        );
+    }
+
+    public Shape getShape() {
+        return BukkitWrapper.shape(data().getShape());
+    }
+
+    @Override
+    public void setShape(Shape shape) {
+        updateData(it -> it.setShape(BukkitWrapper.shape(shape)));
     }
 
     public static BukkitStairsWrapper of(org.bukkit.block.Block block) {

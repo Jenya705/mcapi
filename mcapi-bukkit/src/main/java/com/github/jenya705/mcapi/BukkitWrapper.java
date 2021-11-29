@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi;
 
 import com.github.jenya705.mcapi.block.*;
+import com.github.jenya705.mcapi.block.data.Slab;
 import com.github.jenya705.mcapi.enchantment.BukkitEnchantmentWrapper;
 import com.github.jenya705.mcapi.enchantment.BukkitItemEnchantmentWrapper;
 import com.github.jenya705.mcapi.enchantment.Enchantment;
@@ -62,18 +63,6 @@ public class BukkitWrapper {
         return BukkitPlayerInventoryWrapper.of(playerInventory);
     }
 
-    public BlockFace blockFace(org.bukkit.block.BlockFace blockFace) {
-        return switch (blockFace) {
-            case EAST -> BlockFace.EAST;
-            case WEST -> BlockFace.WEST;
-            case NORTH -> BlockFace.NORTH;
-            case SOUTH -> BlockFace.SOUTH;
-            case UP -> BlockFace.UP;
-            case DOWN -> BlockFace.DOWN;
-            default -> null;
-        };
-    }
-
     public GameMode gamemode(org.bukkit.GameMode gameMode) {
         return GameMode.valueOf(gameMode.name());
     }
@@ -86,12 +75,36 @@ public class BukkitWrapper {
         return BukkitItemEnchantmentWrapper.of(enchantment, level);
     }
 
+    public BlockFace blockFace(org.bukkit.block.BlockFace blockFace) {
+        return BlockFace.valueOf(blockFace.name());
+    }
+
     public Half half(Bisected.Half half) {
         return Half.valueOf(half.name());
     }
 
+    public Slab.SlabType slabType(org.bukkit.block.data.type.Slab.Type type) {
+        return Slab.SlabType.valueOf(type.name());
+    }
+
     public Shape shape(Stairs.Shape shape) {
         return Shape.valueOf(shape.name());
+    }
+
+    public org.bukkit.block.BlockFace blockFace(BlockFace blockFace) {
+        return org.bukkit.block.BlockFace.valueOf(blockFace.name());
+    }
+
+    public Bisected.Half half(Half half) {
+        return Bisected.Half.valueOf(half.name());
+    }
+
+    public Stairs.Shape shape(Shape shape) {
+        return Stairs.Shape.valueOf(shape.name());
+    }
+
+    public org.bukkit.block.data.type.Slab.Type slabType(Slab.SlabType type) {
+        return org.bukkit.block.data.type.Slab.Type.valueOf(type.name());
     }
 
 }

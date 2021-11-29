@@ -16,4 +16,6 @@ public interface Slab extends BlockData, Waterlogged {
 
     SlabType getType();
 
+    void setType(SlabType type);
+
 }

@@ -250,7 +250,7 @@ public class ServerApplication {
             for (Pair<Object, Method> methodPair : methodsPriority) {
                 try {
                     ApplicationClassActionEvent event = new ApplicationClassActionEvent(
-                            methodPair.getLeft().getClass(), action
+                            methodPair.getLeft(), action
                     );
                     eventLoop.invoke(event);
                     if (event.isCancelled()) continue;
@@ -332,6 +332,7 @@ public class ServerApplication {
     }
 
     private void disable() {
+        eventLoop.invoke(new ApplicationDisableEvent());
         enabled = false;
         core.disable();
     }

@@ -46,7 +46,7 @@ public class IgnoreManager extends AbstractApplicationModule {
                 .handler(
                         ApplicationClassActionEvent.class,
                         event -> {
-                            Class<?> currentClass = event.getBeanClass();
+                            Class<?> currentClass = event.getBean().getClass();
                             boolean ignorable = false;
                             while (currentClass != null) {
                                 Ignorable ignorableAnnotation = currentClass.getAnnotation(Ignorable.class);
@@ -59,10 +59,10 @@ public class IgnoreManager extends AbstractApplicationModule {
                             if (!ignorable) return;
                             if (ignorableRules
                                     .stream()
-                                    .noneMatch(func -> func.test(event.getBeanClass().getCanonicalName()))
+                                    .noneMatch(func -> func.test(event.getBean().getClass().getCanonicalName()))
                             ) return;
                             if (app().isDebug()) {
-                                log.info("Ignoring {} class", event.getBeanClass().getCanonicalName());
+                                log.info("Ignoring {} class", event.getBean().getClass().getCanonicalName());
                             }
                             event.setCancelled(true);
                         }

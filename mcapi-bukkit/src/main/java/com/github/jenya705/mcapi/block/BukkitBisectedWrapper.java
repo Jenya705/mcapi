@@ -1,20 +1,27 @@
 package com.github.jenya705.mcapi.block;
 
 import com.github.jenya705.mcapi.BukkitWrapper;
-import lombok.Getter;
+import org.bukkit.block.Block;
 
 /**
  * @author Jenya705
  */
-@Getter
-public class BukkitBisectedWrapper implements Bisected {
+public class BukkitBisectedWrapper
+        extends AbstractBukkitBlockData<org.bukkit.block.data.Bisected>
+        implements Bisected {
 
-    private final Half half;
-
-    public BukkitBisectedWrapper(org.bukkit.block.Block block) {
-        half = BukkitWrapper.half((
-                (org.bukkit.block.data.Bisected)
-                        block.getBlockData())
-                .getHalf());
+    public BukkitBisectedWrapper(Block block) {
+        super(block);
     }
+
+    @Override
+    public Half getHalf() {
+        return BukkitWrapper.half(data().getHalf());
+    }
+
+    @Override
+    public void setHalf(Half half) {
+        updateData(it -> it.setHalf(BukkitWrapper.half(half)));
+    }
+
 }

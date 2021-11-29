@@ -1,21 +1,27 @@
 package com.github.jenya705.mcapi.block;
 
 import com.github.jenya705.mcapi.BukkitWrapper;
-import lombok.Getter;
+import org.bukkit.block.Block;
 
 /**
  * @author Jenya705
  */
-@Getter
-public class BukkitDirectionalWrapper implements Directional {
+public class BukkitDirectionalWrapper
+        extends AbstractBukkitBlockData<org.bukkit.block.data.Directional>
+        implements Directional {
 
-    private final BlockFace direction;
-
-    public BukkitDirectionalWrapper(org.bukkit.block.Block block) {
-        direction = BukkitWrapper.blockFace(
-                ((org.bukkit.block.data.Directional)
-                        block.getBlockData())
-                        .getFacing()
-        );
+    public BukkitDirectionalWrapper(Block block) {
+        super(block);
     }
+
+    @Override
+    public BlockFace getDirection() {
+        return BukkitWrapper.blockFace(data().getFacing());
+    }
+
+    @Override
+    public void setDirection(BlockFace direction) {
+        updateData(it -> it.setFacing(BukkitWrapper.blockFace(direction)));
+    }
+
 }

@@ -9,4 +9,6 @@ public interface Stairs extends BlockData, Directional, Waterlogged, Bisected {
 
     Shape getShape();
 
+    void setShape(Shape shape);
+
 }

@@ -432,7 +432,7 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
 
     protected String loadScript(String fileName) throws IOException {
         String realFileName = fileName + ".sql";
-        core().mkdirs(String.format("sql/%s", sqlType));
+        core().mkdirs(String.format("sql/%s", sqlType)); // making dir to give access for changing sql scripts.
         String fixedContextScriptContent = loadContextScript(String.format("sql/%s/%s", sqlType, realFileName));
         if (fixedContextScriptContent != null) return fixedContextScriptContent;
         String defaultContextScriptContent = loadContextScript(String.format("sql/%s", realFileName));
@@ -454,9 +454,6 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
                 .getResourceAsStream(path);
         if (fixedInputStream != null) {
             byte[] bytes = FileUtils.readInputStream(fixedInputStream);
-            core().saveSpecific(
-                    path, bytes
-            );
             fixedInputStream.close();
             return new String(bytes);
         }

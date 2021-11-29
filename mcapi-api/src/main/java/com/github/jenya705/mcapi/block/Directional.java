@@ -7,4 +7,6 @@ public interface Directional {
 
     BlockFace getDirection();
 
+    void setDirection(BlockFace direction);
+
 }
