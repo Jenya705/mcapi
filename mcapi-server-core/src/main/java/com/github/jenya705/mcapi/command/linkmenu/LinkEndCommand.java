@@ -2,11 +2,11 @@ package com.github.jenya705.mcapi.command.linkmenu;
 
 import com.github.jenya705.mcapi.BaseCommon;
 import com.github.jenya705.mcapi.CommandSender;
-import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.MenuCommand;
 import com.github.jenya705.mcapi.command.NoConfig;
 import com.github.jenya705.mcapi.module.link.LinkingModule;
+import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.stringful.StringfulIterator;
 
 /**

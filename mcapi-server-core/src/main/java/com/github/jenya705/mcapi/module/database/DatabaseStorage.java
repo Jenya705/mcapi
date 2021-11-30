@@ -1,6 +1,5 @@
 package com.github.jenya705.mcapi.module.database;
 
-import com.github.jenya705.mcapi.Permission;
 import com.github.jenya705.mcapi.entity.BotEntity;
 import com.github.jenya705.mcapi.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.entity.BotPermissionEntity;

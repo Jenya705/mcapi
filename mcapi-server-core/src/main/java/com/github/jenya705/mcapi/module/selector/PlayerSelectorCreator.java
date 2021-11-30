@@ -1,9 +1,9 @@
 package com.github.jenya705.mcapi.module.selector;
 
 import com.github.jenya705.mcapi.BaseCommon;
-import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.error.PlayerNotFoundException;
+import com.github.jenya705.mcapi.player.Player;
 
 import java.util.Collection;
 import java.util.Random;

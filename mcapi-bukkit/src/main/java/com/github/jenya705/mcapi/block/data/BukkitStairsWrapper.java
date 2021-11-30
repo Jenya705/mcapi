@@ -2,7 +2,6 @@ package com.github.jenya705.mcapi.block.data;
 
 import com.github.jenya705.mcapi.BukkitWrapper;
 import com.github.jenya705.mcapi.block.*;
-import lombok.Getter;
 import lombok.experimental.Delegate;
 
 /**

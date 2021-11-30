@@ -2,13 +2,13 @@ package com.github.jenya705.mcapi.command.advanced;
 
 import com.github.jenya705.mcapi.AbstractApplicationModule;
 import com.github.jenya705.mcapi.CommandSender;
-import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.CommandExecutor;
 import com.github.jenya705.mcapi.command.CommandTab;
 import com.github.jenya705.mcapi.command.CommandsUtils;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.module.mapper.Mapper;
+import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.stringful.StringfulIterator;
 import com.github.jenya705.mcapi.stringful.StringfulParseError;
 import com.github.jenya705.mcapi.stringful.StringfulParser;

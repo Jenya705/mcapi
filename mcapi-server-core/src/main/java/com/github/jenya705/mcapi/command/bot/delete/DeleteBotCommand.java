@@ -1,13 +1,13 @@
 package com.github.jenya705.mcapi.command.bot.delete;
 
 import com.github.jenya705.mcapi.CommandSender;
-import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.entity.BotEntity;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
+import com.github.jenya705.mcapi.player.Player;
 
 import java.util.UUID;
 

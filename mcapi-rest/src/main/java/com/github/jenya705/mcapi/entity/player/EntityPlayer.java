@@ -1,11 +1,11 @@
 package com.github.jenya705.mcapi.entity.player;
 
-import com.github.jenya705.mcapi.entity.EntityUtils;
-import com.github.jenya705.mcapi.player.GameMode;
 import com.github.jenya705.mcapi.Location;
-import com.github.jenya705.mcapi.player.Player;
+import com.github.jenya705.mcapi.entity.EntityUtils;
 import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.inventory.PlayerInventory;
+import com.github.jenya705.mcapi.player.GameMode;
+import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.player.PlayerAbilities;
 import com.github.jenya705.mcapi.rest.player.RestPlayer;
 import lombok.AllArgsConstructor;

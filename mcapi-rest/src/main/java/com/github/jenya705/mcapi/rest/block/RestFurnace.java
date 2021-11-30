@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.rest.block;
 
-import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.block.data.Furnace;
+import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.rest.inventory.RestInventory;
 import lombok.AllArgsConstructor;
 import lombok.Data;

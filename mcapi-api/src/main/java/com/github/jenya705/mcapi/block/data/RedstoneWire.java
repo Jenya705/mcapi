@@ -4,8 +4,6 @@ import com.github.jenya705.mcapi.block.BlockData;
 import com.github.jenya705.mcapi.block.BlockFace;
 import com.github.jenya705.mcapi.block.LevelPowerable;
 
-import java.util.Set;
-
 /**
  * @author Jenya705
  */

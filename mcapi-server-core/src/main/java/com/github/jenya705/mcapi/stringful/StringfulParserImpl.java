@@ -5,9 +5,11 @@ import com.github.jenya705.mcapi.module.mapper.Mapper;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 /**
  * @author Jenya705
