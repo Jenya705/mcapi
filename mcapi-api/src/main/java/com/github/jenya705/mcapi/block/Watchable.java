@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author Jenya705
  */
-public interface Watchable {
+public interface Watchable extends BlockData {
 
     List<? extends Player> getWatchers();
 

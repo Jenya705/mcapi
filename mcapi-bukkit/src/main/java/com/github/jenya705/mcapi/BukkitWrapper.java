@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi;
 
 import com.github.jenya705.mcapi.block.*;
+import com.github.jenya705.mcapi.block.data.RedstoneWire;
 import com.github.jenya705.mcapi.block.data.Slab;
 import com.github.jenya705.mcapi.enchantment.BukkitEnchantmentWrapper;
 import com.github.jenya705.mcapi.enchantment.BukkitItemEnchantmentWrapper;
@@ -89,6 +90,14 @@ public class BukkitWrapper {
 
     public Shape shape(Stairs.Shape shape) {
         return Shape.valueOf(shape.name());
+    }
+
+    public RedstoneWire.Connection connection(org.bukkit.block.data.type.RedstoneWire.Connection connection) {
+        return RedstoneWire.Connection.valueOf(connection.name());
+    }
+
+    public org.bukkit.block.data.type.RedstoneWire.Connection connection(RedstoneWire.Connection connection) {
+        return org.bukkit.block.data.type.RedstoneWire.Connection.valueOf(connection.name());
     }
 
     public org.bukkit.block.BlockFace blockFace(BlockFace blockFace) {

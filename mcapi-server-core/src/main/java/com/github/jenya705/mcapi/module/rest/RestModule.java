@@ -120,6 +120,7 @@ public class RestModule extends AbstractApplicationModule {
                 .tunnelJsonSerializer(Enchantment.class, RestEnchantment::from)
                 .tunnelJsonSerializer(ItemEnchantment.class, RestItemEnchantment::from)
                 .tunnelJsonSerializer(ShulkerBox.class, RestShulkerBox::from)
+                .tunnelJsonSerializer(RedstoneWire.class, RestRedstoneWire::from)
                 .jsonDeserializer(Command.class, new ApiCommandDeserializer(commandModule))
                 .jsonSerializer(Component.class, new ComponentSerializer())
                 .tunnelJsonDeserializer(
