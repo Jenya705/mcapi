@@ -47,6 +47,11 @@ public class BukkitPlayerInventoryWrapper implements PlayerInventory {
     }
 
     @Override
+    public void setItem(int item, ItemStack itemStack) {
+        inventoryWrapper.setItem(item, itemStack);
+    }
+
+    @Override
     public ItemStack getHelmet() {
         return BukkitWrapper.itemStack(bukkitPlayerInventory.getHelmet());
     }

@@ -41,6 +41,11 @@ public class BukkitInventoryWrapper implements Inventory {
         return cachedItemStacks[item];
     }
 
+    @Override
+    public void setItem(int item, ItemStack itemStack) {
+        bukkitInventory.setItem(item, BukkitWrapper.itemStack(itemStack));
+    }
+
     private void cacheItemIfNeed(int index) {
         if (cachedItemStacks[index] == null) {
             cachedItemStacks[index] = BukkitWrapper.itemStack(bukkitInventory.getItem(index));

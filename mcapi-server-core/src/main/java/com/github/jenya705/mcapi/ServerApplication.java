@@ -11,9 +11,11 @@ import com.github.jenya705.mcapi.module.bot.BotManagementImpl;
 import com.github.jenya705.mcapi.module.command.CommandModuleImpl;
 import com.github.jenya705.mcapi.module.config.ConfigModuleImpl;
 import com.github.jenya705.mcapi.module.database.DatabaseModuleImpl;
+import com.github.jenya705.mcapi.module.enchantment.EnchantmentStorageImpl;
 import com.github.jenya705.mcapi.module.link.LinkingModuleImpl;
 import com.github.jenya705.mcapi.module.localization.LocalizationModuleImpl;
 import com.github.jenya705.mcapi.module.mapper.MapperImpl;
+import com.github.jenya705.mcapi.module.material.MaterialStorageImpl;
 import com.github.jenya705.mcapi.module.message.MessageDeserializerImpl;
 import com.github.jenya705.mcapi.module.rest.RestModule;
 import com.github.jenya705.mcapi.module.rest.route.SendMessageRouteHandler;
@@ -103,6 +105,8 @@ public class ServerApplication {
                 BotManagementImpl.class,
                 BlockDataModuleImpl.class,
                 IgnoreManager.class,
+                MaterialStorageImpl.class,
+                EnchantmentStorageImpl.class,
                 // Routes
                 GetPlayerLocationRouteHandler.class,
                 GetPlayerRouteHandler.class,

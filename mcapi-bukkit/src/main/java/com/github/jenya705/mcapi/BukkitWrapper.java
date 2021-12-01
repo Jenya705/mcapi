@@ -16,6 +16,8 @@ import lombok.experimental.UtilityClass;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.type.Stairs;
 
+import java.util.Locale;
+
 /**
  * @author Jenya705
  */
@@ -54,6 +56,29 @@ public class BukkitWrapper {
 
     public ItemStack itemStack(org.bukkit.inventory.ItemStack itemStack) {
         return BukkitItemStackWrapper.of(itemStack);
+    }
+
+    public org.bukkit.inventory.ItemStack itemStack(ItemStack itemStack) {
+        org.bukkit.inventory.ItemStack bukkitItemStack = new org.bukkit.inventory.ItemStack(
+                material(itemStack.getMaterial())
+        );
+        bukkitItemStack.setAmount(itemStack.getAmount() == 0 ? 1 : itemStack.getAmount());
+        if (itemStack.customName() != null) {
+            org.bukkit.inventory.meta.ItemMeta bukkitItemMeta = bukkitItemStack.getItemMeta();
+            bukkitItemMeta.displayName(itemStack.customName());
+            bukkitItemStack.setItemMeta(bukkitItemMeta);
+        }
+        return bukkitItemStack;
+    }
+
+    public Material material(org.bukkit.Material material) {
+        return VanillaMaterial.getMaterial(material.getKey().getKey());
+    }
+
+    public org.bukkit.Material material(Material material) {
+        return org.bukkit.Material.valueOf(
+                material.getKey().substring("minecraft:".length()).toUpperCase(Locale.ROOT)
+        );
     }
 
     public Inventory inventory(org.bukkit.inventory.Inventory inventory) {
@@ -115,5 +140,4 @@ public class BukkitWrapper {
     public org.bukkit.block.data.type.Slab.Type slabType(Slab.SlabType type) {
         return org.bukkit.block.data.type.Slab.Type.valueOf(type.name());
     }
-
 }

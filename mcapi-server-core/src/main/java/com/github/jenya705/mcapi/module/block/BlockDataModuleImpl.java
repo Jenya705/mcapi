@@ -7,8 +7,10 @@ import com.github.jenya705.mcapi.block.data.RedstoneWire;
 import com.github.jenya705.mcapi.block.data.Slab;
 import com.github.jenya705.mcapi.block.data.Stairs;
 import com.github.jenya705.mcapi.error.FieldSetterNotExistException;
+import com.github.jenya705.mcapi.inventory.InventoryHolder;
+import com.github.jenya705.mcapi.inventory.InventoryItemStack;
 import com.github.jenya705.mcapi.module.mapper.Mapper;
-import com.github.jenya705.mcapi.rest.block.RestConnection;
+import com.github.jenya705.mcapi.rest.block.RestRedstoneWireConnection;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -36,11 +38,16 @@ public class BlockDataModuleImpl extends AbstractApplicationModule implements Bl
                 .field("stairsShape", Stairs.class, Shape.class, Stairs::setShape)
                 .field("power", Powerable.class, boolean.class, Powerable::setPowered)
                 .field("powerLevel", LevelPowerable.class, int.class, LevelPowerable::setPower)
-                .field("connection", RedstoneWire.class, RestConnection.class, (wire, connection) ->
+                .field("connection", RedstoneWire.class, RestRedstoneWireConnection.class, (wire, connection) ->
                         wire.setConnection(
                                 BlockFace.valueOf(connection.getDirection().toUpperCase(Locale.ROOT)),
                                 RedstoneWire.Connection.valueOf(connection.getConnection().toUpperCase(Locale.ROOT))
                         )
+                )
+                .field("item", InventoryHolder.class, InventoryItemStack.class, (inventoryHolder, itemStack) ->
+                        inventoryHolder
+                                .getInventory()
+                                .setItem(itemStack.getIndex(), itemStack)
                 )
         ;
     }

@@ -32,6 +32,11 @@ public class BukkitCampfireInventoryWrapper implements Inventory {
         return BukkitWrapper.itemStack(state().getItem(item));
     }
 
+    @Override
+    public void setItem(int item, ItemStack itemStack) {
+        state().setItem(item, BukkitWrapper.itemStack(itemStack));
+    }
+
     private org.bukkit.block.Campfire state() {
         return state.state();
     }

@@ -11,4 +11,6 @@ public interface Inventory {
 
     ItemStack getItem(int item);
 
+    void setItem(int item, ItemStack itemStack);
+
 }

@@ -12,13 +12,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RestConnection {
+public class RestRedstoneWireConnection {
 
     private String direction;
     private String connection;
 
-    public static RestConnection from(BlockFace face, RedstoneWire.Connection connection) {
-        return new RestConnection(
+    public static RestRedstoneWireConnection from(BlockFace face, RedstoneWire.Connection connection) {
+        return new RestRedstoneWireConnection(
                 face.name(),
                 connection.name()
         );
