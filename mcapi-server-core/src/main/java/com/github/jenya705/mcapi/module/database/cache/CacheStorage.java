@@ -41,10 +41,7 @@ public interface CacheStorage {
         return Optional.ofNullable(getCachedPermissions(botId))
                 .flatMap(collection -> collection
                         .stream()
-                        .filter(it -> {
-                            System.out.println(permission + " " + it.getPermission() + " " + permission.matches(it.getPermission()) + " " + Objects.equals(it.getTarget(), target));
-                            return permission.matches(it.getPermission()) && Objects.equals(it.getTarget(), target);
-                        })
+                        .filter(it -> permission.matches(it.getPermission()) && Objects.equals(it.getTarget(), target))
                         .findAny()
                 )
                 .orElse(null);

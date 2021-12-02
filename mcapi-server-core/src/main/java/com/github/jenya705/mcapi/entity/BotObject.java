@@ -27,15 +27,9 @@ public class BotObject implements AbstractBot {
         BotPermissionEntity permissionEntity =
                 scriptStorage.findPermission(entity.getId(), permission, target);
         if (permissionEntity == null) {
-            if (target == null || target.equals(BotPermissionEntity.identityTarget)) {
-                PermissionEntity storagePermission = storage.getPermission(permission);
-                return storagePermission != null && storagePermission.isEnabled();
-            }
-            else {
-                return hasPermission(permission);
-            }
+            PermissionEntity storagePermission = storage.getPermission(permission);
+            return storagePermission != null && storagePermission.isEnabled();
         }
-        System.out.println(permissionEntity);
         return permissionEntity.isToggled();
     }
 
