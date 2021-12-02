@@ -5,6 +5,7 @@ import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.bot.create.CreateBotCommand;
 import com.github.jenya705.mcapi.command.bot.delete.DeleteBotCommand;
 import com.github.jenya705.mcapi.command.bot.list.ListBotCommand;
+import com.github.jenya705.mcapi.command.bot.permission.give.PermissionGiveBotCommand;
 import com.github.jenya705.mcapi.command.bot.permission.list.PermissionListBotCommand;
 import com.github.jenya705.mcapi.command.link.links.LinksCommand;
 import com.github.jenya705.mcapi.command.link.unlink.UnlinkCommand;
@@ -44,6 +45,7 @@ public class RootCommand extends AbstractApplicationModule implements Supplier<C
                         .leaf("delete", new DeleteBotCommand(app()))
                         .branch("permission", permissionBranch -> permissionBranch
                                 .leaf("list", new PermissionListBotCommand(app()))
+                                .leaf("give", new PermissionGiveBotCommand(app()))
                         )
                 )
                 .branch("tunnel", branch -> branch

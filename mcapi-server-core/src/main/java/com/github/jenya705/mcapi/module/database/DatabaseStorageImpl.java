@@ -200,6 +200,7 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
                             botId,
                             permission,
                             target,
+                            false,
                             storageModule.getPermission(permission).isEnabled()
                     )
             ));
@@ -360,7 +361,8 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
                 permissionEntity.getPermission(),
                 realTarget.getMostSignificantBits(),
                 realTarget.getLeastSignificantBits(),
-                permissionEntity.isToggled()
+                permissionEntity.isToggled(),
+                permissionEntity.isRegex()
         );
         cache().cache(permissionEntity);
     }
@@ -425,6 +427,7 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
                 realTarget.getMostSignificantBits(),
                 realTarget.getLeastSignificantBits(),
                 permissionEntity.isToggled(),
+                permissionEntity.isRegex(),
                 permissionEntity.isToggled()
         );
         cache().cache(permissionEntity);

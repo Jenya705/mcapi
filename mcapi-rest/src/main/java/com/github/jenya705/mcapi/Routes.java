@@ -20,6 +20,8 @@ public class Routes {
 
     public final Route KICK_PLAYER_SELECTOR = Route.delete("/player/{selector}/kick");
 
+    public final Route KILL_PLAYER_SELECTOR = Route.delete("/player/{selector}/kill");
+
     public final Route PLAYER_PERMISSION = Route.get("/player/{id}/permission/{permission}");
 
     public final Route PLAYER_INVENTORY = Route.get("/player/{id}/inventory");

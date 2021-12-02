@@ -11,6 +11,7 @@ import com.github.jenya705.mcapi.entity.BotPermissionEntity;
 import com.github.jenya705.mcapi.entity.event.EntityLinkEvent;
 import com.github.jenya705.mcapi.entity.event.EntityUnlinkEvent;
 import com.github.jenya705.mcapi.error.*;
+import com.github.jenya705.mcapi.event.QuitEvent;
 import com.github.jenya705.mcapi.form.FormComponent;
 import com.github.jenya705.mcapi.form.FormPlatformProvider;
 import com.github.jenya705.mcapi.form.component.*;
@@ -28,16 +29,12 @@ import com.github.jenya705.mcapi.util.MultivaluedMapImpl;
 import com.github.jenya705.mcapi.util.ReactiveUtils;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Stream;
 
 /**
  * @author Jenya705
  */
 public class LinkingModuleImpl extends AbstractApplicationModule implements LinkingModule {
-
-    private final ExecutorService async = Executors.newSingleThreadExecutor();
 
     private LinkingModuleConfig config;
 
@@ -61,6 +58,8 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
                         .getConfig()
                         .required("linking")
         );
+        eventLoop() // not need to send anything because this event can listened by bot
+                .handler(QuitEvent.class, p -> links.remove(p.getPlayer().getUuid()));
     }
 
     @Override
@@ -187,14 +186,12 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
             databaseModule
                     .storage()
                     .delete(link);
-            async.submit(() ->
-                    eventTunnel()
-                            .getClients()
-                            .stream()
-                            .filter(it -> it.getOwner().getEntity().getId() == id)
-                            .filter(it -> it.isSubscribed(RestUnlinkEvent.type))
-                            .forEach(it -> it.send(new EntityUnlinkEvent(player)))
-            );
+            eventTunnel()
+                    .getClients()
+                    .stream()
+                    .filter(it -> it.getOwner().getEntity().getId() == id)
+                    .filter(it -> it.isSubscribed(RestUnlinkEvent.type))
+                    .forEach(it -> it.send(new EntityUnlinkEvent(player)));
         });
     }
 
@@ -231,27 +228,25 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
         }
         if (linkObject == null) return;
         LinkObject finalLinkObject = linkObject;
-        async.submit(() ->
-                eventTunnel()
-                        .getClients()
-                        .stream()
-                        .filter(client -> client.getOwner().getEntity().getId() == finalLinkObject.getId())
-                        .filter(client -> client.isSubscribed(RestLinkEvent.type))
-                        .forEach(client -> client.send(
-                                new EntityLinkEvent(
-                                        !enabled,
-                                        player,
-                                        finalLinkObject
-                                                .getOptionalPermissions()
-                                                .entrySet()
-                                                .stream()
-                                                .filter(it -> !it.getValue())
-                                                .map(Map.Entry::getKey)
-                                                .toArray(String[]::new)
-                                )
-                        ))
-        );
         worker().invoke(() -> {
+            eventTunnel()
+                    .getClients()
+                    .stream()
+                    .filter(client -> client.getOwner().getEntity().getId() == finalLinkObject.getId())
+                    .filter(client -> client.isSubscribed(RestLinkEvent.type))
+                    .forEach(client -> client.send(
+                            new EntityLinkEvent(
+                                    !enabled,
+                                    player,
+                                    finalLinkObject
+                                            .getOptionalPermissions()
+                                            .entrySet()
+                                            .stream()
+                                            .filter(it -> !it.getValue())
+                                            .map(Map.Entry::getKey)
+                                            .toArray(String[]::new)
+                            )
+                    ));
             finalLinkObject
                     .getOptionalPermissions()
                     .entrySet()
@@ -354,8 +349,9 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
                 .storage()
                 .upsert(new BotPermissionEntity(
                         linkObject.getId(),
-                        permission,
+                        BotPermissionEntity.toRegex(permission),
                         player.getUuid(),
+                        false,
                         true
                 ));
     }

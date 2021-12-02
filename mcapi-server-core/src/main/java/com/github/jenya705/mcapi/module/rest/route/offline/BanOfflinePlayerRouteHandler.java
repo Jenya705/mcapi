@@ -10,6 +10,7 @@ import com.github.jenya705.mcapi.module.rest.route.AbstractRouteHandler;
 import com.github.jenya705.mcapi.module.selector.SelectorProvider;
 import com.github.jenya705.mcapi.module.web.Request;
 import com.github.jenya705.mcapi.module.web.Response;
+import com.github.jenya705.mcapi.permission.Permissions;
 import com.github.jenya705.mcapi.util.Selector;
 
 /**
@@ -33,6 +34,7 @@ public class BanOfflinePlayerRouteHandler extends AbstractRouteHandler {
                                 request.paramOrException("selector"),
                                 bot
                         );
+        bot.needPermission(Permissions.PLAYER_BAN, offlinePlayers);
         TypedMessage message = request
                 .bodyOrException(TypedMessage.class);
         offlinePlayers.forEach(player -> MessageUtils.ban(player, message));

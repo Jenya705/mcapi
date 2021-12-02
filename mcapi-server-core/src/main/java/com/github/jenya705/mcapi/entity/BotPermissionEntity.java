@@ -24,12 +24,14 @@ public class BotPermissionEntity {
     private int botId;
     private String permission;
     private UUID target;
+    private boolean regex;
     private boolean toggled;
 
-    public BotPermissionEntity(int botId, String permission, UUID target, boolean toggled) {
+    public BotPermissionEntity(int botId, String permission, UUID target, boolean regex, boolean toggled) {
         this.botId = botId;
         this.permission = permission;
         this.target = Objects.equals(target, identityTarget) ? null : target;
+        this.regex = regex;
         this.toggled = toggled;
     }
 
@@ -43,9 +45,25 @@ public class BotPermissionEntity {
                             resultSet.getLong("target_most"),
                             resultSet.getLong("target_least")
                     ),
+                    resultSet.getBoolean("regex"),
                     resultSet.getBoolean("toggled")
             ));
         }
         return result;
+    }
+
+    public String toLocalPermission() {
+        if (regex) {
+            return permission;
+        }
+        return permission
+                .replace("\\.", ".")
+                .replace(".*", "*");
+    }
+
+    public static String toRegex(String permission) {
+        return permission
+                .replace(".", "\\.")
+                .replace("*", ".*");
     }
 }

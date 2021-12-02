@@ -34,11 +34,13 @@ public class Permissions {
 
     public final String LINK_REQUEST = "link.request";
 
-    public final String PLAYER_COMMAND_CREATE = "player.command.create";
+    public final String COMMAND_CREATE = "command.create";
 
     public final String PLAYER_KICK = "player.kick";
 
     public final String PLAYER_BAN = "player.ban";
+
+    public final String PLAYER_KILL = "player.kill";
 
     public final String PLAYER_SEND_MESSAGE = "player.send_message";
 

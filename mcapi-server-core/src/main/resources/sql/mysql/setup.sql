@@ -15,7 +15,8 @@ create table if not exists mcapi_permissions (
 	target_most bigint not null,
 	target_least bigint not null,
 	toggled boolean not null,
-	constraint un_mcapi_permissions unique(bot_id, permission, target_most, target_least)
+	regex boolean not null,
+	constraint un_mcapi_permissions unique(bot_id, permission, target_most, target_least, regex)
 );
 
 ANOTHEROPERATION
