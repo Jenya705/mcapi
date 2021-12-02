@@ -1,8 +1,10 @@
 package com.github.jenya705.mcapi.command.bot.permission.give;
 
 import com.github.jenya705.mcapi.CommandSender;
+import com.github.jenya705.mcapi.OfflinePlayer;
 import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.command.AdditionalPermissions;
+import com.github.jenya705.mcapi.command.CommandTab;
 import com.github.jenya705.mcapi.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.data.ConfigData;
 import com.github.jenya705.mcapi.entity.BotEntity;
@@ -10,8 +12,11 @@ import com.github.jenya705.mcapi.entity.BotPermissionEntity;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.player.Player;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * @author Jenya705
@@ -25,6 +30,29 @@ public class PermissionGiveBotCommand extends AdvancedCommandExecutor<Permission
 
     public PermissionGiveBotCommand(ServerApplication application) {
         super(application, PermissionGiveBotArguments.class);
+        this
+                .databaseTab((sender, permission, databaseGetter) ->
+                                sender instanceof Player ?
+                                        databaseGetter
+                                                .getBotsByOwner(((Player) sender).getUuid())
+                                                .stream()
+                                                .map(BotEntity::getName)
+                                                .map(CommandTab::of)
+                                                .collect(Collectors.toList())
+                                        : null,
+                        true
+                )
+                .tab(() -> Collections.singletonList("<permission>"))
+                .tab(() -> Arrays.asList("<is_toggled>", "true", "false"))
+                .tab(() -> core()
+                        .getPlayers()
+                        .stream()
+                        .map(OfflinePlayer::getName)
+                        .collect(Collectors.toList())
+                )
+                .tab(() -> Arrays.asList("<is_token>", "true", "false"))
+                .tab(() -> Arrays.asList("<is_regex>", "true", "false"))
+        ;
     }
 
     @Override
@@ -66,8 +94,8 @@ public class PermissionGiveBotCommand extends AdvancedCommandExecutor<Permission
                             .builder()
                             .botId(bot.getId())
                             .permission(args.isRegex() ?
-                                    BotPermissionEntity.toRegex(args.getPermission()) :
-                                    args.getPermission()
+                                    args.getPermission() :
+                                    BotPermissionEntity.toRegex(args.getPermission())
                             )
                             .regex(args.isRegex())
                             .toggled(args.isToggled())

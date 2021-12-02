@@ -35,6 +35,7 @@ public class BotObject implements AbstractBot {
                 return hasPermission(permission);
             }
         }
+        System.out.println(permissionEntity);
         return permissionEntity.isToggled();
     }
 

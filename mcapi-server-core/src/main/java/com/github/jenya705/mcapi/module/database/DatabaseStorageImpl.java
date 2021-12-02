@@ -184,7 +184,7 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
         BotPermissionEntity permissionEntity =
                 cache().getPermission(botId, permission, target);
         if (permissionEntity == null) {
-            permissionEntity = parseSingleElement(
+            List<BotPermissionEntity> permissionEntities =
                     BotPermissionEntity.mapResultSet(
                             databaseModule.query(
                                     findPermission,
@@ -193,8 +193,15 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
                                     realTarget.getMostSignificantBits(),
                                     realTarget.getLeastSignificantBits()
                             )
-                    )
-            );
+                    );
+            if (!permissionEntities.isEmpty()) {
+                for (BotPermissionEntity entity: permissionEntities) {
+                    permissionEntity = entity;
+                    if (Objects.equals(entity.getTarget(), target)) {
+                        break;
+                    }
+                }
+            }
             cache().cache(Objects.requireNonNullElseGet(permissionEntity, () ->
                     new BotPermissionEntity(
                             botId,

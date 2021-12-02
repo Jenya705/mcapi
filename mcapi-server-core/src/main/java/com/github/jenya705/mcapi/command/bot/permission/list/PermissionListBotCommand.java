@@ -99,7 +99,7 @@ public class PermissionListBotCommand extends AdvancedCommandExecutor<Permission
                                             config.getPermissionDisabled()
                             ),
                             "%permission_name%",
-                            permissionEntity.getPermission()
+                            permissionEntity.toLocalPermission()
                     },
                     "%page%",
                     Integer.toString(args.getPage() + 1),
