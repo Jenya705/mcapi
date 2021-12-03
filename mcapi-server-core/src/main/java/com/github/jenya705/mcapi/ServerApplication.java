@@ -115,6 +115,7 @@ public class ServerApplication {
                 KickPlayerRouteHandler.class,
                 PlayerPermissionRouteHandler.class,
                 SendMessageRouteHandler.class,
+                KillPlayerRouteHandler.class,
                 GetBotLinkedPlayersRouteHandler.class,
                 GetBotPermissionRouteHandler.class,
                 GetBotTargetPermissionRouteHandler.class,

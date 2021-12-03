@@ -36,6 +36,11 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements P
     }
 
     @Override
+    public void kill() {
+        BukkitUtils.notAsyncTask(() -> player.setHealth(0d));
+    }
+
+    @Override
     public String getName() {
         return player.getName();
     }

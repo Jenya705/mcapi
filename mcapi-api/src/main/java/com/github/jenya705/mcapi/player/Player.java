@@ -13,6 +13,8 @@ public interface Player extends CommandSender, OfflinePlayer {
 
     void kick(String reason);
 
+    void kill();
+
     Location getLocation();
 
     PlayerInventory getInventory();

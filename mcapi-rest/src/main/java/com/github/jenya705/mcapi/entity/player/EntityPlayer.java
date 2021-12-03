@@ -37,6 +37,11 @@ public class EntityPlayer implements Player {
     private PlayerAbilities abilities;
 
     @Override
+    public void kill() {
+        EntityUtils.throwEntityContextException();
+    }
+
+    @Override
     public void sendMessage(String message) {
         EntityUtils.throwEntityContextException();
     }
