@@ -25,6 +25,7 @@ public class LocalizationModuleImpl extends AbstractApplicationModule implements
         linkPermissionLocalization(Permissions.LINK_REQUEST, "Linking with you");
         linkPermissionLocalization(Permissions.PLAYER_KICK, "Kick you");
         linkPermissionLocalization(Permissions.PLAYER_BAN, "Ban you");
+        linkPermissionLocalization(Permissions.PLAYER_KILL, "Kill you");
         linkPermissionLocalization(Permissions.PLAYER_SEND_MESSAGE, "Send message to you");
         linkPermissionLocalization(Permissions.PLAYER_GET_LOCATION, "Get your location");
         linkPermissionLocalization(Permissions.PLAYER_INVENTORY_GET, "Get your inventory (not items)");
