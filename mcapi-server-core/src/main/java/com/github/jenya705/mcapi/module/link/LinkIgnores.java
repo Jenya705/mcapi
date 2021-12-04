@@ -15,6 +15,8 @@ import java.util.function.Predicate;
  */
 public class LinkIgnores extends AbstractApplicationModule {
 
+    private static final String fileName = "link-ignores.txt";
+
     private final List<Predicate<String>> truePredicates = new ArrayList<>();
     private final List<Predicate<String>> falsePredicates = new ArrayList<>();
 
@@ -24,18 +26,23 @@ public class LinkIgnores extends AbstractApplicationModule {
 
     @SneakyThrows
     public void init() {
-        String[] rules = new String(
-                core().loadSpecific("link-ignores.txt")
-        )
-                .replace("\r", "")
-                .split("\n");
-        for (String rule : rules) {
-            if (rule.startsWith("-")) {
-                falsePredicates.add(getPredicate(rule.substring(1)));
+        if (core().isExistsFile(fileName)) {
+            String[] rules = new String(
+                    core().loadSpecific(fileName)
+            )
+                    .replace("\r", "")
+                    .split("\n");
+            for (String rule : rules) {
+                if (rule.startsWith("-")) {
+                    falsePredicates.add(getPredicate(rule.substring(1)));
+                }
+                else {
+                    truePredicates.add(getPredicate(rule));
+                }
             }
-            else {
-                truePredicates.add(getPredicate(rule));
-            }
+        }
+        else {
+            core().saveSpecific(fileName, "*\n-*".getBytes());
         }
     }
 
