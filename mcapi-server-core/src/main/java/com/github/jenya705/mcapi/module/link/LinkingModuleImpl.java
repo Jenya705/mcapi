@@ -37,6 +37,7 @@ import java.util.stream.Stream;
 public class LinkingModuleImpl extends AbstractApplicationModule implements LinkingModule {
 
     private LinkingModuleConfig config;
+    private LinkIgnores linkIgnores;
 
     @Bean
     private FormPlatformProvider formProvider;
@@ -60,6 +61,8 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
         );
         eventLoop() // not need to send anything because this event can listened by bot
                 .handler(QuitEvent.class, p -> links.remove(p.getPlayer().getUuid()));
+        linkIgnores = new LinkIgnores(app());
+        linkIgnores.init();
     }
 
     @Override
@@ -308,14 +311,14 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
         );
         joinedList
                 .stream()
-                .filter(it -> storageModule.getPermission(it) == null)
+                .filter(it -> storageModule.getPermission(it) == null || linkIgnores.isIgnored(it))
                 .findAny()
                 .ifPresent(it -> {
                     throw LinkRequestPermissionNotFoundException.create(it);
                 });
         joinedList
                 .stream()
-                .filter(it -> storageModule.getPermission(it).isGlobal())
+                .filter(it -> storageModule.getPermission(it).isGlobal() || linkIgnores.isIgnored(it))
                 .findAny()
                 .ifPresent(it -> {
                     throw LinkRequestPermissionIsGlobalException.create(it);
