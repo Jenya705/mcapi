@@ -26,9 +26,10 @@ public class BukkitBlockDataRegistryImpl implements BukkitBlockDataRegistry {
         addCreator(Material.ENDER_CHEST, BukkitEnderChestWrapper::of);
         addCreator(Material.REDSTONE_WIRE, BukkitRedstoneWireWrapper::of);
         for (Material material: Material.values()) {
-            if (material.name().endsWith("STAIRS")) addCreator(material, BukkitStairsWrapper::of);
-            if (material.name().endsWith("SLAB")) addCreator(material, BukkitSlabWrapper::of);
-            if (material.name().endsWith("SHULKER_BOX")) addCreator(material, BukkitShulkerBoxWrapper::of);
+            if (material.name().endsWith("DOOR")) addCreator(material, BukkitDoorWrapper::of);
+            else if (material.name().endsWith("STAIRS")) addCreator(material, BukkitStairsWrapper::of);
+            else if (material.name().endsWith("SLAB")) addCreator(material, BukkitSlabWrapper::of);
+            else if (material.name().endsWith("SHULKER_BOX")) addCreator(material, BukkitShulkerBoxWrapper::of);
         }
     }
 

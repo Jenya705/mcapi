@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi;
 
 import com.github.jenya705.mcapi.block.*;
+import com.github.jenya705.mcapi.block.data.Door;
 import com.github.jenya705.mcapi.block.data.RedstoneWire;
 import com.github.jenya705.mcapi.block.data.Slab;
 import com.github.jenya705.mcapi.enchantment.BukkitEnchantmentWrapper;
@@ -121,6 +122,10 @@ public class BukkitWrapper {
         return RedstoneWire.Connection.valueOf(connection.name());
     }
 
+    public Door.Hinge hinge(org.bukkit.block.data.type.Door.Hinge hinge) {
+        return Door.Hinge.valueOf(hinge.name());
+    }
+
     public org.bukkit.block.data.type.RedstoneWire.Connection connection(RedstoneWire.Connection connection) {
         return org.bukkit.block.data.type.RedstoneWire.Connection.valueOf(connection.name());
     }
@@ -140,4 +145,9 @@ public class BukkitWrapper {
     public org.bukkit.block.data.type.Slab.Type slabType(Slab.SlabType type) {
         return org.bukkit.block.data.type.Slab.Type.valueOf(type.name());
     }
+
+    public org.bukkit.block.data.type.Door.Hinge hinge(Door.Hinge hinge) {
+        return org.bukkit.block.data.type.Door.Hinge.valueOf(hinge.name());
+    }
+
 }

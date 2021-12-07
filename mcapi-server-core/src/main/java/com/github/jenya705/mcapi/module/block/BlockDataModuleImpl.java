@@ -3,6 +3,7 @@ package com.github.jenya705.mcapi.module.block;
 import com.github.jenya705.mcapi.AbstractApplicationModule;
 import com.github.jenya705.mcapi.Bean;
 import com.github.jenya705.mcapi.block.*;
+import com.github.jenya705.mcapi.block.data.Door;
 import com.github.jenya705.mcapi.block.data.RedstoneWire;
 import com.github.jenya705.mcapi.block.data.Slab;
 import com.github.jenya705.mcapi.block.data.Stairs;
@@ -38,6 +39,8 @@ public class BlockDataModuleImpl extends AbstractApplicationModule implements Bl
                 .field("stairsShape", Stairs.class, Shape.class, Stairs::setShape)
                 .field("power", Powerable.class, boolean.class, Powerable::setPowered)
                 .field("powerLevel", LevelPowerable.class, int.class, LevelPowerable::setPower)
+                .field("open", Openable.class, boolean.class, Openable::setOpen)
+                .field("hinge", Door.class, Door.Hinge.class, Door::setHinge)
                 .field("connection", RedstoneWire.class, RestRedstoneWireConnection.class, (wire, connection) ->
                         wire.setConnection(
                                 BlockFace.valueOf(connection.getDirection().toUpperCase(Locale.ROOT)),

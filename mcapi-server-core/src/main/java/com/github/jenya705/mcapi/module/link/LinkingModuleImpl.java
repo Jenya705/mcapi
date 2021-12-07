@@ -318,7 +318,7 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
                 });
         joinedList
                 .stream()
-                .filter(it -> storageModule.getPermission(it).isGlobal() || linkIgnores.isIgnored(it))
+                .filter(it -> storageModule.getPermission(it).isGlobal())
                 .findAny()
                 .ifPresent(it -> {
                     throw LinkRequestPermissionIsGlobalException.create(it);
