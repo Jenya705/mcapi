@@ -1,11 +1,22 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
+plugins {
+    id "com.github.johnrengelman.shadow" version "7.0.0"
+}
+
 subprojects {
 
     apply plugin: 'java'
+    apply plugin: 'com.github.johnrengelman.shadow'
 
     group 'com.github.jenya705'
     version '1.0'
+
+    shadowJar {
+        if (project.hasProperty("dir")) {
+            destinationDir(new File((String) project.getProperties().get("dir")))
+        }
+    }
 
     repositories {
         mavenCentral()

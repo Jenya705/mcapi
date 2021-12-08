@@ -1,16 +1,6 @@
-plugins {
-    id 'com.github.johnrengelman.shadow' version '6.0.0'
-}
-
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(16)
-    }
-}
-
-shadowJar {
-    if (project.hasProperty("dir")) {
-        destinationDir(new File((String) project.getProperties().get("dir")))
     }
 }
 
