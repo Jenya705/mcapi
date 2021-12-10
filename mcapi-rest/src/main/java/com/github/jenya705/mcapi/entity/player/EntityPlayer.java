@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.entity.player;
 
 import com.github.jenya705.mcapi.Location;
+import com.github.jenya705.mcapi.Vector3;
 import com.github.jenya705.mcapi.entity.EntityUtils;
 import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.inventory.PlayerInventory;
@@ -65,6 +66,11 @@ public class EntityPlayer implements Player {
     @Override
     public void kick(String reason) {
         EntityUtils.throwEntityContextException();
+    }
+
+    @Override
+    public Vector3 getVelocity() {
+        return null;
     }
 
     @Override

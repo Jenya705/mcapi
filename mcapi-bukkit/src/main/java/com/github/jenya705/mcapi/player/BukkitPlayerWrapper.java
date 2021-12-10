@@ -1,9 +1,6 @@
 package com.github.jenya705.mcapi.player;
 
-import com.github.jenya705.mcapi.BukkitCommandSenderWrapper;
-import com.github.jenya705.mcapi.BukkitUtils;
-import com.github.jenya705.mcapi.BukkitWrapper;
-import com.github.jenya705.mcapi.Location;
+import com.github.jenya705.mcapi.*;
 import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.inventory.PlayerInventory;
 import net.kyori.adventure.text.Component;
@@ -38,6 +35,11 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements P
     @Override
     public void kill() {
         BukkitUtils.notAsyncTask(() -> player.setHealth(0d));
+    }
+
+    @Override
+    public Vector3 getVelocity() {
+        return BukkitWrapper.vector(player.getVelocity());
     }
 
     @Override

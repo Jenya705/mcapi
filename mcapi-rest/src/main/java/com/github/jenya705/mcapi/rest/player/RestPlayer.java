@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi.rest.player;
 
+import com.github.jenya705.mcapi.Vector3;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.rest.RestLocation;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ public class RestPlayer {
     private UUID uuid;
     private String type;
     private RestLocation location;
+    private Vector3 velocity;
     private float yaw;
     private float pitch;
     private String gameMode;
@@ -43,6 +45,7 @@ public class RestPlayer {
                 player.getUuid(),
                 player.getType(),
                 RestLocation.from(player.getLocation()),
+                player.getVelocity(),
                 player.getYaw(),
                 player.getPitch(),
                 player.getGameMode().name(),

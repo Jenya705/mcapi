@@ -39,6 +39,14 @@ public class BukkitWrapper {
         return BukkitOfflinePlayerWrapper.of(player);
     }
 
+    public Vector3 vector(org.bukkit.util.Vector vector) {
+        return new Vector3(
+                vector.getX(),
+                vector.getY(),
+                vector.getZ()
+        );
+    }
+
     public Player player(org.bukkit.entity.Player player) {
         return BukkitPlayerWrapper.of(player);
     }
