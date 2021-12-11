@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi.entity.player;
 
+import com.github.jenya705.mcapi.BoundingBox;
 import com.github.jenya705.mcapi.Location;
 import com.github.jenya705.mcapi.Vector3;
 import com.github.jenya705.mcapi.entity.EntityUtils;
@@ -70,6 +71,11 @@ public class EntityPlayer implements Player {
 
     @Override
     public Vector3 getVelocity() {
+        return null;
+    }
+
+    @Override
+    public BoundingBox getBoundingBox() {
         return null;
     }
 

@@ -10,16 +10,32 @@ import lombok.ToString;
 @Getter
 @ToString
 @AllArgsConstructor
-public class Vector3 {
+public final class Vector3 {
 
-    private static final double epsilon = 1 / 1e6;
+    private static final double epsilon = 1e-6;
 
     private final double x;
     private final double y;
     private final double z;
 
+    public Vector3(Vector3 other) {
+        this(other.x, other.y, other.z);
+    }
+
     public Vector3() {
         this(0, 0, 0);
+    }
+
+    public static Vector3 of(double x, double y, double z) {
+        return new Vector3(x, y, z);
+    }
+
+    public static Vector3 zero() {
+        return new Vector3();
+    }
+
+    public Vector3 copy() {
+        return new Vector3(this);
     }
 
     public Vector3 add(Vector3 other) {

@@ -3,6 +3,8 @@ package com.github.jenya705.mcapi;
 import com.github.jenya705.mcapi.world.World;
 import lombok.AllArgsConstructor;
 
+import java.util.Objects;
+
 /**
  * @author Jenya705
  */
@@ -33,5 +35,13 @@ public class BukkitLocationWrapper implements Location {
     @Override
     public World getWorld() {
         return BukkitWrapper.world(location.getWorld());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Location other)) return false;
+        if (obj == this) return true;
+        return Objects.equals(other.getWorld(), getWorld()) &&
+                Objects.equals(asVector(), other.asVector());
     }
 }

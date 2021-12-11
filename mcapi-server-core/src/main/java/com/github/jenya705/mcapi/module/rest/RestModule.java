@@ -137,6 +137,7 @@ public class RestModule extends AbstractApplicationModule {
                 .tunnelJsonSerializer(ShulkerBox.class, RestShulkerBox::from)
                 .tunnelJsonSerializer(RedstoneWire.class, RestRedstoneWire::from)
                 .tunnelJsonSerializer(Door.class, RestDoor::from)
+                .tunnelJsonSerializer(BoundingBox.class, RestBoundingBox::from)
                 .jsonDeserializer(Command.class, new ApiCommandDeserializer(commandModule))
                 .jsonSerializer(Component.class, new ComponentSerializer())
                 .tunnelJsonDeserializer(ItemStack.class, RestItemStack.class, this::parseItemStack)

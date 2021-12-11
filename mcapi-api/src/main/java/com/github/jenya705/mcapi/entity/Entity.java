@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi.entity;
 
+import com.github.jenya705.mcapi.BoundingBox;
 import com.github.jenya705.mcapi.Location;
 import com.github.jenya705.mcapi.UUIDHolder;
 import com.github.jenya705.mcapi.Vector3;
@@ -16,5 +17,7 @@ public interface Entity extends UUIDHolder {
     float getPitch();
 
     Vector3 getVelocity();
+
+    BoundingBox getBoundingBox();
 
 }

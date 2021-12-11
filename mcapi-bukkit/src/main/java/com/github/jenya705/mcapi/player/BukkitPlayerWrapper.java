@@ -43,6 +43,11 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements P
     }
 
     @Override
+    public BoundingBox getBoundingBox() {
+        return BukkitWrapper.boundingBox(player.getBoundingBox());
+    }
+
+    @Override
     public String getName() {
         return player.getName();
     }

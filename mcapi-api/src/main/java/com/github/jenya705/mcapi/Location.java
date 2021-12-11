@@ -14,4 +14,9 @@ public interface Location {
     double getZ();
 
     World getWorld();
+
+    default Vector3 asVector() {
+        return new Vector3(getX(), getY(), getZ());
+    }
+
 }

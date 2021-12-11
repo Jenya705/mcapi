@@ -47,6 +47,13 @@ public class BukkitWrapper {
         );
     }
 
+    public BoundingBox boundingBox(org.bukkit.util.BoundingBox boundingBox) {
+        return new BoundingBox(
+                vector(boundingBox.getMin()),
+                vector(boundingBox.getMax())
+        );
+    }
+
     public Player player(org.bukkit.entity.Player player) {
         return BukkitPlayerWrapper.of(player);
     }

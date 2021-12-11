@@ -32,14 +32,14 @@ public class FailureOperation {
 
     public FailureOperation ifSuccess(Supplier<Boolean> supplier) {
         if (success) {
-            return new FailureOperation(supplier.get());
+            return FailureOperation.of(supplier.get());
         }
         return this;
     }
 
     public FailureOperation ifFailed(Supplier<Boolean> supplier) {
         if (!success) {
-            return new FailureOperation(supplier.get());
+            return FailureOperation.of(supplier.get());
         }
         return this;
     }

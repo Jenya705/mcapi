@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.github.jenya705.mcapi.ApiError;
 import com.github.jenya705.mcapi.module.rest.ObjectTunnelFunction;
-import com.github.jenya705.mcapi.module.rest.json.JsonUtils;
+import com.github.jenya705.mcapi.module.rest.json.*;
 
 /**
  * @author Jenya705
@@ -26,6 +26,14 @@ public interface Mapper {
     <T> Mapper jsonSerializer(Class<? extends T> clazz, JsonSerializer<T> serializer);
 
     <T> Mapper throwableParser(Class<? extends T> clazz, ThrowableParser throwableParser);
+
+    default <T> Mapper jsonSerializer(Class<T> clazz, JsonSerializerFunction<T> serializerFunction) {
+        return jsonSerializer(clazz, new JacksonSerializer<>(clazz, serializerFunction));
+    }
+
+    default <T> Mapper jsonDeserializer(Class<T> clazz, JsonDeserializerFunction<T> deserializerFunction) {
+        return jsonDeserializer(clazz, new JacksonDeserializer<>(clazz, deserializerFunction));
+    }
 
     default <T, E> Mapper tunnelJsonDeserializer(Class<E> returnClass, Class<T> inputClass, ObjectTunnelFunction<T, ? extends E> tunnelFunction) {
         return jsonDeserializer(returnClass, JsonUtils.jacksonDeserializerTunnel(inputClass, tunnelFunction));

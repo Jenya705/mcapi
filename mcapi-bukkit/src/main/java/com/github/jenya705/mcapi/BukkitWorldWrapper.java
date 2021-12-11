@@ -7,6 +7,8 @@ import com.github.jenya705.mcapi.world.WorldDimension;
 import com.github.jenya705.mcapi.world.WorldWeather;
 import lombok.AllArgsConstructor;
 
+import java.util.Objects;
+
 /**
  * @author Jenya705
  */
@@ -63,5 +65,12 @@ public class BukkitWorldWrapper implements World {
             return WorldWeather.RAIN;
         }
         return WorldWeather.CLEAR;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof World other)) return false;
+        if (obj == this) return true;
+        return Objects.equals(getName(), other.getName());
     }
 }

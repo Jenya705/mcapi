@@ -28,15 +28,19 @@ public class BukkitApplication extends JavaPlugin implements Supplier<ServerAppl
     private ServerApplication application;
 
     @Override
-    public void onEnable() {
+    public void onLoad() {
         BukkitUtils.setPlugin(this);
         application = new ServerApplication();
         application.addClass(BukkitServerCore.class);
         application.addClass(BukkitServerEventHandler.class);
         application.addClass(BukkitOfflinePlayerStorageImpl.class);
         paperFeatures();
-        permissionManager();
         application.addBean(this);
+    }
+
+    @Override
+    public void onEnable() {
+        permissionManager();
         application.start();
     }
 
