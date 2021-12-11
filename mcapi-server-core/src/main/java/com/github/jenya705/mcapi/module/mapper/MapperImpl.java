@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.github.jenya705.mcapi.ApiError;
+import com.github.jenya705.mcapi.Vector3;
 import com.github.jenya705.mcapi.entity.EntityError;
 import com.github.jenya705.mcapi.module.rest.json.JacksonSerializer;
 import com.github.jenya705.mcapi.module.rest.json.JsonUtils;
@@ -20,8 +21,6 @@ public class MapperImpl implements Mapper, JacksonProvider {
 
     private static final ApiError defaultError = new EntityError(0, 500, null, "Some bad happened");
 
-    private static final double epsilon = 1e4;
-
     private final ObjectMapper json = new ObjectMapper();
     private final Map<Class<?>, RawDeserializer<?>> rawDeserializers = new CacheClassMap<>();
     private final Map<Class<?>, ThrowableParser> throwableParsers = new CacheClassMap<>();
@@ -29,7 +28,7 @@ public class MapperImpl implements Mapper, JacksonProvider {
     private static double normalizeDouble(double num) {
         long integerPart = (long) num;
         double fractionPart = num - integerPart;
-        return integerPart + Math.round(fractionPart * epsilon) / epsilon;
+        return integerPart + Math.round(fractionPart / Vector3.epsilon) * Vector3.epsilon;
     }
 
     private static float normalizeFloat(float num) {

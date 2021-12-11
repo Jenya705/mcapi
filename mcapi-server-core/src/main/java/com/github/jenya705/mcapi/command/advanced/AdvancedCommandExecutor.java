@@ -160,7 +160,7 @@ public abstract class AdvancedCommandExecutor<T> extends AbstractApplicationModu
     }
 
     public static void handleOnError(ServerApplication application, StringfulParseError error, CommandSender sender, AdvancedCommandExecutorConfig config) {
-        if (application.isDebug() && error.causedBy() != null) {
+        if (application != null && application.isDebug() && error.causedBy() != null) {
             log.warn("Exception during command execution: ", error.causedBy());
         }
         if (error.isNotEnoughArguments()) {

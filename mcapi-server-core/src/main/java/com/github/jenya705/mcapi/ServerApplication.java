@@ -5,6 +5,7 @@ import com.github.jenya705.mcapi.event.EventLoop;
 import com.github.jenya705.mcapi.form.ComponentFormProvider;
 import com.github.jenya705.mcapi.form.component.ComponentMapParserImpl;
 import com.github.jenya705.mcapi.ignore.IgnoreManager;
+import com.github.jenya705.mcapi.log.TimerTask;
 import com.github.jenya705.mcapi.module.authorization.AuthorizationModuleImpl;
 import com.github.jenya705.mcapi.module.block.BlockDataModuleImpl;
 import com.github.jenya705.mcapi.module.bot.BotManagementImpl;
@@ -142,6 +143,7 @@ public class ServerApplication {
         log.info("Plugin is under heavy development! All api is subject to change!");
         log.info("If you find a bug, consider to issue it on https://github.com/Jenya705/mcapi/issues");
         log.info("Plugin wiki: https://github.com/Jenya705/mcapi/wiki");
+        TimerTask startTask = TimerTask.start(log, "Starting application...");
         addBean(this);
         Map<Integer, Set<Pair<Object, Method>>> initializingMethods = new HashMap<>();
         Map<Integer, Set<Pair<Object, Method>>> startupMethods = new HashMap<>();
@@ -178,6 +180,7 @@ public class ServerApplication {
         if (debug) {
             log.info("Debug mode enabled");
         }
+        startTask.complete();
     }
 
     protected void onStartMethods(Map<Integer, Set<Pair<Object, Method>>> initializingMethods, Map<Integer, Set<Pair<Object, Method>>> startupMethods, Object obj) {

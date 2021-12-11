@@ -1,14 +1,17 @@
 package com.github.jenya705.mcapi.rest;
 
 import com.github.jenya705.mcapi.BoundingBox;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.github.jenya705.mcapi.Vector3;
+import lombok.*;
+
+import java.util.Objects;
 
 /**
  * @author Jenya705
  */
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class RestBoundingBox {
@@ -28,6 +31,21 @@ public class RestBoundingBox {
                 boundingBox.getMaxCorner().getX(),
                 boundingBox.getMaxCorner().getY(),
                 boundingBox.getMaxCorner().getZ()
+        );
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof RestBoundingBox)) return false;
+        if (this == obj) return true;
+        RestBoundingBox other = (RestBoundingBox) obj;
+        return Objects.equals(asBoundingBox(), other.asBoundingBox());
+    }
+
+    public BoundingBox asBoundingBox() {
+        return new BoundingBox(
+                Vector3.of(x0, y0, z0),
+                Vector3.of(x1, y1, z1)
         );
     }
 

@@ -7,6 +7,7 @@ import com.github.jenya705.mcapi.rest.RestShortBoundingBox;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.kyori.adventure.text.Component;
 
 import java.util.UUID;
 
@@ -31,6 +32,13 @@ public class RestPlayer {
     private float absorptionAmount;
     private float airLeft;
     private float fallDistance;
+    private boolean crouching;
+    private boolean sprinting;
+    private boolean swimming;
+    private boolean flyingWithElytra;
+    private Component customName;
+    private boolean customNameVisible;
+    private boolean silent;
     private boolean falling;
     private int fireTicks;
     private int foodLevel;
@@ -56,6 +64,13 @@ public class RestPlayer {
                 player.getAbsorptionAmount(),
                 player.getAirLeft(),
                 player.getFallDistance(),
+                player.isCrouching(),
+                player.isSprinting(),
+                player.isSwimming(),
+                player.isFlyingWithElytra(),
+                player.customName(),
+                player.isCustomNameVisible(),
+                player.isSilent(),
                 player.isFalling(),
                 player.getFireTicks(),
                 player.getFoodLevel(),

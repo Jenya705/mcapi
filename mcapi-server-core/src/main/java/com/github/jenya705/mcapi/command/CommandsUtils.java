@@ -17,10 +17,10 @@ public class CommandsUtils {
 
     public String placeholderMessage(String message, String... placeholders) {
         String messageWithPlaceholders = message
-                .replaceAll("&", Character.toString(colorsChar));
+                .replace('&', colorsChar);
         for (int i = 0; i < placeholders.length; i += 2) {
             messageWithPlaceholders = messageWithPlaceholders
-                    .replaceAll(placeholders[i], placeholders[i + 1]);
+                    .replace(placeholders[i], placeholders[i + 1]);
         }
         return messageWithPlaceholders;
     }

@@ -26,13 +26,9 @@ public interface Player extends Entity, CommandSender, OfflinePlayer {
 
     float getAbsorptionAmount();
 
-    int getAirLeft();
-
     float getFallDistance();
 
     boolean isFalling();
-
-    int getFireTicks();
 
     int getFoodLevel();
 
@@ -47,6 +43,8 @@ public interface Player extends Entity, CommandSender, OfflinePlayer {
     int getXpLevel();
 
     int getXpPercentage();
+
+    boolean isClimbing();
 
     @Override
     default String getId() {

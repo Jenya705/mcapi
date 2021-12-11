@@ -177,4 +177,44 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements P
     public int getXpPercentage() {
         return Math.round(player.getExp() * 100);
     }
+
+    @Override
+    public boolean isCrouching() {
+        return player.isSneaking();
+    }
+
+    @Override
+    public boolean isSprinting() {
+        return player.isSprinting();
+    }
+
+    @Override
+    public boolean isSwimming() {
+        return player.isSwimming();
+    }
+
+    @Override
+    public boolean isFlyingWithElytra() {
+        return player.isGliding();
+    }
+
+    @Override
+    public Component customName() {
+        return player.customName();
+    }
+
+    @Override
+    public boolean isCustomNameVisible() {
+        return player.isCustomNameVisible();
+    }
+
+    @Override
+    public boolean isSilent() {
+        return player.isSilent();
+    }
+
+    @Override
+    public boolean isClimbing() {
+        return player.isClimbing();
+    }
 }

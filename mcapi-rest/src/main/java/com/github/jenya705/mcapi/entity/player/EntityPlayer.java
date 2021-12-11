@@ -139,6 +139,46 @@ public class EntityPlayer implements Player {
         return 0;
     }
 
+    @Override
+    public boolean isClimbing() {
+        return false;
+    }
+
+    @Override
+    public boolean isCrouching() {
+        return false;
+    }
+
+    @Override
+    public boolean isSprinting() {
+        return false;
+    }
+
+    @Override
+    public boolean isSwimming() {
+        return false;
+    }
+
+    @Override
+    public boolean isFlyingWithElytra() {
+        return false;
+    }
+
+    @Override
+    public Component customName() {
+        return null;
+    }
+
+    @Override
+    public boolean isCustomNameVisible() {
+        return false;
+    }
+
+    @Override
+    public boolean isSilent() {
+        return false;
+    }
+
     public RestPlayer rest() {
         return RestPlayer.from(this);
     }

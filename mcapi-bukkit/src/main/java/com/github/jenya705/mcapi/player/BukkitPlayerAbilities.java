@@ -28,7 +28,7 @@ public class BukkitPlayerAbilities implements PlayerAbilities {
 
     @Override
     public float getWalkSpeed() {
-        return player.getWalkSpeed();
+        return player.getWalkSpeed() / 2f; // Bukkit is doubling this value, idk why
     }
 
     @Override
@@ -44,6 +44,6 @@ public class BukkitPlayerAbilities implements PlayerAbilities {
 
     @Override
     public float getFlySpeed() {
-        return player.getFlySpeed();
+        return player.getFlySpeed() / 2f; // Bukkit is doubling this value, idk why
     }
 }

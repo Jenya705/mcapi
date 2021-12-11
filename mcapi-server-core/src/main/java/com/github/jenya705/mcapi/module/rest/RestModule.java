@@ -114,7 +114,6 @@ public class RestModule extends AbstractApplicationModule {
                 .tunnelJsonSerializer(LinkRequest.class, RestLinkRequest::from)
                 .tunnelJsonSerializer(Location.class, RestLocation::from)
                 .tunnelJsonSerializer(OfflinePlayer.class, RestOfflinePlayer::from)
-                .tunnelJsonSerializer(Player.class, RestPlayer::from)
                 .tunnelJsonSerializer(SubscribeRequest.class, RestSubscribeRequest::from)
                 .tunnelJsonSerializer(EventTunnelAuthorizationRequest.class, RestEventTunnelAuthorizationRequest::from)
                 .tunnelJsonSerializer(Permission.class, RestPermission::from)
@@ -131,13 +130,24 @@ public class RestModule extends AbstractApplicationModule {
                 .tunnelJsonSerializer(EnderChest.class, RestEnderChest::from)
                 .tunnelJsonSerializer(Stairs.class, RestStairs::from)
                 .tunnelJsonSerializer(Slab.class, RestSlab::from)
-                .tunnelJsonSerializer(PlayerAbilities.class, RestPlayerAbilities::from)
                 .tunnelJsonSerializer(Enchantment.class, RestEnchantment::from)
                 .tunnelJsonSerializer(ItemEnchantment.class, RestItemEnchantment::from)
                 .tunnelJsonSerializer(ShulkerBox.class, RestShulkerBox::from)
                 .tunnelJsonSerializer(RedstoneWire.class, RestRedstoneWire::from)
                 .tunnelJsonSerializer(Door.class, RestDoor::from)
                 .tunnelJsonSerializer(BoundingBox.class, RestBoundingBox::from)
+                .tunnelDefaultJsonSerializer(
+                        Player.class,
+                        RestPlayer.class,
+                        RestDefaults.player,
+                        RestPlayer::from
+                )
+                .tunnelDefaultJsonSerializer(
+                        PlayerAbilities.class,
+                        RestPlayerAbilities.class,
+                        RestDefaults.playerAbilities,
+                        RestPlayerAbilities::from
+                )
                 .jsonDeserializer(Command.class, new ApiCommandDeserializer(commandModule))
                 .jsonSerializer(Component.class, new ComponentSerializer())
                 .tunnelJsonDeserializer(ItemStack.class, RestItemStack.class, this::parseItemStack)
