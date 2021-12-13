@@ -62,4 +62,6 @@ public class Routes {
 
     public final Route PLAYER_ENDER_CHEST_ITEM = Route.get("/player/{id}/ender/{item}");
 
+    public final Route ENTITY = Route.get("/entity/{id}");
+
 }

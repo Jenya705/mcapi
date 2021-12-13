@@ -136,6 +136,7 @@ public class RestModule extends AbstractApplicationModule {
                 .tunnelJsonSerializer(RedstoneWire.class, RestRedstoneWire::from)
                 .tunnelJsonSerializer(Door.class, RestDoor::from)
                 .tunnelJsonSerializer(BoundingBox.class, RestBoundingBox::from)
+                .tunnelJsonSerializer(Piston.class, RestPiston::from)
                 .tunnelDefaultJsonSerializer(
                         Player.class,
                         RestPlayer.class,

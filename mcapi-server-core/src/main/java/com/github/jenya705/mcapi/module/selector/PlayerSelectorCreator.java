@@ -6,14 +6,11 @@ import com.github.jenya705.mcapi.error.PlayerNotFoundException;
 import com.github.jenya705.mcapi.player.Player;
 
 import java.util.Collection;
-import java.util.Random;
 
 /**
  * @author Jenya705
  */
 public class PlayerSelectorCreator extends MapSelectorCreator<Player, DefaultSelectorCreatorData> implements BaseCommon {
-
-    private final Random random = new Random();
 
     private final ServerApplication application;
 

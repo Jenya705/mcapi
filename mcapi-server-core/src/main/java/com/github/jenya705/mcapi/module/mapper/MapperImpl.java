@@ -2,13 +2,12 @@ package com.github.jenya705.mcapi.module.mapper;
 
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.github.jenya705.mcapi.ApiError;
 import com.github.jenya705.mcapi.Vector3;
 import com.github.jenya705.mcapi.entity.EntityError;
-import com.github.jenya705.mcapi.module.rest.json.JacksonSerializer;
-import com.github.jenya705.mcapi.module.rest.json.JsonUtils;
 import com.github.jenya705.mcapi.util.CacheClassMap;
 import lombok.SneakyThrows;
 
@@ -26,6 +25,9 @@ public class MapperImpl implements Mapper, JacksonProvider {
     private final Map<Class<?>, ThrowableParser> throwableParsers = new CacheClassMap<>();
 
     private static double normalizeDouble(double num) {
+        if (!Double.isFinite(num)) {
+            throw new IllegalArgumentException("Num is NaN or Infinite");
+        }
         long integerPart = (long) num;
         double fractionPart = num - integerPart;
         return integerPart + Math.round(fractionPart / Vector3.epsilon) * Vector3.epsilon;
@@ -35,22 +37,19 @@ public class MapperImpl implements Mapper, JacksonProvider {
         return (float) normalizeDouble(num);
     }
 
-    private static double doubleParse(String s) {
-        return normalizeDouble(Double.parseDouble(s));
-    }
-
-    private static boolean booleanParse(String s) {
-        if (s.equalsIgnoreCase("true")) return true;
-        if (s.equalsIgnoreCase("false")) return false;
+    private static boolean parseBoolean(String s) {
+        if (s.equals("1") || s.equalsIgnoreCase("true")) return true;
+        if (s.equals("0") || s.equalsIgnoreCase("false")) return false;
         throw new IllegalArgumentException("String is not true or false");
     }
 
-    private static char charParse(String s) {
+    private static char parseChar(String s) {
         if (s.length() == 1) return s.charAt(0);
         throw new IllegalArgumentException("String length is not 1");
     }
 
     public MapperImpl() {
+        json.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS);
         this
                 .rawDeserializer(byte.class, Byte::parseByte)
                 .rawDeserializer(short.class, Short::parseShort)
@@ -58,16 +57,15 @@ public class MapperImpl implements Mapper, JacksonProvider {
                 .rawDeserializer(long.class, Long::parseLong)
                 .rawDeserializer(float.class, Float::parseFloat)
                 .rawDeserializer(double.class, Double::parseDouble)
-                .rawDeserializer(boolean.class, MapperImpl::booleanParse)
-                .rawDeserializer(char.class, MapperImpl::charParse)
+                .rawDeserializer(boolean.class, MapperImpl::parseBoolean)
+                .rawDeserializer(char.class, MapperImpl::parseChar)
                 .rawDeserializer(Byte.class, Byte::valueOf)
                 .rawDeserializer(Short.class, Short::valueOf)
                 .rawDeserializer(Integer.class, Integer::valueOf)
                 .rawDeserializer(Long.class, Long::valueOf)
-                .rawDeserializer(Float.class, Float::valueOf)
                 .rawDeserializer(Double.class, Double::valueOf)
-                .rawDeserializer(Boolean.class, MapperImpl::booleanParse)
-                .rawDeserializer(Character.class, MapperImpl::charParse)
+                .rawDeserializer(Boolean.class, MapperImpl::parseBoolean)
+                .rawDeserializer(Character.class, MapperImpl::parseChar)
                 .rawDeserializer(String.class, s -> s)
                 .jsonSerializer(float.class, (value, generator, serializers) -> generator.writeRawValue(Float.toString(MapperImpl.normalizeFloat(value))))
                 .jsonSerializer(double.class, (value, generator, serializers) -> generator.writeRawValue(Double.toString(MapperImpl.normalizeDouble(value))))

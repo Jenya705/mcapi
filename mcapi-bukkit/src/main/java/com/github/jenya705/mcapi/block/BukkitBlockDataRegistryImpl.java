@@ -25,6 +25,8 @@ public class BukkitBlockDataRegistryImpl implements BukkitBlockDataRegistry {
         addCreator(Material.BREWING_STAND, BukkitBrewingStandWrapper::of);
         addCreator(Material.ENDER_CHEST, BukkitEnderChestWrapper::of);
         addCreator(Material.REDSTONE_WIRE, BukkitRedstoneWireWrapper::of);
+        addCreator(Material.PISTON, BukkitPistonWrapper::of);
+        addCreator(Material.STICKY_PISTON, BukkitPistonWrapper::of);
         for (Material material: Material.values()) {
             if (material.name().endsWith("DOOR")) addCreator(material, BukkitDoorWrapper::of);
             else if (material.name().endsWith("STAIRS")) addCreator(material, BukkitStairsWrapper::of);
