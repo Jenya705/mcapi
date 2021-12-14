@@ -30,7 +30,7 @@ public class RestDefaults {
             new RestPlayer(
                     null,
                     null,
-                    "player",
+                    null, // default is minecraft:player but type is necessary for entities
                     null,
                     Vector3.zero(),
                     new RestShortBoundingBox(0.6, 0.6, 1.8),

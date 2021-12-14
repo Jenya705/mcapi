@@ -27,6 +27,7 @@ import com.github.jenya705.mcapi.module.rest.route.bot.GetBotTargetPermissionRou
 import com.github.jenya705.mcapi.module.rest.route.bot.LinkRequestRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.command.CreateCommandRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.command.DeleteCommandRouteHandler;
+import com.github.jenya705.mcapi.module.rest.route.entity.GetEntityRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.offline.BanOfflinePlayerRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.offline.GetOfflinePlayerRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.player.*;
@@ -134,7 +135,8 @@ public class ServerApplication {
                 GetPlayerInventoryItemRouteHandler.class,
                 GetPlayerEnderChestRouteHandler.class,
                 GetPlayerEnderChestItemRouteHandler.class,
-                SetBlockDataFieldRouteHandler.class
+                SetBlockDataFieldRouteHandler.class,
+                GetEntityRouteHandler.class
                 // End Routes
         );
     }

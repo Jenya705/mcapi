@@ -1,8 +1,11 @@
 package com.github.jenya705.mcapi.player;
 
 import com.github.jenya705.mcapi.*;
+import com.github.jenya705.mcapi.entity.BukkitEntityWrapper;
+import com.github.jenya705.mcapi.entity.Entity;
 import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.inventory.PlayerInventory;
+import lombok.experimental.Delegate;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
@@ -16,6 +19,9 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements P
 
     private final org.bukkit.entity.Player player;
 
+    @Delegate
+    private final Entity entityDelegate;
+
     private PlayerAbilities abilities;
 
     private final PlayerInventory inventory;
@@ -24,6 +30,7 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements P
     public BukkitPlayerWrapper(org.bukkit.entity.Player player) {
         super(player);
         this.player = player;
+        entityDelegate = new BukkitEntityWrapper(player);
         enderChest = BukkitWrapper.inventory(player.getEnderChest());
         inventory = BukkitWrapper.playerInventory(player.getInventory());
     }
@@ -38,23 +45,8 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements P
     }
 
     @Override
-    public Vector3 getVelocity() {
-        return BukkitWrapper.vector(player.getVelocity());
-    }
-
-    @Override
-    public BoundingBox getBoundingBox() {
-        return BukkitWrapper.boundingBox(player.getBoundingBox());
-    }
-
-    @Override
     public String getName() {
         return player.getName();
-    }
-
-    @Override
-    public UUID getUuid() {
-        return player.getUniqueId();
     }
 
     @Override
@@ -78,11 +70,6 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements P
     }
 
     @Override
-    public Location getLocation() {
-        return BukkitWrapper.location(player.getLocation());
-    }
-
-    @Override
     public PlayerInventory getInventory() {
         return inventory;
     }
@@ -90,16 +77,6 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements P
     @Override
     public Inventory getEnderChest() {
         return enderChest;
-    }
-
-    @Override
-    public float getYaw() {
-        return player.getLocation().getYaw();
-    }
-
-    @Override
-    public float getPitch() {
-        return player.getLocation().getPitch();
     }
 
     @Override
@@ -132,12 +109,7 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements P
 
     @Override
     public boolean isFalling() {
-        return player.getFallDistance() > 0f;
-    }
-
-    @Override
-    public int getFireTicks() {
-        return player.getFireTicks();
+        return player.getFallDistance() > 0;
     }
 
     @Override
@@ -196,21 +168,6 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements P
     @Override
     public boolean isFlyingWithElytra() {
         return player.isGliding();
-    }
-
-    @Override
-    public Component customName() {
-        return player.customName();
-    }
-
-    @Override
-    public boolean isCustomNameVisible() {
-        return player.isCustomNameVisible();
-    }
-
-    @Override
-    public boolean isSilent() {
-        return player.isSilent();
     }
 
     @Override

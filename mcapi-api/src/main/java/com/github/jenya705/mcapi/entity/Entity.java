@@ -11,6 +11,8 @@ import net.kyori.adventure.text.Component;
  */
 public interface Entity extends UUIDHolder {
 
+    String getType();
+
     Location getLocation();
 
     float getYaw();
@@ -22,16 +24,6 @@ public interface Entity extends UUIDHolder {
     BoundingBox getBoundingBox();
 
     int getFireTicks();
-
-    boolean isCrouching();
-
-    boolean isSprinting();
-
-    boolean isSwimming();
-
-    boolean isFlyingWithElytra();
-
-    int getAirLeft();
 
     Component customName();
 

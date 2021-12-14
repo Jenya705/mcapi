@@ -25,10 +25,6 @@ public class DefaultEventTunnel extends WebSocketRouteContainerImpl<DefaultEvent
         return application;
     }
 
-    public DefaultEventTunnel() {
-
-    }
-
     @OnStartup
     public void start() {
         TimerTask task = TimerTask.start(log, "Starting event tunnel...");

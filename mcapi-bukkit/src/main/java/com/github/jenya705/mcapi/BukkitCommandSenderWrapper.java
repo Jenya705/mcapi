@@ -22,8 +22,6 @@ public class BukkitCommandSenderWrapper implements CommandSender {
     public String getType() {
         if (sender instanceof ConsoleCommandSender)
             return "console";
-        if (sender instanceof Player)
-            return "player";
         return "undefined";
     }
 

@@ -2,12 +2,15 @@ package com.github.jenya705.mcapi;
 
 import com.github.jenya705.mcapi.block.Block;
 import com.github.jenya705.mcapi.block.BukkitBlockWrapper;
+import com.github.jenya705.mcapi.entity.Entity;
 import com.github.jenya705.mcapi.world.World;
 import com.github.jenya705.mcapi.world.WorldDimension;
 import com.github.jenya705.mcapi.world.WorldWeather;
 import lombok.AllArgsConstructor;
 
+import java.util.Collection;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author Jenya705
@@ -65,6 +68,15 @@ public class BukkitWorldWrapper implements World {
             return WorldWeather.RAIN;
         }
         return WorldWeather.CLEAR;
+    }
+
+    @Override
+    public Collection<Entity> getEntities() {
+        return bukkitWorld
+                .getEntities()
+                .stream()
+                .map(BukkitWrapper::entity)
+                .collect(Collectors.toList());
     }
 
     @Override

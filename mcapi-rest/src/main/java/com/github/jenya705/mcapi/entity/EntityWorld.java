@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Collection;
+
 /**
  * @author Jenya705
  */
@@ -29,6 +31,12 @@ public class EntityWorld implements World {
 
     @Override
     public Block getBlock(int x, int y, int z) {
+        EntityUtils.throwEntityContextException();
+        return null;
+    }
+
+    @Override
+    public Collection<Entity> getEntities() {
         EntityUtils.throwEntityContextException();
         return null;
     }

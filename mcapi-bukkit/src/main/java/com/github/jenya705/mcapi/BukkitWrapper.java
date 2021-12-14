@@ -8,6 +8,8 @@ import com.github.jenya705.mcapi.enchantment.BukkitEnchantmentWrapper;
 import com.github.jenya705.mcapi.enchantment.BukkitItemEnchantmentWrapper;
 import com.github.jenya705.mcapi.enchantment.Enchantment;
 import com.github.jenya705.mcapi.enchantment.ItemEnchantment;
+import com.github.jenya705.mcapi.entity.BukkitEntityWrapper;
+import com.github.jenya705.mcapi.entity.Entity;
 import com.github.jenya705.mcapi.inventory.*;
 import com.github.jenya705.mcapi.player.BukkitPlayerWrapper;
 import com.github.jenya705.mcapi.player.GameMode;
@@ -54,6 +56,13 @@ public class BukkitWrapper {
         );
     }
 
+    public Entity entity(org.bukkit.entity.Entity entity) {
+        if (entity instanceof org.bukkit.entity.Player) {
+            return BukkitPlayerWrapper.of((org.bukkit.entity.Player) entity);
+        }
+        return BukkitEntityWrapper.of(entity);
+    }
+
     public Player player(org.bukkit.entity.Player player) {
         return BukkitPlayerWrapper.of(player);
     }
@@ -78,7 +87,9 @@ public class BukkitWrapper {
         org.bukkit.inventory.ItemStack bukkitItemStack = new org.bukkit.inventory.ItemStack(
                 material(itemStack.getMaterial())
         );
-        bukkitItemStack.setAmount(itemStack.getAmount() == 0 ? 1 : itemStack.getAmount());
+        bukkitItemStack.setAmount(
+                Math.max(1, Math.min(64, itemStack.getAmount()))
+        );
         if (itemStack.customName() != null) {
             org.bukkit.inventory.meta.ItemMeta bukkitItemMeta = bukkitItemStack.getItemMeta();
             bukkitItemMeta.displayName(itemStack.customName());

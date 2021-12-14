@@ -30,6 +30,16 @@ public interface Player extends Entity, CommandSender, OfflinePlayer {
 
     boolean isFalling();
 
+    boolean isCrouching();
+
+    boolean isSprinting();
+
+    boolean isSwimming();
+
+    boolean isFlyingWithElytra();
+
+    int getAirLeft();
+
     int getFoodLevel();
 
     float getFoodExhaustionLevel();

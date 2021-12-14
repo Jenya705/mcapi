@@ -3,6 +3,7 @@ package com.github.jenya705.mcapi.mock;
 import com.github.jenya705.mcapi.OfflinePlayer;
 import com.github.jenya705.mcapi.ServerCore;
 import com.github.jenya705.mcapi.command.CommandExecutor;
+import com.github.jenya705.mcapi.entity.Entity;
 import com.github.jenya705.mcapi.mock.filesystem.MockFileSystem;
 import com.github.jenya705.mcapi.mock.filesystem.MockFileSystemImpl;
 import com.github.jenya705.mcapi.player.Player;
@@ -72,6 +73,11 @@ public class MockServerCore implements ServerCore {
     @Override
     public OfflinePlayer getOfflinePlayer(UUID uuid) {
         return getPlayer(uuid);
+    }
+
+    @Override
+    public Entity getEntity(UUID uuid) {
+        return null;
     }
 
     @Override

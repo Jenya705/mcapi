@@ -2,6 +2,9 @@ package com.github.jenya705.mcapi.world;
 
 import com.github.jenya705.mcapi.Location;
 import com.github.jenya705.mcapi.block.Block;
+import com.github.jenya705.mcapi.entity.Entity;
+
+import java.util.Collection;
 
 /**
  * @author Jenya705
@@ -17,5 +20,7 @@ public interface World {
     WorldDimension getWorldDimension();
 
     WorldWeather getWorldWeather();
+
+    Collection<Entity> getEntities();
 
 }

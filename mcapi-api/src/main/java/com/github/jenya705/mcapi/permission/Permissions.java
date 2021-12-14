@@ -64,4 +64,6 @@ public class Permissions {
 
     public final String PLAYER_ENDER_CHEST_ITEM_GET = "player.get.ender.item";
 
+    public final String ENTITY_GET = "entity.get";
+
 }

@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi;
 
 import com.github.jenya705.mcapi.command.CommandExecutor;
+import com.github.jenya705.mcapi.entity.Entity;
 import com.github.jenya705.mcapi.permission.PermissionManagerHook;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.world.World;
@@ -121,6 +122,13 @@ public class BukkitServerCore extends AbstractApplicationModule implements Serve
     @Override
     public OfflinePlayer getOfflinePlayer(UUID uuid) {
         return BukkitWrapper.offlinePlayer(Bukkit.getOfflinePlayer(uuid));
+    }
+
+    @Override
+    public Entity getEntity(UUID uuid) {
+        return BukkitWrapper.entity(
+                BukkitUtils.notAsyncSupplier(() -> Bukkit.getEntity(uuid))
+        );
     }
 
     @Override

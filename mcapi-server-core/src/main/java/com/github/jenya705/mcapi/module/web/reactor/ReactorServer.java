@@ -38,6 +38,8 @@ import java.util.function.BiFunction;
 @Getter
 public class ReactorServer extends AbstractApplicationModule implements WebServer {
 
+    private static final String jsonContentType = "application/json";
+
     private final List<ReactorRouteImplementation> routeImplementations = new ArrayList<>();
     private final List<Pair<String, WebSocketRouteHandler>> webSocketRouteImplementations = new ArrayList<>();
 
@@ -140,7 +142,7 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
         }
         ReactorRequest localRequest = new ReactorRequest(this, request, body, parameters);
         ReactorResponse localResponse = new ReactorResponse(response);
-        localResponse.contentType("application/json");
+        localResponse.contentType(jsonContentType);
         try {
             handler.handle(localRequest, localResponse);
         } catch (Throwable e) {
@@ -152,7 +154,13 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
                     .status(error.getStatusCode())
                     .body(error);
         }
-        return mapper.asJson(localResponse.getBody());
+        String currentContentType = response
+                .responseHeaders()
+                .getAsString("Content-type");
+        if (jsonContentType.equals(currentContentType)) {
+            return mapper.asJson(localResponse.getBody());
+        }
+        return String.valueOf(localResponse.getBody());
     }
 
     private void webSocketRoute(Pair<String, WebSocketRouteHandler> webSocketRouteImplementation, HttpServerRoutes routes) {
@@ -211,5 +219,4 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
     private RouteParameters routeParameters(Object obj) {
         return obj instanceof RouteParameters ? (RouteParameters) obj : null;
     }
-
 }

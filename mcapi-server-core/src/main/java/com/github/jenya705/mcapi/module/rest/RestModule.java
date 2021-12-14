@@ -7,10 +7,7 @@ import com.github.jenya705.mcapi.block.data.*;
 import com.github.jenya705.mcapi.command.*;
 import com.github.jenya705.mcapi.enchantment.Enchantment;
 import com.github.jenya705.mcapi.enchantment.ItemEnchantment;
-import com.github.jenya705.mcapi.entity.AbstractBot;
-import com.github.jenya705.mcapi.entity.EntityEventTunnelAuthorizationRequest;
-import com.github.jenya705.mcapi.entity.EntityLinkRequest;
-import com.github.jenya705.mcapi.entity.EntitySubscribeRequest;
+import com.github.jenya705.mcapi.entity.*;
 import com.github.jenya705.mcapi.entity.enchantment.EntityItemEnchantment;
 import com.github.jenya705.mcapi.entity.inventory.EntityInventoryItemStack;
 import com.github.jenya705.mcapi.entity.inventory.EntityItemStack;
@@ -37,6 +34,7 @@ import com.github.jenya705.mcapi.rest.block.*;
 import com.github.jenya705.mcapi.rest.command.*;
 import com.github.jenya705.mcapi.rest.enchantment.RestEnchantment;
 import com.github.jenya705.mcapi.rest.enchantment.RestItemEnchantment;
+import com.github.jenya705.mcapi.rest.entity.RestEntity;
 import com.github.jenya705.mcapi.rest.event.*;
 import com.github.jenya705.mcapi.rest.inventory.RestInventory;
 import com.github.jenya705.mcapi.rest.inventory.RestInventoryItemStack;
@@ -96,6 +94,7 @@ public class RestModule extends AbstractApplicationModule {
                                 .orElseThrow(() -> PlayerNotFoundException.create(id))
                 )
                 .throwableParser(JsonProcessingException.class, e -> JsonDeserializeException.create())
+                .tunnelJsonSerializer(Entity.class, RestEntity::from)
                 .tunnelJsonSerializer(Command.class, RestCommand::from)
                 .tunnelJsonSerializer(CommandExecutableOption.class, RestCommandExecutableOption::from)
                 .tunnelJsonSerializer(CommandInteractionValue.class, RestCommandInteractionValue::from)

@@ -12,7 +12,7 @@ import java.util.UUID;
 public class TokenUtils {
 
     public String generateToken() {
-        return UUID.randomUUID().toString().replaceAll("-", "") +
+        return UUID.randomUUID().toString().replace("-", "") +
                 String.format("%019d", new Date().getTime());
     }
 }

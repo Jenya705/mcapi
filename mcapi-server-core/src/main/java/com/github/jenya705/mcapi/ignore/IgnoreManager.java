@@ -26,7 +26,7 @@ public class IgnoreManager extends AbstractApplicationModule {
             String[] stringRules = new String(
                     core().loadSpecific(fileName)
             )
-                    .replaceAll("\r", "")
+                    .replace("\r", "")
                     .split("\n");
             for (String stringRule : stringRules) {
                 if (stringRule.isEmpty()) continue;

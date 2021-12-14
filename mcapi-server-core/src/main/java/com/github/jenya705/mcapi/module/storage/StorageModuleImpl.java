@@ -4,12 +4,15 @@ import com.github.jenya705.mcapi.AbstractApplicationModule;
 import com.github.jenya705.mcapi.OnDisable;
 import com.github.jenya705.mcapi.OnStartup;
 import com.github.jenya705.mcapi.VanillaMaterial;
+import com.github.jenya705.mcapi.entity.EntityType;
 import com.github.jenya705.mcapi.entity.PermissionEntity;
 import com.github.jenya705.mcapi.module.config.ConfigModule;
 import com.github.jenya705.mcapi.permission.DefaultPermission;
 import com.github.jenya705.mcapi.permission.Permissions;
+import lombok.SneakyThrows;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -49,6 +52,7 @@ public class StorageModuleImpl extends AbstractApplicationModule implements Stor
                     Permissions.BLOCK_DATA_FIELD + "." + material.getKey()
             );
         }
+        addEntityPermissions();
     }
 
     @OnStartup(priority = 4)
@@ -116,6 +120,18 @@ public class StorageModuleImpl extends AbstractApplicationModule implements Stor
                         global, enabled
                 ));
             }
+        }
+    }
+
+    @SneakyThrows
+    private void addEntityPermissions() {
+        for (Field field: EntityType.class.getFields()) {
+            if (!field.getType().equals(String.class)) continue;
+            String entityType = (String) field.get(null);
+            addPermissionsIfNotExist(
+                    true, true,
+                    Permissions.ENTITY_GET + "." + entityType
+            );
         }
     }
 

@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi;
 
 import com.github.jenya705.mcapi.command.CommandExecutor;
+import com.github.jenya705.mcapi.entity.Entity;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.util.PlayerUtils;
 import com.github.jenya705.mcapi.world.World;
@@ -32,6 +33,8 @@ public interface ServerCore {
 
     OfflinePlayer getOfflinePlayer(UUID uuid);
 
+    Entity getEntity(UUID uuid);
+
     World getWorld(String id);
 
     default Optional<? extends Player> getOptionalPlayer(String name) {
@@ -44,6 +47,10 @@ public interface ServerCore {
 
     default Optional<? extends Player> getOptionalPlayerId(String id) {
         return PlayerUtils.getPlayer(id, this);
+    }
+
+    default Optional<? extends Entity> getOptionalEntity(UUID uuid) {
+        return Optional.ofNullable(getEntity(uuid));
     }
 
     default Optional<? extends OfflinePlayer> getOptionalOfflinePlayer(String name) {
