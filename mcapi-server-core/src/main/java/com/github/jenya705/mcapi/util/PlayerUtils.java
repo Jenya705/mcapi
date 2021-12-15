@@ -74,19 +74,7 @@ public class PlayerUtils {
             }
             return name;
         }
-        else if (name.length() == 32) {
-            return UUID.fromString(
-                    name.replaceFirst(
-                            "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5"
-                    )
-            );
-        }
-        else if (name.length() == 36) {
-            return UUID.fromString(name);
-        }
-        else {
-            return null;
-        }
+        return parseUuid(name);
     }
 
     public List<String> playerTabs(ServerCore core) {
@@ -99,11 +87,7 @@ public class PlayerUtils {
 
     public UUID parseUuid(String uuid) {
         if (uuid.length() == 32) {
-            return UUID.fromString(
-                    uuid.replaceFirst(
-                            "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5"
-                    )
-            );
+            return parseUUIDWithoutDashes(uuid);
         }
         else if (uuid.length() == 36) {
             return UUID.fromString(uuid);
@@ -114,4 +98,13 @@ public class PlayerUtils {
     public Optional<UUID> optionalUuid(String uuid) {
         return Optional.ofNullable(parseUuid(uuid));
     }
+
+    private UUID parseUUIDWithoutDashes(String uuid) {
+        long most = Long.parseLong(uuid, 0, 8, 16) << 32 |
+                Long.parseLong(uuid, 8, 16, 16);
+        long least = Long.parseLong(uuid, 16, 24, 16) << 32 |
+                Long.parseLong(uuid, 24, 32, 16);
+        return new UUID(most, least);
+    }
+
 }

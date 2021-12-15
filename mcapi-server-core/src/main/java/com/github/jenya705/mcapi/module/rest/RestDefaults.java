@@ -4,6 +4,7 @@ import com.github.jenya705.mcapi.Vector3;
 import com.github.jenya705.mcapi.defaults.DefaultValue;
 import com.github.jenya705.mcapi.player.GameMode;
 import com.github.jenya705.mcapi.rest.RestShortBoundingBox;
+import com.github.jenya705.mcapi.rest.entity.RestEntity;
 import com.github.jenya705.mcapi.rest.player.RestPlayer;
 import com.github.jenya705.mcapi.rest.player.RestPlayerAbilities;
 import lombok.experimental.UtilityClass;
@@ -59,4 +60,20 @@ public class RestDefaults {
                     0
             )
     );
+
+    public final DefaultValue<RestEntity> entity = DefaultValue.of(
+            new RestEntity(
+                    null,
+                    null,
+                    0,
+                    0,
+                    Vector3.zero(),
+                    new RestShortBoundingBox(0, 0, 0),
+                    0,
+                    null,
+                    false,
+                    false
+            )
+    );
+
 }

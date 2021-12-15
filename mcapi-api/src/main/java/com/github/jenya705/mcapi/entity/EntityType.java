@@ -10,4 +10,6 @@ public class EntityType {
 
     public final String PLAYER = "minecraft:player";
 
+    public final String COW = "minecraft:cow";
+
 }

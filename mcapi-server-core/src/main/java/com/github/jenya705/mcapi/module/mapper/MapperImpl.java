@@ -69,7 +69,6 @@ public class MapperImpl implements Mapper, JacksonProvider {
                 .rawDeserializer(Boolean.class, MapperImpl::parseBoolean)
                 .rawDeserializer(Character.class, MapperImpl::parseChar)
                 .rawDeserializer(String.class, s -> s)
-                .rawDeserializer(UUID.class, PlayerUtils::parseUuid)
                 .jsonSerializer(float.class, (value, generator, serializers) -> generator.writeRawValue(Float.toString(MapperImpl.normalizeFloat(value))))
                 .jsonSerializer(double.class, (value, generator, serializers) -> generator.writeRawValue(Double.toString(MapperImpl.normalizeDouble(value))))
                 .jsonSerializer(Float.class, (value, generator, serializers) -> generator.writeRawValue(Float.toString(MapperImpl.normalizeFloat(value))))

@@ -27,6 +27,8 @@ import java.util.Locale;
 @UtilityClass
 public class BukkitWrapper {
 
+    private final int minecraftNamespaceLength = "minecraft:".length();
+
     public CommandSender sender(org.bukkit.command.CommandSender sender) {
         if (sender instanceof org.bukkit.entity.Player) {
             return BukkitPlayerWrapper.of((org.bukkit.entity.Player) sender);
@@ -104,7 +106,7 @@ public class BukkitWrapper {
 
     public org.bukkit.Material material(Material material) {
         return org.bukkit.Material.valueOf(
-                material.getKey().substring("minecraft:".length()).toUpperCase(Locale.ROOT)
+                material.getKey().substring(minecraftNamespaceLength).toUpperCase(Locale.ROOT)
         );
     }
 

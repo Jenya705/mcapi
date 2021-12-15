@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
@@ -28,13 +29,15 @@ public class BukkitUtils {
         }
     }
 
+    record ValueContainer<T>(T value) {}
+
     public <T> T notAsyncSupplier(Supplier<T> supplier) {
         if (Bukkit.isPrimaryThread()) {
             return supplier.get();
         }
-        AtomicReference<T> atomicValue = new AtomicReference<>();
+        AtomicReference<ValueContainer<T>> atomicValue = new AtomicReference<>();
         Bukkit.getServer().getScheduler().runTask(plugin, () -> {
-            atomicValue.set(supplier.get());
+            atomicValue.set(new ValueContainer<>(supplier.get()));
             synchronized (atomicValue) {
                 atomicValue.notifyAll();
             }
@@ -46,11 +49,11 @@ public class BukkitUtils {
                 // ignored
             }
         }
-        T value = atomicValue.get();
+        ValueContainer<T> value = atomicValue.get();
         if (value == null) {
-            throw new IllegalArgumentException("Or supplier returns null, or bukkit server is lagging");
+            throw new IllegalArgumentException("Bukkit server is lagging");
         }
-        return value;
+        return value.value();
     }
 
 }

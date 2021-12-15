@@ -11,6 +11,7 @@ import com.github.jenya705.mcapi.entity.*;
 import com.github.jenya705.mcapi.entity.enchantment.EntityItemEnchantment;
 import com.github.jenya705.mcapi.entity.inventory.EntityInventoryItemStack;
 import com.github.jenya705.mcapi.entity.inventory.EntityItemStack;
+import com.github.jenya705.mcapi.error.BadUuidFormatException;
 import com.github.jenya705.mcapi.error.JsonDeserializeException;
 import com.github.jenya705.mcapi.error.PlayerNotFoundException;
 import com.github.jenya705.mcapi.event.*;
@@ -41,12 +42,14 @@ import com.github.jenya705.mcapi.rest.inventory.RestInventoryItemStack;
 import com.github.jenya705.mcapi.rest.inventory.RestItemStack;
 import com.github.jenya705.mcapi.rest.player.RestPlayer;
 import com.github.jenya705.mcapi.rest.player.RestPlayerAbilities;
+import com.github.jenya705.mcapi.util.PlayerUtils;
 import com.github.jenya705.mcapi.world.World;
 import net.kyori.adventure.text.Component;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -93,8 +96,12 @@ public class RestModule extends AbstractApplicationModule {
                                 .getOptionalOfflinePlayerId(id)
                                 .orElseThrow(() -> PlayerNotFoundException.create(id))
                 )
+                .rawDeserializer(UUID.class, it ->
+                        PlayerUtils
+                                .optionalUuid(it)
+                                .orElseThrow(() -> new BadUuidFormatException(it))
+                )
                 .throwableParser(JsonProcessingException.class, e -> JsonDeserializeException.create())
-                .tunnelJsonSerializer(Entity.class, RestEntity::from)
                 .tunnelJsonSerializer(Command.class, RestCommand::from)
                 .tunnelJsonSerializer(CommandExecutableOption.class, RestCommandExecutableOption::from)
                 .tunnelJsonSerializer(CommandInteractionValue.class, RestCommandInteractionValue::from)
@@ -136,6 +143,12 @@ public class RestModule extends AbstractApplicationModule {
                 .tunnelJsonSerializer(Door.class, RestDoor::from)
                 .tunnelJsonSerializer(BoundingBox.class, RestBoundingBox::from)
                 .tunnelJsonSerializer(Piston.class, RestPiston::from)
+                .tunnelDefaultJsonSerializer(
+                        Entity.class,
+                        RestEntity.class,
+                        RestDefaults.entity,
+                        RestEntity::from
+                )
                 .tunnelDefaultJsonSerializer(
                         Player.class,
                         RestPlayer.class,
