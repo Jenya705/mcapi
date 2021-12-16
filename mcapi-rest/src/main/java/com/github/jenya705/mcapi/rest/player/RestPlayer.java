@@ -48,6 +48,8 @@ public class RestPlayer {
     private RestLocation spawn;
     private int xpLevel;
     private int xpPercentage;
+    private boolean ai;
+    private boolean colliding;
 
     public static RestPlayer from(Player player) {
         return new RestPlayer(
@@ -79,7 +81,9 @@ public class RestPlayer {
                 player.getHealth(),
                 RestLocation.from(player.getSpawn()),
                 player.getXpLevel(),
-                player.getXpPercentage()
+                player.getXpPercentage(),
+                player.hasAI(),
+                player.isColliding()
         );
     }
 

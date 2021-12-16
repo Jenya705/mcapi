@@ -174,4 +174,9 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements P
     public boolean isClimbing() {
         return player.isClimbing();
     }
+
+    @Override
+    public boolean isColliding() {
+        return player.isCollidable();
+    }
 }

@@ -4,13 +4,14 @@ import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.Location;
 import com.github.jenya705.mcapi.OfflinePlayer;
 import com.github.jenya705.mcapi.entity.Entity;
+import com.github.jenya705.mcapi.entity.LivingEntity;
 import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.inventory.PlayerInventory;
 
 /**
  * @author Jenya705
  */
-public interface Player extends Entity, CommandSender, OfflinePlayer {
+public interface Player extends LivingEntity, CommandSender, OfflinePlayer {
 
     void kick(String reason);
 
@@ -34,8 +35,6 @@ public interface Player extends Entity, CommandSender, OfflinePlayer {
 
     boolean isSprinting();
 
-    boolean isSwimming();
-
     boolean isFlyingWithElytra();
 
     int getAirLeft();
@@ -46,8 +45,6 @@ public interface Player extends Entity, CommandSender, OfflinePlayer {
 
     float getFoodSaturationLevel();
 
-    float getHealth();
-
     Location getSpawn();
 
     int getXpLevel();
@@ -55,6 +52,11 @@ public interface Player extends Entity, CommandSender, OfflinePlayer {
     int getXpPercentage();
 
     boolean isClimbing();
+
+    @Override
+    default boolean hasAI() {
+        return true;
+    }
 
     @Override
     default String getId() {

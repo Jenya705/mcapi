@@ -64,4 +64,8 @@ public class Routes {
 
     public final Route ENTITY = Route.get("/entity/{id}");
 
+    public final Route REGISTER_ENTITY = Route.post("/entity");
+
+    public final Route UPDATE_ENTITY = Route.patch("/entity/{id}");
+
 }

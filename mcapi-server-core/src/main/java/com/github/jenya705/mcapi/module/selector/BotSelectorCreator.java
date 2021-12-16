@@ -12,10 +12,9 @@ import java.util.Collections;
  */
 public class BotSelectorCreator extends MapSelectorCreator<AbstractBot, DefaultSelectorCreatorData> {
 
-    private final AuthorizationModule authorizationModule;
-
     public BotSelectorCreator(ServerApplication application) {
-        authorizationModule = application.getBean(AuthorizationModule.class);
+        AuthorizationModule authorizationModule =
+                application.getBean(AuthorizationModule.class);
         this
                 .direct(
                         (data, token) ->
