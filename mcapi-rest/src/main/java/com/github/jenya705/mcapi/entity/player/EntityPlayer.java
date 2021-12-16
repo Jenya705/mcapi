@@ -179,6 +179,11 @@ public class EntityPlayer implements Player {
         return false;
     }
 
+    @Override
+    public boolean isColliding() {
+        return false;
+    }
+
     public RestPlayer rest() {
         return RestPlayer.from(this);
     }
