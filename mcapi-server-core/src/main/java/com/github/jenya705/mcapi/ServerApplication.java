@@ -13,6 +13,7 @@ import com.github.jenya705.mcapi.module.command.CommandModuleImpl;
 import com.github.jenya705.mcapi.module.config.ConfigModuleImpl;
 import com.github.jenya705.mcapi.module.database.DatabaseModuleImpl;
 import com.github.jenya705.mcapi.module.enchantment.EnchantmentStorageImpl;
+import com.github.jenya705.mcapi.module.entity.capture.EntityCapturableModuleImpl;
 import com.github.jenya705.mcapi.module.link.LinkingModuleImpl;
 import com.github.jenya705.mcapi.module.localization.LocalizationModuleImpl;
 import com.github.jenya705.mcapi.module.mapper.MapperImpl;
@@ -27,6 +28,7 @@ import com.github.jenya705.mcapi.module.rest.route.bot.GetBotTargetPermissionRou
 import com.github.jenya705.mcapi.module.rest.route.bot.LinkRequestRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.command.CreateCommandRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.command.DeleteCommandRouteHandler;
+import com.github.jenya705.mcapi.module.rest.route.entity.CaptureEntityRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.entity.GetEntityRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.offline.BanOfflinePlayerRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.offline.GetOfflinePlayerRouteHandler;
@@ -109,6 +111,7 @@ public class ServerApplication {
                 IgnoreManager.class,
                 MaterialStorageImpl.class,
                 EnchantmentStorageImpl.class,
+                EntityCapturableModuleImpl.class,
                 // Routes
                 GetPlayerLocationRouteHandler.class,
                 GetPlayerRouteHandler.class,
@@ -136,7 +139,8 @@ public class ServerApplication {
                 GetPlayerEnderChestRouteHandler.class,
                 GetPlayerEnderChestItemRouteHandler.class,
                 SetBlockDataFieldRouteHandler.class,
-                GetEntityRouteHandler.class
+                GetEntityRouteHandler.class,
+                CaptureEntityRouteHandler.class
                 // End Routes
         );
     }

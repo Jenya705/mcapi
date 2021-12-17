@@ -10,6 +10,7 @@ import com.github.jenya705.mcapi.module.rest.route.AbstractRouteHandler;
 import com.github.jenya705.mcapi.module.web.Request;
 import com.github.jenya705.mcapi.module.web.Response;
 import com.github.jenya705.mcapi.permission.Permissions;
+import com.github.jenya705.mcapi.util.PermissionUtils;
 
 import java.util.Optional;
 
@@ -41,7 +42,7 @@ public class SetBlockDataFieldRouteHandler extends AbstractRouteHandler {
                 .orElseThrow(BlockNotFoundException::create);
         request
                 .bot()
-                .needPermission(Permissions.BLOCK_DATA_FIELD + "." + block.getMaterial().getKey());
+                .needPermission(PermissionUtils.updateData(block));
         blockDataModule
                 .setField(block.getBlockData(), field, request.bodyOrException());
         response.noContent();

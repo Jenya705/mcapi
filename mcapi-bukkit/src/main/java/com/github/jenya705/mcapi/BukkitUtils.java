@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi;
 
+import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,6 +15,7 @@ import java.util.function.Supplier;
 @UtilityClass
 public class BukkitUtils {
 
+    @Getter
     private JavaPlugin plugin;
 
     public void setPlugin(JavaPlugin plugin) {

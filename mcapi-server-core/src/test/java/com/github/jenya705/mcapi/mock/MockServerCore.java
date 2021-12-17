@@ -81,6 +81,11 @@ public class MockServerCore implements ServerCore {
     }
 
     @Override
+    public Collection<? extends Entity> getEntities() {
+        return null;
+    }
+
+    @Override
     public Map<String, Object> loadConfig(String file) throws IOException {
         return fileSystem.getConfig(file);
     }

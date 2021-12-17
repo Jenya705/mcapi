@@ -4,6 +4,7 @@ import com.github.jenya705.mcapi.command.CommandExecutor;
 import com.github.jenya705.mcapi.entity.Entity;
 import com.github.jenya705.mcapi.permission.PermissionManagerHook;
 import com.github.jenya705.mcapi.player.Player;
+import com.github.jenya705.mcapi.util.ListUtils;
 import com.github.jenya705.mcapi.world.World;
 import lombok.Cleanup;
 import org.bukkit.Bukkit;
@@ -19,6 +20,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -129,6 +131,28 @@ public class BukkitServerCore extends AbstractApplicationModule implements Serve
         return BukkitWrapper.entity(
                 BukkitUtils.notAsyncSupplier(() -> Bukkit.getEntity(uuid))
         );
+    }
+
+    @Override
+    public Collection<? extends Entity> getEntities(Predicate<Entity> predicate) {
+        return ListUtils.join(
+                Bukkit
+                        .getWorlds()
+                        .stream()
+                        .map(org.bukkit.World::getEntities)
+                        .map(entities -> entities
+                                .stream()
+                                .map(BukkitWrapper::entity)
+                                .filter(predicate)
+                                .collect(Collectors.toList())
+                        )
+                        .collect(Collectors.toList())
+        );
+    }
+
+    @Override
+    public Collection<? extends Entity> getEntities() {
+        return getEntities(it -> true);
     }
 
     @Override

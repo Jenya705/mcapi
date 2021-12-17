@@ -29,4 +29,13 @@ public class ListUtils {
         }
         return newList;
     }
+
+    public <T> List<T> join(List<List<T>> lists) {
+        List<T> newList = new ArrayList<>();
+        for (List<T> list: lists) {
+            newList.addAll(list);
+        }
+        return newList;
+    }
+
 }

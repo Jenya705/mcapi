@@ -1,21 +1,25 @@
 package com.github.jenya705.mcapi.entity;
 
-import com.github.jenya705.mcapi.BoundingBox;
-import com.github.jenya705.mcapi.BukkitWrapper;
-import com.github.jenya705.mcapi.Location;
-import com.github.jenya705.mcapi.Vector3;
-import lombok.AllArgsConstructor;
+import com.github.jenya705.mcapi.*;
+import lombok.experimental.Delegate;
 import net.kyori.adventure.text.Component;
+import org.bukkit.NamespacedKey;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.UUID;
 
 /**
  * @author Jenya705
  */
-@AllArgsConstructor
-public class BukkitEntityWrapper implements Entity {
+public class BukkitEntityWrapper implements CapturableEntity {
+
+    public static final NamespacedKey ownerKey = new NamespacedKey(BukkitUtils.getPlugin(), "owner");
 
     private final org.bukkit.entity.Entity entity;
+
+    public BukkitEntityWrapper(org.bukkit.entity.Entity entity) {
+        this.entity = entity;
+    }
 
     public static BukkitEntityWrapper of(org.bukkit.entity.Entity entity) {
         if (entity == null) return null;
@@ -76,4 +80,19 @@ public class BukkitEntityWrapper implements Entity {
     public boolean isSilent() {
         return entity.isSilent();
     }
+
+    @Override
+    public void setOwner(int id) {
+        entity
+                .getPersistentDataContainer()
+                .set(ownerKey, PersistentDataType.INTEGER, id);
+    }
+
+    @Override
+    public int getOwner() {
+        return entity
+                .getPersistentDataContainer()
+                .getOrDefault(ownerKey, PersistentDataType.INTEGER, -1);
+    }
+
 }

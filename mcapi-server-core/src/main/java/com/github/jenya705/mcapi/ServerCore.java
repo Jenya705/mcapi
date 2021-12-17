@@ -11,6 +11,8 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * @author Jenya705
@@ -36,6 +38,15 @@ public interface ServerCore {
     Entity getEntity(UUID uuid);
 
     World getWorld(String id);
+
+    Collection<? extends Entity> getEntities();
+
+    default Collection<? extends Entity> getEntities(Predicate<Entity> filter) {
+        return getEntities()
+                .stream()
+                .filter(filter)
+                .collect(Collectors.toList());
+    }
 
     default Optional<? extends Player> getOptionalPlayer(String name) {
         return Optional.ofNullable(getPlayer(name));

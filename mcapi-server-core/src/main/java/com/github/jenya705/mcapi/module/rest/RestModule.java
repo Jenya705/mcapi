@@ -11,9 +11,7 @@ import com.github.jenya705.mcapi.entity.*;
 import com.github.jenya705.mcapi.entity.enchantment.EntityItemEnchantment;
 import com.github.jenya705.mcapi.entity.inventory.EntityInventoryItemStack;
 import com.github.jenya705.mcapi.entity.inventory.EntityItemStack;
-import com.github.jenya705.mcapi.error.BadUuidFormatException;
-import com.github.jenya705.mcapi.error.JsonDeserializeException;
-import com.github.jenya705.mcapi.error.PlayerNotFoundException;
+import com.github.jenya705.mcapi.error.*;
 import com.github.jenya705.mcapi.event.*;
 import com.github.jenya705.mcapi.form.FormComponent;
 import com.github.jenya705.mcapi.form.FormPlatformProvider;
@@ -46,10 +44,7 @@ import com.github.jenya705.mcapi.util.PlayerUtils;
 import com.github.jenya705.mcapi.world.World;
 import net.kyori.adventure.text.Component;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -96,11 +91,9 @@ public class RestModule extends AbstractApplicationModule {
                                 .getOptionalOfflinePlayerId(id)
                                 .orElseThrow(() -> PlayerNotFoundException.create(id))
                 )
-                .rawDeserializer(UUID.class, it ->
-                        PlayerUtils
-                                .optionalUuid(it)
-                                .orElseThrow(() -> new BadUuidFormatException(it))
-                )
+                .rawDeserializer(UUID.class, this::getUuid)
+                .rawDeserializer(Entity.class, this::getEntity)
+                .rawDeserializer(CapturableEntity.class, this::getCapturableEntity)
                 .throwableParser(JsonProcessingException.class, e -> JsonDeserializeException.create())
                 .tunnelJsonSerializer(Command.class, RestCommand::from)
                 .tunnelJsonSerializer(CommandExecutableOption.class, RestCommandExecutableOption::from)
@@ -235,4 +228,24 @@ public class RestModule extends AbstractApplicationModule {
                 )
                 .build();
     }
+
+    private UUID getUuid(String uuid) {
+        return PlayerUtils
+                .optionalUuid(uuid)
+                .orElseThrow(() -> BadUuidFormatException.create(uuid));
+    }
+
+    private Entity getEntity(String uuid) {
+        UUID uuidObject = getUuid(uuid);
+        return core()
+                .getOptionalEntity(uuidObject)
+                .orElseThrow(() -> EntityNotFoundException.create(uuidObject));
+    }
+
+    private CapturableEntity getCapturableEntity(String uuid) {
+        Entity entity = getEntity(uuid);
+        if (entity instanceof CapturableEntity) return (CapturableEntity) entity;
+        throw EntityNotCapturableException.create(entity.getUuid());
+    }
+
 }

@@ -66,4 +66,10 @@ public class Permissions {
 
     public final String ENTITY_GET = "entity.get";
 
+    public final String CREATE_ENTITY = "entity.create";
+
+    public final String CAPTURE_ENTITY = "entity.capture";
+
+    public final String UPDATE_ENTITY = "entity.update";
+
 }
