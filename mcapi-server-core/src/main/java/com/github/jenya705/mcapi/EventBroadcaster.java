@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi;
 
 import com.github.jenya705.mcapi.event.*;
+import com.github.jenya705.mcapi.rest.entity.RestCapturedEntityClickEvent;
 import com.github.jenya705.mcapi.rest.event.*;
 
 /**
@@ -36,7 +37,15 @@ public class EventBroadcaster extends AbstractApplicationModule {
                         it -> eventTunnel()
                                 .broadcast(RestPlayerBlockBreakEvent.from(it), RestPlayerBlockBreakEvent.type)
                 )
+                .asyncHandler(
+                        CapturedEntityClickEvent.class,
+                        it -> eventTunnel()
+                                .getClients()
+                                .stream()
+                                .filter(client -> client.getOwner().getEntity().getId() == it.getEntity().getOwner())
+                                .filter(client -> client.isSubscribed(RestCapturedEntityClickEvent.type))
+                                .forEach(client -> client.send(it))
+                )
         ;
     }
-
 }

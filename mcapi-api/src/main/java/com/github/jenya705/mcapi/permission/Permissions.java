@@ -32,6 +32,8 @@ public class Permissions {
 
     public final String EVENT_TUNNEL_BLOCK_PLACE = "event_tunnel.block_place";
 
+    public final String EVENT_TUNNEL_CAPTURED_ENTITY_CLICK = "event_tunnel.captured_entity_click";
+
     public final String LINK_REQUEST = "link.request";
 
     public final String COMMAND_CREATE = "command.create";

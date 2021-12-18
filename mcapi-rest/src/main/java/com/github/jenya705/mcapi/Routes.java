@@ -66,7 +66,7 @@ public class Routes {
 
     public final Route CREATE_ENTITY = Route.post("/entity");
 
-    public final Route CAPTURE_ENTITY = Route.put("/entity/{id}");
+    public final Route CAPTURE_ENTITY = Route.put("/entity/{id}/capture");
 
     public final Route UPDATE_ENTITY = Route.patch("/entity/{id}");
 

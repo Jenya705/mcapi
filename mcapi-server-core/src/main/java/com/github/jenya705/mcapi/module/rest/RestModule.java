@@ -33,6 +33,7 @@ import com.github.jenya705.mcapi.rest.block.*;
 import com.github.jenya705.mcapi.rest.command.*;
 import com.github.jenya705.mcapi.rest.enchantment.RestEnchantment;
 import com.github.jenya705.mcapi.rest.enchantment.RestItemEnchantment;
+import com.github.jenya705.mcapi.rest.entity.RestCapturedEntityClickEvent;
 import com.github.jenya705.mcapi.rest.entity.RestEntity;
 import com.github.jenya705.mcapi.rest.event.*;
 import com.github.jenya705.mcapi.rest.inventory.RestInventory;
@@ -115,6 +116,7 @@ public class RestModule extends AbstractApplicationModule {
                 .tunnelJsonSerializer(OfflinePlayer.class, RestOfflinePlayer::from)
                 .tunnelJsonSerializer(SubscribeRequest.class, RestSubscribeRequest::from)
                 .tunnelJsonSerializer(EventTunnelAuthorizationRequest.class, RestEventTunnelAuthorizationRequest::from)
+                .tunnelJsonSerializer(CapturedEntityClickEvent.class, RestCapturedEntityClickEvent::from)
                 .tunnelJsonSerializer(Permission.class, RestPermission::from)
                 .tunnelJsonSerializer(World.class, RestWorld::from)
                 .tunnelJsonSerializer(Block.class, RestBlock::from)

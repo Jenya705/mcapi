@@ -132,6 +132,10 @@ public class StorageModuleImpl extends AbstractApplicationModule implements Stor
                     true, true,
                     Permissions.ENTITY_GET + "." + entityType
             );
+            addPermissionsIfNotExist(
+                    true, false,
+                    Permissions.CAPTURE_ENTITY + "." + entityType
+            );
         }
     }
 
