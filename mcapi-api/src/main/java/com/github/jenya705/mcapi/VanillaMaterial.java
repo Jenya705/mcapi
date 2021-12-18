@@ -1037,6 +1037,7 @@ public enum VanillaMaterial implements Material {
     MUSIC_DISC_WARD(false, true, false, false, false, false, "music_disc_ward"),
     MUSIC_DISC_11(false, true, false, false, false, false, "music_disc_11"),
     MUSIC_DISC_WAIT(false, true, false, false, false, false, "music_disc_wait"),
+    MUSIC_DISC_OTHERSIDE(false, true, false, false, false, false, "music_disc_otherside"),
     MUSIC_DISC_PIGSTEP(false, true, false, false, false, false, "music_disc_pigstep"),
     TRIDENT(false, true, false, false, false, false, "trident"),
     PHANTOM_MEMBRANE(false, true, false, false, false, false, "phantom_membrane"),
