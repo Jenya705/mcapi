@@ -30,11 +30,10 @@ public class EntityPlayer implements Player {
     private UUID uuid;
     private String type;
     private boolean online;
+    private Component customName;
     private Location location;
     private PlayerInventory inventory;
     private Inventory enderChest;
-    private float yaw;
-    private float pitch;
     private GameMode gameMode;
     private PlayerAbilities abilities;
 
@@ -60,6 +59,11 @@ public class EntityPlayer implements Player {
     }
 
     @Override
+    public Component customName() {
+        return customName;
+    }
+
+    @Override
     public void ban(String reason) {
         EntityUtils.throwEntityContextException();
     }
@@ -70,121 +74,16 @@ public class EntityPlayer implements Player {
     }
 
     @Override
-    public Vector3 getVelocity() {
-        return null;
-    }
-
-    @Override
-    public BoundingBox getBoundingBox() {
-        return null;
-    }
-
-    @Override
-    public float getAbsorptionAmount() {
-        return 0;
-    }
-
-    @Override
-    public int getAirLeft() {
-        return 0;
-    }
-
-    @Override
-    public float getFallDistance() {
-        return 0;
-    }
-
-    @Override
-    public boolean isFalling() {
-        return false;
-    }
-
-    @Override
-    public int getFireTicks() {
-        return 0;
-    }
-
-    @Override
-    public int getFoodLevel() {
-        return 0;
-    }
-
-    @Override
-    public float getFoodExhaustionLevel() {
-        return 0;
-    }
-
-    @Override
-    public float getFoodSaturationLevel() {
-        return 0;
-    }
-
-    @Override
     public float getHealth() {
         return 0;
     }
 
-    @Override
-    public Location getSpawn() {
-        return null;
-    }
-
-    @Override
-    public int getXpLevel() {
-        return 0;
-    }
-
-    @Override
-    public int getXpPercentage() {
-        return 0;
-    }
-
-    @Override
-    public boolean isClimbing() {
-        return false;
-    }
-
-    @Override
-    public boolean isCrouching() {
-        return false;
-    }
-
-    @Override
-    public boolean isSprinting() {
-        return false;
-    }
-
-    @Override
-    public boolean isSwimming() {
-        return false;
-    }
-
-    @Override
-    public boolean isFlyingWithElytra() {
-        return false;
-    }
-
-    @Override
-    public Component customName() {
-        return null;
-    }
-
-    @Override
-    public boolean isCustomNameVisible() {
-        return false;
-    }
-
-    @Override
-    public boolean isSilent() {
-        return false;
-    }
-
-    @Override
-    public boolean isColliding() {
-        return false;
-    }
-
     public RestPlayer rest() {
         return RestPlayer.from(this);
+    }
+
+    @Override
+    public boolean hasAI() {
+        return false;
     }
 }

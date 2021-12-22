@@ -25,39 +25,6 @@ public interface Player extends LivingEntity, CommandSender, OfflinePlayer {
 
     PlayerAbilities getAbilities();
 
-    float getAbsorptionAmount();
-
-    float getFallDistance();
-
-    boolean isFalling();
-
-    boolean isCrouching();
-
-    boolean isSprinting();
-
-    boolean isFlyingWithElytra();
-
-    int getAirLeft();
-
-    int getFoodLevel();
-
-    float getFoodExhaustionLevel();
-
-    float getFoodSaturationLevel();
-
-    Location getSpawn();
-
-    int getXpLevel();
-
-    int getXpPercentage();
-
-    boolean isClimbing();
-
-    @Override
-    default boolean hasAI() {
-        return true;
-    }
-
     @Override
     default String getId() {
         return getUuid().toString();

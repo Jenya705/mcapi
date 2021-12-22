@@ -7,10 +7,8 @@ public interface LivingEntity extends Entity {
 
     float getHealth();
 
-    boolean isSwimming();
-
     boolean hasAI();
 
-    boolean isColliding();
+    void kill();
 
 }

@@ -33,33 +33,11 @@ public class RestDefaults {
                     null,
                     null, // default is minecraft:player but type is necessary for entities
                     null,
-                    Vector3.zero(),
-                    new RestShortBoundingBox(0.6, 0.6, 1.8),
-                    0,
-                    0,
                     GameMode.SURVIVAL.name(),
                     playerAbilities.getDefaultValue(),
-                    0,
-                    300,
-                    0,
-                    false,
-                    false,
-                    false,
-                    false,
                     null,
-                    false,
-                    false,
-                    false,
-                    -20,
                     20,
-                    0,
-                    20,
-                    20,
-                    null,
-                    0,
-                    0,
-                    false,
-                    true
+                    false
             )
     );
 
@@ -67,14 +45,7 @@ public class RestDefaults {
             new RestEntity(
                     null,
                     null,
-                    0,
-                    0,
-                    Vector3.zero(),
-                    new RestShortBoundingBox(0, 0, 0),
-                    0,
-                    null,
-                    false,
-                    false
+                    null
             )
     );
 

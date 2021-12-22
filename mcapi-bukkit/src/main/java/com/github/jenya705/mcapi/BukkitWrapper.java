@@ -9,6 +9,7 @@ import com.github.jenya705.mcapi.enchantment.BukkitItemEnchantmentWrapper;
 import com.github.jenya705.mcapi.enchantment.Enchantment;
 import com.github.jenya705.mcapi.enchantment.ItemEnchantment;
 import com.github.jenya705.mcapi.entity.BukkitEntityWrapper;
+import com.github.jenya705.mcapi.entity.BukkitLivingEntityWrapper;
 import com.github.jenya705.mcapi.entity.Entity;
 import com.github.jenya705.mcapi.inventory.*;
 import com.github.jenya705.mcapi.player.BukkitPlayerWrapper;
@@ -59,8 +60,11 @@ public class BukkitWrapper {
     }
 
     public Entity entity(org.bukkit.entity.Entity entity) {
-        if (entity instanceof org.bukkit.entity.Player) {
-            return BukkitPlayerWrapper.of((org.bukkit.entity.Player) entity);
+        if (entity instanceof org.bukkit.entity.LivingEntity livingEntity) {
+            if (entity instanceof org.bukkit.entity.Player player) {
+                return BukkitPlayerWrapper.of(player);
+            }
+            return BukkitLivingEntityWrapper.of(livingEntity);
         }
         return BukkitEntityWrapper.of(entity);
     }

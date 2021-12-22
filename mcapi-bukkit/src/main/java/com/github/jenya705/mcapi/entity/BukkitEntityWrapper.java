@@ -42,43 +42,8 @@ public class BukkitEntityWrapper implements CapturableEntity {
     }
 
     @Override
-    public float getYaw() {
-        return entity.getLocation().getYaw();
-    }
-
-    @Override
-    public float getPitch() {
-        return entity.getLocation().getPitch();
-    }
-
-    @Override
-    public Vector3 getVelocity() {
-        return BukkitWrapper.vector(entity.getVelocity());
-    }
-
-    @Override
-    public BoundingBox getBoundingBox() {
-        return BukkitWrapper.boundingBox(entity.getBoundingBox());
-    }
-
-    @Override
-    public int getFireTicks() {
-        return entity.getFireTicks();
-    }
-
-    @Override
     public Component customName() {
         return entity.customName();
-    }
-
-    @Override
-    public boolean isCustomNameVisible() {
-        return entity.isCustomNameVisible();
-    }
-
-    @Override
-    public boolean isSilent() {
-        return entity.isSilent();
     }
 
     @Override

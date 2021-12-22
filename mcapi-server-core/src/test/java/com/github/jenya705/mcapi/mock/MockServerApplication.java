@@ -9,6 +9,7 @@ import com.github.jenya705.mcapi.mock.database.MockDatabaseModule;
 import com.github.jenya705.mcapi.mock.web.MockWebServer;
 import com.github.jenya705.mcapi.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.module.web.WebServer;
+import com.github.jenya705.mcapi.player.GameMode;
 import com.github.jenya705.mcapi.player.Player;
 import org.mockito.Mockito;
 
@@ -22,12 +23,11 @@ public class MockServerApplication extends ServerApplication {
                     UUID.randomUUID(),
                     "player",
                     true,
+                    null,
                     new EntityLocation(0, 10, 0, null),
                     null,
                     null,
-                    0f,
-                    0f,
-                    null,
+                    GameMode.SURVIVAL,
                     null
             )),
             createMockPlayer(new EntityPlayer(
@@ -35,12 +35,11 @@ public class MockServerApplication extends ServerApplication {
                     UUID.randomUUID(),
                     "player",
                     true,
-                    new EntityLocation(-3, 10, 3, null),
+                    null,
+                    new EntityLocation(0, 10, 0, null),
                     null,
                     null,
-                    0f,
-                    0f,
-                    null,
+                    GameMode.SURVIVAL,
                     null
             )),
             createMockPlayer(new EntityPlayer(
@@ -48,12 +47,11 @@ public class MockServerApplication extends ServerApplication {
                     UUID.randomUUID(),
                     "player",
                     true,
-                    new EntityLocation(8, 20, 4, null),
+                    null,
+                    new EntityLocation(0, 10, 0, null),
                     null,
                     null,
-                    0f,
-                    0f,
-                    null,
+                    GameMode.SURVIVAL,
                     null
             )),
             createMockPlayer(new EntityPlayer(
@@ -61,12 +59,11 @@ public class MockServerApplication extends ServerApplication {
                     UUID.randomUUID(),
                     "player",
                     true,
-                    new EntityLocation(1, 11, 2, null),
+                    null,
+                    new EntityLocation(0, 10, 0, null),
                     null,
                     null,
-                    0f,
-                    0f,
-                    null,
+                    GameMode.SURVIVAL,
                     null
             ))
     );

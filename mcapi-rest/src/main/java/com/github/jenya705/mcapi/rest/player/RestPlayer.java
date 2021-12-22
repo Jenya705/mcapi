@@ -23,33 +23,11 @@ public class RestPlayer {
     private UUID uuid;
     private String type;
     private RestLocation location;
-    private Vector3 velocity;
-    private RestShortBoundingBox boundingBox;
-    private float yaw;
-    private float pitch;
     private String gameMode;
     private RestPlayerAbilities abilities;
-    private float absorptionAmount;
-    private float airLeft;
-    private float fallDistance;
-    private boolean crouching;
-    private boolean sprinting;
-    private boolean swimming;
-    private boolean flyingWithElytra;
     private Component customName;
-    private boolean customNameVisible;
-    private boolean silent;
-    private boolean falling;
-    private int fireTicks;
-    private int foodLevel;
-    private float foodExhaustionLevel;
-    private float foodSaturationLevel;
     private float health;
-    private RestLocation spawn;
-    private int xpLevel;
-    private int xpPercentage;
     private boolean ai;
-    private boolean colliding;
 
     public static RestPlayer from(Player player) {
         return new RestPlayer(
@@ -57,33 +35,11 @@ public class RestPlayer {
                 player.getUuid(),
                 player.getType(),
                 RestLocation.from(player.getLocation()),
-                player.getVelocity(),
-                RestShortBoundingBox.from(player.getBoundingBox()),
-                player.getYaw(),
-                player.getPitch(),
                 player.getGameMode().name(),
                 RestPlayerAbilities.from(player.getAbilities()),
-                player.getAbsorptionAmount(),
-                player.getAirLeft(),
-                player.getFallDistance(),
-                player.isCrouching(),
-                player.isSprinting(),
-                player.isSwimming(),
-                player.isFlyingWithElytra(),
                 player.customName(),
-                player.isCustomNameVisible(),
-                player.isSilent(),
-                player.isFalling(),
-                player.getFireTicks(),
-                player.getFoodLevel(),
-                player.getFoodExhaustionLevel(),
-                player.getFoodSaturationLevel(),
                 player.getHealth(),
-                RestLocation.from(player.getSpawn()),
-                player.getXpLevel(),
-                player.getXpPercentage(),
-                player.hasAI(),
-                player.isColliding()
+                player.hasAI()
         );
     }
 

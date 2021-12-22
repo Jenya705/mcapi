@@ -19,27 +19,13 @@ public class RestEntity {
 
     private String type;
     private RestLocation location;
-    private float yaw;
-    private float pitch;
-    private Vector3 velocity;
-    private RestShortBoundingBox boundingBox;
-    private int fireTicks;
     private Component customName;
-    private boolean customNameVisible;
-    private boolean silent;
 
     public static RestEntity from(Entity entity) {
         return new RestEntity(
                 entity.getType(),
                 RestLocation.from(entity.getLocation()),
-                entity.getYaw(),
-                entity.getPitch(),
-                entity.getVelocity(),
-                RestShortBoundingBox.from(entity.getBoundingBox()),
-                entity.getFireTicks(),
-                entity.customName(),
-                entity.isCustomNameVisible(),
-                entity.isSilent()
+                entity.customName()
         );
     }
 }
