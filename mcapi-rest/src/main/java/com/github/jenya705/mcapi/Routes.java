@@ -70,4 +70,6 @@ public class Routes {
 
     public final Route UPDATE_ENTITY = Route.patch("/entity/{id}");
 
+    public final Route OPEN_INVENTORY = Route.put("/player/{selector}/inventory/open");
+
 }

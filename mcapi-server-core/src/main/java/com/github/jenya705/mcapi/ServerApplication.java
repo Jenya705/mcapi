@@ -18,6 +18,7 @@ import com.github.jenya705.mcapi.module.link.LinkingModuleImpl;
 import com.github.jenya705.mcapi.module.localization.LocalizationModuleImpl;
 import com.github.jenya705.mcapi.module.mapper.MapperImpl;
 import com.github.jenya705.mcapi.module.material.MaterialStorageImpl;
+import com.github.jenya705.mcapi.module.menu.MenuModuleImpl;
 import com.github.jenya705.mcapi.module.message.MessageDeserializerImpl;
 import com.github.jenya705.mcapi.module.rest.RestModule;
 import com.github.jenya705.mcapi.module.rest.route.SendMessageRouteHandler;
@@ -112,6 +113,7 @@ public class ServerApplication {
                 MaterialStorageImpl.class,
                 EnchantmentStorageImpl.class,
                 EntityCapturableModuleImpl.class,
+                MenuModuleImpl.class,
                 // Routes
                 GetPlayerLocationRouteHandler.class,
                 GetPlayerRouteHandler.class,

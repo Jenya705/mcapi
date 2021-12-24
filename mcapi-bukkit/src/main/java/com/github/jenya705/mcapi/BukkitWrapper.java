@@ -17,6 +17,7 @@ import com.github.jenya705.mcapi.player.GameMode;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.world.World;
 import lombok.experimental.UtilityClass;
+import org.bukkit.Bukkit;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.type.Stairs;
 
@@ -89,7 +90,20 @@ public class BukkitWrapper {
         return BukkitItemStackWrapper.of(itemStack);
     }
 
+    public InventoryView inventoryView(Inventory inventory, boolean unique) {
+        return inventoryView(inventory, null, unique);
+    }
+
+    public InventoryView inventoryView(Inventory inventory, Material airMaterial, boolean unique) {
+        return unique ?
+                BukkitUniqueInventoryViewWrapper.of(inventory, airMaterial) :
+                BukkitSharedInventoryViewWrapper.of(inventory, airMaterial);
+    }
+
     public org.bukkit.inventory.ItemStack itemStack(ItemStack itemStack) {
+        if (itemStack instanceof BukkitItemStackWrapper bukkitItemStackWrapper) {
+            return bukkitItemStackWrapper.getItemStack();
+        }
         org.bukkit.inventory.ItemStack bukkitItemStack = new org.bukkit.inventory.ItemStack(
                 material(itemStack.getMaterial())
         );
@@ -182,4 +196,33 @@ public class BukkitWrapper {
         return org.bukkit.block.data.type.Door.Hinge.valueOf(hinge.name());
     }
 
+    public org.bukkit.inventory.Inventory inventory(Inventory inventory) {
+        if (inventory instanceof BukkitInventoryWrapper inventoryWrapper) {
+            return inventoryWrapper.getBukkitInventory();
+        }
+        return copyInventory(inventory);
+    }
+
+    public org.bukkit.inventory.Inventory copyInventory(Inventory inventory) {
+        org.bukkit.inventory.Inventory bukkitInventory;
+        bukkitInventory = Bukkit.createInventory(null, inventory.getSize());
+        for (ItemStack itemStack : inventory.getAllItems()) {
+            bukkitInventory.addItem(BukkitWrapper.itemStack(itemStack));
+        }
+        return bukkitInventory;
+    }
+
+    public org.bukkit.inventory.Inventory copyInventory(InventoryView inventoryView) {
+        org.bukkit.inventory.Inventory bukkitInventory;
+        bukkitInventory = Bukkit.createInventory(null, inventoryView.getInventory().getSize());
+        for (ItemStack itemStack : inventoryView.getInventory().getAllItems()) {
+            if (itemStack.getMaterial().equals(VanillaMaterial.AIR)) {
+                bukkitInventory.addItem(
+                        new org.bukkit.inventory.ItemStack(material(inventoryView.getAirMaterial()))
+                );
+            }
+            bukkitInventory.addItem(BukkitWrapper.itemStack(itemStack));
+        }
+        return bukkitInventory;
+    }
 }

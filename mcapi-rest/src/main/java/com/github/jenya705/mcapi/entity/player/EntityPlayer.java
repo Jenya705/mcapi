@@ -5,6 +5,7 @@ import com.github.jenya705.mcapi.Location;
 import com.github.jenya705.mcapi.Vector3;
 import com.github.jenya705.mcapi.entity.EntityUtils;
 import com.github.jenya705.mcapi.inventory.Inventory;
+import com.github.jenya705.mcapi.inventory.InventoryView;
 import com.github.jenya705.mcapi.inventory.PlayerInventory;
 import com.github.jenya705.mcapi.player.GameMode;
 import com.github.jenya705.mcapi.player.Player;
@@ -59,8 +60,20 @@ public class EntityPlayer implements Player {
     }
 
     @Override
+    public InventoryView openInventory(InventoryView inventory, boolean sayAboutSelf) {
+        EntityUtils.throwEntityContextException();
+        return null;
+    }
+
+    @Override
     public Component customName() {
         return customName;
+    }
+
+    @Override
+    public InventoryView openInventory(Inventory inventory) {
+        EntityUtils.throwEntityContextException();
+        return null;
     }
 
     @Override
@@ -76,6 +89,16 @@ public class EntityPlayer implements Player {
     @Override
     public float getHealth() {
         return 0;
+    }
+
+    @Override
+    public void chat(String message) {
+        EntityUtils.throwEntityContextException();
+    }
+
+    @Override
+    public void runCommand(String command) {
+        EntityUtils.throwEntityContextException();
     }
 
     public RestPlayer rest() {

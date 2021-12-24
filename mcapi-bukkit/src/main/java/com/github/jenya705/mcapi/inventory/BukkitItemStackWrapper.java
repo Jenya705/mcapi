@@ -4,6 +4,7 @@ import com.github.jenya705.mcapi.BukkitWrapper;
 import com.github.jenya705.mcapi.Material;
 import com.github.jenya705.mcapi.VanillaMaterial;
 import com.github.jenya705.mcapi.enchantment.ItemEnchantment;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BukkitItemStackWrapper implements ItemStack {
 
+    @Getter
     private final org.bukkit.inventory.ItemStack itemStack;
 
     private List<ItemEnchantment> enchantments;

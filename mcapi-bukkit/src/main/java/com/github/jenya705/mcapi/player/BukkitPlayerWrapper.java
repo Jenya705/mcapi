@@ -5,8 +5,11 @@ import com.github.jenya705.mcapi.entity.BukkitEntityWrapper;
 import com.github.jenya705.mcapi.entity.BukkitLivingEntityWrapper;
 import com.github.jenya705.mcapi.entity.Entity;
 import com.github.jenya705.mcapi.entity.LivingEntity;
+import com.github.jenya705.mcapi.inventory.BukkitInventoryViewWrapper;
 import com.github.jenya705.mcapi.inventory.Inventory;
+import com.github.jenya705.mcapi.inventory.InventoryView;
 import com.github.jenya705.mcapi.inventory.PlayerInventory;
+import lombok.Getter;
 import lombok.experimental.Delegate;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -19,6 +22,7 @@ import java.util.UUID;
  */
 public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements Player {
 
+    @Getter
     private final org.bukkit.entity.Player player;
 
     @Delegate
@@ -39,6 +43,38 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements P
 
     public static BukkitPlayerWrapper of(org.bukkit.entity.Player player) {
         return player == null ? null : new BukkitPlayerWrapper(player);
+    }
+
+    @Override
+    public InventoryView openInventory(InventoryView inventory, boolean sayAboutSelf) {
+        if (sayAboutSelf) {
+            inventory.open(this);
+            return inventory;
+        }
+        if (inventory instanceof BukkitInventoryViewWrapper bukkitInventoryViewWrapper) {
+            player.openInventory(bukkitInventoryViewWrapper.getBukkitInventory());
+        }
+        else {
+            player.openInventory(BukkitWrapper.copyInventory(inventory));
+        }
+        return inventory;
+    }
+
+    @Override
+    public InventoryView openInventory(Inventory inventory) {
+        InventoryView inventoryView = BukkitWrapper.inventoryView(inventory, false);
+        inventoryView.open(this);
+        return inventoryView;
+    }
+
+    @Override
+    public void chat(String message) {
+        player.chat(message);
+    }
+
+    @Override
+    public void runCommand(String command) {
+        player.performCommand(command);
     }
 
     @Override

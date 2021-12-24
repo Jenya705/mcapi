@@ -74,4 +74,6 @@ public class Permissions {
 
     public final String UPDATE_ENTITY = "entity.update";
 
+    public final String PLAYER_OPEN_INVENTORY = "player.inventory.open";
+
 }

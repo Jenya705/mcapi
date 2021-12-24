@@ -1,0 +1,50 @@
+package com.github.jenya705.mcapi.inventory;
+
+import com.github.jenya705.mcapi.BukkitWrapper;
+import com.github.jenya705.mcapi.Material;
+import com.github.jenya705.mcapi.VanillaMaterial;
+import com.github.jenya705.mcapi.player.Player;
+import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Objects;
+
+/**
+ * @author Jenya705
+ */
+@Getter
+public class BukkitSharedInventoryViewWrapper implements BukkitInventoryViewWrapper {
+
+    private final Inventory inventory;
+    private final Material airMaterial;
+    private final Collection<Player> viewers;
+
+    private final org.bukkit.inventory.Inventory bukkitInventory;
+
+    public BukkitSharedInventoryViewWrapper(Inventory inventory, Material airMaterial) {
+        this.inventory = inventory;
+        this.airMaterial = airMaterial;
+        viewers = new ArrayList<>();
+        bukkitInventory = BukkitWrapper.copyInventory(this);
+    }
+
+    public static BukkitSharedInventoryViewWrapper of(Inventory inventory, Material airMaterial) {
+        if (inventory == null) return null;
+        return new BukkitSharedInventoryViewWrapper(
+                inventory,
+                Objects.requireNonNullElse(airMaterial, VanillaMaterial.AIR)
+        );
+    }
+
+    @Override
+    public void open(Player player) {
+        viewers.add(player);
+        player.openInventory(this, false);
+    }
+
+    @Override
+    public boolean isUnique() {
+        return false;
+    }
+}

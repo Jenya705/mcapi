@@ -36,7 +36,8 @@ public enum DefaultPermission {
     BLOCK_INVENTORY_GET(Permissions.BLOCK_INVENTORY_GET, true, false, true),
     BLOCK_ITEM_GET(Permissions.BLOCK_ITEM_GET, true, false, true),
     PLAYER_ENDER_CHEST_GET(Permissions.PLAYER_ENDER_CHEST_GET, false, true, true),
-    PLAYER_ENDER_CHEST_ITEM_GET(Permissions.PLAYER_ENDER_CHEST_ITEM_GET, false, true, true)
+    PLAYER_ENDER_CHEST_ITEM_GET(Permissions.PLAYER_ENDER_CHEST_ITEM_GET, false, true, true),
+    PLAYER_OPEN_INVENTORY(Permissions.PLAYER_OPEN_INVENTORY, false, true, false)
     ;
 
     private final String name;

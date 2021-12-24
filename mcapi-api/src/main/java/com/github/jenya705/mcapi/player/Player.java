@@ -1,11 +1,10 @@
 package com.github.jenya705.mcapi.player;
 
 import com.github.jenya705.mcapi.CommandSender;
-import com.github.jenya705.mcapi.Location;
 import com.github.jenya705.mcapi.OfflinePlayer;
-import com.github.jenya705.mcapi.entity.Entity;
 import com.github.jenya705.mcapi.entity.LivingEntity;
 import com.github.jenya705.mcapi.inventory.Inventory;
+import com.github.jenya705.mcapi.inventory.InventoryView;
 import com.github.jenya705.mcapi.inventory.PlayerInventory;
 
 /**
@@ -17,6 +16,10 @@ public interface Player extends LivingEntity, CommandSender, OfflinePlayer {
 
     void kill();
 
+    void chat(String message);
+
+    void runCommand(String command);
+
     PlayerInventory getInventory();
 
     Inventory getEnderChest();
@@ -24,6 +27,14 @@ public interface Player extends LivingEntity, CommandSender, OfflinePlayer {
     GameMode getGameMode();
 
     PlayerAbilities getAbilities();
+
+    default InventoryView openInventory(InventoryView inventory) {
+        return openInventory(inventory, true);
+    }
+
+    InventoryView openInventory(InventoryView inventory, boolean sayAboutSelf);
+
+    InventoryView openInventory(Inventory inventory);
 
     @Override
     default String getId() {

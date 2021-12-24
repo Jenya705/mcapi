@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.rest.inventory;
 
-import com.github.jenya705.mcapi.inventory.InventoryItemStack;
+import com.github.jenya705.mcapi.inventory.IdentifiedInventoryItemStack;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,13 +11,15 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RestInventoryItemStack {
+public class RestIdentifiedInventoryItemStack {
 
+    private String id;
     private int index;
     private RestItemStack item;
 
-    public static RestInventoryItemStack from(InventoryItemStack inventoryItemStack) {
-        return new RestInventoryItemStack(
+    public static RestIdentifiedInventoryItemStack from(IdentifiedInventoryItemStack inventoryItemStack) {
+        return new RestIdentifiedInventoryItemStack(
+                inventoryItemStack.getId(),
                 inventoryItemStack.getIndex(),
                 RestItemStack.from(inventoryItemStack)
         );

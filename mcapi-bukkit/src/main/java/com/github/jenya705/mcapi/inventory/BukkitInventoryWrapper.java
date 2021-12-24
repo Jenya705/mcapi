@@ -1,12 +1,14 @@
 package com.github.jenya705.mcapi.inventory;
 
 import com.github.jenya705.mcapi.BukkitWrapper;
+import lombok.Getter;
 
 /**
  * @author Jenya705
  */
 public class BukkitInventoryWrapper implements Inventory {
 
+    @Getter
     private final org.bukkit.inventory.Inventory bukkitInventory;
 
     private final ItemStack[] cachedItemStacks;
