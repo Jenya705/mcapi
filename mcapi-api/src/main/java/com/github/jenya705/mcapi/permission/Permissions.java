@@ -78,4 +78,6 @@ public class Permissions {
 
     public final String PLAYER_OPEN_INVENTORY = "player.inventory.open";
 
+    public final String PLAYER_CLOSE_INVENTORY = "player.inventory.close";
+
 }

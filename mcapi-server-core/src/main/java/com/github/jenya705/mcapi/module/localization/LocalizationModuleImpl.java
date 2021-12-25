@@ -34,6 +34,8 @@ public class LocalizationModuleImpl extends AbstractApplicationModule implements
         linkPermissionLocalization(Permissions.PLAYER_ENDER_CHEST_ITEM_GET, "Get items from your ender chest");
         linkPermissionLocalization(Permissions.EVENT_TUNNEL_BLOCK_BREAK, "Listen to block breaking");
         linkPermissionLocalization(Permissions.EVENT_TUNNEL_BLOCK_PLACE, "Listen to block placing");
+        linkPermissionLocalization(Permissions.PLAYER_OPEN_INVENTORY, "Open inventory for you");
+        linkPermissionLocalization(Permissions.PLAYER_CLOSE_INVENTORY, "Close your current inventory");
         save();
         debugValidate();
     }

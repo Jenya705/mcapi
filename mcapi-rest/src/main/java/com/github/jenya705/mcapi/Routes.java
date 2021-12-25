@@ -72,4 +72,6 @@ public class Routes {
 
     public final Route OPEN_INVENTORY = Route.put("/player/{selector}/inventory/open");
 
+    public final Route CLOSE_INVENTORY = Route.delete("/player/{selector}/inventory/close");
+
 }
