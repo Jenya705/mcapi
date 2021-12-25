@@ -90,11 +90,11 @@ public class BukkitWrapper {
         return BukkitItemStackWrapper.of(itemStack);
     }
 
-    public InventoryView inventoryView(Inventory inventory, boolean unique) {
+    public BukkitInventoryViewWrapper inventoryView(Inventory inventory, boolean unique) {
         return inventoryView(inventory, null, unique);
     }
 
-    public InventoryView inventoryView(Inventory inventory, Material airMaterial, boolean unique) {
+    public BukkitInventoryViewWrapper inventoryView(Inventory inventory, Material airMaterial, boolean unique) {
         return unique ?
                 BukkitUniqueInventoryViewWrapper.of(inventory, airMaterial) :
                 BukkitSharedInventoryViewWrapper.of(inventory, airMaterial);
@@ -123,9 +123,11 @@ public class BukkitWrapper {
     }
 
     public org.bukkit.Material material(Material material) {
-        return org.bukkit.Material.valueOf(
-                material.getKey().substring(minecraftNamespaceLength).toUpperCase(Locale.ROOT)
-        );
+        return material == null ?
+                org.bukkit.Material.AIR :
+                org.bukkit.Material.valueOf(
+                        material.getKey().substring(minecraftNamespaceLength).toUpperCase(Locale.ROOT)
+                );
     }
 
     public Inventory inventory(org.bukkit.inventory.Inventory inventory) {
@@ -215,13 +217,18 @@ public class BukkitWrapper {
     public org.bukkit.inventory.Inventory copyInventory(InventoryView inventoryView) {
         org.bukkit.inventory.Inventory bukkitInventory;
         bukkitInventory = Bukkit.createInventory(null, inventoryView.getInventory().getSize());
+        int index = 0;
         for (ItemStack itemStack : inventoryView.getInventory().getAllItems()) {
-            if (itemStack.getMaterial().equals(VanillaMaterial.AIR)) {
-                bukkitInventory.addItem(
-                        new org.bukkit.inventory.ItemStack(material(inventoryView.getAirMaterial()))
+            org.bukkit.inventory.ItemStack bukkitItemStack;
+            if (itemStack == null || VanillaMaterial.AIR.equals(itemStack.getMaterial())) {
+                bukkitItemStack = new org.bukkit.inventory.ItemStack(
+                        material(inventoryView.getAirMaterial())
                 );
             }
-            bukkitInventory.addItem(BukkitWrapper.itemStack(itemStack));
+            else {
+                bukkitItemStack = BukkitWrapper.itemStack(itemStack);
+            }
+            bukkitInventory.setItem(index++, bukkitItemStack);
         }
         return bukkitInventory;
     }

@@ -20,9 +20,8 @@ import java.util.UUID;
 /**
  * @author Jenya705
  */
-public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements Player {
+public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements BukkitPlayer {
 
-    @Getter
     private final org.bukkit.entity.Player player;
 
     @Delegate
@@ -46,17 +45,24 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements P
     }
 
     @Override
+    public org.bukkit.entity.Player getBukkit() {
+        return player;
+    }
+
+    @Override
     public InventoryView openInventory(InventoryView inventory, boolean sayAboutSelf) {
         if (sayAboutSelf) {
             inventory.open(this);
             return inventory;
         }
+        org.bukkit.inventory.Inventory bukkitInventory;
         if (inventory instanceof BukkitInventoryViewWrapper bukkitInventoryViewWrapper) {
-            player.openInventory(bukkitInventoryViewWrapper.getBukkitInventory());
+            bukkitInventory = bukkitInventoryViewWrapper.getBukkitInventory();
         }
         else {
-            player.openInventory(BukkitWrapper.copyInventory(inventory));
+            bukkitInventory = BukkitWrapper.copyInventory(inventory);
         }
+        BukkitUtils.notAsyncTask(() -> player.openInventory(bukkitInventory));
         return inventory;
     }
 
@@ -65,6 +71,11 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements P
         InventoryView inventoryView = BukkitWrapper.inventoryView(inventory, false);
         inventoryView.open(this);
         return inventoryView;
+    }
+
+    @Override
+    public void closeInventory() {
+        BukkitUtils.notAsyncTask(player::closeInventory);
     }
 
     @Override

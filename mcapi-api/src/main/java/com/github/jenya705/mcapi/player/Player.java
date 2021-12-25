@@ -36,6 +36,8 @@ public interface Player extends LivingEntity, CommandSender, OfflinePlayer {
 
     InventoryView openInventory(Inventory inventory);
 
+    void closeInventory();
+
     @Override
     default String getId() {
         return getUuid().toString();

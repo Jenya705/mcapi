@@ -2,6 +2,11 @@ package com.github.jenya705.mcapi;
 
 import com.github.jenya705.mcapi.command.CommandExecutor;
 import com.github.jenya705.mcapi.entity.Entity;
+import com.github.jenya705.mcapi.inventory.Inventory;
+import com.github.jenya705.mcapi.inventory.InventoryView;
+import com.github.jenya705.mcapi.inventory.InventoryViewModel;
+import com.github.jenya705.mcapi.inventory.ItemStack;
+import com.github.jenya705.mcapi.menu.InventoryMenuView;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.util.PlayerUtils;
 import com.github.jenya705.mcapi.world.World;
@@ -40,6 +45,26 @@ public interface ServerCore {
     World getWorld(String id);
 
     Collection<? extends Entity> getEntities();
+
+    InventoryView createInventoryView(Inventory inventory, Material airMaterial, boolean unique);
+
+    InventoryMenuView createInventoryMenuView(Inventory inventory, Material airMaterial, boolean unique);
+
+    default InventoryView createInventoryView(Inventory inventory) {
+        return createInventoryView(inventory, null);
+    }
+
+    default InventoryMenuView createInventoryMenuView(Inventory inventory) {
+        return createInventoryMenuView(inventory, null);
+    }
+
+    default InventoryView createInventoryView(Inventory inventory, Material airMaterial) {
+        return createInventoryView(inventory, airMaterial, true);
+    }
+
+    default InventoryMenuView createInventoryMenuView(Inventory inventory, Material airMaterial) {
+        return createInventoryMenuView(inventory, airMaterial, true);
+    }
 
     default Collection<? extends Entity> getEntities(Predicate<Entity> filter) {
         return getEntities()

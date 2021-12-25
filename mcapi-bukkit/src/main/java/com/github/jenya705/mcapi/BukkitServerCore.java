@@ -2,6 +2,11 @@ package com.github.jenya705.mcapi;
 
 import com.github.jenya705.mcapi.command.CommandExecutor;
 import com.github.jenya705.mcapi.entity.Entity;
+import com.github.jenya705.mcapi.inventory.BukkitInventoryViewWrapper;
+import com.github.jenya705.mcapi.inventory.Inventory;
+import com.github.jenya705.mcapi.menu.BukkitInventoryMenuImpl;
+import com.github.jenya705.mcapi.menu.BukkitMenuManager;
+import com.github.jenya705.mcapi.menu.InventoryMenuView;
 import com.github.jenya705.mcapi.permission.PermissionManagerHook;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.util.ListUtils;
@@ -44,6 +49,9 @@ public class BukkitServerCore extends AbstractApplicationModule implements Serve
 
     @Bean
     private BukkitOfflinePlayerStorage offlinePlayerStorage;
+
+    @Bean
+    private BukkitMenuManager menuManager;
 
     @OnInitializing(priority = -1)
     public void initialize() {
@@ -147,6 +155,20 @@ public class BukkitServerCore extends AbstractApplicationModule implements Serve
                                 .collect(Collectors.toList())
                         )
                         .collect(Collectors.toList())
+        );
+    }
+
+    @Override
+    public BukkitInventoryViewWrapper createInventoryView(Inventory inventory, Material airMaterial, boolean unique) {
+        return BukkitWrapper.inventoryView(inventory, airMaterial, unique);
+    }
+
+    @Override
+    public InventoryMenuView createInventoryMenuView(Inventory inventory, Material airMaterial, boolean unique) {
+        return new BukkitInventoryMenuImpl(
+                menuManager,
+                createInventoryView(inventory, airMaterial, unique),
+                inventory
         );
     }
 

@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi;
 
+import com.github.jenya705.mcapi.menu.BukkitMenuManagerImpl;
 import com.github.jenya705.mcapi.permission.LuckPermsHook;
 import com.github.jenya705.mcapi.permission.VaultPermissionHook;
 import com.github.jenya705.mcapi.utils.FailureOperation;
@@ -31,9 +32,12 @@ public class BukkitApplication extends JavaPlugin implements Supplier<ServerAppl
     public void onLoad() {
         BukkitUtils.setPlugin(this);
         application = new ServerApplication();
-        application.addClass(BukkitServerCore.class);
-        application.addClass(BukkitServerEventHandler.class);
-        application.addClass(BukkitOfflinePlayerStorageImpl.class);
+        application.addClasses(
+                BukkitServerCore.class,
+                BukkitServerEventHandler.class,
+                BukkitOfflinePlayerStorageImpl.class,
+                BukkitMenuManagerImpl.class
+        );
         paperFeatures();
         application.addBean(this);
     }

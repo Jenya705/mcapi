@@ -12,6 +12,8 @@ public interface InventoryView {
 
     void open(Player player);
 
+    void close(Player player);
+
     Material getAirMaterial();
 
     Inventory getInventory();

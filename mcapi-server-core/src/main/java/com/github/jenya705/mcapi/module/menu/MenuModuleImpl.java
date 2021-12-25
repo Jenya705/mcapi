@@ -3,6 +3,7 @@ package com.github.jenya705.mcapi.module.menu;
 import com.github.jenya705.mcapi.AbstractApplicationModule;
 import com.github.jenya705.mcapi.Bean;
 import com.github.jenya705.mcapi.inventory.IdentifiedInventoryItemStack;
+import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.inventory.ItemStack;
 import com.github.jenya705.mcapi.menu.MenuItem;
 import com.github.jenya705.mcapi.module.web.tunnel.EventTunnel;
@@ -33,5 +34,15 @@ public class MenuModuleImpl extends AbstractApplicationModule implements MenuMod
                         eventTunnel
                 )
         );
+    }
+
+    @Override
+    public void makeMenuItems(Inventory inventory, int botId) {
+        for (int i = 0; i < inventory.getSize(); ++i) {
+            ItemStack item = inventory.getItem(i);
+            if (!(item instanceof IdentifiedInventoryItemStack)) continue;
+            IdentifiedInventoryItemStack identifiedInventoryItemStack = (IdentifiedInventoryItemStack) item;
+            inventory.setItem(i, createEventTunnelItem(identifiedInventoryItemStack, botId));
+        }
     }
 }

@@ -92,6 +92,11 @@ public class EntityPlayer implements Player {
     }
 
     @Override
+    public void closeInventory() {
+        EntityUtils.throwEntityContextException();
+    }
+
+    @Override
     public void chat(String message) {
         EntityUtils.throwEntityContextException();
     }

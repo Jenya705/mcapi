@@ -18,6 +18,7 @@ import com.github.jenya705.mcapi.form.FormComponent;
 import com.github.jenya705.mcapi.form.FormPlatformProvider;
 import com.github.jenya705.mcapi.form.component.ComponentMapParser;
 import com.github.jenya705.mcapi.inventory.*;
+import com.github.jenya705.mcapi.menu.InventoryMenuView;
 import com.github.jenya705.mcapi.module.authorization.AuthorizationModule;
 import com.github.jenya705.mcapi.module.command.ApiCommandDeserializer;
 import com.github.jenya705.mcapi.module.command.CommandModule;
@@ -25,6 +26,7 @@ import com.github.jenya705.mcapi.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.module.enchantment.EnchantmentStorage;
 import com.github.jenya705.mcapi.module.mapper.Mapper;
 import com.github.jenya705.mcapi.module.material.MaterialStorage;
+import com.github.jenya705.mcapi.module.menu.MenuModule;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.player.PlayerAbilities;
 import com.github.jenya705.mcapi.rest.*;
@@ -76,6 +78,9 @@ public class RestModule extends AbstractApplicationModule {
 
     @Bean
     private EnchantmentStorage enchantmentStorage;
+
+    @Bean
+    private MenuModule menuModule;
 
     @OnStartup
     @SuppressWarnings("unchecked")
@@ -165,10 +170,32 @@ public class RestModule extends AbstractApplicationModule {
                         RestInventoryView.class,
                         rest -> new InventoryViewModel(
                                 materialStorage.getMaterial(rest.getAirMaterial()),
-                                Arrays.stream(rest.getItems())
-                                        .map(this::parseIdentifiedInventoryItemStack)
-                                        .toArray(IdentifiedInventoryItemStack[]::new)
+                                buildInventory(
+                                        Arrays
+                                                .stream(rest.getItems())
+                                                .map(this::parseIdentifiedInventoryItemStack)
+                                                .toArray(IdentifiedInventoryItemStack[]::new),
+                                        rest.getSize()
+                                )
                         )
+                )
+                .tunnelJsonDeserializer(
+                        InventoryView.class,
+                        InventoryViewModel.class,
+                        model -> core()
+                                .createInventoryView(
+                                        new InventoryContainer(model.getItems()),
+                                        model.getAirMaterial()
+                                )
+                )
+                .tunnelJsonDeserializer(
+                        InventoryMenuView.class,
+                        InventoryViewModel.class,
+                        model -> core()
+                                .createInventoryMenuView(
+                                        new InventoryContainer(model.getItems()),
+                                        model.getAirMaterial()
+                                )
                 )
                 .tunnelJsonDeserializer(ItemStack.class, RestItemStack.class, this::parseItemStack)
                 .tunnelJsonDeserializer(
@@ -279,5 +306,13 @@ public class RestModule extends AbstractApplicationModule {
         Entity entity = getEntity(uuid);
         if (entity instanceof CapturableEntity) return (CapturableEntity) entity;
         throw EntityNotCapturableException.create(entity.getUuid());
+    }
+
+    private ItemStack[] buildInventory(IdentifiedInventoryItemStack[] items, int size) {
+        ItemStack[] result = new ItemStack[size];
+        for (IdentifiedInventoryItemStack inventoryItemStack : items) {
+            result[inventoryItemStack.getIndex()] = inventoryItemStack;
+        }
+        return result;
     }
 }

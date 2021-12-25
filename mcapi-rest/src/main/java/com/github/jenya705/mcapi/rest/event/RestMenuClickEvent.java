@@ -14,8 +14,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RestMenuClickEvent {
 
+    public static final String type = "menu_click";
+
     private String id;
     private RestPlayer player;
+
+    public String getType() {
+        return type;
+    }
 
     public static RestMenuClickEvent from(MenuClickEvent event) {
         return new RestMenuClickEvent(

@@ -47,6 +47,12 @@ public class BukkitUniqueInventoryViewWrapper implements BukkitInventoryViewWrap
     }
 
     @Override
+    public void close(Player player) {
+        viewers.remove(player);
+        player.closeInventory();
+    }
+
+    @Override
     public boolean isUnique() {
         return true;
     }

@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class RestInventoryView {
 
     private String airMaterial;
+    private int size;
     private RestIdentifiedInventoryItemStack[] items;
 
 }

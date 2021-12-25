@@ -31,6 +31,7 @@ import com.github.jenya705.mcapi.module.rest.route.command.CreateCommandRouteHan
 import com.github.jenya705.mcapi.module.rest.route.command.DeleteCommandRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.entity.CaptureEntityRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.entity.GetEntityRouteHandler;
+import com.github.jenya705.mcapi.module.rest.route.inventory.OpenInventoryRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.offline.BanOfflinePlayerRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.offline.GetOfflinePlayerRouteHandler;
 import com.github.jenya705.mcapi.module.rest.route.player.*;
@@ -142,7 +143,8 @@ public class ServerApplication {
                 GetPlayerEnderChestItemRouteHandler.class,
                 SetBlockDataFieldRouteHandler.class,
                 GetEntityRouteHandler.class,
-                CaptureEntityRouteHandler.class
+                CaptureEntityRouteHandler.class,
+                OpenInventoryRouteHandler.class
                 // End Routes
         );
     }
