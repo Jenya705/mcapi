@@ -4,4 +4,4 @@
 
 Web / Rest api for server owners and players! Built on top of reactor-netty.
 
-* [wiki](https://github.com/Jenya705/mcapi/wiki)
+* [wiki](https://github.com/Jenya705/mcapi/wiki) (deprecated)
