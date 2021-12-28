@@ -30,8 +30,8 @@ public final class BoundingBox {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof BoundingBox)) return false;
         if (obj == this) return true;
+        if (!(obj instanceof BoundingBox)) return false;
         BoundingBox other = (BoundingBox) obj;
         return Objects.equals(minCorner, other.minCorner) &&
                 Objects.equals(maxCorner, other.maxCorner);

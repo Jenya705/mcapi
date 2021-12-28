@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -13,9 +14,9 @@ import java.util.List;
 public class ListUtils {
 
     @SafeVarargs
-    public <T> List<T> join(List<T>... lists) {
+    public <T> List<T> join(Collection<T>... lists) {
         List<T> newList = new ArrayList<>();
-        for (List<T> list : lists) {
+        for (Collection<T> list : lists) {
             newList.addAll(list);
         }
         return newList;
@@ -30,9 +31,9 @@ public class ListUtils {
         return newList;
     }
 
-    public <T> List<T> join(List<List<T>> lists) {
+    public <T> List<T> join(Collection<? extends Collection<T>> lists) {
         List<T> newList = new ArrayList<>();
-        for (List<T> list: lists) {
+        for (Collection<T> list: lists) {
             newList.addAll(list);
         }
         return newList;

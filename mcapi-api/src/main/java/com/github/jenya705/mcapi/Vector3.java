@@ -108,8 +108,8 @@ public final class Vector3 {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Vector3)) return false;
         if (obj == this) return true;
+        if (!(obj instanceof Vector3)) return false;
         Vector3 other = (Vector3) obj;
         return Math.abs(x - other.x) < epsilon &&
                 Math.abs(y - other.y) < epsilon &&

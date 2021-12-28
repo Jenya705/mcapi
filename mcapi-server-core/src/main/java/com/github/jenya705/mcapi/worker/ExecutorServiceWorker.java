@@ -3,11 +3,11 @@ package com.github.jenya705.mcapi.worker;
 import com.github.jenya705.mcapi.AbstractApplicationModule;
 import com.github.jenya705.mcapi.OnInitializing;
 import com.github.jenya705.mcapi.module.config.ConfigModule;
+import com.github.jenya705.mcapi.util.AlreadyDoneFuture;
+import com.github.jenya705.mcapi.util.AlreadyFailedFuture;
+import com.github.jenya705.mcapi.util.FutureUtils;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 /**
  * @author Jenya705
@@ -24,16 +24,26 @@ public class ExecutorServiceWorker extends AbstractApplicationModule implements 
                         .getConfig()
                         .required("worker")
         );
-        threadPool = Executors.newFixedThreadPool(config.getThreads());
+        if (config.getThreads() > 0) {
+            threadPool = Executors.newFixedThreadPool(config.getThreads());
+        }
     }
 
     @Override
-    public <T> Future<T> invoke(Callable<T> supplier) {
-        return threadPool.submit(supplier);
+    public <T> Future<T> invoke(Callable<T> callable) {
+        if (threadPool != null) {
+            return threadPool.submit(callable);
+        }
+        return FutureUtils.fromCallable(callable);
     }
 
     @Override
     public void invoke(Runnable runnable) {
-        threadPool.execute(runnable);
+        if (threadPool != null) {
+            threadPool.execute(runnable);
+        }
+        else {
+            runnable.run();
+        }
     }
 }

@@ -23,16 +23,16 @@ public class ReactiveUtils {
         if (obj) throw exceptionSupplier.get();
     }
 
-    public void runtimeException(Throwable e) {
-        throw new RuntimeException(e);
+    public RuntimeException runtimeException(Throwable e) {
+        if (e instanceof RuntimeException) return (RuntimeException) e;
+        return new RuntimeException(e);
     }
 
     public RuntimeException unknownException() {
         return new RuntimeException("Unknown exception");
     }
 
-    public void needRuntimeException(Throwable e) {
-        if (e instanceof RuntimeException) throw (RuntimeException) e;
-        throw new RuntimeException(e);
+    public void throwRuntimeException(Throwable e) {
+        throw runtimeException(e);
     }
 }

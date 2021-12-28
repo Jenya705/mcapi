@@ -72,7 +72,7 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
                 });
         nettyServer = server
                 .bind()
-                .doOnError(ReactiveUtils::runtimeException)
+                .doOnError(ReactiveUtils::throwRuntimeException)
                 .block();
         timerTask.complete();
         log.info("Web server available on port {}", config.getPort());
