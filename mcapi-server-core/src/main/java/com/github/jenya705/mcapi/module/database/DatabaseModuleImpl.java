@@ -40,8 +40,6 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
     private DatabaseGetter safeSyncWithFuture;
     private DatabaseGetter safeAsync;
 
-    private final Object block = new Object();
-
     @OnInitializing
     public void initialize() {
         addTypeInitializer("mysql", new MySqlDatabaseInitializer(app()));
@@ -59,7 +57,7 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
                                 .required("cache")
                 )
         );
-        TimerTask task = TimerTask.start(log, String.format("Creating connection with %s...", config.getType()));
+        TimerTask task = TimerTask.start(log, "Creating connection with %s...", config.getType());
         createConnection();
         task.complete();
         task.start("Loading storage...");
@@ -97,7 +95,7 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
     @Override
     @SneakyThrows
     public void update(String sql, Object... objects) {
-        synchronized (block) {
+        synchronized (this) {
             if (objects.length == 0) {
                 Statement statement = connection.createStatement();
                 statement.executeUpdate(sql);
@@ -115,7 +113,7 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
     @Override
     @SneakyThrows
     public ResultSet query(String sql, Object... objects) {
-        synchronized (block) {
+        synchronized (this) {
             if (objects.length == 0) {
                 Statement statement = connection.createStatement();
                 return statement.executeQuery(sql);

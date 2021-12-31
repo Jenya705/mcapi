@@ -11,6 +11,10 @@ public interface TimerTask {
         return new TimerTaskImpl(logger, message);
     }
 
+    static TimerTask start(Logger logger, String format, Object... args) {
+        return start(logger, String.format(format, args));
+    }
+
     void start(String message);
 
     void complete();

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.Delegate;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,10 @@ public class MultivaluedMapImpl<T, V> implements MultivaluedMap<T, V> {
 
     @Delegate
     private final Map<T, List<V>> map;
+
+    public MultivaluedMapImpl() {
+        this(new HashMap<>());
+    }
 
     @Override
     public void add(T key, V value) {

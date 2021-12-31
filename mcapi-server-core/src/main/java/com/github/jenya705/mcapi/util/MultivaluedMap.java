@@ -13,6 +13,10 @@ public interface MultivaluedMap<T, V> extends Map<T, List<V>> {
         return new MultivaluedMapImpl<>(map);
     }
 
+    static <T, V> MultivaluedMap<T, V> create() {
+        return new MultivaluedMapImpl<>();
+    }
+
     void add(T key, V value);
 
     default void forEach(T key, Consumer<V> consumer) {

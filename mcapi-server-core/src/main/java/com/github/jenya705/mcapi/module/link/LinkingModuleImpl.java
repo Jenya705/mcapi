@@ -25,7 +25,7 @@ import com.github.jenya705.mcapi.rest.event.RestLinkEvent;
 import com.github.jenya705.mcapi.rest.event.RestUnlinkEvent;
 import com.github.jenya705.mcapi.util.ListUtils;
 import com.github.jenya705.mcapi.util.MultivaluedMap;
-import com.github.jenya705.mcapi.util.MultivaluedMapImpl;
+import com.github.jenya705.mcapi.util.OnlinePlayerImitation;
 import com.github.jenya705.mcapi.util.ReactiveUtils;
 
 import java.util.*;
@@ -50,7 +50,7 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
     @Bean
     private CommandModule commandModule;
 
-    private final MultivaluedMap<UUID, LinkObject> links = new MultivaluedMapImpl<>(new HashMap<>());
+    private final MultivaluedMap<UUID, LinkObject> links = MultivaluedMap.create();
 
     @OnStartup
     public void start() {
@@ -59,8 +59,16 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
                         .getConfig()
                         .required("linking")
         );
-        eventLoop() // not need to send anything because this event can listened by bot
-                .handler(QuitEvent.class, p -> links.remove(p.getPlayer().getUuid()));
+        eventLoop()
+                .handler(QuitEvent.class, event -> {
+                    Player player = new OnlinePlayerImitation(event.getPlayer());
+                    if (links.containsKey(player.getUuid())) {
+                        links
+                                .get(player.getUuid())
+                                .forEach(it -> end(player, it, false));
+                        links.remove(player.getUuid());
+                    }
+                });
         linkIgnores = new LinkIgnores(app());
         linkIgnores.init();
     }
@@ -219,29 +227,29 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
 
     @Override
     public void end(Player player, int index, boolean enabled) {
-        LinkObject linkObject = null;
         List<LinkObject> playerLinks = getPlayerLinks(player);
         for (int i = 0; i < playerLinks.size(); ++i) {
             LinkObject currentPlayerLink = playerLinks.get(i);
             if (currentPlayerLink.getId() == index) {
-                linkObject = currentPlayerLink;
+                end(player, currentPlayerLink, enabled);
                 playerLinks.remove(i);
                 break;
             }
         }
-        if (linkObject == null) return;
-        LinkObject finalLinkObject = linkObject;
+    }
+
+    private void end(Player player, LinkObject linkObject, boolean enabled) {
         worker().invoke(() -> {
             eventTunnel()
                     .getClients()
                     .stream()
-                    .filter(client -> client.getOwner().getEntity().getId() == finalLinkObject.getId())
+                    .filter(client -> client.getOwner().getEntity().getId() == linkObject.getId())
                     .filter(client -> client.isSubscribed(RestLinkEvent.type))
                     .forEach(client -> client.send(
                             new EntityLinkEvent(
                                     !enabled,
                                     player,
-                                    finalLinkObject
+                                    linkObject
                                             .getOptionalPermissions()
                                             .entrySet()
                                             .stream()
@@ -250,23 +258,23 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
                                             .toArray(String[]::new)
                             )
                     ));
-            finalLinkObject
+            linkObject
                     .getOptionalPermissions()
                     .entrySet()
                     .stream()
                     .filter(Map.Entry::getValue)
                     .map(Map.Entry::getKey)
-                    .forEach(it -> savePermission(finalLinkObject, it, player));
+                    .forEach(it -> savePermission(linkObject, it, player));
             Arrays.stream(
-                    finalLinkObject
+                    linkObject
                             .getRequest()
                             .getRequireRequestPermissions()
             )
-                    .forEach(it -> savePermission(finalLinkObject, it, player));
+                    .forEach(it -> savePermission(linkObject, it, player));
             databaseModule
                     .storage()
                     .save(new BotLinkEntity(
-                            finalLinkObject.getId(),
+                            linkObject.getId(),
                             player.getUuid()
                     ));
         });
@@ -285,7 +293,7 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
                                 .stream(linkObject.getRequest().getMinecraftRequestCommands())
                                 .map(it -> String.format(
                                         CommandModule.permissionFormat,
-                                        finalLinkObject.getBot().getEntity().getId()
+                                        linkObject.getBot().getEntity().getId()
                                         ) + "." + it.replaceAll(" ", ".")
                                 )
                                 .toArray(String[]::new)
