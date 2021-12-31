@@ -1,7 +1,6 @@
 package com.github.jenya705.mcapi.bukkit;
 
 import com.github.jenya705.mcapi.bukkit.block.BukkitBlockWrapper;
-import com.github.jenya705.bukkit.inventory.*;
 import com.github.jenya705.mcapi.*;
 import com.github.jenya705.mcapi.block.*;
 import com.github.jenya705.mcapi.block.data.Door;
