@@ -212,7 +212,7 @@ public class ServerApplication {
         }
     }
 
-    protected <T> void addToMap(Map<Integer, Set<T>> map, int key, T value) {
+    protected <E, T> void addToMap(Map<E, Set<T>> map, E key, T value) {
         if (!map.containsKey(key)) map.put(key, new HashSet<>());
         map.get(key).add(value);
     }
@@ -349,6 +349,27 @@ public class ServerApplication {
 
     public void addBean(Object obj) {
         beans.add(obj);
+    }
+
+    public void swapBeans(Class<?> from, Class<?> to) {
+        if (initialized) {
+            throw new IllegalStateException("You can not change bean classes when application already initialized");
+        }
+        int i = 0;
+        for (Class<?> clazz: classes) {
+            if (clazz.isAssignableFrom(from)) {
+                classes.remove(i);
+                classes.add(to);
+                return;
+            }
+            ++i;
+        }
+        if (isDebug()) {
+            log.warn(String.format(
+                    "Tried to swap not exist bean. From: %s, To: %s",
+                    from, to
+            ), new RuntimeException());
+        }
     }
 
     private void disable() {

@@ -13,7 +13,7 @@ public class PatternUtils {
 
     public boolean validateAllString(Pattern pattern, String str) {
         Matcher matcher = pattern.matcher(str);
-        return matcher.find() && matcher.end() == str.length();
+        return matcher.find() && matcher.end() == str.length() && matcher.start() == 0;
     }
 
 }

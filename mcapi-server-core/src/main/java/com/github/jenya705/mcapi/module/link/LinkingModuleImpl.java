@@ -265,12 +265,9 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
                     .filter(Map.Entry::getValue)
                     .map(Map.Entry::getKey)
                     .forEach(it -> savePermission(linkObject, it, player));
-            Arrays.stream(
-                    linkObject
-                            .getRequest()
-                            .getRequireRequestPermissions()
-            )
-                    .forEach(it -> savePermission(linkObject, it, player));
+            for (String requirePermission: linkObject.getRequest().getRequireRequestPermissions()) {
+                savePermission(linkObject, requirePermission, player);
+            }
             databaseModule
                     .storage()
                     .save(new BotLinkEntity(
