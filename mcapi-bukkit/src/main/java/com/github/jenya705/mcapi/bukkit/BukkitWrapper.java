@@ -218,8 +218,8 @@ public class BukkitWrapper {
     }
 
     public org.bukkit.inventory.Inventory copyInventory(InventoryView inventoryView) {
-        org.bukkit.inventory.Inventory bukkitInventory;
-        bukkitInventory = Bukkit.createInventory(null, inventoryView.getInventory().getSize());
+        org.bukkit.inventory.Inventory bukkitInventory =
+                Bukkit.createInventory(null, inventoryView.getInventory().getSize());
         int index = 0;
         for (ItemStack itemStack : inventoryView.getInventory().getAllItems()) {
             org.bukkit.inventory.ItemStack bukkitItemStack;

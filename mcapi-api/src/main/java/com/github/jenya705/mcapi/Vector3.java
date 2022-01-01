@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.util.Objects;
+
 /**
  * @author Jenya705
  */
@@ -114,5 +116,10 @@ public final class Vector3 {
         return Math.abs(x - other.x) < epsilon &&
                 Math.abs(y - other.y) < epsilon &&
                 Math.abs(z - other.z) < epsilon;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, z);
     }
 }

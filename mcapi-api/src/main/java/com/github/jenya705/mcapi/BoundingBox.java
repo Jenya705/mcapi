@@ -37,6 +37,11 @@ public final class BoundingBox {
                 Objects.equals(maxCorner, other.maxCorner);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(minCorner, maxCorner);
+    }
+
     public BoundingBox minCorner(Vector3 minCorner) {
         return new BoundingBox(minCorner, maxCorner);
     }
