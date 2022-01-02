@@ -8,6 +8,7 @@ import com.github.jenya705.mcapi.command.Command;
 import com.github.jenya705.mcapi.command.CommandOption;
 import com.github.jenya705.mcapi.entity.command.EntityCommand;
 import com.github.jenya705.mcapi.util.IteratorUtils;
+import com.github.jenya705.mcapi.util.ObjectUtils;
 
 import java.io.IOException;
 
@@ -17,13 +18,14 @@ import java.io.IOException;
 public class ApiCommandDeserializer extends StdDeserializer<Command> {
 
     private CommandOption[] getSubOptions(JsonNode node) {
-        return IteratorUtils.stream(
-                node
-                        .get("options")
-                        .elements()
-        )
-                .map(it -> commandModule.getParser(it.get("type").asText()).deserialize(it))
-                .toArray(CommandOption[]::new);
+        return ObjectUtils.ifNotNullProcessOrElse(
+                node.get("options"),
+                options -> IteratorUtils
+                        .stream(options.elements())
+                        .map(it -> commandModule.getParser(it.get("type").asText()).deserialize(it))
+                        .toArray(CommandOption[]::new),
+                new CommandOption[0]
+        );
     }
 
     private final CommandModule commandModule;

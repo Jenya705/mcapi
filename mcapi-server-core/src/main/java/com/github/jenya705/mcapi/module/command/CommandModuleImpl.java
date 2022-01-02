@@ -148,7 +148,7 @@ public class CommandModuleImpl extends AbstractApplicationModule implements Comm
             if (option instanceof CommandValueOption) anyValues = true;
             else if (option instanceof CommandExecutableOption) anySubs = true;
         }
-        return anyValues ? (anySubs ? ValidateResult.ALL : ValidateResult.VALUES) : ValidateResult.SUBS;
+        return anySubs ? (anyValues ? ValidateResult.ALL : ValidateResult.SUBS) : ValidateResult.VALUES;
     }
 
     @Override

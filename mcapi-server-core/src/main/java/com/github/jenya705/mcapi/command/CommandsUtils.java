@@ -18,9 +18,9 @@ public class CommandsUtils {
     public String placeholderMessage(String message, String... placeholders) {
         String messageWithPlaceholders = message
                 .replace('&', colorsChar);
-        for (int i = 0; i < placeholders.length; i += 2) {
+        for (int i = 0; i < placeholders.length;) {
             messageWithPlaceholders = messageWithPlaceholders
-                    .replace(placeholders[i], placeholders[i + 1]);
+                    .replace(placeholders[i++], placeholders[i++]);
         }
         return messageWithPlaceholders;
     }

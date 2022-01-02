@@ -44,6 +44,11 @@ public class ApiCommandExecutor extends AbstractApplicationModule implements Com
         this.path = path;
         this.owner = owner;
         this.commandModule = commandModule;
+        if (valueOptions.length == 0) {
+            parser = null;
+            tabs = null;
+            return;
+        }
         int requiredStart = Integer.MAX_VALUE;
         for (int i = 0; i < valueOptions.length; ++i) {
             CommandValueOption option = valueOptions[i];
@@ -63,6 +68,23 @@ public class ApiCommandExecutor extends AbstractApplicationModule implements Com
 
     @Override
     public void onCommand(CommandSender sender, StringfulIterator args, String permission) {
+        if (parser == null || tabs == null) {
+            eventTunnel()
+                    .broadcast(
+                            new EntityCommandInteractionEvent(
+                                    path,
+                                    sender,
+                                    new CommandInteractionValue[]{
+                                            new EntityCommandInteractionValue(
+                                                    ApiCommandExecutor.others,
+                                                    args.allNext()
+                                            )
+                                    }
+                            ),
+                            RestCommandInteractionEvent.type
+                    );
+            return;
+        }
         parser.create(args)
                 .ifPresent(list ->
                         eventTunnel()

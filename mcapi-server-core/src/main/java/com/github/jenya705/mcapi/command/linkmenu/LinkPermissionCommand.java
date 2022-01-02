@@ -18,6 +18,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.stream.Collectors;
+
 /**
  * @author Jenya705
  */
@@ -76,11 +78,14 @@ public class LinkPermissionCommand extends MenuCommand implements BaseCommon {
                                 config.getListDelimiter(),
                                 databaseModule
                                         .storage()
-                                        .findPermissionsByIdAndTarget(botId, player.getUuid()),
+                                        .findPermissionsByIdAndTarget(botId, player.getUuid())
+                                        .stream()
+                                        .filter(it -> !it.isRegex())
+                                        .collect(Collectors.toList()),
                                 it -> new String[]{
                                         "%permission%",
                                         localizationModule
-                                                .getLinkPermissionLocalization(it.getPermission())
+                                                .getLinkPermissionLocalization(it.toLocalPermission())
                                 },
                                 "%name%", databaseModule
                                         .storage()

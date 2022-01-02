@@ -68,7 +68,7 @@ public class StringfulParserImpl<T> implements StringfulParser<T> {
         }
         else {
             throw new IllegalArgumentException(
-                    "This reflection object's type need to be string[] or collection of strings");
+                    "This reflection object's type need to be array or collection of strings");
         }
     }
 
