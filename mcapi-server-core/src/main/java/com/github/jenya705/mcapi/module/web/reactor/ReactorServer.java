@@ -194,6 +194,11 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
                                     .asByteArray()
                                     .map(ZipUtils::decompressSneaky)
                                     .map(String::new)
+                                    .doOnNext(message -> {
+                                        if (app().isDebug()) {
+                                            log.info("Received message from webSocket. message: {}", message);
+                                        }
+                                    })
                                     .map(message ->
                                             Objects.requireNonNullElse(
                                                     handler.onMessage(
@@ -203,6 +208,11 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
                                                     ""
                                             )
                                     )
+                                    .doOnError(e -> {
+                                        if (app().isDebug()) {
+                                            log.warn("Received error while trying to read webSocket message", e);
+                                        }
+                                    })
                                     .doOnError(e -> handler.onError(connection, e))
                                     .onErrorResume(e -> Mono.just(mapper.asApiError(e)))
                                     .map(mapper::asJson)

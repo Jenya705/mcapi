@@ -29,7 +29,9 @@ public class ConnectedEventTunnelsCommand extends AdvancedCommandExecutor<Connec
                 config.getListDelimiter(),
                 eventTunnel().getClients(),
                 client -> new String[]{
-                        "%name%", client.getOwner().getEntity().getName()
+                        "%name%",
+                        client.getOwner() == null || client.getOwner().getEntity() == null
+                                ? "unknown" : client.getOwner().getEntity().getName()
                 },
                 config.getMaxElements(),
                 args.getPage(),
