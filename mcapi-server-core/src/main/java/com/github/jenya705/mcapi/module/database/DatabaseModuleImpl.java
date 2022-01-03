@@ -115,8 +115,7 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
     public ResultSet query(String sql, Object... objects) {
         synchronized (this) {
             if (objects.length == 0) {
-                Statement statement = connection.createStatement();
-                return statement.executeQuery(sql);
+                return connection.createStatement().executeQuery(sql);
             }
             else {
                 PreparedStatement statement = connection.prepareStatement(sql);

@@ -60,7 +60,7 @@ public class LocalizationModuleImpl extends AbstractApplicationModule implements
     }
 
     private void debugValidate() {
-        if (!app().isDebug()) return;
+        if (!debug()) return;
         for (DefaultPermission permission: DefaultPermission.values()) {
             if (permission.isGlobal()) continue;
             if (getLinkPermissionLocalization(permission.getName()) == null) {

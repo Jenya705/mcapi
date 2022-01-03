@@ -137,7 +137,7 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
     }
 
     private String executeHandler(HttpServerRequest request, HttpServerResponse response, RouteHandler handler, String body, RouteParameters parameters) {
-        if (app().isDebug()) {
+        if (debug()) {
             log.info("Received request to uri {} with body {}", request.uri(), body);
         }
         ReactorRequest localRequest = new ReactorRequest(this, request, body, parameters);
@@ -146,7 +146,7 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
         try {
             handler.handle(localRequest, localResponse);
         } catch (Throwable e) {
-            if (app().isDebug()) {
+            if (debug()) {
                 log.info("Exception on request: ", e);
             }
             ApiError error = mapper.asApiError(e);
@@ -194,11 +194,9 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
                                     .asByteArray()
                                     .map(ZipUtils::decompressSneaky)
                                     .map(String::new)
-                                    .doOnNext(message -> {
-                                        if (app().isDebug()) {
-                                            log.info("Received message from webSocket. message: {}", message);
-                                        }
-                                    })
+                                    .doOnNext(message -> debug(
+                                            () -> log.info("Received message from webSocket. message: {}", message)
+                                    ))
                                     .map(message ->
                                             Objects.requireNonNullElse(
                                                     handler.onMessage(
@@ -208,15 +206,13 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
                                                     ""
                                             )
                                     )
-                                    .doOnError(e -> {
-                                        if (app().isDebug()) {
-                                            log.warn("Received error while trying to read webSocket message", e);
-                                        }
-                                    })
+                                    .doOnError(e -> debug(
+                                            () -> log.warn("Received error while trying to read webSocket message", e))
+                                    )
                                     .doOnError(e -> handler.onError(connection, e))
                                     .onErrorResume(e -> Mono.just(mapper.asApiError(e)))
+                                    .filter(Objects::nonNull)
                                     .map(mapper::asJson)
-                                    .filter(String::isEmpty)
                                     .subscribe(sink::next);
                         })
                         .map(String::getBytes)

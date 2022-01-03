@@ -123,8 +123,6 @@ public class ContainerCommandExecutor extends AbstractApplicationModule implemen
         return new Pair<>(current, path.toString());
     }
 
-
-
     @Override
     public void setConfig(ConfigData config) {
         this.config = new ContainerCommandConfig(config);

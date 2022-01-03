@@ -22,7 +22,7 @@ public class ReactorWebSocketConnection implements WebSocketConnection {
     @Getter
     private FluxSink<String> sink;
 
-    private final List<String> toSend = new ArrayList<>();
+    private List<String> toSend = new ArrayList<>();
 
     public ReactorWebSocketConnection(WebsocketInbound inbound, WebsocketOutbound outbound, ReactorServer server) {
         this.inbound = inbound;
@@ -53,15 +53,10 @@ public class ReactorWebSocketConnection implements WebSocketConnection {
             toSend.add(server.getMapper().asJson(obj));
         }
     }
-
-    @Override
-    public int hashCode() {
-        return inbound.hashCode();
-    }
-
+    
     public void setSink(FluxSink<String> sink) {
         this.sink = sink;
-        toSend.forEach(str -> this.sink.next(str));
-        toSend.clear();
+        toSend.forEach(this.sink::next);
+        toSend = null;
     }
 }

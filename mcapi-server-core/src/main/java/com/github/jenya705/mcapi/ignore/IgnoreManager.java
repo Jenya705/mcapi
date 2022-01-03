@@ -61,7 +61,7 @@ public class IgnoreManager extends AbstractApplicationModule {
                                     .stream()
                                     .noneMatch(func -> func.test(event.getBean().getClass().getCanonicalName()))
                             ) return;
-                            if (app().isDebug()) {
+                            if (debug()) {
                                 log.info("Ignoring {} class", event.getBean().getClass().getCanonicalName());
                             }
                             event.setCancelled(true);

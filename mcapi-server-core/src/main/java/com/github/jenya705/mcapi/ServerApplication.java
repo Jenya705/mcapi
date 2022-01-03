@@ -332,7 +332,7 @@ public class ServerApplication {
             }
         }
         if (isDebug()) {
-            log.warn("Trying to get not exist bean:", new RuntimeException());
+            log.warn("Trying to get non-existent bean:", new RuntimeException());
         }
         return null;
     }
@@ -366,7 +366,7 @@ public class ServerApplication {
         }
         if (isDebug()) {
             log.warn(String.format(
-                    "Tried to swap not exist bean. From: %s, To: %s",
+                    "Tried to swap non-existent bean. From: %s, To: %s",
                     from, to
             ), new RuntimeException());
         }

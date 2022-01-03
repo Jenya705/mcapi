@@ -223,7 +223,7 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
             permissions = BotPermissionEntity.mapResultSet(
                     databaseModule.query(findPermissionsById, botId)
             );
-            permissions.forEach(it -> cache().cache(it));
+            permissions.forEach(cache()::cache);
         }
         return castCollection(permissions);
     }
@@ -287,7 +287,7 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
             links = BotLinkEntity.mapResultSet(
                     databaseModule.query(findLinksByBot, botId)
             );
-            links.forEach(it -> cache().cache(it));
+            links.forEach(cache()::cache);
         }
         return castCollection(links);
     }
@@ -304,7 +304,7 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
                             target.getLeastSignificantBits()
                     )
             );
-            links.forEach(it -> cache().cache(it));
+            links.forEach(cache()::cache);
         }
         return castCollection(links);
     }
@@ -313,10 +313,10 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
     public void delete(BotEntity botEntity) {
         cache()
                 .getCachedLinksWithNullSafety(botEntity.getId())
-                .forEach(it -> cache().unCache(it));
+                .forEach(cache()::unCache);
         cache()
                 .getCachedPermissionsWithNullSafety(botEntity.getId())
-                .forEach(it -> cache().unCache(it));
+                .forEach(cache()::unCache);
         cache()
                 .unCache(botEntity);
         databaseModule.update(

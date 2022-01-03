@@ -34,4 +34,12 @@ public interface BaseCommon {
     default void autoBeans() {
         app().injectBeansInObject(this);
     }
+
+    default boolean debug() {
+        return app().isDebug();
+    }
+
+    default void debug(Runnable runnable) {
+        if (debug()) runnable.run();
+    }
 }
