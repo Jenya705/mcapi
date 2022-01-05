@@ -10,7 +10,7 @@ import java.util.function.Function;
  * @author Jenya705
  */
 @Getter
-@ToString
+@ToString(includeFieldNames = false)
 public final class BoundingBox {
 
     private final Vector3 minCorner;
