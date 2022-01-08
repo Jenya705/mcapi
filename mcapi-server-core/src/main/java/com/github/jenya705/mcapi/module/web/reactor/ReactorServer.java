@@ -207,12 +207,12 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
                                             )
                                     )
                                     .doOnError(e -> debug(
-                                            () -> log.warn("Received error while trying to read webSocket message", e))
-                                    )
+                                            () -> log.warn("Received error while trying to read webSocket message", e)
+                                    ))
                                     .doOnError(e -> handler.onError(connection, e))
                                     .onErrorResume(e -> Mono.just(mapper.asApiError(e)))
-                                    .filter(Objects::nonNull)
                                     .map(mapper::asJson)
+                                    .filter(it -> !it.isEmpty())
                                     .subscribe(sink::next);
                         })
                         .map(String::getBytes)
