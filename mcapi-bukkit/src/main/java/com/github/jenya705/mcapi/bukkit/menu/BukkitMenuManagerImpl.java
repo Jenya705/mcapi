@@ -2,9 +2,11 @@ package com.github.jenya705.mcapi.bukkit.menu;
 
 import com.github.jenya705.mcapi.bukkit.BukkitApplication;
 import com.github.jenya705.mcapi.bukkit.BukkitWrapper;
-import com.github.jenya705.mcapi.*;
 import com.github.jenya705.mcapi.menu.InventoryMenuView;
 import com.github.jenya705.mcapi.player.Player;
+import com.github.jenya705.mcapi.server.AbstractApplicationModule;
+import com.github.jenya705.mcapi.server.Bean;
+import com.github.jenya705.mcapi.server.OnStartup;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;

@@ -1,11 +1,11 @@
 package com.github.jenya705.mcapi.test;
 
-import com.github.jenya705.mcapi.entity.AbstractBot;
 import com.github.jenya705.mcapi.error.AuthorizationBadTokenException;
 import com.github.jenya705.mcapi.error.AuthorizationFormatException;
 import com.github.jenya705.mcapi.mock.MockServerApplication;
-import com.github.jenya705.mcapi.module.authorization.AuthorizationModule;
-import com.github.jenya705.mcapi.module.database.DatabaseModule;
+import com.github.jenya705.mcapi.server.entity.AbstractBot;
+import com.github.jenya705.mcapi.server.module.authorization.AuthorizationModule;
+import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

@@ -1,12 +1,12 @@
 package com.github.jenya705.mcapi.mock.web;
 
-import com.github.jenya705.mcapi.AbstractApplicationModule;
-import com.github.jenya705.mcapi.module.web.RouteHandler;
-import com.github.jenya705.mcapi.module.web.RouteParameters;
-import com.github.jenya705.mcapi.module.web.RoutePredicate;
-import com.github.jenya705.mcapi.module.web.WebServer;
-import com.github.jenya705.mcapi.module.web.websocket.WebSocketRouteHandler;
-import com.github.jenya705.mcapi.util.Pair;
+import com.github.jenya705.mcapi.server.AbstractApplicationModule;
+import com.github.jenya705.mcapi.server.module.web.RouteHandler;
+import com.github.jenya705.mcapi.server.module.web.RouteParameters;
+import com.github.jenya705.mcapi.server.module.web.RoutePredicate;
+import com.github.jenya705.mcapi.server.module.web.WebServer;
+import com.github.jenya705.mcapi.server.module.web.websocket.WebSocketRouteHandler;
+import com.github.jenya705.mcapi.server.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;

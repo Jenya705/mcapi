@@ -1,8 +1,8 @@
 package com.github.jenya705.mcapi.bukkit.block.data;
 
-import com.github.jenya705.mcapi.bukkit.block.BukkitDirectionalWrapper;
 import com.github.jenya705.mcapi.block.Directional;
 import com.github.jenya705.mcapi.block.data.CommandBlock;
+import com.github.jenya705.mcapi.bukkit.block.BukkitDirectionalWrapper;
 import com.github.jenya705.mcapi.bukkit.block.state.CapturedState;
 import com.github.jenya705.mcapi.bukkit.block.state.SharedCapturedState;
 import lombok.experimental.Delegate;

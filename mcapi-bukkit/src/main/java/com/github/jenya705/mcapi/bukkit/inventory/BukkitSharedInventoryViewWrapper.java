@@ -1,8 +1,8 @@
 package com.github.jenya705.mcapi.bukkit.inventory;
 
-import com.github.jenya705.mcapi.bukkit.BukkitWrapper;
 import com.github.jenya705.mcapi.Material;
 import com.github.jenya705.mcapi.VanillaMaterial;
+import com.github.jenya705.mcapi.bukkit.BukkitWrapper;
 import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.player.Player;
 import lombok.Getter;

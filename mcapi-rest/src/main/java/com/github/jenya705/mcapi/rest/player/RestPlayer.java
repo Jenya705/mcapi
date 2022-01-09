@@ -1,9 +1,7 @@
 package com.github.jenya705.mcapi.rest.player;
 
-import com.github.jenya705.mcapi.Vector3;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.rest.RestLocation;
-import com.github.jenya705.mcapi.rest.RestShortBoundingBox;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

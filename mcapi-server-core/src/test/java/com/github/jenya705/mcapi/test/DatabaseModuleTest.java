@@ -1,9 +1,9 @@
 package com.github.jenya705.mcapi.test;
 
-import com.github.jenya705.mcapi.entity.BotEntity;
 import com.github.jenya705.mcapi.mock.MockServerApplication;
-import com.github.jenya705.mcapi.module.database.DatabaseModule;
-import com.github.jenya705.mcapi.util.TokenUtils;
+import com.github.jenya705.mcapi.server.entity.BotEntity;
+import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
+import com.github.jenya705.mcapi.server.util.TokenUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

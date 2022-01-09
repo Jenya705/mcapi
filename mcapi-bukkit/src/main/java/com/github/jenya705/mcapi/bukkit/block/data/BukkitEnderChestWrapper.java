@@ -1,10 +1,10 @@
 package com.github.jenya705.mcapi.bukkit.block.data;
 
-import com.github.jenya705.mcapi.bukkit.block.BukkitDirectionalWrapper;
-import com.github.jenya705.mcapi.bukkit.block.BukkitWaterloggedWrapper;
 import com.github.jenya705.mcapi.block.Directional;
 import com.github.jenya705.mcapi.block.Waterlogged;
 import com.github.jenya705.mcapi.block.data.EnderChest;
+import com.github.jenya705.mcapi.bukkit.block.BukkitDirectionalWrapper;
+import com.github.jenya705.mcapi.bukkit.block.BukkitWaterloggedWrapper;
 import lombok.experimental.Delegate;
 
 /**

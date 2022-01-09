@@ -1,8 +1,8 @@
 package com.github.jenya705.mcapi.bukkit;
 
-import com.github.jenya705.mcapi.command.CommandExecutor;
-import com.github.jenya705.mcapi.command.CommandTab;
-import com.github.jenya705.mcapi.stringful.ArrayStringfulIterator;
+import com.github.jenya705.mcapi.server.command.CommandExecutor;
+import com.github.jenya705.mcapi.server.command.CommandTab;
+import com.github.jenya705.mcapi.server.stringful.ArrayStringfulIterator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.command.Command;

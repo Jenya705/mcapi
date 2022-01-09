@@ -1,8 +1,8 @@
 package com.github.jenya705.mcapi.bukkit.block;
 
-import com.github.jenya705.mcapi.bukkit.BukkitWrapper;
 import com.github.jenya705.mcapi.block.BlockFace;
 import com.github.jenya705.mcapi.block.Directional;
+import com.github.jenya705.mcapi.bukkit.BukkitWrapper;
 import org.bukkit.block.Block;
 
 /**

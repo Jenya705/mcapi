@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.mock;
 
-import com.github.jenya705.mcapi.command.CommandExecutor;
+import com.github.jenya705.mcapi.server.command.CommandExecutor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

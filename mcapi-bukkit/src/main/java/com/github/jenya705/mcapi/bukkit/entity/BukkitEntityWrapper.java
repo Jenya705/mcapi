@@ -1,8 +1,8 @@
 package com.github.jenya705.mcapi.bukkit.entity;
 
+import com.github.jenya705.mcapi.Location;
 import com.github.jenya705.mcapi.bukkit.BukkitUtils;
 import com.github.jenya705.mcapi.bukkit.BukkitWrapper;
-import com.github.jenya705.mcapi.*;
 import com.github.jenya705.mcapi.entity.CapturableEntity;
 import net.kyori.adventure.text.Component;
 import org.bukkit.NamespacedKey;

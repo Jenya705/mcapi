@@ -1,8 +1,8 @@
 package com.github.jenya705.mcapi.bukkit.block;
 
-import com.github.jenya705.mcapi.bukkit.BukkitWrapper;
 import com.github.jenya705.mcapi.block.Bisected;
 import com.github.jenya705.mcapi.block.Half;
+import com.github.jenya705.mcapi.bukkit.BukkitWrapper;
 import org.bukkit.block.Block;
 
 /**

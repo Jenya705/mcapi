@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.mock.web;
 
-import com.github.jenya705.mcapi.module.web.Response;
+import com.github.jenya705.mcapi.server.module.web.Response;
 import lombok.Getter;
 
 import java.util.HashMap;

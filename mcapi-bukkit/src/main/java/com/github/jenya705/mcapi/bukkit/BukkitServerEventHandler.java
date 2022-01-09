@@ -1,10 +1,10 @@
 package com.github.jenya705.mcapi.bukkit;
 
-import com.github.jenya705.mcapi.AbstractApplicationModule;
-import com.github.jenya705.mcapi.OnStartup;
 import com.github.jenya705.mcapi.entity.CapturableEntity;
 import com.github.jenya705.mcapi.entity.Entity;
 import com.github.jenya705.mcapi.entity.event.*;
+import com.github.jenya705.mcapi.server.AbstractApplicationModule;
+import com.github.jenya705.mcapi.server.OnStartup;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;

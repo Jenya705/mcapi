@@ -1,8 +1,8 @@
 package com.github.jenya705.mcapi.bukkit.block.data;
 
+import com.github.jenya705.mcapi.block.Directional;
 import com.github.jenya705.mcapi.bukkit.block.AbstractBukkitBlockData;
 import com.github.jenya705.mcapi.bukkit.block.BukkitDirectionalWrapper;
-import com.github.jenya705.mcapi.block.Directional;
 import lombok.experimental.Delegate;
 import org.bukkit.block.data.type.Piston;
 

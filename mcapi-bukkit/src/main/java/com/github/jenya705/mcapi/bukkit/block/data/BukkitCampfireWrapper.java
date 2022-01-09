@@ -1,10 +1,12 @@
 package com.github.jenya705.mcapi.bukkit.block.data;
 
+import com.github.jenya705.mcapi.block.Directional;
+import com.github.jenya705.mcapi.block.Liter;
+import com.github.jenya705.mcapi.block.Waterlogged;
+import com.github.jenya705.mcapi.block.data.Campfire;
 import com.github.jenya705.mcapi.bukkit.block.BukkitDirectionalWrapper;
 import com.github.jenya705.mcapi.bukkit.block.BukkitLiterWrapper;
 import com.github.jenya705.mcapi.bukkit.block.BukkitWaterloggedWrapper;
-import com.github.jenya705.mcapi.block.*;
-import com.github.jenya705.mcapi.block.data.Campfire;
 import com.github.jenya705.mcapi.bukkit.block.state.CapturedState;
 import com.github.jenya705.mcapi.bukkit.block.state.SharedCapturedState;
 import com.github.jenya705.mcapi.bukkit.inventory.BukkitCampfireInventoryWrapper;

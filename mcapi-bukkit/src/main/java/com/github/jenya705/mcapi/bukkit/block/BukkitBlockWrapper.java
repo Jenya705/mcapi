@@ -1,11 +1,11 @@
 package com.github.jenya705.mcapi.bukkit.block;
 
-import com.github.jenya705.mcapi.bukkit.BukkitLocationWrapper;
 import com.github.jenya705.mcapi.Location;
 import com.github.jenya705.mcapi.Material;
 import com.github.jenya705.mcapi.VanillaMaterial;
 import com.github.jenya705.mcapi.block.Block;
 import com.github.jenya705.mcapi.block.BlockData;
+import com.github.jenya705.mcapi.bukkit.BukkitLocationWrapper;
 import lombok.AllArgsConstructor;
 
 /**

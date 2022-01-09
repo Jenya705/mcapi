@@ -1,9 +1,9 @@
 package com.github.jenya705.mcapi.mock.web;
 
 import com.github.jenya705.mcapi.HttpMethod;
-import com.github.jenya705.mcapi.ServerApplication;
-import com.github.jenya705.mcapi.module.mapper.Mapper;
-import com.github.jenya705.mcapi.module.web.Request;
+import com.github.jenya705.mcapi.server.ServerApplication;
+import com.github.jenya705.mcapi.server.module.mapper.Mapper;
+import com.github.jenya705.mcapi.server.module.web.Request;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

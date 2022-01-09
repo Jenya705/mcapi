@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.mock.database;
 
-import com.github.jenya705.mcapi.module.database.DatabaseModuleImpl;
-import com.github.jenya705.mcapi.module.database.DatabaseTypeInitializer;
+import com.github.jenya705.mcapi.server.module.database.DatabaseModuleImpl;
+import com.github.jenya705.mcapi.server.module.database.DatabaseTypeInitializer;
 import lombok.SneakyThrows;
 
 import java.sql.Connection;

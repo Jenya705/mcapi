@@ -1,16 +1,16 @@
 package com.github.jenya705.mcapi.mock;
 
-import com.github.jenya705.mcapi.Bean;
-import com.github.jenya705.mcapi.OnInitializing;
-import com.github.jenya705.mcapi.ServerApplication;
 import com.github.jenya705.mcapi.entity.EntityLocation;
 import com.github.jenya705.mcapi.entity.player.EntityPlayer;
 import com.github.jenya705.mcapi.mock.database.MockDatabaseModule;
 import com.github.jenya705.mcapi.mock.web.MockWebServer;
-import com.github.jenya705.mcapi.module.database.DatabaseModule;
-import com.github.jenya705.mcapi.module.web.WebServer;
 import com.github.jenya705.mcapi.player.GameMode;
 import com.github.jenya705.mcapi.player.Player;
+import com.github.jenya705.mcapi.server.Bean;
+import com.github.jenya705.mcapi.server.OnInitializing;
+import com.github.jenya705.mcapi.server.ServerApplication;
+import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
+import com.github.jenya705.mcapi.server.module.web.WebServer;
 import org.mockito.Mockito;
 
 import java.util.*;

@@ -1,8 +1,8 @@
 package com.github.jenya705.mcapi.bukkit.inventory;
 
-import com.github.jenya705.mcapi.bukkit.BukkitWrapper;
 import com.github.jenya705.mcapi.Material;
 import com.github.jenya705.mcapi.VanillaMaterial;
+import com.github.jenya705.mcapi.bukkit.BukkitWrapper;
 import com.github.jenya705.mcapi.enchantment.ItemEnchantment;
 import com.github.jenya705.mcapi.inventory.ItemStack;
 import lombok.Getter;

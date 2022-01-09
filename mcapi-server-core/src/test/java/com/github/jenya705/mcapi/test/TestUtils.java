@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.test;
 
-import com.github.jenya705.mcapi.entity.BotEntity;
-import com.github.jenya705.mcapi.util.TokenUtils;
+import com.github.jenya705.mcapi.server.entity.BotEntity;
+import com.github.jenya705.mcapi.server.util.TokenUtils;
 import lombok.experimental.UtilityClass;
 
 import java.util.UUID;

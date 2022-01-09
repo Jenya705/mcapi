@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.bukkit.block;
 
-import com.github.jenya705.mcapi.bukkit.BukkitWrapper;
 import com.github.jenya705.mcapi.block.Watchable;
+import com.github.jenya705.mcapi.bukkit.BukkitWrapper;
 import com.github.jenya705.mcapi.bukkit.block.state.CapturedState;
 import com.github.jenya705.mcapi.player.Player;
 import lombok.RequiredArgsConstructor;
