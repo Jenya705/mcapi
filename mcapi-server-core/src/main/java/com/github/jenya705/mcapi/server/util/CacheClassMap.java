@@ -3,10 +3,7 @@ package com.github.jenya705.mcapi.server.util;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -14,8 +11,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class CacheClassMap<T> implements Map<Class<?>, T> {
 
-    private final Map<Class<?>, T> map = new ConcurrentHashMap<>();
-    private final Map<Class<?>, Class<?>> cache = new ConcurrentHashMap<>();
+    private final Map<Class<?>, T> map = new HashMap<>();
+    private final Map<Class<?>, Class<?>> cache = new HashMap<>();
 
     @Override
     public int size() {

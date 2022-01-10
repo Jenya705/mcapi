@@ -169,29 +169,10 @@ public class ServerApplication {
         int cur = 0;
         for (Class<?> clazz : classes) {
             try {
-                ApplicationPreBeanCreationEvent preEvent = new ApplicationPreBeanCreationEvent(clazz);
-                eventLoop.invoke(preEvent);
-                if (preEvent.getBean() == null) {
-                    classes.remove(cur);
-                    continue;
-                }
-                else if (preEvent.getBean() != clazz) {
-                    classes.set(cur, preEvent.getBean());
-                    clazz = preEvent.getBean();
-                }
                 Constructor<?> clazzConstructor = clazz.getConstructor();
                 Object thisObject = clazzConstructor.newInstance();
-                ApplicationPostBeanCreationEvent postEvent = new ApplicationPostBeanCreationEvent(thisObject);
-                if (postEvent.getBeanObject() == null) {
-                    classes.remove(cur);
-                    continue;
-                }
-                else if (postEvent.getBeanObject() != thisObject){
-                    thisObject = postEvent.getBeanObject();
-                }
                 onStartMethods(initializingMethods, startupMethods, thisObject);
                 beans.add(thisObject);
-                cur++;
             } catch (Exception e) {
                 log.error(String.format("Can not initialize bean %s, disabling:", clazz.getCanonicalName()), e);
                 disable();
@@ -317,7 +298,15 @@ public class ServerApplication {
     }
 
     public void stop() {
-        if (!initialized || !enabled) return;
+        if (!initialized || !enabled) {
+            if (debug) {
+                log.warn(
+                        "Someone tried to stop application when it is not enabled",
+                        new RuntimeException()
+                );
+            }
+            return;
+        }
         Map<Integer, Set<Pair<Object, Method>>> endMethods = new HashMap<>();
         for (Object obj : beans) {
             Class<?> currentClass = obj.getClass();
