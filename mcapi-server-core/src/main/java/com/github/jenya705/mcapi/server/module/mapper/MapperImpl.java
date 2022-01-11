@@ -21,8 +21,8 @@ public class MapperImpl implements Mapper, JacksonProvider {
     private static final ApiError defaultError = new EntityError(0, 500, null, "Some bad happened");
 
     private final ObjectMapper json = new ObjectMapper();
-    private final Map<Class<?>, RawDeserializer<?>> rawDeserializers = new CacheClassMap<>();
-    private final Map<Class<?>, ThrowableParser> throwableParsers = new CacheClassMap<>();
+    private final Map<Class<?>, RawDeserializer<?>> rawDeserializers = CacheClassMap.concurrent();
+    private final Map<Class<?>, ThrowableParser> throwableParsers = CacheClassMap.concurrent();
 
     private static double normalizeDouble(double num) {
         if (!Double.isFinite(num)) {

@@ -14,6 +14,8 @@ import com.github.jenya705.mcapi.player.PlayerAbilities;
 import lombok.experimental.Delegate;
 import net.kyori.adventure.text.Component;
 
+import java.util.Locale;
+
 /**
  * @author Jenya705
  */
@@ -133,4 +135,8 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements B
         return abilities;
     }
 
+    @Override
+    public Locale getLocale() {
+        return player.locale();
+    }
 }

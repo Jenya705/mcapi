@@ -7,6 +7,8 @@ import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.inventory.InventoryView;
 import com.github.jenya705.mcapi.inventory.PlayerInventory;
 
+import java.util.Locale;
+
 /**
  * @author Jenya705
  */
@@ -27,6 +29,10 @@ public interface Player extends LivingEntity, CommandSender, OfflinePlayer {
     GameMode getGameMode();
 
     PlayerAbilities getAbilities();
+
+    default Locale getLocale() {
+        return Locale.ENGLISH;
+    }
 
     default InventoryView openInventory(InventoryView inventory) {
         return openInventory(inventory, true);

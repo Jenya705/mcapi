@@ -3,7 +3,6 @@ package com.github.jenya705.mcapi.server.entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,14 +15,13 @@ import java.util.UUID;
  */
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 public class BotEntity {
 
-    private String token;
-    private String name;
-    private UUID owner;
-    private int id;
+    private final String token;
+    private final String name;
+    private final UUID owner;
+    private final int id;
 
     public static BotEntity empty() {
         return new BotEntity(null, null, null, -1);
@@ -48,4 +46,5 @@ public class BotEntity {
     public boolean isEmpty() {
         return id == -1;
     }
+
 }

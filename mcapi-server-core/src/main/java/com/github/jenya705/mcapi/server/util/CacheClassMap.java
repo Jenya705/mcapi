@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi.server.util;
 
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -9,10 +10,21 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author Jenya705
  */
+@RequiredArgsConstructor
 public class CacheClassMap<T> implements Map<Class<?>, T> {
 
-    private final Map<Class<?>, T> map = new HashMap<>();
-    private final Map<Class<?>, Class<?>> cache = new HashMap<>();
+    public static <T> CacheClassMap<T> concurrent(){
+        return new CacheClassMap<>(new ConcurrentHashMap<>(), new ConcurrentHashMap<>());
+    }
+
+    private static final class NullClass {}
+
+    private final Map<Class<?>, T> map;
+    private final Map<Class<?>, Class<?>> cache;
+
+    public CacheClassMap() {
+        this(new HashMap<>(), new HashMap<>());
+    }
 
     @Override
     public int size() {
@@ -99,7 +111,7 @@ public class CacheClassMap<T> implements Map<Class<?>, T> {
         Class<?> clazz = (Class<?>) key;
         if (cache.containsKey(clazz)) {
             Class<?> cacheClass = cache.get(clazz);
-            if (cacheClass == null) return defaultValue;
+            if (cacheClass == NullClass.class) return defaultValue;
             return map.get(cacheClass);
         }
         if (map.containsKey(clazz)) {
@@ -111,7 +123,7 @@ public class CacheClassMap<T> implements Map<Class<?>, T> {
                 return entry.getValue();
             }
         }
-        cache.put(clazz, null);
+        cache.put(clazz, NullClass.class);
         return defaultValue;
     }
 }

@@ -14,12 +14,11 @@ import java.util.UUID;
  * @author Jenya705
  */
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class BotLinkEntity {
 
-    private int botId;
-    private UUID target;
+    private final int botId;
+    private final UUID target;
 
     public static List<BotLinkEntity> mapResultSet(ResultSet resultSet) throws SQLException {
         List<BotLinkEntity> result = new ArrayList<>();
@@ -34,4 +33,5 @@ public class BotLinkEntity {
         }
         return result;
     }
+
 }

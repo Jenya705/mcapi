@@ -1,11 +1,9 @@
 package com.github.jenya705.mcapi.server;
 
-import com.github.jenya705.mcapi.server.event.application.ApplicationClassActionEvent;
-import com.github.jenya705.mcapi.server.event.application.ApplicationDisableEvent;
 import com.github.jenya705.mcapi.server.event.DefaultEventLoop;
 import com.github.jenya705.mcapi.server.event.EventLoop;
-import com.github.jenya705.mcapi.server.event.application.ApplicationPostBeanCreationEvent;
-import com.github.jenya705.mcapi.server.event.application.ApplicationPreBeanCreationEvent;
+import com.github.jenya705.mcapi.server.event.application.ApplicationClassActionEvent;
+import com.github.jenya705.mcapi.server.event.application.ApplicationDisableEvent;
 import com.github.jenya705.mcapi.server.form.ComponentFormProvider;
 import com.github.jenya705.mcapi.server.form.component.ComponentMapParserImpl;
 import com.github.jenya705.mcapi.server.ignore.IgnoreManager;
@@ -66,9 +64,9 @@ import java.util.stream.Collectors;
 public class ServerApplication {
 
     @Getter
-    private final List<Class<?>> classes = new ArrayList<>();
+    private final List<Class<?>> classes = Collections.synchronizedList(new ArrayList<>());
 
-    private final List<Object> beans = new ArrayList<>();
+    private final List<Object> beans = Collections.synchronizedList(new ArrayList<>());
     private final Map<Class<?>, Object> cachedBeans = new HashMap<>();
 
     @Getter
@@ -166,7 +164,6 @@ public class ServerApplication {
         for (Object obj : beans) {
             onStartMethods(initializingMethods, startupMethods, obj);
         }
-        int cur = 0;
         for (Class<?> clazz : classes) {
             try {
                 Constructor<?> clazzConstructor = clazz.getConstructor();
@@ -331,7 +328,7 @@ public class ServerApplication {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T getBean(Class<? extends T> clazz) {
+    public synchronized <T> T getBean(Class<? extends T> clazz) {
         if (!initialized) {
             throw new IllegalStateException("Application is not initialized");
         }

@@ -16,13 +16,14 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Jenya705
  */
 public class StorageModuleImpl extends AbstractApplicationModule implements StorageModule {
 
-    private final Map<String, PermissionEntity> permissions = new HashMap<>();
+    private final Map<String, PermissionEntity> permissions = new ConcurrentHashMap<>();
 
     public StorageModuleImpl() {
         for (DefaultPermission defaultPermission : DefaultPermission.values()) {
@@ -32,8 +33,7 @@ public class StorageModuleImpl extends AbstractApplicationModule implements Stor
                         defaultPermission.isGlobal(),
                         defaultPermission.isEnabledDefault()
                 ));
-            }
-            else {
+            } else {
                 addPermission(new PermissionEntity(
                         defaultPermission.getName(),
                         defaultPermission.isGlobal(),
@@ -41,7 +41,7 @@ public class StorageModuleImpl extends AbstractApplicationModule implements Stor
                 ));
             }
         }
-        for (VanillaMaterial material: VanillaMaterial.values()) {
+        for (VanillaMaterial material : VanillaMaterial.values()) {
             addPermissionsIfNotExist(
                     true, true,
                     Permissions.BLOCK_GET + "." + material.getKey(),
@@ -77,11 +77,20 @@ public class StorageModuleImpl extends AbstractApplicationModule implements Stor
                 configPermissions.put(
                         permissionEntry.getKey(), permissionEnabled
                 );
-                permissions
-                        .get(permissionEntry.getKey())
-                        .setEnabled(permissionEnabled);
-            }
-            else {
+                PermissionEntity permissionEntity = permissions
+                        .get(permissionEntry.getKey());
+                if (permissionEntity.isEnabled() != permissionEnabled) {
+                    permissions.put(
+                            permissionEntry.getKey(),
+                            PermissionEntity
+                                    .builder()
+                                    .enabled(permissionEnabled)
+                                    .global(permissionEntity.isGlobal())
+                                    .permission(permissionEntity.getPermission())
+                                    .build()
+                    );
+                }
+            } else {
                 configPermissions.put(
                         permissionEntry.getKey(),
                         permissionEntry.getValue().isEnabled()
@@ -113,7 +122,7 @@ public class StorageModuleImpl extends AbstractApplicationModule implements Stor
     }
 
     private void addPermissionsIfNotExist(boolean global, boolean enabled, String... permissions) {
-        for (String permission: permissions) {
+        for (String permission : permissions) {
             if (!this.permissions.containsKey(permission)) {
                 addPermission(new PermissionEntity(
                         permission,
@@ -125,7 +134,7 @@ public class StorageModuleImpl extends AbstractApplicationModule implements Stor
 
     @SneakyThrows
     private void addEntityPermissions() {
-        for (Field field: EntityType.class.getFields()) {
+        for (Field field : EntityType.class.getFields()) {
             if (!field.getType().equals(String.class)) continue;
             String entityType = (String) field.get(null);
             addPermissionsIfNotExist(

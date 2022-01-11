@@ -16,16 +16,15 @@ import java.util.UUID;
  */
 @Data
 @Builder
-@NoArgsConstructor
 public class BotPermissionEntity {
 
     public static final UUID identityTarget = new UUID(0, 0);
 
-    private int botId;
-    private String permission;
-    private UUID target;
-    private boolean regex;
-    private boolean toggled;
+    private final int botId;
+    private final String permission;
+    private final UUID target;
+    private final boolean regex;
+    private final boolean toggled;
 
     public BotPermissionEntity(int botId, String permission, UUID target, boolean regex, boolean toggled) {
         this.botId = botId;
@@ -66,4 +65,5 @@ public class BotPermissionEntity {
                 .replace(".", "\\.")
                 .replace("*", ".*");
     }
+
 }

@@ -14,7 +14,7 @@ import java.util.function.Consumer;
  */
 public class DefaultEventLoop extends AbstractApplicationModule implements EventLoop {
 
-    private final Map<Class<?>, Collection<Consumer<Object>>> handlers = new CacheClassMap<>();
+    private final Map<Class<?>, Collection<Consumer<Object>>> handlers = CacheClassMap.concurrent();
 
     @Override
     @SuppressWarnings("unchecked")
