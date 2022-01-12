@@ -6,6 +6,7 @@ java {
 
 shadowJar {
     relocate 'de.tr7zw.changeme', 'com.github.jenya705.mcapi.nbtapi'
+    archiveName("mcapi-bukkit-impl.jar")
 }
 
 repositories {
