@@ -2,15 +2,21 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
     id "com.github.johnrengelman.shadow" version "7.0.0"
+    id 'maven-publish'
+    id 'java'
 }
 
-subprojects {
+allprojects {
 
     apply plugin: 'java'
     apply plugin: 'com.github.johnrengelman.shadow'
 
     group 'com.github.jenya705'
-    version '1.0'
+    version '0.0.5-alpha'
+
+    java {
+        withSourcesJar()
+    }
 
     shadowJar {
         if (project.hasProperty("dir")) {
@@ -27,15 +33,11 @@ subprojects {
     }
 
     dependencies {
-        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
-        compileOnly 'org.jetbrains:annotations:16.0.2'
-
-        compileOnly 'org.projectlombok:lombok:1.18.20'
-        annotationProcessor 'org.projectlombok:lombok:1.18.20'
-
-        testCompileOnly 'org.projectlombok:lombok:1.18.20'
-        testAnnotationProcessor 'org.projectlombok:lombok:1.18.20'
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+        compileOnly 'org.jetbrains:annotations:22.0.0'
+        compileOnly 'org.projectlombok:lombok:1.18.22'
+        annotationProcessor 'org.projectlombok:lombok:1.18.22'
     }
 
     processResources {
@@ -45,6 +47,23 @@ subprojects {
 
     tasks.withType(ProcessResources).configureEach() {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+}
+
+subprojects {
+
+    apply plugin: 'maven-publish'
+    apply plugin: 'java'
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                groupId = 'com.github.jenya705'
+                version = '0.0.5-alpha'
+                from components.java
+                artifactId archivesBaseName
+            }
+        }
     }
 
 }

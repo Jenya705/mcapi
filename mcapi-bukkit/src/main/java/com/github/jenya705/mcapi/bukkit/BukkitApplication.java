@@ -25,6 +25,10 @@ import java.util.function.Supplier;
 @Setter
 public class BukkitApplication extends JavaPlugin implements Supplier<ServerApplication> {
 
+    public static BukkitApplication instance() {
+        return (BukkitApplication) BukkitUtils.getPlugin();
+    }
+
     private boolean asyncTab;
 
     private ServerApplication application;
