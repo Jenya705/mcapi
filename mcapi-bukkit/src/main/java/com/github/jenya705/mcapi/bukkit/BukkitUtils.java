@@ -1,6 +1,5 @@
 package com.github.jenya705.mcapi.bukkit;
 
-import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,30 +13,33 @@ import java.util.function.Supplier;
 @UtilityClass
 public class BukkitUtils {
 
-    @Getter
-    private JavaPlugin plugin;
+    private final AtomicReference<JavaPlugin> pluginReference = new AtomicReference<>();
+
+    public JavaPlugin getPlugin() {
+        return pluginReference.get();
+    }
 
     public void setPlugin(JavaPlugin plugin) {
-        BukkitUtils.plugin = plugin;
+        pluginReference.set(plugin);
     }
 
     public void notAsyncTask(Runnable runnable) {
         if (Bukkit.isPrimaryThread()) {
             runnable.run();
-        }
-        else {
-            Bukkit.getServer().getScheduler().runTask(plugin, runnable);
+        } else {
+            Bukkit.getServer().getScheduler().runTask(getPlugin(), runnable);
         }
     }
 
-    record ValueContainer<T>(T value) {}
+    record ValueContainer<T>(T value) {
+    }
 
     public <T> T notAsyncSupplier(Supplier<T> supplier) {
         if (Bukkit.isPrimaryThread()) {
             return supplier.get();
         }
         AtomicReference<ValueContainer<T>> atomicValue = new AtomicReference<>();
-        Bukkit.getServer().getScheduler().runTask(plugin, () -> {
+        Bukkit.getServer().getScheduler().runTask(getPlugin(), () -> {
             atomicValue.set(new ValueContainer<>(supplier.get()));
             synchronized (atomicValue) {
                 atomicValue.notifyAll();
