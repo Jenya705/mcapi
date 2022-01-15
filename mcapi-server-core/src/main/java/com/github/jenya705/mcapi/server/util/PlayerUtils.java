@@ -18,8 +18,6 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class PlayerUtils {
 
-    private final Random random = new Random();
-
     public Optional<? extends Player> getPlayer(String name, ServerCore core) {
         Pair<Optional<? extends Player>, Boolean> information = getPlayerWithFullInformation(name, core);
         if (!information.getRight()) {
