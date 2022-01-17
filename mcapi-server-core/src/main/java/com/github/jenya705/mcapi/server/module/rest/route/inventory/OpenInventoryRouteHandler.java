@@ -5,7 +5,7 @@ import com.github.jenya705.mcapi.inventory.InventoryView;
 import com.github.jenya705.mcapi.menu.InventoryMenuView;
 import com.github.jenya705.mcapi.permission.Permissions;
 import com.github.jenya705.mcapi.player.Player;
-import com.github.jenya705.mcapi.server.Bean;
+import com.github.jenya705.mcapi.server.application.Bean;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.module.menu.MenuModule;
 import com.github.jenya705.mcapi.server.module.rest.route.AbstractRouteHandler;

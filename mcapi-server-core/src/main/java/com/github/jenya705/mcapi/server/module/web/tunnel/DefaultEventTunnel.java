@@ -1,9 +1,9 @@
 package com.github.jenya705.mcapi.server.module.web.tunnel;
 
-import com.github.jenya705.mcapi.server.BaseCommon;
-import com.github.jenya705.mcapi.server.Bean;
-import com.github.jenya705.mcapi.server.OnStartup;
-import com.github.jenya705.mcapi.server.ServerApplication;
+import com.github.jenya705.mcapi.server.application.BaseCommon;
+import com.github.jenya705.mcapi.server.application.Bean;
+import com.github.jenya705.mcapi.server.application.OnStartup;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.log.TimerTask;
 import com.github.jenya705.mcapi.server.module.web.WebServer;
 import com.github.jenya705.mcapi.server.module.web.websocket.container.WebSocketRouteContainerImpl;

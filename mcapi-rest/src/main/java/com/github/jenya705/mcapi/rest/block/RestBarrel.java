@@ -3,6 +3,7 @@ package com.github.jenya705.mcapi.rest.block;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jenya705.mcapi.block.data.Barrel;
+import com.github.jenya705.mcapi.jackson.DefaultNull;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.rest.inventory.RestInventory;
 import lombok.AllArgsConstructor;
@@ -21,9 +22,6 @@ public class RestBarrel {
 
     private UUID[] watchers;
     private RestInventory inventory;
-
-    @JsonProperty
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String direction;
 
     public static RestBarrel from(Barrel barrel) {
@@ -34,7 +32,7 @@ public class RestBarrel {
                         .map(Player::getUuid)
                         .toArray(UUID[]::new),
                 RestInventory.from(barrel.getInventory()),
-                barrel.getDirection() == null ? null : barrel.getDirection().name()
+                barrel.getDirection().name()
         );
     }
 }

@@ -2,9 +2,9 @@ package com.github.jenya705.mcapi.server.command.linkmenu;
 
 import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.player.Player;
-import com.github.jenya705.mcapi.server.BaseCommon;
-import com.github.jenya705.mcapi.server.Bean;
-import com.github.jenya705.mcapi.server.ServerApplication;
+import com.github.jenya705.mcapi.server.application.BaseCommon;
+import com.github.jenya705.mcapi.server.application.Bean;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.command.CommandsUtils;
 import com.github.jenya705.mcapi.server.command.MenuCommand;
 import com.github.jenya705.mcapi.server.data.ConfigData;

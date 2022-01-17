@@ -7,6 +7,7 @@ import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.inventory.InventoryView;
 import com.github.jenya705.mcapi.menu.InventoryMenuView;
 import com.github.jenya705.mcapi.player.Player;
+import com.github.jenya705.mcapi.server.application.FileType;
 import com.github.jenya705.mcapi.server.command.CommandExecutor;
 import com.github.jenya705.mcapi.server.util.PlayerUtils;
 import com.github.jenya705.mcapi.world.World;

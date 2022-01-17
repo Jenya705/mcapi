@@ -6,8 +6,8 @@ import com.github.jenya705.mcapi.error.FieldSetterNotExistException;
 import com.github.jenya705.mcapi.inventory.InventoryHolder;
 import com.github.jenya705.mcapi.inventory.InventoryItemStack;
 import com.github.jenya705.mcapi.rest.block.RestRedstoneWireConnection;
-import com.github.jenya705.mcapi.server.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.Bean;
+import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
+import com.github.jenya705.mcapi.server.application.Bean;
 import com.github.jenya705.mcapi.server.module.mapper.Mapper;
 
 import java.util.HashMap;

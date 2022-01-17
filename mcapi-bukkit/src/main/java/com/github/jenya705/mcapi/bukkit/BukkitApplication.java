@@ -4,7 +4,7 @@ import com.github.jenya705.mcapi.bukkit.menu.BukkitMenuManagerImpl;
 import com.github.jenya705.mcapi.bukkit.permission.LuckPermsHook;
 import com.github.jenya705.mcapi.bukkit.permission.VaultPermissionHook;
 import com.github.jenya705.mcapi.bukkit.utils.FailureOperation;
-import com.github.jenya705.mcapi.server.ServerApplication;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -36,9 +36,8 @@ public class BukkitApplication extends JavaPlugin implements Supplier<ServerAppl
     @Override
     public void onLoad() {
         BukkitUtils.setPlugin(this);
-        application = new ServerApplication();
+        application = new ServerApplication(new BukkitServerCore(this));
         application.addClasses(
-                BukkitServerCore.class,
                 BukkitServerEventHandler.class,
                 BukkitOfflinePlayerStorageImpl.class,
                 BukkitMenuManagerImpl.class

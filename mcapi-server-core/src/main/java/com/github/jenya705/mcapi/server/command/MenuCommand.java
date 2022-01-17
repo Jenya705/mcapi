@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.server.command;
 
 import com.github.jenya705.mcapi.CommandSender;
-import com.github.jenya705.mcapi.server.ServerApplication;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.data.ConfigData;
 import com.github.jenya705.mcapi.server.stringful.StringfulIterator;
 import lombok.extern.slf4j.Slf4j;

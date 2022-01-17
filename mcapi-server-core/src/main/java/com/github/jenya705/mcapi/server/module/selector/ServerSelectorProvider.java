@@ -2,8 +2,8 @@ package com.github.jenya705.mcapi.server.module.selector;
 
 import com.github.jenya705.mcapi.OfflinePlayer;
 import com.github.jenya705.mcapi.player.Player;
-import com.github.jenya705.mcapi.server.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.OnInitializing;
+import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
+import com.github.jenya705.mcapi.server.application.OnInitializing;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.util.Selector;
 import org.jetbrains.annotations.NotNull;

@@ -2,8 +2,8 @@ package com.github.jenya705.mcapi.server.module.authorization;
 
 import com.github.jenya705.mcapi.error.AuthorizationBadTokenException;
 import com.github.jenya705.mcapi.error.AuthorizationFormatException;
-import com.github.jenya705.mcapi.server.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.Bean;
+import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
+import com.github.jenya705.mcapi.server.application.Bean;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.entity.BotObject;

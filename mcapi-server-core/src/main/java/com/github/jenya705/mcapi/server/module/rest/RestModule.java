@@ -29,9 +29,9 @@ import com.github.jenya705.mcapi.rest.event.*;
 import com.github.jenya705.mcapi.rest.inventory.*;
 import com.github.jenya705.mcapi.rest.player.RestPlayer;
 import com.github.jenya705.mcapi.rest.player.RestPlayerAbilities;
-import com.github.jenya705.mcapi.server.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.Bean;
-import com.github.jenya705.mcapi.server.OnStartup;
+import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
+import com.github.jenya705.mcapi.server.application.Bean;
+import com.github.jenya705.mcapi.server.application.OnStartup;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.form.FormComponent;
 import com.github.jenya705.mcapi.server.form.FormPlatformProvider;
@@ -151,24 +151,9 @@ public class RestModule extends AbstractApplicationModule {
                 .tunnelJsonSerializer(Door.class, RestDoor::from)
                 .tunnelJsonSerializer(BoundingBox.class, RestBoundingBox::from)
                 .tunnelJsonSerializer(Piston.class, RestPiston::from)
-                .tunnelDefaultJsonSerializer(
-                        Entity.class,
-                        RestEntity.class,
-                        RestDefaults.entity,
-                        RestEntity::from
-                )
-                .tunnelDefaultJsonSerializer(
-                        Player.class,
-                        RestPlayer.class,
-                        RestDefaults.player,
-                        RestPlayer::from
-                )
-                .tunnelDefaultJsonSerializer(
-                        PlayerAbilities.class,
-                        RestPlayerAbilities.class,
-                        RestDefaults.playerAbilities,
-                        RestPlayerAbilities::from
-                )
+                .tunnelJsonSerializer(Entity.class, RestEntity::from)
+                .tunnelJsonSerializer(Player.class, RestPlayer::from)
+                .tunnelJsonSerializer(PlayerAbilities.class, RestPlayerAbilities::from)
                 .jsonDeserializer(Command.class, new ApiCommandDeserializer(commandModule))
                 .jsonSerializer(Component.class, new ComponentSerializer())
                 .tunnelJsonDeserializer(

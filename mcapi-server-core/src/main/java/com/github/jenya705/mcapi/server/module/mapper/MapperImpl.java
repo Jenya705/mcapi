@@ -5,10 +5,14 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
 import com.github.jenya705.mcapi.ApiError;
 import com.github.jenya705.mcapi.Vector3;
 import com.github.jenya705.mcapi.entity.EntityError;
+import com.github.jenya705.mcapi.server.defaults.DefaultValueProcessor;
+import com.github.jenya705.mcapi.server.defaults.DefaultValueProcessorImpl;
 import com.github.jenya705.mcapi.server.util.CacheClassMap;
+import lombok.Getter;
 import lombok.SneakyThrows;
 
 import java.util.Map;
@@ -24,6 +28,9 @@ public class MapperImpl implements Mapper, JacksonProvider {
     private final Map<Class<?>, RawDeserializer<?>> rawDeserializers = CacheClassMap.concurrent();
     private final Map<Class<?>, ThrowableParser> throwableParsers = CacheClassMap.concurrent();
 
+    @Getter
+    private final DefaultValueProcessor defaultValueProcessor = new DefaultValueProcessorImpl();
+
     private static double normalizeDouble(double num) {
         if (!Double.isFinite(num)) {
             throw new IllegalArgumentException("Num is NaN or Infinite");
@@ -38,8 +45,12 @@ public class MapperImpl implements Mapper, JacksonProvider {
     }
 
     private static boolean parseBoolean(String s) {
-        if (s.equals("1") || s.equalsIgnoreCase("true")) return true;
-        if (s.equals("0") || s.equalsIgnoreCase("false")) return false;
+        if (s.length() == 1) {
+            if (s.equals("1")) return true;
+            else if (s.equals("0")) return false;
+        }
+        else if (s.equalsIgnoreCase("true")) return true;
+        else if (s.equalsIgnoreCase("false")) return false;
         throw new IllegalArgumentException("String is not true or false");
     }
 
@@ -67,10 +78,18 @@ public class MapperImpl implements Mapper, JacksonProvider {
                 .rawDeserializer(Boolean.class, MapperImpl::parseBoolean)
                 .rawDeserializer(Character.class, MapperImpl::parseChar)
                 .rawDeserializer(String.class, s -> s)
-                .jsonSerializer(float.class, (value, generator, serializers) -> generator.writeRawValue(Float.toString(MapperImpl.normalizeFloat(value))))
-                .jsonSerializer(double.class, (value, generator, serializers) -> generator.writeRawValue(Double.toString(MapperImpl.normalizeDouble(value))))
-                .jsonSerializer(Float.class, (value, generator, serializers) -> generator.writeRawValue(Float.toString(MapperImpl.normalizeFloat(value))))
-                .jsonSerializer(Double.class, (value, generator, serializers) -> generator.writeRawValue(Double.toString(MapperImpl.normalizeDouble(value))))
+                .jsonSerializer(float.class, (value, generator, serializers) ->
+                        generator.writeRawValue(Float.toString(MapperImpl.normalizeFloat(value)))
+                )
+                .jsonSerializer(double.class, (value, generator, serializers) ->
+                        generator.writeRawValue(Double.toString(MapperImpl.normalizeDouble(value)))
+                )
+                .jsonSerializer(Float.class, (value, generator, serializers) ->
+                        generator.writeRawValue(Float.toString(MapperImpl.normalizeFloat(value)))
+                )
+                .jsonSerializer(Double.class, (value, generator, serializers) ->
+                        generator.writeRawValue(Double.toString(MapperImpl.normalizeDouble(value)))
+                )
         ;
     }
 
@@ -128,6 +147,14 @@ public class MapperImpl implements Mapper, JacksonProvider {
     @Override
     public <T> Mapper throwableParser(Class<? extends T> clazz, ThrowableParser throwableParser) {
         throwableParsers.put(clazz, throwableParser);
+        return this;
+    }
+
+    @Override
+    public <T> Mapper beanSerializerModifier(Class<? extends T> clazz, BeanSerializerModifier beanSerializerModifier) {
+        SimpleModule module = new SimpleModule();
+        module.setSerializerModifier(beanSerializerModifier);
+        json.registerModule(module);
         return this;
     }
 

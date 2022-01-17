@@ -1,10 +1,11 @@
 package com.github.jenya705.mcapi.server.command;
 
 import com.github.jenya705.mcapi.CommandSender;
-import com.github.jenya705.mcapi.server.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.ServerApplication;
+import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.data.ConfigData;
 import com.github.jenya705.mcapi.server.stringful.StringfulIterator;
+import com.github.jenya705.mcapi.server.util.MutablePair;
 import com.github.jenya705.mcapi.server.util.Pair;
 import lombok.Getter;
 
@@ -54,7 +55,7 @@ public class ContainerCommandExecutor extends AbstractApplicationModule implemen
         }
         else {
             Map<String, Object> node = (Map<String, Object>) pair.getLeft();
-            String commandStart = "/" + command + pair.getRight().replaceAll("\\.", " ") + " ";
+            String commandStart = "/" + command + pair.getRight().replace('.', ' ') + " ";
             sender.sendMessage(CommandsUtils
                     .listMessage(
                             config.getHelpLayout(),
@@ -82,7 +83,7 @@ public class ContainerCommandExecutor extends AbstractApplicationModule implemen
 
     @SuppressWarnings("unchecked")
     private List<CommandTab> tab(CommandSender sender, StringfulIterator args, String permission, Function<CommandExecutor, List<CommandTab>> tab) {
-        Pair<Object, String> pair = walkThrew(args);
+        MutablePair<Object, String> pair = walkThrew(args).mutable();
         pair.setRight(permission + pair.getRight());
         if (pair.getLeft() instanceof CommandExecutor) {
             if (!sender.hasPermission(pair.getRight())) {

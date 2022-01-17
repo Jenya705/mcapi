@@ -2,7 +2,7 @@ package com.github.jenya705.mcapi.server.command.link.unlink;
 
 import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.player.Player;
-import com.github.jenya705.mcapi.server.ServerApplication;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.server.command.CommandTab;
 import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutor;

@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.server.module.rest.route.command;
 
 import com.github.jenya705.mcapi.Routes;
-import com.github.jenya705.mcapi.server.Bean;
+import com.github.jenya705.mcapi.server.application.Bean;
 import com.github.jenya705.mcapi.server.module.command.CommandModule;
 import com.github.jenya705.mcapi.server.module.rest.route.AbstractRouteHandler;
 import com.github.jenya705.mcapi.server.module.web.Request;

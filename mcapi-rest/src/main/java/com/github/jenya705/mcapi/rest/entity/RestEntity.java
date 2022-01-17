@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.rest.entity;
 
 import com.github.jenya705.mcapi.entity.Entity;
+import com.github.jenya705.mcapi.jackson.DefaultNull;
 import com.github.jenya705.mcapi.rest.RestLocation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +17,9 @@ import net.kyori.adventure.text.Component;
 public class RestEntity {
 
     private String type;
+    @DefaultNull
     private RestLocation location;
+    @DefaultNull
     private Component customName;
 
     public static RestEntity from(Entity entity) {

@@ -1,8 +1,8 @@
 package com.github.jenya705.mcapi.server.ignore;
 
-import com.github.jenya705.mcapi.server.AbstractApplicationModule;
+import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
 import com.github.jenya705.mcapi.server.event.application.ApplicationClassActionEvent;
-import com.github.jenya705.mcapi.server.OnInitializing;
+import com.github.jenya705.mcapi.server.application.OnInitializing;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;

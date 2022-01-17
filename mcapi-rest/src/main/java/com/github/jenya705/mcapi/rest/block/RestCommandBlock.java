@@ -16,15 +16,12 @@ import lombok.NoArgsConstructor;
 public class RestCommandBlock {
 
     private String command;
-
-    @JsonProperty
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String direction;
 
     public static RestCommandBlock from(CommandBlock commandBlock) {
         return new RestCommandBlock(
                 commandBlock.getCommand(),
-                commandBlock.getDirection() == null ? null : commandBlock.getDirection().name()
+                commandBlock.getDirection().name()
         );
     }
 

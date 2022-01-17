@@ -8,9 +8,9 @@ import com.github.jenya705.mcapi.event.QuitEvent;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.rest.event.RestLinkEvent;
 import com.github.jenya705.mcapi.rest.event.RestUnlinkEvent;
-import com.github.jenya705.mcapi.server.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.Bean;
-import com.github.jenya705.mcapi.server.OnStartup;
+import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
+import com.github.jenya705.mcapi.server.application.Bean;
+import com.github.jenya705.mcapi.server.application.OnStartup;
 import com.github.jenya705.mcapi.server.command.CommandsUtils;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.entity.BotLinkEntity;
@@ -291,7 +291,7 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
                                 .map(it -> String.format(
                                         CommandModule.permissionFormat,
                                         linkObject.getBot().getEntity().getId()
-                                        ) + "." + it.replaceAll(" ", ".")
+                                        ) + "." + it.replace(' ', '.')
                                 )
                                 .toArray(String[]::new)
                 );

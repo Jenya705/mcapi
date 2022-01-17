@@ -2,8 +2,9 @@ package com.github.jenya705.mcapi.server.module.mapper;
 
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
 import com.github.jenya705.mcapi.ApiError;
-import com.github.jenya705.mcapi.server.defaults.DefaultValue;
+import com.github.jenya705.mcapi.server.defaults.DefaultValueProcessor;
 import com.github.jenya705.mcapi.server.module.rest.ObjectTunnelFunction;
 import com.github.jenya705.mcapi.server.module.rest.json.*;
 
@@ -28,6 +29,10 @@ public interface Mapper {
 
     <T> Mapper throwableParser(Class<? extends T> clazz, ThrowableParser throwableParser);
 
+    <T> Mapper beanSerializerModifier(Class<? extends T> clazz, BeanSerializerModifier beanSerializerModifier);
+
+    DefaultValueProcessor getDefaultValueProcessor();
+
     default <T> Mapper jsonSerializer(Class<T> clazz, JsonSerializerFunction<T> serializerFunction) {
         return jsonSerializer(clazz, new JacksonSerializer<>(clazz, serializerFunction));
     }
@@ -44,16 +49,4 @@ public interface Mapper {
         return jsonSerializer(inputClass, JsonUtils.jacksonSerializerTunnel(inputClass, tunnelFunction));
     }
 
-    default <T, E> Mapper tunnelDefaultJsonSerializer(Class<T> inputClass, Class<E> defaultValueClass, DefaultValue<E> defaultValue, ObjectTunnelFunction<T, E> tunnelFunction) {
-        return jsonSerializer(
-                defaultValueClass,
-                (value, generator, serializers) -> {
-                    generator.writeStartObject();
-                    defaultValue.write(generator, value);
-                    generator.writeEndObject();
-                }
-        )
-                .tunnelJsonSerializer(inputClass, tunnelFunction)
-                ;
-    }
 }

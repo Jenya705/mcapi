@@ -5,8 +5,8 @@ import com.github.jenya705.mcapi.command.CommandExecutableOption;
 import com.github.jenya705.mcapi.command.CommandValueOption;
 import com.github.jenya705.mcapi.command.types.SubCommandOption;
 import com.github.jenya705.mcapi.error.BadOptionException;
-import com.github.jenya705.mcapi.server.BaseCommon;
-import com.github.jenya705.mcapi.server.ServerApplication;
+import com.github.jenya705.mcapi.server.application.BaseCommon;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.module.command.CommandModule;
 import com.github.jenya705.mcapi.server.util.IteratorUtils;
 

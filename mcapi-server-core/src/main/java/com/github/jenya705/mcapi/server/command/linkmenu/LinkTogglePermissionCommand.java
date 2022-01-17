@@ -2,8 +2,8 @@ package com.github.jenya705.mcapi.server.command.linkmenu;
 
 import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.player.Player;
-import com.github.jenya705.mcapi.server.BaseCommon;
-import com.github.jenya705.mcapi.server.ServerApplication;
+import com.github.jenya705.mcapi.server.application.BaseCommon;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.command.MenuCommand;
 import com.github.jenya705.mcapi.server.command.NoConfig;
 import com.github.jenya705.mcapi.server.module.link.LinkingModule;

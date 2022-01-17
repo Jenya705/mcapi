@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.server;
+package com.github.jenya705.mcapi.server.application;
 
 /**
  * @author Jenya705

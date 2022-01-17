@@ -2,8 +2,8 @@ package com.github.jenya705.mcapi.server.command.advanced;
 
 import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.player.Player;
-import com.github.jenya705.mcapi.server.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.ServerApplication;
+import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.command.CommandExecutor;
 import com.github.jenya705.mcapi.server.command.CommandTab;
 import com.github.jenya705.mcapi.server.command.CommandsUtils;

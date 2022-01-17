@@ -2,17 +2,31 @@ package com.github.jenya705.mcapi.server.util;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * @author Jenya705
  */
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class Pair<T, V> {
 
-    private T left;
-    private V right;
+    private final T left;
+    private final V right;
+
+    public Pair() {
+        this(null, null);
+    }
+
+    public Pair<T, V> setLeft(T left) {
+        return new Pair<>(left, right);
+    }
+
+    public Pair<T, V> setRight(V right) {
+        return new Pair<>(left, right);
+    }
+
+    public MutablePair<T, V> mutable() {
+        return new MutablePair<>(left, right);
+    }
 
 }

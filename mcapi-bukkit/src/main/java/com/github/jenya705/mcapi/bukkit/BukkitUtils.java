@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi.bukkit;
 
+import com.github.jenya705.mcapi.server.util.ValueContainer;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -31,9 +32,6 @@ public class BukkitUtils {
         }
     }
 
-    record ValueContainer<T>(T value) {
-    }
-
     public <T> T notAsyncSupplier(Supplier<T> supplier) {
         if (Bukkit.isPrimaryThread()) {
             return supplier.get();
@@ -56,7 +54,7 @@ public class BukkitUtils {
         if (value == null) {
             throw new IllegalArgumentException("Bukkit server is lagging");
         }
-        return value.value();
+        return value.getValue();
     }
 
 }

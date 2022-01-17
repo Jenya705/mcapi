@@ -3,7 +3,7 @@ package com.github.jenya705.mcapi.server.module.rest.route.bot;
 import com.github.jenya705.mcapi.Routes;
 import com.github.jenya705.mcapi.error.SelectorEmptyException;
 import com.github.jenya705.mcapi.rest.player.RestPlayerList;
-import com.github.jenya705.mcapi.server.Bean;
+import com.github.jenya705.mcapi.server.application.Bean;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.server.module.rest.route.AbstractRouteHandler;

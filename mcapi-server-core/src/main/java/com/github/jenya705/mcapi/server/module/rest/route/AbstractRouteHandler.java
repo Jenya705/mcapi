@@ -1,8 +1,8 @@
 package com.github.jenya705.mcapi.server.module.rest.route;
 
 import com.github.jenya705.mcapi.Route;
-import com.github.jenya705.mcapi.server.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.OnStartup;
+import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
+import com.github.jenya705.mcapi.server.application.OnStartup;
 import com.github.jenya705.mcapi.server.ignore.Ignorable;
 import com.github.jenya705.mcapi.server.module.web.RouteHandler;
 import com.github.jenya705.mcapi.server.module.web.WebServer;

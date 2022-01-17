@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.server.event;
 
-import com.github.jenya705.mcapi.server.AbstractApplicationModule;
+import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
 import com.github.jenya705.mcapi.server.util.CacheClassMap;
 
 import java.util.ArrayList;

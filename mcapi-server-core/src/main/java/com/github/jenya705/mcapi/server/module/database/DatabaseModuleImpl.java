@@ -1,8 +1,8 @@
 package com.github.jenya705.mcapi.server.module.database;
 
-import com.github.jenya705.mcapi.server.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.OnDisable;
-import com.github.jenya705.mcapi.server.OnInitializing;
+import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
+import com.github.jenya705.mcapi.server.application.OnDisable;
+import com.github.jenya705.mcapi.server.application.OnInitializing;
 import com.github.jenya705.mcapi.server.data.ConfigData;
 import com.github.jenya705.mcapi.server.log.TimerTask;
 import com.github.jenya705.mcapi.server.module.config.ConfigModule;

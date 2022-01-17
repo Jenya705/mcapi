@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.server.module.command;
 
 import com.github.jenya705.mcapi.command.types.*;
-import com.github.jenya705.mcapi.server.ServerApplication;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.module.command.option.executable.SubCommandGroupOptionParser;
 import com.github.jenya705.mcapi.server.module.command.option.executable.SubCommandOptionParser;
 import com.github.jenya705.mcapi.server.module.command.option.value.BooleanOptionParser;

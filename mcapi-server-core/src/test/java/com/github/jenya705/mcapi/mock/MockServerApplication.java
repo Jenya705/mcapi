@@ -6,9 +6,9 @@ import com.github.jenya705.mcapi.mock.database.MockDatabaseModule;
 import com.github.jenya705.mcapi.mock.web.MockWebServer;
 import com.github.jenya705.mcapi.player.GameMode;
 import com.github.jenya705.mcapi.player.Player;
-import com.github.jenya705.mcapi.server.Bean;
-import com.github.jenya705.mcapi.server.OnInitializing;
-import com.github.jenya705.mcapi.server.ServerApplication;
+import com.github.jenya705.mcapi.server.application.Bean;
+import com.github.jenya705.mcapi.server.application.OnInitializing;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.server.module.web.WebServer;
 import org.mockito.Mockito;
@@ -82,7 +82,7 @@ public class MockServerApplication extends ServerApplication {
     private MockServerCore core;
 
     public MockServerApplication() {
-        addClass(MockServerCore.class);
+        super(new MockServerCore());
         change(DatabaseModule.class, MockDatabaseModule.class);
         change(WebServer.class, MockWebServer.class);
     }

@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.server;
+package com.github.jenya705.mcapi.server.application;
 
 import com.github.jenya705.mcapi.event.*;
 import com.github.jenya705.mcapi.rest.entity.RestCapturedEntityClickEvent;

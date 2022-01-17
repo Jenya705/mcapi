@@ -4,8 +4,8 @@ import com.github.jenya705.mcapi.inventory.IdentifiedInventoryItemStack;
 import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.inventory.ItemStack;
 import com.github.jenya705.mcapi.menu.MenuItem;
-import com.github.jenya705.mcapi.server.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.Bean;
+import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
+import com.github.jenya705.mcapi.server.application.Bean;
 import com.github.jenya705.mcapi.server.module.web.tunnel.EventTunnel;
 
 /**

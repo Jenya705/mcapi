@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.server.module.link;
 
-import com.github.jenya705.mcapi.server.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.ServerApplication;
+import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.ignore.SingleIgnoreCriteria;
 import com.github.jenya705.mcapi.server.ignore.SubIgnoreCriteria;
 import lombok.SneakyThrows;

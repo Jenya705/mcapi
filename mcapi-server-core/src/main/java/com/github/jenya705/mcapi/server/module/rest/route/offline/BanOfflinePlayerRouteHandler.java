@@ -3,7 +3,7 @@ package com.github.jenya705.mcapi.server.module.rest.route.offline;
 import com.github.jenya705.mcapi.OfflinePlayer;
 import com.github.jenya705.mcapi.Routes;
 import com.github.jenya705.mcapi.permission.Permissions;
-import com.github.jenya705.mcapi.server.Bean;
+import com.github.jenya705.mcapi.server.application.Bean;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.module.message.MessageUtils;
 import com.github.jenya705.mcapi.server.module.message.TypedMessage;

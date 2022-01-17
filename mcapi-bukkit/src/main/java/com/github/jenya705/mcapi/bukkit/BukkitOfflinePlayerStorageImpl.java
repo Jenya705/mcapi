@@ -1,9 +1,9 @@
 package com.github.jenya705.mcapi.bukkit;
 
-import com.github.jenya705.mcapi.server.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.Bean;
-import com.github.jenya705.mcapi.server.OnDisable;
-import com.github.jenya705.mcapi.server.OnInitializing;
+import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
+import com.github.jenya705.mcapi.server.application.Bean;
+import com.github.jenya705.mcapi.server.application.OnDisable;
+import com.github.jenya705.mcapi.server.application.OnInitializing;
 import com.github.jenya705.mcapi.server.log.TimerTask;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

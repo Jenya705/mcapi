@@ -13,10 +13,8 @@ import java.util.UUID;
 @UtilityClass
 public class TokenUtils {
 
-    private final Random secureRandom = new SecureRandom();
-
     public String generateToken() {
-        return new UUID(secureRandom.nextLong(), secureRandom.nextLong()).toString().replace("-", "") +
+        return UUID.randomUUID().toString().replace("-", "") +
                 String.format("%019d", new Date().getTime());
     }
 }

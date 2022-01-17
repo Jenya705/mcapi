@@ -1,5 +1,6 @@
-package com.github.jenya705.mcapi.server;
+package com.github.jenya705.mcapi.server.application;
 
+import com.github.jenya705.mcapi.server.ServerCore;
 import com.github.jenya705.mcapi.server.event.EventLoop;
 import com.github.jenya705.mcapi.server.module.web.tunnel.EventTunnel;
 import com.github.jenya705.mcapi.server.worker.Worker;

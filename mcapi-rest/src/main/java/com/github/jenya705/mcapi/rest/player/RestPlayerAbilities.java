@@ -1,5 +1,7 @@
 package com.github.jenya705.mcapi.rest.player;
 
+import com.github.jenya705.mcapi.jackson.DefaultBoolean;
+import com.github.jenya705.mcapi.jackson.DefaultFloat;
 import com.github.jenya705.mcapi.player.PlayerAbilities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,12 +15,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RestPlayerAbilities {
 
+    @DefaultBoolean(false)
     private boolean invulnerable;
+    @DefaultBoolean(false)
     private boolean mayFly;
+    @DefaultBoolean(false)
     private boolean instabuild;
+    @DefaultFloat(0.1f)
     private float walkSpeed;
+    @DefaultBoolean(true)
     private boolean mayBuild;
+    @DefaultBoolean(false)
     private boolean flying;
+    @DefaultFloat(0.05f)
     private float flySpeed;
 
     public static RestPlayerAbilities from(PlayerAbilities abilities) {

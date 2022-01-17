@@ -22,9 +22,6 @@ public class RestChest {
     private UUID[] watchers;
     private RestInventory inventory;
     private boolean waterlogged;
-
-    @JsonProperty
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String direction;
 
     public static RestChest from(Chest chest) {
@@ -36,7 +33,7 @@ public class RestChest {
                         .toArray(UUID[]::new),
                 RestInventory.from(chest.getInventory()),
                 chest.isWaterlogged(),
-                chest.getDirection() == null ? null : chest.getDirection().name()
+                chest.getDirection().name()
         );
     }
 }

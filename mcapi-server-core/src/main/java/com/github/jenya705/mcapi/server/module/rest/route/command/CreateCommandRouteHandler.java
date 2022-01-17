@@ -3,7 +3,7 @@ package com.github.jenya705.mcapi.server.module.rest.route.command;
 import com.github.jenya705.mcapi.Routes;
 import com.github.jenya705.mcapi.command.Command;
 import com.github.jenya705.mcapi.permission.Permissions;
-import com.github.jenya705.mcapi.server.Bean;
+import com.github.jenya705.mcapi.server.application.Bean;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.module.command.CommandModule;
 import com.github.jenya705.mcapi.server.module.rest.route.AbstractRouteHandler;

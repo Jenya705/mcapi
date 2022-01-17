@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.mock.web;
 
 import com.github.jenya705.mcapi.HttpMethod;
-import com.github.jenya705.mcapi.server.ServerApplication;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.module.mapper.Mapper;
 
 import java.util.HashMap;

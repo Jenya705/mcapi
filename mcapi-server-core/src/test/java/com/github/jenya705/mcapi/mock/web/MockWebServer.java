@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.mock.web;
 
-import com.github.jenya705.mcapi.server.AbstractApplicationModule;
+import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
 import com.github.jenya705.mcapi.server.module.web.RouteHandler;
 import com.github.jenya705.mcapi.server.module.web.RouteParameters;
 import com.github.jenya705.mcapi.server.module.web.RoutePredicate;

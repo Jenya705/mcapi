@@ -10,9 +10,9 @@ import com.github.jenya705.mcapi.entity.Entity;
 import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.menu.InventoryMenuView;
 import com.github.jenya705.mcapi.player.Player;
-import com.github.jenya705.mcapi.server.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.Bean;
-import com.github.jenya705.mcapi.server.OnInitializing;
+import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
+import com.github.jenya705.mcapi.server.application.Bean;
+import com.github.jenya705.mcapi.server.application.OnInitializing;
 import com.github.jenya705.mcapi.server.ServerCore;
 import com.github.jenya705.mcapi.server.command.CommandExecutor;
 import com.github.jenya705.mcapi.server.util.ListUtils;
@@ -47,8 +47,7 @@ public class BukkitServerCore extends AbstractApplicationModule implements Serve
         return new Yaml(dumperOptions);
     }
 
-    @Bean
-    private BukkitApplication plugin;
+    private final BukkitApplication plugin;
 
     @Bean
     private PermissionManagerHook permissionManagerHook;
@@ -58,6 +57,10 @@ public class BukkitServerCore extends AbstractApplicationModule implements Serve
 
     @Bean
     private BukkitMenuManager menuManager;
+
+    public BukkitServerCore(BukkitApplication plugin) {
+        this.plugin = plugin;
+    }
 
     @OnInitializing(priority = -1)
     public void initialize() {

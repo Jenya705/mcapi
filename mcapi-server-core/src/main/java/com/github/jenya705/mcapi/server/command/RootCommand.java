@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.server.command;
 
-import com.github.jenya705.mcapi.server.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.ServerApplication;
+import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.command.bot.create.CreateBotCommand;
 import com.github.jenya705.mcapi.server.command.bot.delete.DeleteBotCommand;
 import com.github.jenya705.mcapi.server.command.bot.list.ListBotCommand;

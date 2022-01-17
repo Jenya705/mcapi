@@ -1,5 +1,8 @@
-package com.github.jenya705.mcapi.server;
+package com.github.jenya705.mcapi.server.application;
 
+import com.github.jenya705.mcapi.server.ServerCore;
+import com.github.jenya705.mcapi.server.application.option.Option;
+import com.github.jenya705.mcapi.server.application.option.Options;
 import com.github.jenya705.mcapi.server.event.DefaultEventLoop;
 import com.github.jenya705.mcapi.server.event.EventLoop;
 import com.github.jenya705.mcapi.server.event.application.ApplicationClassActionEvent;
@@ -16,6 +19,7 @@ import com.github.jenya705.mcapi.server.module.config.ConfigModuleImpl;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModuleImpl;
 import com.github.jenya705.mcapi.server.module.enchantment.EnchantmentStorageImpl;
 import com.github.jenya705.mcapi.server.module.entity.capture.EntityCapturableModuleImpl;
+import com.github.jenya705.mcapi.server.module.inject.field.FieldInjectionModuleImpl;
 import com.github.jenya705.mcapi.server.module.link.LinkingModuleImpl;
 import com.github.jenya705.mcapi.server.module.localization.LocalizationModuleImpl;
 import com.github.jenya705.mcapi.server.module.mapper.MapperImpl;
@@ -79,8 +83,8 @@ public class ServerApplication {
     private boolean debug = false;
 
     @Getter
-    @Bean
-    private ServerCore core;
+    private final ServerCore core;
+
     @Getter
     @Bean
     private EventTunnel eventTunnel;
@@ -91,7 +95,9 @@ public class ServerApplication {
     @Bean
     private EventLoop eventLoop;
 
-    public ServerApplication() {
+    public ServerApplication(ServerCore serverCore) {
+        addBean(serverCore);
+        core = serverCore;
         addClasses(
                 ConfigModuleImpl.class,
                 DatabaseModuleImpl.class,
@@ -118,6 +124,7 @@ public class ServerApplication {
                 EnchantmentStorageImpl.class,
                 EntityCapturableModuleImpl.class,
                 MenuModuleImpl.class,
+                FieldInjectionModuleImpl.class,
                 // Routes
                 GetPlayerLocationRouteHandler.class,
                 GetPlayerRouteHandler.class,
@@ -164,12 +171,14 @@ public class ServerApplication {
         for (Object obj : beans) {
             onStartMethods(initializingMethods, startupMethods, obj);
         }
+        int cur = 0;
         for (Class<?> clazz : classes) {
             try {
                 Constructor<?> clazzConstructor = clazz.getConstructor();
                 Object thisObject = clazzConstructor.newInstance();
                 onStartMethods(initializingMethods, startupMethods, thisObject);
                 beans.add(thisObject);
+                cur++;
             } catch (Exception e) {
                 log.error(String.format("Can not initialize bean %s, disabling:", clazz.getCanonicalName()), e);
                 disable();

@@ -3,6 +3,7 @@ package com.github.jenya705.mcapi.rest.inventory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jenya705.mcapi.inventory.ItemStack;
+import com.github.jenya705.mcapi.jackson.DefaultNull;
 import com.github.jenya705.mcapi.rest.enchantment.RestItemEnchantment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,12 +25,10 @@ public class RestItemStack {
     private String material;
     private int amount;
 
-    @JsonProperty
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @DefaultNull
     private Component customName;
 
-    @JsonProperty
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @DefaultNull
     private List<RestItemEnchantment> enchantments;
 
     public static RestItemStack from(ItemStack itemStack) {

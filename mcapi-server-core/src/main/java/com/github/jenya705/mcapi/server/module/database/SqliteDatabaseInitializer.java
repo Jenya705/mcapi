@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.server.module.database;
 
-import com.github.jenya705.mcapi.server.ServerApplication;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 

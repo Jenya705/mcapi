@@ -1,9 +1,9 @@
 package com.github.jenya705.mcapi.bukkit;
 
 import com.destroystokyo.paper.event.server.AsyncTabCompleteEvent;
-import com.github.jenya705.mcapi.server.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.Bean;
-import com.github.jenya705.mcapi.server.OnStartup;
+import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
+import com.github.jenya705.mcapi.server.application.Bean;
+import com.github.jenya705.mcapi.server.application.OnStartup;
 import com.github.jenya705.mcapi.server.command.CommandExecutor;
 import com.github.jenya705.mcapi.server.command.CommandTab;
 import com.github.jenya705.mcapi.server.stringful.ArrayStringfulIterator;

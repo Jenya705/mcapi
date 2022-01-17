@@ -5,8 +5,8 @@ import com.github.jenya705.mcapi.OfflinePlayer;
 import com.github.jenya705.mcapi.command.CommandValueOption;
 import com.github.jenya705.mcapi.command.types.PlayerOption;
 import com.github.jenya705.mcapi.error.PlayerNotFoundException;
-import com.github.jenya705.mcapi.server.BaseCommon;
-import com.github.jenya705.mcapi.server.ServerApplication;
+import com.github.jenya705.mcapi.server.application.BaseCommon;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.util.PlayerUtils;
 

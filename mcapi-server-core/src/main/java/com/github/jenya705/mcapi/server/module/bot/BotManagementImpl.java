@@ -1,8 +1,8 @@
 package com.github.jenya705.mcapi.server.module.bot;
 
-import com.github.jenya705.mcapi.server.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.Bean;
-import com.github.jenya705.mcapi.server.OnStartup;
+import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
+import com.github.jenya705.mcapi.server.application.Bean;
+import com.github.jenya705.mcapi.server.application.OnStartup;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.module.config.ConfigModule;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
@@ -34,7 +34,7 @@ public class BotManagementImpl extends AbstractApplicationModule implements BotM
         if (!validateBotName(name)) return false;
         databaseModule
                 .storage()
-                .update(BotEntity
+                .save(BotEntity
                         .builder()
                         .name(name)
                         .token(token)

@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.server.module.entity.capture;
 
 import com.github.jenya705.mcapi.entity.CapturableEntity;
-import com.github.jenya705.mcapi.server.AbstractApplicationModule;
+import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 
 import java.util.Collection;

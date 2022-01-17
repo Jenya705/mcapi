@@ -2,7 +2,7 @@ package com.github.jenya705.mcapi.server.command.bot.permission.list;
 
 import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.player.Player;
-import com.github.jenya705.mcapi.server.ServerApplication;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.server.command.CommandTabImpl;
 import com.github.jenya705.mcapi.server.command.CommandsUtils;
