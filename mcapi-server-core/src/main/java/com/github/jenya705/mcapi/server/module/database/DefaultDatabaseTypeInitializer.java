@@ -16,6 +16,7 @@ public class DefaultDatabaseTypeInitializer {
     private static final String urlFormat = "jdbc:%s://%s/%s";
 
     private final ServerApplication application;
+    private final DatabaseModule databaseModule;
 
     @SneakyThrows
     public Connection connection(DatabaseModuleConfig config) {
@@ -35,7 +36,7 @@ public class DefaultDatabaseTypeInitializer {
     public DatabaseStorage storage(DatabaseModuleConfig config) {
         return new DatabaseStorageImpl(
                 application,
-                application.getBean(DatabaseModule.class),
+                databaseModule,
                 config.getType()
         );
     }

@@ -13,9 +13,12 @@ import com.github.jenya705.mcapi.server.module.database.safe.CacheDatabaseGetter
 import com.github.jenya705.mcapi.server.module.database.safe.DatabaseGetter;
 import com.github.jenya705.mcapi.server.module.database.safe.StorageDatabaseGetter;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.Locale;
@@ -29,7 +32,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Singleton
 public class DatabaseModuleImpl extends AbstractApplicationModule implements DatabaseModule {
 
-    private final Map<String, DatabaseTypeInitializer> databaseTypeInitializers = new ConcurrentHashMap<>();
+    private final Map<String, DatabaseTypeInitializer> databaseTypeInitializers;
 
     private final DefaultDatabaseTypeInitializer defaultDatabaseTypeInitializer;
 
@@ -46,20 +49,22 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
     @Inject
     public DatabaseModuleImpl(ServerApplication application, ConfigModule configModule) {
         super(application);
-        addTypeInitializer("mysql", new MySqlDatabaseInitializer(app()));
+        databaseTypeInitializers = new ConcurrentHashMap<>();
+        addTypeInitializer("mysql", new MySqlDatabaseInitializer(app(), this));
         addTypeInitializer("sqlite", new SqliteDatabaseInitializer(app()));
-        defaultDatabaseTypeInitializer = new DefaultDatabaseTypeInitializer(app());
+        defaultDatabaseTypeInitializer = new DefaultDatabaseTypeInitializer(app(), this);
         ConfigData configData =
                 configModule
                         .getConfig()
                         .required("database");
         config = new DatabaseModuleConfig(configData);
         cache = new CacheStorageImpl(
-                app(),
+                application,
                 new CacheConfig(
                         configData
                                 .required("cache")
-                )
+                ),
+                this
         );
         TimerTask task = TimerTask.start(log, "Creating connection with %s...", config.getType());
         connection = createConnection();

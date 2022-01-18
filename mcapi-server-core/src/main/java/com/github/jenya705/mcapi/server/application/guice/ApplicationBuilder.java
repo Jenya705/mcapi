@@ -26,12 +26,10 @@ public class ApplicationBuilder {
     }
 
     public ApplicationBuilder defaultLayers() {
-        return layer(
-                new ApplicationBuilderLayer()
-                        .classes(ServerApplication.class)
-        )
+        return layer(ServerApplication.class)
                 .layer(ApplicationClassesBinder.ofModules().asLayer())
-                .layer(ApplicationClassesBinder.ofRoutes().asLayer());
+                .layer(ApplicationClassesBinder.ofRoutes().asLayer())
+                .layer(ApplicationClassesBinder.ofCommands().asLayer());
     }
 
     public ServerApplication build() {

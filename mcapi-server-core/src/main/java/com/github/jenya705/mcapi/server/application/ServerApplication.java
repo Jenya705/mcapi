@@ -5,16 +5,21 @@ import com.github.jenya705.mcapi.server.event.EventLoop;
 import com.github.jenya705.mcapi.server.event.application.ApplicationClassActionEvent;
 import com.github.jenya705.mcapi.server.event.application.ApplicationDisableEvent;
 import com.github.jenya705.mcapi.server.log.TimerTask;
+import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.server.module.web.tunnel.EventTunnel;
 import com.github.jenya705.mcapi.server.util.Pair;
 import com.github.jenya705.mcapi.server.worker.Worker;
 import com.google.inject.*;
+import com.google.inject.internal.BindingImpl;
+import com.google.inject.internal.Scoping;
+import com.google.inject.spi.InstanceBinding;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -60,7 +65,7 @@ public class ServerApplication {
         Map<Integer, Set<Pair<Object, Method>>> initializingMethods = new HashMap<>();
         Map<Integer, Set<Pair<Object, Method>>> startupMethods = new HashMap<>();
         initialized = true;
-        for (Object obj : getBeans()) {
+        for (Object obj : getBeans(it -> true)) {
             onStartMethods(initializingMethods, startupMethods, obj);
         }
         runMethods(
@@ -149,7 +154,7 @@ public class ServerApplication {
             return;
         }
         Map<Integer, Set<Pair<Object, Method>>> endMethods = new HashMap<>();
-        for (Object obj : getBeans()) {
+        for (Object obj : getBeans(it -> true)) {
             Class<?> currentClass = obj.getClass();
             while (currentClass != null) {
                 for (Method method : currentClass.getMethods()) {
@@ -191,14 +196,21 @@ public class ServerApplication {
         return binding.getProvider().get();
     }
 
-    private Collection<Object> getBeans() {
+    private Collection<Object> getBeans(Predicate<Binding<?>> predicate) {
         if (injector == null) {
             return Collections.emptyList();
         }
+        Set<Class<?>> exists = new HashSet<>();
         return injector
                 .getBindings()
                 .values()
                 .stream()
+                .filter(it -> {
+                    Class<?> clazz = it.getKey().getTypeLiteral().getRawType();
+                    if (exists.contains(clazz)) return false;
+                    exists.add(clazz);
+                    return predicate.test(it);
+                })
                 .map(binding -> binding.getProvider().get())
                 .collect(Collectors.toList());
     }

@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Jenya705
@@ -40,7 +41,7 @@ public class CommandModuleImpl extends AbstractApplicationModule implements Comm
     private final CommandOptionParserContainer parserContainer;
     private final CommandModuleConfig config;
 
-    private final Map<Integer, ContainerCommandExecutor> botCommands = new HashMap<>();
+    private final Map<Integer, ContainerCommandExecutor> botCommands = new ConcurrentHashMap<>();
 
     @Inject
     public CommandModuleImpl(ServerApplication application, ConfigModule configModule, Mapper mapper) {

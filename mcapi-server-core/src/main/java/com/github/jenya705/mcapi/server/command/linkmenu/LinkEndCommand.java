@@ -17,7 +17,6 @@ import com.google.inject.Inject;
 public class LinkEndCommand extends MenuCommand implements BaseCommon {
 
     private final LinkingModule linkingModule;
-
     private final ServerApplication application;
 
     @Override

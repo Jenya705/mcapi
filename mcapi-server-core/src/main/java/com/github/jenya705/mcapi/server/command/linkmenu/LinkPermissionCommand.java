@@ -52,7 +52,6 @@ public class LinkPermissionCommand extends MenuCommand implements BaseCommon {
 
     private CommandConfig config;
 
-
     @Override
     public ServerApplication app() {
         return application;

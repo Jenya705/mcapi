@@ -1,6 +1,19 @@
 package com.github.jenya705.mcapi.server.application.guice;
 
 import com.github.jenya705.mcapi.server.application.EventBroadcaster;
+import com.github.jenya705.mcapi.server.command.bot.create.CreateBotCommand;
+import com.github.jenya705.mcapi.server.command.bot.delete.DeleteBotCommand;
+import com.github.jenya705.mcapi.server.command.bot.list.ListBotCommand;
+import com.github.jenya705.mcapi.server.command.bot.permission.give.PermissionGiveBotCommand;
+import com.github.jenya705.mcapi.server.command.bot.permission.list.PermissionListBotCommand;
+import com.github.jenya705.mcapi.server.command.link.links.LinksCommand;
+import com.github.jenya705.mcapi.server.command.link.unlink.UnlinkCommand;
+import com.github.jenya705.mcapi.server.command.linkmenu.LinkEndCommand;
+import com.github.jenya705.mcapi.server.command.linkmenu.LinkPermissionCommand;
+import com.github.jenya705.mcapi.server.command.linkmenu.LinkTogglePermissionCommand;
+import com.github.jenya705.mcapi.server.command.linkmenu.LinkUnlinkCommand;
+import com.github.jenya705.mcapi.server.command.tunnels.connected.ConnectedEventTunnelsCommand;
+import com.github.jenya705.mcapi.server.command.tunnels.subscriptions.SubscriptionsEventTunnelsCommand;
 import com.github.jenya705.mcapi.server.event.DefaultEventLoop;
 import com.github.jenya705.mcapi.server.event.EventLoop;
 import com.github.jenya705.mcapi.server.form.ComponentFormProvider;
@@ -112,12 +125,32 @@ public class ApplicationClassesBinder extends AbstractModule {
             CloseInventoryRouteHandler.class
     );
 
+    public static final List<Class<?>> commands = Arrays.asList(
+            CreateBotCommand.class,
+            ListBotCommand.class,
+            DeleteBotCommand.class,
+            PermissionListBotCommand.class,
+            PermissionGiveBotCommand.class,
+            ConnectedEventTunnelsCommand.class,
+            SubscriptionsEventTunnelsCommand.class,
+            LinkEndCommand.class,
+            LinkTogglePermissionCommand.class,
+            LinkPermissionCommand.class,
+            LinkUnlinkCommand.class,
+            LinksCommand.class,
+            UnlinkCommand.class
+    );
+
     public static ApplicationClassesBinder ofModules() {
         return new ApplicationClassesBinder(modules);
     }
 
     public static ApplicationClassesBinder ofRoutes() {
         return new ApplicationClassesBinder(routes);
+    }
+
+    public static ApplicationClassesBinder ofCommands() {
+        return new ApplicationClassesBinder(commands);
     }
 
     public static ApplicationClassesBinder of(Class<?>... classes) {
