@@ -1,163 +1,60 @@
 package com.github.jenya705.mcapi.server.application;
 
 import com.github.jenya705.mcapi.server.ServerCore;
-import com.github.jenya705.mcapi.server.application.option.Option;
-import com.github.jenya705.mcapi.server.application.option.Options;
-import com.github.jenya705.mcapi.server.event.DefaultEventLoop;
 import com.github.jenya705.mcapi.server.event.EventLoop;
 import com.github.jenya705.mcapi.server.event.application.ApplicationClassActionEvent;
 import com.github.jenya705.mcapi.server.event.application.ApplicationDisableEvent;
-import com.github.jenya705.mcapi.server.form.ComponentFormProvider;
-import com.github.jenya705.mcapi.server.form.component.ComponentMapParserImpl;
-import com.github.jenya705.mcapi.server.ignore.IgnoreManager;
 import com.github.jenya705.mcapi.server.log.TimerTask;
-import com.github.jenya705.mcapi.server.module.authorization.AuthorizationModuleImpl;
-import com.github.jenya705.mcapi.server.module.block.BlockDataModuleImpl;
-import com.github.jenya705.mcapi.server.module.bot.BotManagementImpl;
-import com.github.jenya705.mcapi.server.module.command.CommandModuleImpl;
-import com.github.jenya705.mcapi.server.module.config.ConfigModuleImpl;
-import com.github.jenya705.mcapi.server.module.database.DatabaseModuleImpl;
-import com.github.jenya705.mcapi.server.module.enchantment.EnchantmentStorageImpl;
-import com.github.jenya705.mcapi.server.module.entity.capture.EntityCapturableModuleImpl;
-import com.github.jenya705.mcapi.server.module.inject.field.FieldInjectionModuleImpl;
-import com.github.jenya705.mcapi.server.module.link.LinkingModuleImpl;
-import com.github.jenya705.mcapi.server.module.localization.LocalizationModuleImpl;
-import com.github.jenya705.mcapi.server.module.mapper.MapperImpl;
-import com.github.jenya705.mcapi.server.module.material.MaterialStorageImpl;
-import com.github.jenya705.mcapi.server.module.menu.MenuModuleImpl;
-import com.github.jenya705.mcapi.server.module.message.MessageDeserializerImpl;
-import com.github.jenya705.mcapi.server.module.rest.RestModule;
-import com.github.jenya705.mcapi.server.module.rest.route.SendMessageRouteHandler;
-import com.github.jenya705.mcapi.server.module.rest.route.block.*;
-import com.github.jenya705.mcapi.server.module.rest.route.bot.GetBotLinkedPlayersRouteHandler;
-import com.github.jenya705.mcapi.server.module.rest.route.bot.GetBotPermissionRouteHandler;
-import com.github.jenya705.mcapi.server.module.rest.route.bot.GetBotTargetPermissionRouteHandler;
-import com.github.jenya705.mcapi.server.module.rest.route.bot.LinkRequestRouteHandler;
-import com.github.jenya705.mcapi.server.module.rest.route.command.CreateCommandRouteHandler;
-import com.github.jenya705.mcapi.server.module.rest.route.command.DeleteCommandRouteHandler;
-import com.github.jenya705.mcapi.server.module.rest.route.entity.CaptureEntityRouteHandler;
-import com.github.jenya705.mcapi.server.module.rest.route.entity.GetEntityRouteHandler;
-import com.github.jenya705.mcapi.server.module.rest.route.inventory.CloseInventoryRouteHandler;
-import com.github.jenya705.mcapi.server.module.rest.route.inventory.OpenInventoryRouteHandler;
-import com.github.jenya705.mcapi.server.module.rest.route.offline.BanOfflinePlayerRouteHandler;
-import com.github.jenya705.mcapi.server.module.rest.route.offline.GetOfflinePlayerRouteHandler;
-import com.github.jenya705.mcapi.server.module.rest.route.player.*;
-import com.github.jenya705.mcapi.server.module.rest.route.world.GetWorldRouteHandler;
-import com.github.jenya705.mcapi.server.module.selector.ServerSelectorProvider;
-import com.github.jenya705.mcapi.server.module.storage.StorageModuleImpl;
-import com.github.jenya705.mcapi.server.module.web.reactor.ReactorServer;
-import com.github.jenya705.mcapi.server.module.web.tunnel.DefaultEventTunnel;
+import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.server.module.web.tunnel.EventTunnel;
 import com.github.jenya705.mcapi.server.util.Pair;
-import com.github.jenya705.mcapi.server.worker.ExecutorServiceWorker;
 import com.github.jenya705.mcapi.server.worker.Worker;
+import com.google.inject.*;
+import com.google.inject.internal.BindingImpl;
+import com.google.inject.internal.Scoping;
+import com.google.inject.spi.InstanceBinding;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
  * @author Jenya705
  */
 @Slf4j
+@Getter
+@Singleton
 public class ServerApplication {
 
-    @Getter
-    private final List<Class<?>> classes = Collections.synchronizedList(new ArrayList<>());
-
-    private final List<Object> beans = Collections.synchronizedList(new ArrayList<>());
-    private final Map<Class<?>, Object> cachedBeans = new HashMap<>();
-
-    @Getter
     private boolean initialized = false;
-    @Getter
     private boolean enabled = true;
-
-    @Getter
+    private final Injector injector;
     @Setter
     private boolean debug = false;
-
-    @Getter
     private final ServerCore core;
+    private final Worker worker;
+    private final EventLoop eventLoop;
 
-    @Getter
-    @Bean
-    private EventTunnel eventTunnel;
-    @Getter
-    @Bean
-    private Worker worker;
-    @Getter
-    @Bean
-    private EventLoop eventLoop;
+    private EventTunnel cachedEventTunnel;
 
-    public ServerApplication(ServerCore serverCore) {
-        addBean(serverCore);
+    public EventTunnel getEventTunnel() {
+        if (cachedEventTunnel == null) {
+            cachedEventTunnel = getBean(EventTunnel.class);
+        }
+        return cachedEventTunnel;
+    }
+
+    @Inject
+    public ServerApplication(ServerCore serverCore, Injector injector,
+                             Worker worker, EventLoop eventLoop) {
         core = serverCore;
-        addClasses(
-                ConfigModuleImpl.class,
-                DatabaseModuleImpl.class,
-                StorageModuleImpl.class,
-                AuthorizationModuleImpl.class,
-                CommandModuleImpl.class,
-                LinkingModuleImpl.class,
-                LocalizationModuleImpl.class,
-                MapperImpl.class,
-                ReactorServer.class,
-                RestModule.class,
-                ServerSelectorProvider.class,
-                DefaultEventTunnel.class,
-                EventBroadcaster.class,
-                MessageDeserializerImpl.class,
-                ComponentMapParserImpl.class,
-                ComponentFormProvider.class,
-                ExecutorServiceWorker.class,
-                DefaultEventLoop.class,
-                BotManagementImpl.class,
-                BlockDataModuleImpl.class,
-                IgnoreManager.class,
-                MaterialStorageImpl.class,
-                EnchantmentStorageImpl.class,
-                EntityCapturableModuleImpl.class,
-                MenuModuleImpl.class,
-                FieldInjectionModuleImpl.class,
-                // Routes
-                GetPlayerLocationRouteHandler.class,
-                GetPlayerRouteHandler.class,
-                GetPlayerListRouteHandler.class,
-                BanPlayerRouteHandler.class,
-                KickPlayerRouteHandler.class,
-                PlayerPermissionRouteHandler.class,
-                SendMessageRouteHandler.class,
-                KillPlayerRouteHandler.class,
-                GetBotLinkedPlayersRouteHandler.class,
-                GetBotPermissionRouteHandler.class,
-                GetBotTargetPermissionRouteHandler.class,
-                CreateCommandRouteHandler.class,
-                DeleteCommandRouteHandler.class,
-                LinkRequestRouteHandler.class,
-                GetOfflinePlayerRouteHandler.class,
-                BanOfflinePlayerRouteHandler.class,
-                GetBlockRouteHandler.class,
-                GetWorldRouteHandler.class,
-                GetBlockDataRouteHandler.class,
-                GetBlockInventoryRouteHandler.class,
-                GetBlockInventoryItemRouteHandler.class,
-                GetPlayerInventoryRouteHandler.class,
-                GetPlayerInventoryItemRouteHandler.class,
-                GetPlayerEnderChestRouteHandler.class,
-                GetPlayerEnderChestItemRouteHandler.class,
-                SetBlockDataFieldRouteHandler.class,
-                GetEntityRouteHandler.class,
-                CaptureEntityRouteHandler.class,
-                OpenInventoryRouteHandler.class,
-                CloseInventoryRouteHandler.class
-                // End Routes
-        );
+        this.injector = injector;
+        this.worker = worker;
+        this.eventLoop = eventLoop;
     }
 
     public void start() {
@@ -165,28 +62,12 @@ public class ServerApplication {
         log.info("If you find a bug, consider to issue it on https://github.com/Jenya705/mcapi/issues");
         log.info("Plugin wiki: https://github.com/Jenya705/mcapi/wiki");
         TimerTask startTask = TimerTask.start(log, "Starting application...");
-        addBean(this);
         Map<Integer, Set<Pair<Object, Method>>> initializingMethods = new HashMap<>();
         Map<Integer, Set<Pair<Object, Method>>> startupMethods = new HashMap<>();
-        for (Object obj : beans) {
+        initialized = true;
+        for (Object obj : getBeans(it -> true)) {
             onStartMethods(initializingMethods, startupMethods, obj);
         }
-        int cur = 0;
-        for (Class<?> clazz : classes) {
-            try {
-                Constructor<?> clazzConstructor = clazz.getConstructor();
-                Object thisObject = clazzConstructor.newInstance();
-                onStartMethods(initializingMethods, startupMethods, thisObject);
-                beans.add(thisObject);
-                cur++;
-            } catch (Exception e) {
-                log.error(String.format("Can not initialize bean %s, disabling:", clazz.getCanonicalName()), e);
-                disable();
-                return;
-            }
-        }
-        initialized = true;
-        injectBeans();
         runMethods(
                 initializingMethods,
                 "initialize",
@@ -226,47 +107,6 @@ public class ServerApplication {
     protected <E, T> void addToMap(Map<E, Set<T>> map, E key, T value) {
         if (!map.containsKey(key)) map.put(key, new HashSet<>());
         map.get(key).add(value);
-    }
-
-    protected void injectBeans() {
-        for (Object obj : beans) {
-            injectBeansInObject(obj);
-        }
-    }
-
-    public void injectBeansInObject(Object obj) {
-        Class<?> currentObjClass = obj.getClass();
-        while (currentObjClass != null) {
-            injectBeans(obj, currentObjClass);
-            currentObjClass = currentObjClass.getSuperclass();
-        }
-    }
-
-    protected void injectBeans(Object obj, Class<?> objClass) {
-        for (Field field : objClass.getDeclaredFields()) {
-            if (field.getAnnotation(Bean.class) == null) continue;
-            Object toInject = getBean(field.getType());
-            if (toInject == null) {
-                log.error(String.format(
-                        "Failed to inject %s bean to %s class in %s field",
-                        field.getType().getCanonicalName(),
-                        obj.getClass().getCanonicalName(),
-                        field.getName()
-                ));
-                continue;
-            }
-            try {
-                field.setAccessible(true);
-                field.set(obj, toInject);
-            } catch (Exception e) {
-                log.error(String.format(
-                        "Failed to inject %s bean to %s class in %s field because of exception:",
-                        field.getType().getCanonicalName(),
-                        obj.getClass().getCanonicalName(),
-                        field.getName()
-                ), e);
-            }
-        }
     }
 
     protected void runMethods(Map<Integer, Set<Pair<Object, Method>>> methods, String procedureName, ApplicationClassActionEvent.Action action, boolean onFailedDisable) {
@@ -314,7 +154,7 @@ public class ServerApplication {
             return;
         }
         Map<Integer, Set<Pair<Object, Method>>> endMethods = new HashMap<>();
-        for (Object obj : beans) {
+        for (Object obj : getBeans(it -> true)) {
             Class<?> currentClass = obj.getClass();
             while (currentClass != null) {
                 for (Method method : currentClass.getMethods()) {
@@ -336,59 +176,43 @@ public class ServerApplication {
         enabled = false;
     }
 
-    @SuppressWarnings("unchecked")
-    public synchronized <T> T getBean(Class<? extends T> clazz) {
+    public <T> T getBean(Class<? extends T> clazz) {
         if (!initialized) {
             throw new IllegalStateException("Application is not initialized");
         }
-        if (cachedBeans.containsKey(clazz)) {
-            return (T) cachedBeans.get(clazz);
-        }
-        for (Object obj : beans) {
-            if (clazz.isAssignableFrom(obj.getClass())) {
-                cachedBeans.put(clazz, obj);
-                return (T) obj;
+        if (injector == null) {
+            if (isDebug()) {
+                log.warn("Someone trying to get bean while injector is null", new RuntimeException());
             }
+            return null;
         }
-        if (isDebug()) {
-            log.warn("Trying to get non-existent bean:", new RuntimeException());
-        }
-        return null;
-    }
-
-    public void addClass(Class<?> clazz) {
-        classes.add(clazz);
-    }
-
-    public void addClasses(Class<?>... classes) {
-        for (Class<?> clazz : classes) {
-            addClass(clazz);
-        }
-    }
-
-    public void addBean(Object obj) {
-        beans.add(obj);
-    }
-
-    public void swapBeans(Class<?> from, Class<?> to) {
-        if (initialized) {
-            throw new IllegalStateException("You can not change bean classes when application already initialized");
-        }
-        int i = 0;
-        for (Class<?> clazz: classes) {
-            if (clazz.isAssignableFrom(from)) {
-                classes.remove(i);
-                classes.add(to);
-                return;
+        Binding<? extends T> binding = injector.getExistingBinding(Key.get(clazz));
+        if (binding == null) {
+            if (isDebug()) {
+                log.warn("Someone trying to get non-exist bean", new RuntimeException());
             }
-            ++i;
+            return null;
         }
-        if (isDebug()) {
-            log.warn(String.format(
-                    "Tried to swap non-existent bean. From: %s, To: %s",
-                    from, to
-            ), new RuntimeException());
+        return binding.getProvider().get();
+    }
+
+    private Collection<Object> getBeans(Predicate<Binding<?>> predicate) {
+        if (injector == null) {
+            return Collections.emptyList();
         }
+        Set<Class<?>> exists = new HashSet<>();
+        return injector
+                .getBindings()
+                .values()
+                .stream()
+                .filter(it -> {
+                    Class<?> clazz = it.getKey().getTypeLiteral().getRawType();
+                    if (exists.contains(clazz)) return false;
+                    exists.add(clazz);
+                    return predicate.test(it);
+                })
+                .map(binding -> binding.getProvider().get())
+                .collect(Collectors.toList());
     }
 
     private void disable() {

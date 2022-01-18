@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
 import com.github.jenya705.mcapi.ApiError;
@@ -12,6 +13,7 @@ import com.github.jenya705.mcapi.entity.EntityError;
 import com.github.jenya705.mcapi.server.defaults.DefaultValueProcessor;
 import com.github.jenya705.mcapi.server.defaults.DefaultValueProcessorImpl;
 import com.github.jenya705.mcapi.server.util.CacheClassMap;
+import com.google.inject.Singleton;
 import lombok.Getter;
 import lombok.SneakyThrows;
 
@@ -20,11 +22,12 @@ import java.util.Map;
 /**
  * @author Jenya705
  */
+@Singleton
 public class MapperImpl implements Mapper, JacksonProvider {
 
     private static final ApiError defaultError = new EntityError(0, 500, null, "Some bad happened");
 
-    private final ObjectMapper json = new ObjectMapper();
+    private final ObjectMapper json;
     private final Map<Class<?>, RawDeserializer<?>> rawDeserializers = CacheClassMap.concurrent();
     private final Map<Class<?>, ThrowableParser> throwableParsers = CacheClassMap.concurrent();
 
@@ -60,7 +63,10 @@ public class MapperImpl implements Mapper, JacksonProvider {
     }
 
     public MapperImpl() {
-        json.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS);
+        json = JsonMapper
+                .builder()
+                .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
+                .build();
         this
                 .rawDeserializer(byte.class, Byte::parseByte)
                 .rawDeserializer(short.class, Short::parseShort)

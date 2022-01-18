@@ -3,20 +3,25 @@ package com.github.jenya705.mcapi.server.module.rest.route.player;
 import com.github.jenya705.mcapi.Routes;
 import com.github.jenya705.mcapi.permission.Permissions;
 import com.github.jenya705.mcapi.player.Player;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.module.rest.route.AbstractRouteHandler;
 import com.github.jenya705.mcapi.server.module.web.Request;
 import com.github.jenya705.mcapi.server.module.web.Response;
 import com.github.jenya705.mcapi.server.util.ItemUtils;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import java.util.Optional;
 
 /**
  * @author Jenya705
  */
+@Singleton
 public class GetPlayerEnderChestItemRouteHandler extends AbstractRouteHandler {
 
-    public GetPlayerEnderChestItemRouteHandler() {
-        super(Routes.PLAYER_ENDER_CHEST_ITEM);
+    @Inject
+    public GetPlayerEnderChestItemRouteHandler(ServerApplication application) {
+        super(application, Routes.PLAYER_ENDER_CHEST_ITEM);
     }
 
     @Override

@@ -3,7 +3,6 @@ package com.github.jenya705.mcapi.server.command.linkmenu;
 import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.server.application.BaseCommon;
-import com.github.jenya705.mcapi.server.application.Bean;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.command.CommandsUtils;
 import com.github.jenya705.mcapi.server.command.MenuCommand;
@@ -14,6 +13,7 @@ import com.github.jenya705.mcapi.server.module.config.Config;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.server.module.localization.LocalizationModule;
 import com.github.jenya705.mcapi.server.stringful.StringfulIterator;
+import com.google.inject.Inject;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -46,23 +46,23 @@ public class LinkPermissionCommand extends MenuCommand implements BaseCommon {
         }
     }
 
-    @Bean
-    private DatabaseModule databaseModule;
-    @Bean
-    private LocalizationModule localizationModule;
-    private CommandConfig config;
-
+    private final DatabaseModule databaseModule;
+    private final LocalizationModule localizationModule;
     private final ServerApplication application;
+
+    private CommandConfig config;
 
     @Override
     public ServerApplication app() {
         return application;
     }
 
-    public LinkPermissionCommand(ServerApplication application) {
+    @Inject
+    public LinkPermissionCommand(ServerApplication application, DatabaseModule databaseModule, LocalizationModule localizationModule) {
         super(application);
         this.application = application;
-        autoBeans();
+        this.databaseModule = databaseModule;
+        this.localizationModule = localizationModule;
     }
 
     @Override

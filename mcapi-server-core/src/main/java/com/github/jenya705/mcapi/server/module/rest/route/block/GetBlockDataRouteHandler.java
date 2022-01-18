@@ -5,20 +5,25 @@ import com.github.jenya705.mcapi.block.Block;
 import com.github.jenya705.mcapi.error.BlockDataNotFoundException;
 import com.github.jenya705.mcapi.error.BlockNotFoundException;
 import com.github.jenya705.mcapi.error.WorldNotFoundException;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.module.rest.route.AbstractRouteHandler;
 import com.github.jenya705.mcapi.server.module.web.Request;
 import com.github.jenya705.mcapi.server.module.web.Response;
 import com.github.jenya705.mcapi.server.util.PermissionUtils;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import java.util.Optional;
 
 /**
  * @author Jenya705
  */
+@Singleton
 public class GetBlockDataRouteHandler extends AbstractRouteHandler {
 
-    public GetBlockDataRouteHandler() {
-        super(Routes.BLOCK_DATA);
+    @Inject
+    public GetBlockDataRouteHandler(ServerApplication application) {
+        super(application, Routes.BLOCK_DATA);
     }
 
     @Override

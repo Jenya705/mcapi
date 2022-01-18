@@ -5,10 +5,12 @@ import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.server.command.RootCommand;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
+import com.google.inject.ImplementedBy;
 
 /**
  * @author Jenya705
  */
+@ImplementedBy(LinkingModuleImpl.class)
 public interface LinkingModule {
 
     String linkCommand = "/" + RootCommand.name + " linkMenu";

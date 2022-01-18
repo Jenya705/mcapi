@@ -13,6 +13,7 @@ import java.sql.Connection;
 public class MySqlDatabaseInitializer implements DatabaseTypeInitializer {
 
     private final ServerApplication application;
+    private final DatabaseModule databaseModule;
 
     @Override
     @SneakyThrows
@@ -24,6 +25,6 @@ public class MySqlDatabaseInitializer implements DatabaseTypeInitializer {
     @Override
     @SneakyThrows
     public DatabaseStorage storage() {
-        return new MySqlDatabaseStorage(application, application.getBean(DatabaseModule.class));
+        return new MySqlDatabaseStorage(application, databaseModule);
     }
 }

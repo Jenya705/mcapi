@@ -9,6 +9,7 @@ import com.github.jenya705.mcapi.server.data.ConfigData;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.server.module.web.tunnel.EventTunnelClient;
+import com.google.inject.Inject;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,12 +22,14 @@ import java.util.UUID;
 @AdditionalPermissions("others")
 public class SubscriptionsEventTunnelsCommand extends AdvancedCommandExecutor<SubscriptionsEventTunnelsArguments> {
 
-    private final DatabaseModule databaseModule = bean(DatabaseModule.class);
+    private final DatabaseModule databaseModule;
 
     private SubscriptionsEventTunnelsConfig config;
 
-    public SubscriptionsEventTunnelsCommand(ServerApplication application) {
+    @Inject
+    public SubscriptionsEventTunnelsCommand(ServerApplication application, DatabaseModule databaseModule) {
         super(application, SubscriptionsEventTunnelsArguments.class);
+        this.databaseModule = databaseModule;
         this
                 .tab(() -> Collections.singletonList("<token>"))
                 .tab(() -> Collections.singletonList("<page>"));

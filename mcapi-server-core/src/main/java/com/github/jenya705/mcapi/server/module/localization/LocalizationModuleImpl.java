@@ -2,12 +2,13 @@ package com.github.jenya705.mcapi.server.module.localization;
 
 import com.github.jenya705.mcapi.permission.DefaultPermission;
 import com.github.jenya705.mcapi.permission.Permissions;
-import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.application.OnDisable;
-import com.github.jenya705.mcapi.server.application.OnInitializing;
+import com.github.jenya705.mcapi.server.application.*;
 import com.github.jenya705.mcapi.server.module.config.ConfigModule;
+import com.google.inject.Inject;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+
+import java.io.IOException;
 
 /**
  * @author Jenya705
@@ -15,11 +16,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LocalizationModuleImpl extends AbstractApplicationModule implements LocalizationModule {
 
-    private LocalizationModuleConfig config;
+    private final LocalizationModuleConfig config;
 
-    @OnInitializing
-    public void initialize() {
-        load();
+    @Inject
+    public LocalizationModuleImpl(ServerApplication application, ConfigModule configModule) throws IOException {
+        super(application);
+        config = new LocalizationModuleConfig(
+                configModule.createConfig(
+                        core().loadConfig("localization")
+                )
+        );
         linkPermissionLocalization(Permissions.PLAYER_GET, "Get your player object");
         linkPermissionLocalization(Permissions.PLAYER_HAS_PERMISSION, "Check if you have permission");
         linkPermissionLocalization(Permissions.LINK_REQUEST, "Linking with you");
@@ -40,21 +46,9 @@ public class LocalizationModuleImpl extends AbstractApplicationModule implements
         debugValidate();
     }
 
-    @OnDisable(priority = 4)
-    public void disable() {
-        save();
-    }
-
     @SneakyThrows
-    private void load() {
-        config = new LocalizationModuleConfig(
-                bean(ConfigModule.class).createConfig(
-                        core().loadConfig("localization")
-                )
-        );
-    }
-
-    @SneakyThrows
+    @OnDisable(priority = 5)
+    @OnStartup(priority = 5)
     private void save() {
         core().saveConfig("localization", config.represent());
     }

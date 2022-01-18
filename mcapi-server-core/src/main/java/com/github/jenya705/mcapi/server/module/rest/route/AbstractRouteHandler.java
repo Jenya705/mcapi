@@ -3,6 +3,7 @@ package com.github.jenya705.mcapi.server.module.rest.route;
 import com.github.jenya705.mcapi.Route;
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
 import com.github.jenya705.mcapi.server.application.OnStartup;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.ignore.Ignorable;
 import com.github.jenya705.mcapi.server.module.web.RouteHandler;
 import com.github.jenya705.mcapi.server.module.web.WebServer;
@@ -15,7 +16,8 @@ public abstract class AbstractRouteHandler extends AbstractApplicationModule imp
 
     private final Route route;
 
-    public AbstractRouteHandler(Route route) {
+    public AbstractRouteHandler(ServerApplication application, Route route) {
+        super(application);
         this.route = route;
     }
 

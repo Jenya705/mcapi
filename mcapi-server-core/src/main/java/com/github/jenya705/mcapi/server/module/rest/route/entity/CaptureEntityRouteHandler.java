@@ -2,24 +2,28 @@ package com.github.jenya705.mcapi.server.module.rest.route.entity;
 
 import com.github.jenya705.mcapi.Routes;
 import com.github.jenya705.mcapi.entity.CapturableEntity;
-import com.github.jenya705.mcapi.server.application.Bean;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.module.entity.capture.EntityCaptureModule;
 import com.github.jenya705.mcapi.server.module.rest.route.AbstractRouteHandler;
 import com.github.jenya705.mcapi.server.module.web.Request;
 import com.github.jenya705.mcapi.server.module.web.Response;
 import com.github.jenya705.mcapi.server.util.PermissionUtils;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 /**
  * @author Jenya705
  */
+@Singleton
 public class CaptureEntityRouteHandler extends AbstractRouteHandler {
 
-    @Bean
-    private EntityCaptureModule entityCaptureModule;
+    private final EntityCaptureModule entityCaptureModule;
 
-    public CaptureEntityRouteHandler() {
-        super(Routes.CAPTURE_ENTITY);
+    @Inject
+    public CaptureEntityRouteHandler(ServerApplication application, EntityCaptureModule entityCaptureModule) {
+        super(application, Routes.CAPTURE_ENTITY);
+        this.entityCaptureModule = entityCaptureModule;
     }
 
     @Override

@@ -5,8 +5,10 @@ import com.github.jenya705.mcapi.bukkit.BukkitWrapper;
 import com.github.jenya705.mcapi.menu.InventoryMenuView;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.application.Bean;
 import com.github.jenya705.mcapi.server.application.OnStartup;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -19,12 +21,17 @@ import java.util.UUID;
 /**
  * @author Jenya705
  */
-public class BukkitMenuManagerImpl extends AbstractApplicationModule implements Listener, BukkitMenuManager {
+@Singleton
+public class BukkitMenuManagerImpl implements Listener, BukkitMenuManager {
 
-    @Bean
-    private BukkitApplication plugin;
+    private final BukkitApplication plugin;
 
     private final Map<UUID, InventoryMenuView> menus = new HashMap<>();
+
+    @Inject
+    public BukkitMenuManagerImpl(BukkitApplication plugin) {
+        this.plugin = plugin;
+    }
 
     @Override
     public void register(Player player, InventoryMenuView menu) {

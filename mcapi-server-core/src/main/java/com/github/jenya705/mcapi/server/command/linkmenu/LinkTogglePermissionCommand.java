@@ -8,6 +8,7 @@ import com.github.jenya705.mcapi.server.command.MenuCommand;
 import com.github.jenya705.mcapi.server.command.NoConfig;
 import com.github.jenya705.mcapi.server.module.link.LinkingModule;
 import com.github.jenya705.mcapi.server.stringful.StringfulIterator;
+import com.google.inject.Inject;
 
 /**
  * @author Jenya705
@@ -24,10 +25,11 @@ public class LinkTogglePermissionCommand extends MenuCommand implements BaseComm
         return application;
     }
 
-    public LinkTogglePermissionCommand(ServerApplication application) {
+    @Inject
+    public LinkTogglePermissionCommand(ServerApplication application, LinkingModule linkingModule) {
         super(application);
         this.application = application;
-        linkingModule = bean(LinkingModule.class);
+        this.linkingModule = linkingModule;
     }
 
     @Override

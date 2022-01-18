@@ -8,6 +8,7 @@ import com.github.jenya705.mcapi.server.entity.BotPermissionEntity;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.google.inject.Provider;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,8 +19,6 @@ import java.util.stream.Collectors;
  */
 public class CacheStorageImpl extends AbstractApplicationModule implements CacheStorage {
 
-    private final DatabaseModule databaseModule;
-
     private final FutureCacheStorage futureCacheStorage;
 
     private final Cache<Integer, BotEntity> botCache;
@@ -28,9 +27,8 @@ public class CacheStorageImpl extends AbstractApplicationModule implements Cache
     private final Cache<Integer, List<BotPermissionEntity>> permissionCache;
     private final Map<String, Integer> botTokens;
 
-    public CacheStorageImpl(ServerApplication application, CacheConfig config) {
+    public CacheStorageImpl(ServerApplication application, CacheConfig config, DatabaseModule databaseModule) {
         super(application);
-        databaseModule = bean(DatabaseModule.class);
         futureCacheStorage = new FutureCacheStorageImpl(application, this, databaseModule);
         botTokens = new ConcurrentHashMap<>();
         botCache = CacheBuilder.newBuilder()

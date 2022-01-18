@@ -10,14 +10,15 @@ import com.github.jenya705.mcapi.entity.Entity;
 import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.menu.InventoryMenuView;
 import com.github.jenya705.mcapi.player.Player;
-import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.application.Bean;
-import com.github.jenya705.mcapi.server.application.OnInitializing;
 import com.github.jenya705.mcapi.server.ServerCore;
+import com.github.jenya705.mcapi.server.application.OnInitializing;
 import com.github.jenya705.mcapi.server.command.CommandExecutor;
 import com.github.jenya705.mcapi.server.util.ListUtils;
 import com.github.jenya705.mcapi.world.World;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import lombok.Cleanup;
+import lombok.experimental.Delegate;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.PluginCommand;
@@ -37,29 +38,25 @@ import java.util.stream.Collectors;
 /**
  * @author Jenya705
  */
-public class BukkitServerCore extends AbstractApplicationModule implements ServerCore {
+@Singleton
+public class BukkitServerCore implements ServerCore {
 
-    private static final Yaml yaml = generateYaml();
-
-    private static Yaml generateYaml() {
-        DumperOptions dumperOptions = new DumperOptions();
-        dumperOptions.setPrettyFlow(true);
-        return new Yaml(dumperOptions);
-    }
+    @Delegate
+    private final BukkitEasyCore easyCore;
 
     private final BukkitApplication plugin;
+    private final BukkitMenuManager menuManager;
+    private final PermissionManagerHook permissionManagerHook;
+    private final BukkitOfflinePlayerStorage offlinePlayerStorage;
 
-    @Bean
-    private PermissionManagerHook permissionManagerHook;
-
-    @Bean
-    private BukkitOfflinePlayerStorage offlinePlayerStorage;
-
-    @Bean
-    private BukkitMenuManager menuManager;
-
-    public BukkitServerCore(BukkitApplication plugin) {
+    @Inject
+    public BukkitServerCore(BukkitApplication plugin, BukkitMenuManager menuManager, BukkitEasyCore easyCore,
+                            PermissionManagerHook permissionManagerHook, BukkitOfflinePlayerStorage offlinePlayerStorage) {
         this.plugin = plugin;
+        this.menuManager = menuManager;
+        this.easyCore = easyCore;
+        this.permissionManagerHook = permissionManagerHook;
+        this.offlinePlayerStorage = offlinePlayerStorage;
     }
 
     @OnInitializing(priority = -1)
@@ -191,57 +188,4 @@ public class BukkitServerCore extends AbstractApplicationModule implements Serve
         return BukkitWrapper.world(Bukkit.getWorld(NamespacedKey.minecraft(id)));
     }
 
-    @Override
-    public Map<String, Object> loadConfig(String file) throws IOException {
-        File fileObject = new File(plugin.getDataFolder(), file + ".yml");
-        if (!fileObject.exists()) fileObject.createNewFile(); // IGNORED
-        @Cleanup Reader reader = new FileReader(fileObject);
-        return Objects.requireNonNullElse(yaml.load(reader), new LinkedHashMap<>());
-    }
-
-    @Override
-    public byte[] loadSpecific(String file) throws IOException {
-        File fileObject = new File(plugin.getDataFolder(), file);
-        if (!fileObject.exists()) fileObject.createNewFile(); // IGNORED
-        return Files.readAllBytes(fileObject.toPath());
-    }
-
-    @Override
-    public void saveConfig(String file, Map<String, Object> config) throws IOException {
-        File fileObject = new File(plugin.getDataFolder(), file + ".yml");
-        if (!fileObject.exists()) fileObject.createNewFile(); // IGNORED
-        @Cleanup Writer writer = new FileWriter(fileObject);
-        yaml.dump(config, writer);
-    }
-
-    @Override
-    public void saveSpecific(String file, byte[] bytes) throws IOException {
-        File fileObject = new File(plugin.getDataFolder(), file);
-        if (!fileObject.exists()) fileObject.createNewFile(); // IGNORED
-        Files.write(fileObject.toPath(), bytes, StandardOpenOption.WRITE);
-    }
-
-    public File getFile(String file) {
-        return new File(plugin.getDataFolder(), file);
-    }
-
-    @Override
-    public boolean isExistsFile(String file) {
-        return getFile(file).exists();
-    }
-
-    @Override
-    public void mkdirs(String file) {
-        getFile(file).mkdirs();
-    }
-
-    @Override
-    public String getAbsolutePath(String file) {
-        return getFile(file).getAbsolutePath();
-    }
-
-    @Override
-    public void disable() {
-        Bukkit.getPluginManager().disablePlugin(plugin);
-    }
 }

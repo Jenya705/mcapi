@@ -40,26 +40,26 @@ public class RootCommand extends AbstractApplicationModule implements Supplier<C
         container
                 .tree()
                 .branch("bot", branch -> branch
-                        .leaf("create", new CreateBotCommand(app()))
-                        .leaf("list", new ListBotCommand(app()))
-                        .leaf("delete", new DeleteBotCommand(app()))
+                        .leaf("create", bean(CreateBotCommand.class))
+                        .leaf("list", bean(ListBotCommand.class))
+                        .leaf("delete", bean(DeleteBotCommand.class))
                         .branch("permission", permissionBranch -> permissionBranch
-                                .leaf("list", new PermissionListBotCommand(app()))
-                                .leaf("give", new PermissionGiveBotCommand(app()))
+                                .leaf("list", bean(PermissionListBotCommand.class))
+                                .leaf("give", bean(PermissionGiveBotCommand.class))
                         )
                 )
                 .branch("tunnel", branch -> branch
-                        .leaf("connected", new ConnectedEventTunnelsCommand(app()))
-                        .leaf("subscriptions", new SubscriptionsEventTunnelsCommand(app()))
+                        .leaf("connected", bean(ConnectedEventTunnelsCommand.class))
+                        .leaf("subscriptions", bean(SubscriptionsEventTunnelsCommand.class))
                 )
                 .ghostBranch("linkMenu", branch -> branch
-                        .leaf("end", new LinkEndCommand(app()))
-                        .leaf("toggle", new LinkTogglePermissionCommand(app()))
-                        .leaf("permission", new LinkPermissionCommand(app()))
-                        .leaf("unlink", new LinkUnlinkCommand(app()))
+                        .leaf("end", bean(LinkEndCommand.class))
+                        .leaf("toggle", bean(LinkTogglePermissionCommand.class))
+                        .leaf("permission", bean(LinkPermissionCommand.class))
+                        .leaf("unlink", bean(LinkUnlinkCommand.class))
                 )
-                .leaf("links", new LinksCommand(app()))
-                .leaf("unlink", new UnlinkCommand(app()))
+                .leaf("links", bean(LinksCommand.class))
+                .leaf("unlink", bean(UnlinkCommand.class))
         ;
         ConfigData configData = bean(ConfigModule.class)
                 .createConfig(core().loadConfig("commands"));

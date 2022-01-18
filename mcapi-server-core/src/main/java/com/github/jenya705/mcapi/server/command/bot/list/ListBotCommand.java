@@ -7,6 +7,7 @@ import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutor
 import com.github.jenya705.mcapi.server.data.ConfigData;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.server.util.PlayerUtils;
+import com.google.inject.Inject;
 
 import java.util.Collections;
 
@@ -18,10 +19,12 @@ public class ListBotCommand extends AdvancedCommandExecutor<ListBotArguments> {
 
     private ListBotConfig config;
 
-    private final DatabaseModule databaseModule = bean(DatabaseModule.class);
+    private final DatabaseModule databaseModule;
 
-    public ListBotCommand(ServerApplication application) {
+    @Inject
+    public ListBotCommand(ServerApplication application, DatabaseModule databaseModule) {
         super(application, ListBotArguments.class);
+        this.databaseModule = databaseModule;
         this
                 .tab(() -> Collections.singletonList("<page>"))
                 .tab((sender, permission) ->

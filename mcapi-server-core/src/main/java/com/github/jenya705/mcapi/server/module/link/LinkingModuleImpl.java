@@ -9,8 +9,8 @@ import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.rest.event.RestLinkEvent;
 import com.github.jenya705.mcapi.rest.event.RestUnlinkEvent;
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.application.Bean;
 import com.github.jenya705.mcapi.server.application.OnStartup;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.command.CommandsUtils;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.entity.BotLinkEntity;
@@ -27,6 +27,7 @@ import com.github.jenya705.mcapi.server.util.ListUtils;
 import com.github.jenya705.mcapi.server.util.MultivaluedMap;
 import com.github.jenya705.mcapi.server.util.OnlinePlayerImitation;
 import com.github.jenya705.mcapi.server.util.ReactiveUtils;
+import com.google.inject.Inject;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -36,29 +37,33 @@ import java.util.stream.Stream;
  */
 public class LinkingModuleImpl extends AbstractApplicationModule implements LinkingModule {
 
-    private LinkingModuleConfig config;
-    private LinkIgnores linkIgnores;
+    private final LinkingModuleConfig config;
+    private final LinkIgnores linkIgnores;
 
-    @Bean
-    private FormPlatformProvider formProvider;
-    @Bean
-    private DatabaseModule databaseModule;
-    @Bean
-    private StorageModule storageModule;
-    @Bean
-    private LocalizationModule localizationModule;
-    @Bean
-    private CommandModule commandModule;
+    private final FormPlatformProvider formProvider;
+    private final DatabaseModule databaseModule;
+    private final StorageModule storageModule;
+    private final LocalizationModule localizationModule;
+    private final CommandModule commandModule;
 
     private final MultivaluedMap<UUID, LinkObject> links = MultivaluedMap.create();
 
-    @OnStartup
-    public void start() {
+    @Inject
+    public LinkingModuleImpl(ServerApplication application, FormPlatformProvider formProvider,
+                             DatabaseModule databaseModule, StorageModule storageModule,
+                             LocalizationModule localizationModule, CommandModule commandModule,
+                             ConfigModule configModule) {
+        super(application);
         config = new LinkingModuleConfig(
-                bean(ConfigModule.class)
+                configModule
                         .getConfig()
                         .required("linking")
         );
+        this.formProvider = formProvider;
+        this.databaseModule = databaseModule;
+        this.storageModule = storageModule;
+        this.localizationModule = localizationModule;
+        this.commandModule = commandModule;
         eventLoop()
                 .handler(QuitEvent.class, event -> {
                     Player player = new OnlinePlayerImitation(event.getPlayer());

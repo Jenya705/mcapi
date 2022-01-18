@@ -2,7 +2,7 @@ package com.github.jenya705.mcapi.server.module.database;
 
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
 import com.github.jenya705.mcapi.server.application.OnDisable;
-import com.github.jenya705.mcapi.server.application.OnInitializing;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.data.ConfigData;
 import com.github.jenya705.mcapi.server.log.TimerTask;
 import com.github.jenya705.mcapi.server.module.config.ConfigModule;
@@ -12,53 +12,62 @@ import com.github.jenya705.mcapi.server.module.database.cache.CacheStorageImpl;
 import com.github.jenya705.mcapi.server.module.database.safe.CacheDatabaseGetter;
 import com.github.jenya705.mcapi.server.module.database.safe.DatabaseGetter;
 import com.github.jenya705.mcapi.server.module.database.safe.StorageDatabaseGetter;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+import com.google.inject.Singleton;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Jenya705
  */
 @Slf4j
+@Singleton
 public class DatabaseModuleImpl extends AbstractApplicationModule implements DatabaseModule {
 
-    private final Map<String, DatabaseTypeInitializer> databaseTypeInitializers = new HashMap<>();
+    private final Map<String, DatabaseTypeInitializer> databaseTypeInitializers;
 
-    private DefaultDatabaseTypeInitializer defaultDatabaseTypeInitializer;
+    private final DefaultDatabaseTypeInitializer defaultDatabaseTypeInitializer;
 
-    private Connection connection;
-    private DatabaseStorage storage;
+    private final Connection connection;
+    private final DatabaseStorage storage;
 
-    private DatabaseModuleConfig config;
+    private final DatabaseModuleConfig config;
 
-    private CacheStorage cache;
-    private DatabaseGetter safeSync;
-    private DatabaseGetter safeSyncWithFuture;
-    private DatabaseGetter safeAsync;
+    private final CacheStorage cache;
+    private final DatabaseGetter safeSync;
+    private final DatabaseGetter safeSyncWithFuture;
+    private final DatabaseGetter safeAsync;
 
-    @OnInitializing
-    public void initialize() {
-        addTypeInitializer("mysql", new MySqlDatabaseInitializer(app()));
+    @Inject
+    public DatabaseModuleImpl(ServerApplication application, ConfigModule configModule) {
+        super(application);
+        databaseTypeInitializers = new ConcurrentHashMap<>();
+        addTypeInitializer("mysql", new MySqlDatabaseInitializer(app(), this));
         addTypeInitializer("sqlite", new SqliteDatabaseInitializer(app()));
-        defaultDatabaseTypeInitializer = new DefaultDatabaseTypeInitializer(app());
+        defaultDatabaseTypeInitializer = new DefaultDatabaseTypeInitializer(app(), this);
         ConfigData configData =
-                bean(ConfigModule.class)
+                configModule
                         .getConfig()
                         .required("database");
         config = new DatabaseModuleConfig(configData);
         cache = new CacheStorageImpl(
-                app(),
+                application,
                 new CacheConfig(
                         configData
                                 .required("cache")
-                )
+                ),
+                this
         );
         TimerTask task = TimerTask.start(log, "Creating connection with %s...", config.getType());
-        createConnection();
+        connection = createConnection();
         task.complete();
         task.start("Loading storage...");
         storage = createStorage(config.getType());
@@ -69,7 +78,8 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
         safeSyncWithFuture = new CacheDatabaseGetter(cache.withFuture());
     }
 
-    protected void createConnection() {
+    protected Connection createConnection() {
+        Connection connection = null;
         String loweredType = config.getType().toLowerCase(Locale.ROOT);
         if (databaseTypeInitializers.containsKey(loweredType)) {
             connection = databaseTypeInitializers
@@ -85,6 +95,7 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
             connection = defaultDatabaseTypeInitializer
                     .connection(config);
         }
+        return connection;
     }
 
     @OnDisable
@@ -137,7 +148,7 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
         return cache;
     }
 
-    public DatabaseStorage createStorage(String sqlType) {
+    private DatabaseStorage createStorage(String sqlType) {
         String loweredSqlType = sqlType.toLowerCase(Locale.ROOT);
         DatabaseStorage created = null;
         if (databaseTypeInitializers.containsKey(loweredSqlType)) {

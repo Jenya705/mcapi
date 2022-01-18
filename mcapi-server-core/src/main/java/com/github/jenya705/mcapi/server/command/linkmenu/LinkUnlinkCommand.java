@@ -11,6 +11,7 @@ import com.github.jenya705.mcapi.server.data.loadable.Value;
 import com.github.jenya705.mcapi.server.module.config.Config;
 import com.github.jenya705.mcapi.server.module.link.LinkingModule;
 import com.github.jenya705.mcapi.server.stringful.StringfulIterator;
+import com.google.inject.Inject;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -33,7 +34,7 @@ public class LinkUnlinkCommand extends MenuCommand implements BaseCommon {
     }
 
     private CommandConfig config;
-    private LinkingModule linkingModule;
+    private final LinkingModule linkingModule;
 
     private final ServerApplication application;
 
@@ -42,10 +43,11 @@ public class LinkUnlinkCommand extends MenuCommand implements BaseCommon {
         return application;
     }
 
-    public LinkUnlinkCommand(ServerApplication application) {
+    @Inject
+    public LinkUnlinkCommand(ServerApplication application, LinkingModule linkingModule) {
         super(application);
         this.application = application;
-        linkingModule = bean(LinkingModule.class);
+        this.linkingModule = linkingModule;
     }
 
     @Override

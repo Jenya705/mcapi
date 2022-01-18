@@ -10,6 +10,7 @@ import com.github.jenya705.mcapi.server.util.Pair;
 import lombok.Getter;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -18,7 +19,6 @@ import java.util.stream.Collectors;
  */
 public class ContainerCommandExecutor extends AbstractApplicationModule implements CommandExecutor {
 
-    @Getter
     private final Map<String, Object> nodes;
 
     private final String permission;
@@ -27,7 +27,7 @@ public class ContainerCommandExecutor extends AbstractApplicationModule implemen
     private ContainerCommandConfig config;
 
     public ContainerCommandExecutor(ServerApplication application, String permission, String command) {
-        this(application, new HashMap<>(), permission, command);
+        this(application, new ConcurrentHashMap<>(), permission, command);
     }
 
     public ContainerCommandExecutor(ServerApplication application, Map<String, Object> nodes, String permission, String command) {
@@ -39,6 +39,10 @@ public class ContainerCommandExecutor extends AbstractApplicationModule implemen
 
     public void withConfig(ContainerCommandConfig config) {
         this.config = config;
+    }
+
+    public Map<String, Object> getNodes() {
+        return Collections.unmodifiableMap(nodes);
     }
 
     @Override

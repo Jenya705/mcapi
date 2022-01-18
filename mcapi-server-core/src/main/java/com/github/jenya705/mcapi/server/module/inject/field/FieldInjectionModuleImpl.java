@@ -17,12 +17,13 @@ import com.github.jenya705.mcapi.rest.player.RestPlayer;
 import com.github.jenya705.mcapi.rest.player.RestPlayerAbilities;
 import com.github.jenya705.mcapi.rest.player.RestPlayerList;
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.application.Bean;
 import com.github.jenya705.mcapi.server.application.OnDisable;
 import com.github.jenya705.mcapi.server.application.OnStartup;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.log.TimerTask;
 import com.github.jenya705.mcapi.server.module.mapper.Mapper;
 import com.github.jenya705.mcapi.server.util.CacheClassMap;
+import com.google.inject.Inject;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,14 +54,15 @@ public class FieldInjectionModuleImpl extends AbstractApplicationModule implemen
 
     }
 
-    @Bean
-    private Mapper mapper;
+    private final Mapper mapper;
 
     private final Map<Class<?>, InjectedClassInformation<?>> injectableClasses = CacheClassMap.concurrent();
 
-    @OnStartup(priority = 0)
+    @Inject
     @SuppressWarnings("unchecked")
-    public void start() throws IOException {
+    public FieldInjectionModuleImpl(ServerApplication application, Mapper mapper) throws IOException {
+        super(application);
+        this.mapper = mapper;
         TimerTask task = TimerTask.start(log, "Loading field ignores");
         Map<String, Object> loadedIgnorableFields = Objects.requireNonNullElse(
                 core().loadConfig(fileName), Collections.emptyMap());
@@ -90,10 +92,6 @@ public class FieldInjectionModuleImpl extends AbstractApplicationModule implemen
             }
         }
         task.complete();
-    }
-
-    @OnStartup(priority = 1)
-    public void registerDefault() {
         //<editor-fold desc="Registering Classes" defaultstate="collapsed">
         registerClasses(
                 RestBarrel.class,
@@ -153,7 +151,7 @@ public class FieldInjectionModuleImpl extends AbstractApplicationModule implemen
         //</editor-fold>
     }
 
-    @OnDisable
+    @OnDisable(priority = 5)
     @OnStartup(priority = 5)
     public void save() throws IOException {
         TimerTask task = TimerTask.start(log, "Saving field ignores");

@@ -1,10 +1,12 @@
 package com.github.jenya705.mcapi.bukkit;
 
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.application.Bean;
 import com.github.jenya705.mcapi.server.application.OnDisable;
 import com.github.jenya705.mcapi.server.application.OnInitializing;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.log.TimerTask;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.bukkit.Bukkit;
@@ -22,18 +24,25 @@ import java.util.UUID;
  * @author Jenya705
  */
 @Slf4j
-public class BukkitOfflinePlayerStorageImpl extends AbstractApplicationModule implements BukkitOfflinePlayerStorage, Listener {
+@Singleton
+public class BukkitOfflinePlayerStorageImpl implements BukkitOfflinePlayerStorage, Listener {
 
     private final Map<String, UUID> nickUUIDMap = new HashMap<>();
 
-    @Bean
-    private BukkitApplication plugin;
+    private final BukkitEasyCore core;
+    private final BukkitApplication plugin;
+
+    @Inject
+    public BukkitOfflinePlayerStorageImpl(BukkitEasyCore core, BukkitApplication plugin) {
+        this.core = core;
+        this.plugin = plugin;
+    }
 
     @SneakyThrows
     @OnInitializing(priority = 0)
     public void initialize() {
         TimerTask task = TimerTask.start(log, "Loading nick and uuids...");
-        Map<String, Object> loadedNickUUIDMap = core().loadConfig("bukkit-nick-uuid");
+        Map<String, Object> loadedNickUUIDMap = core.loadConfig("bukkit-nick-uuid");
         if (loadedNickUUIDMap != null) {
             for (Map.Entry<String, Object> entry : loadedNickUUIDMap.entrySet()) {
                 if (!(entry.getValue() instanceof String)) {
@@ -52,7 +61,7 @@ public class BukkitOfflinePlayerStorageImpl extends AbstractApplicationModule im
         Map<String, Object> toSave = new HashMap<>();
         nickUUIDMap
                 .forEach((key, value) -> toSave.put(key, value.toString()));
-        core().saveConfig("bukkit-nick-uuid", toSave);
+        core.saveConfig("bukkit-nick-uuid", toSave);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

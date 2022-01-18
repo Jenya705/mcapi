@@ -10,6 +10,7 @@ import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutor
 import com.github.jenya705.mcapi.server.data.ConfigData;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
+import com.google.inject.Inject;
 
 import java.util.Collections;
 import java.util.List;
@@ -26,9 +27,10 @@ public class PermissionListBotCommand extends AdvancedCommandExecutor<Permission
 
     private PermissionListBotConfig config;
 
-    public PermissionListBotCommand(ServerApplication application) {
+    @Inject
+    public PermissionListBotCommand(ServerApplication application, DatabaseModule databaseModule) {
         super(application, PermissionListBotArguments.class);
-        databaseModule = bean(DatabaseModule.class);
+        this.databaseModule = databaseModule;
         this
                 .databaseTab((sender, permission, databaseGetter) ->
                         sender instanceof Player ?

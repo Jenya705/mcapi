@@ -30,8 +30,8 @@ import com.github.jenya705.mcapi.rest.inventory.*;
 import com.github.jenya705.mcapi.rest.player.RestPlayer;
 import com.github.jenya705.mcapi.rest.player.RestPlayerAbilities;
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.application.Bean;
 import com.github.jenya705.mcapi.server.application.OnStartup;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.form.FormComponent;
 import com.github.jenya705.mcapi.server.form.FormPlatformProvider;
@@ -48,6 +48,8 @@ import com.github.jenya705.mcapi.server.module.material.MaterialStorage;
 import com.github.jenya705.mcapi.server.module.menu.MenuModule;
 import com.github.jenya705.mcapi.server.util.PlayerUtils;
 import com.github.jenya705.mcapi.world.World;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 
 import java.util.Arrays;
@@ -59,40 +61,36 @@ import java.util.stream.Collectors;
 /**
  * @author Jenya705
  */
+@Singleton
 public class RestModule extends AbstractApplicationModule {
 
-    @Bean
-    private Mapper mapper;
+    private final Mapper mapper;
+    private final AuthorizationModule authorizationModule;
+    private final CommandModule commandModule;
+    private final FormPlatformProvider formProvider;
+    private final ComponentMapParser formComponentParser;
+    private final MaterialStorage materialStorage;
+    private final EnchantmentStorage enchantmentStorage;
 
-    @Bean
-    private AuthorizationModule authorizationModule;
-
-    @Bean
-    private DatabaseModule databaseModule;
-
-    @Bean
-    private CommandModule commandModule;
-
-    @Bean
-    private FormPlatformProvider formProvider;
-
-    @Bean
-    private ComponentMapParser formComponentParser;
-
-    @Bean
-    private MaterialStorage materialStorage;
-
-    @Bean
-    private EnchantmentStorage enchantmentStorage;
-
-    @Bean
-    private MenuModule menuModule;
+    @Inject
+    public RestModule(ServerApplication application, Mapper mapper, AuthorizationModule authorizationModule,
+                      CommandModule commandModule, FormPlatformProvider formProvider,
+                      ComponentMapParser formComponentParser, MaterialStorage materialStorage, EnchantmentStorage enchantmentStorage) {
+        super(application);
+        this.mapper = mapper;
+        this.authorizationModule = authorizationModule;
+        this.commandModule = commandModule;
+        this.formProvider = formProvider;
+        this.formComponentParser = formComponentParser;
+        this.materialStorage = materialStorage;
+        this.enchantmentStorage = enchantmentStorage;
+    }
 
     @OnStartup
     @SuppressWarnings("unchecked")
     public void start() {
         mapper
-                .rawDeserializer(AbstractBot.class, authorization -> authorizationModule.bot(authorization))
+                .rawDeserializer(AbstractBot.class, authorizationModule::bot)
                 .rawDeserializer(Player.class, id ->
                         core()
                                 .getOptionalPlayerId(id)

@@ -11,6 +11,7 @@ import com.github.jenya705.mcapi.server.data.ConfigData;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.entity.BotPermissionEntity;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
+import com.google.inject.Inject;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,12 +25,14 @@ import java.util.stream.Collectors;
 @AdditionalPermissions("others")
 public class PermissionGiveBotCommand extends AdvancedCommandExecutor<PermissionGiveBotArguments> {
 
-    private final DatabaseModule databaseModule = bean(DatabaseModule.class);
+    private final DatabaseModule databaseModule;
 
     private PermissionGiveBotConfig config;
 
-    public PermissionGiveBotCommand(ServerApplication application) {
+    @Inject
+    public PermissionGiveBotCommand(ServerApplication application, DatabaseModule databaseModule) {
         super(application, PermissionGiveBotArguments.class);
+        this.databaseModule = databaseModule;
         this
                 .databaseTab((sender, permission, databaseGetter) ->
                                 sender instanceof Player ?

@@ -5,7 +5,7 @@ import com.github.jenya705.mcapi.inventory.InventoryView;
 import com.github.jenya705.mcapi.menu.InventoryMenuView;
 import com.github.jenya705.mcapi.permission.Permissions;
 import com.github.jenya705.mcapi.player.Player;
-import com.github.jenya705.mcapi.server.application.Bean;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.module.menu.MenuModule;
 import com.github.jenya705.mcapi.server.module.rest.route.AbstractRouteHandler;
@@ -13,20 +13,23 @@ import com.github.jenya705.mcapi.server.module.selector.SelectorProvider;
 import com.github.jenya705.mcapi.server.module.web.Request;
 import com.github.jenya705.mcapi.server.module.web.Response;
 import com.github.jenya705.mcapi.server.util.Selector;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 /**
  * @author Jenya705
  */
+@Singleton
 public class OpenInventoryRouteHandler extends AbstractRouteHandler {
 
-    @Bean
-    private SelectorProvider selectorProvider;
+    private final SelectorProvider selectorProvider;
+    private final MenuModule menuModule;
 
-    @Bean
-    private MenuModule menuModule;
-
-    public OpenInventoryRouteHandler() {
-        super(Routes.OPEN_INVENTORY);
+    @Inject
+    public OpenInventoryRouteHandler(ServerApplication application, SelectorProvider selectorProvider, MenuModule menuModule) {
+        super(application, Routes.OPEN_INVENTORY);
+        this.selectorProvider = selectorProvider;
+        this.menuModule = menuModule;
     }
 
     @Override

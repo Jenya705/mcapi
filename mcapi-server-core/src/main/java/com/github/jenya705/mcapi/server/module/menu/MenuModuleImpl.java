@@ -5,16 +5,22 @@ import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.inventory.ItemStack;
 import com.github.jenya705.mcapi.menu.MenuItem;
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.application.Bean;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.module.web.tunnel.EventTunnel;
+import com.google.inject.Inject;
 
 /**
  * @author Jenya705
  */
 public class MenuModuleImpl extends AbstractApplicationModule implements MenuModule {
 
-    @Bean
-    private EventTunnel eventTunnel;
+    private final EventTunnel eventTunnel;
+
+    @Inject
+    public MenuModuleImpl(ServerApplication application, EventTunnel eventTunnel) {
+        super(application);
+        this.eventTunnel = eventTunnel;
+    }
 
     @Override
     public MenuItem createCommandItem(ItemStack itemStack, String command) {

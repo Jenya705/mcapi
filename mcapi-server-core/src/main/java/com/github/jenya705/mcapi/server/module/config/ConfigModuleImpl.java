@@ -1,14 +1,14 @@
 package com.github.jenya705.mcapi.server.module.config;
 
-import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.application.OnDisable;
-import com.github.jenya705.mcapi.server.application.OnInitializing;
-import com.github.jenya705.mcapi.server.application.OnStartup;
+import com.github.jenya705.mcapi.server.ServerCore;
+import com.github.jenya705.mcapi.server.application.*;
 import com.github.jenya705.mcapi.server.data.ConfigData;
 import com.github.jenya705.mcapi.server.data.loadable.CallbackLoadableConfigData;
 import com.github.jenya705.mcapi.server.log.TimerTask;
 import com.github.jenya705.mcapi.server.module.rest.ObjectTunnelFunction;
 import com.github.jenya705.mcapi.server.util.CacheClassMap;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -23,17 +23,20 @@ import java.util.regex.Pattern;
  */
 @Slf4j
 @Getter
-public class ConfigModuleImpl extends AbstractApplicationModule implements ConfigModule {
+@Singleton
+public class ConfigModuleImpl implements ConfigModule {
 
-    private ConfigData config;
-    private GlobalConfig global;
+    private final ConfigData config;
+    private final GlobalConfig global;
+    private final ServerCore core;
 
     private final Map<Class<?>, ObjectTunnelFunction<Object, ?>> deserializers = CacheClassMap.concurrent();
     private final Map<Class<?>, ObjectTunnelFunction<?, Object>> serializers = CacheClassMap.concurrent();
 
+    @Inject
     @SuppressWarnings("unchecked")
-    @OnInitializing(priority = 0)
-    public void initialize() throws IOException {
+    public ConfigModuleImpl(ServerCore core) throws IOException {
+        this.core = core;
         this
                 .raw(String.class)
                 .raw(byte.class)
@@ -58,20 +61,15 @@ public class ConfigModuleImpl extends AbstractApplicationModule implements Confi
                 .deserializer(ConfigData.class, obj -> createConfig((Map<String, Object>) obj))
         ;
         TimerTask task = TimerTask.start(log, "Loading config...");
-        config = createConfig(core().loadConfig("config"));
+        config = createConfig(core.loadConfig("config"));
         task.complete();
         global = new GlobalConfig(config.required("global"));
-        app().setDebug(
-                config
-                        .getBoolean("debug")
-                        .orElse(false)
-        );
     }
 
     @OnDisable(priority = 4)
     @OnStartup(priority = 4)
     public void save() throws IOException {
-        core().saveConfig("config", config.primitiveRepresent());
+        core.saveConfig("config", config.primitiveRepresent());
     }
 
     @Override

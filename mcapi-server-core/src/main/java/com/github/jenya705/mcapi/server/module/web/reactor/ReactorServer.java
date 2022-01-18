@@ -2,8 +2,8 @@ package com.github.jenya705.mcapi.server.module.web.reactor;
 
 import com.github.jenya705.mcapi.ApiError;
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.application.Bean;
 import com.github.jenya705.mcapi.server.application.OnStartup;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.log.TimerTask;
 import com.github.jenya705.mcapi.server.module.config.ConfigModule;
 import com.github.jenya705.mcapi.server.module.mapper.Mapper;
@@ -13,6 +13,8 @@ import com.github.jenya705.mcapi.server.util.Pair;
 import com.github.jenya705.mcapi.server.util.ReactiveUtils;
 import com.github.jenya705.mcapi.server.util.ReactorUtils;
 import com.github.jenya705.mcapi.utils.ZipUtils;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.reactivestreams.Publisher;
@@ -29,6 +31,7 @@ import reactor.netty.http.websocket.WebsocketOutbound;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiFunction;
 
 /**
@@ -36,28 +39,33 @@ import java.util.function.BiFunction;
  */
 @Slf4j
 @Getter
+@Singleton
 public class ReactorServer extends AbstractApplicationModule implements WebServer {
 
     private static final String jsonContentType = "application/json";
 
-    private final List<ReactorRouteImplementation> routeImplementations = new ArrayList<>();
-    private final List<Pair<String, WebSocketRouteHandler>> webSocketRouteImplementations = new ArrayList<>();
+    private final List<ReactorRouteImplementation> routeImplementations = new CopyOnWriteArrayList<>();
+    private final List<Pair<String, WebSocketRouteHandler>> webSocketRouteImplementations = new CopyOnWriteArrayList<>();
 
-    @Bean
-    private Mapper mapper;
-
-    private WebConfig config;
+    private final Mapper mapper;
+    private final WebConfig config;
 
     private HttpServer server;
     private DisposableServer nettyServer;
 
-    @OnStartup(priority = 4)
-    public void start() {
+    @Inject
+    public ReactorServer(ServerApplication application, Mapper mapper, ConfigModule configModule) {
+        super(application);
+        this.mapper = mapper;
         config = new WebConfig(
-                bean(ConfigModule.class)
+                configModule
                         .getConfig()
                         .required("web")
         );
+    }
+
+    @OnStartup(priority = 4)
+    public void start() {
         TimerTask timerTask = TimerTask.start(log, "Starting web server...");
         server = HttpServer
                 .create()

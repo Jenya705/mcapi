@@ -4,6 +4,7 @@ import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.server.data.ConfigData;
+import com.google.inject.Inject;
 
 import java.util.Collections;
 
@@ -14,6 +15,7 @@ public class ConnectedEventTunnelsCommand extends AdvancedCommandExecutor<Connec
 
     private ConnectedEventTunnelsConfig config;
 
+    @Inject
     public ConnectedEventTunnelsCommand(ServerApplication application) {
         super(application, ConnectedEventTunnelsArguments.class);
         this
