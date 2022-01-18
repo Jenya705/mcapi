@@ -7,10 +7,12 @@ import com.github.jenya705.mcapi.ApiError;
 import com.github.jenya705.mcapi.server.defaults.DefaultValueProcessor;
 import com.github.jenya705.mcapi.server.module.rest.ObjectTunnelFunction;
 import com.github.jenya705.mcapi.server.module.rest.json.*;
+import com.google.inject.ImplementedBy;
 
 /**
  * @author Jenya705
  */
+@ImplementedBy(MapperImpl.class)
 public interface Mapper {
 
     String asJson(Object obj);

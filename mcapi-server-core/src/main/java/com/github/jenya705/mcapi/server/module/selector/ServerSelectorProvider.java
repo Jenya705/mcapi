@@ -4,8 +4,10 @@ import com.github.jenya705.mcapi.OfflinePlayer;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
 import com.github.jenya705.mcapi.server.application.OnInitializing;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.util.Selector;
+import com.google.inject.Inject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,12 +16,13 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ServerSelectorProvider extends AbstractApplicationModule implements SelectorProvider {
 
-    private BotSelectorCreator botSelectorCreator;
-    private PlayerSelectorCreator playerSelectorCreator;
-    private OfflineSelectorCreator offlinePlayerSelectorCreator;
+    private final BotSelectorCreator botSelectorCreator;
+    private final PlayerSelectorCreator playerSelectorCreator;
+    private final OfflineSelectorCreator offlinePlayerSelectorCreator;
 
-    @OnInitializing
-    public void init() {
+    @Inject
+    public ServerSelectorProvider(ServerApplication application) {
+        super(application);
         playerSelectorCreator = new PlayerSelectorCreator(app());
         botSelectorCreator = new BotSelectorCreator(app());
         offlinePlayerSelectorCreator = new OfflineSelectorCreator(app());

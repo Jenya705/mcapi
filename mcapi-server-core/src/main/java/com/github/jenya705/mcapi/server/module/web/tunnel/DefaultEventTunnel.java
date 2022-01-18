@@ -1,12 +1,13 @@
 package com.github.jenya705.mcapi.server.module.web.tunnel;
 
 import com.github.jenya705.mcapi.server.application.BaseCommon;
-import com.github.jenya705.mcapi.server.application.Bean;
 import com.github.jenya705.mcapi.server.application.OnStartup;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.log.TimerTask;
 import com.github.jenya705.mcapi.server.module.web.WebServer;
 import com.github.jenya705.mcapi.server.module.web.websocket.container.WebSocketRouteContainerImpl;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
@@ -15,14 +16,19 @@ import java.util.Collection;
  * @author Jenya705
  */
 @Slf4j
+@Singleton
 public class DefaultEventTunnel extends WebSocketRouteContainerImpl<DefaultEventTunnelClient> implements EventTunnel, BaseCommon {
 
-    @Bean
-    private ServerApplication application;
+    private final ServerApplication application;
 
     @Override
     public ServerApplication app() {
         return application;
+    }
+
+    @Inject
+    public DefaultEventTunnel(ServerApplication application) {
+        this.application = application;
     }
 
     @OnStartup

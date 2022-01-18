@@ -3,11 +3,19 @@ package com.github.jenya705.mcapi.server.application;
 import com.github.jenya705.mcapi.event.*;
 import com.github.jenya705.mcapi.rest.entity.RestCapturedEntityClickEvent;
 import com.github.jenya705.mcapi.rest.event.*;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 /**
  * @author Jenya705
  */
+@Singleton
 public class EventBroadcaster extends AbstractApplicationModule {
+
+    @Inject
+    public EventBroadcaster(ServerApplication application) {
+        super(application);
+    }
 
     @OnStartup
     public void start() {

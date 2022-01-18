@@ -5,10 +5,12 @@ import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.inventory.ItemStack;
 import com.github.jenya705.mcapi.menu.MenuItem;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
+import com.google.inject.ImplementedBy;
 
 /**
  * @author Jenya705
  */
+@ImplementedBy(MenuModuleImpl.class)
 public interface MenuModule {
 
     MenuItem createCommandItem(ItemStack itemStack, String command);

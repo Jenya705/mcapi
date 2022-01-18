@@ -1,29 +1,31 @@
 package com.github.jenya705.mcapi.server.module.bot;
 
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.application.Bean;
-import com.github.jenya705.mcapi.server.application.OnStartup;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.module.config.ConfigModule;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.server.util.PatternUtils;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import java.util.UUID;
 
 /**
  * @author Jenya705
  */
+@Singleton
 public class BotManagementImpl extends AbstractApplicationModule implements BotManagement {
 
-    @Bean
-    private DatabaseModule databaseModule;
+    private final DatabaseModule databaseModule;
+    private final BotManagementConfig config;
 
-    private BotManagementConfig config;
-
-    @OnStartup
-    public void start() {
+    @Inject
+    public BotManagementImpl(ServerApplication application, DatabaseModule databaseModule, ConfigModule configModule) {
+        super(application);
+        this.databaseModule = databaseModule;
         config = new BotManagementConfig(
-                bean(ConfigModule.class)
+                configModule
                         .getConfig()
                         .required("bot")
         );

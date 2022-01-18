@@ -11,6 +11,7 @@ import com.github.jenya705.mcapi.server.module.config.GlobalConfig;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.server.util.PlayerUtils;
 import com.github.jenya705.mcapi.server.util.TokenUtils;
+import com.google.inject.Inject;
 
 import java.util.Collections;
 
@@ -22,12 +23,17 @@ public class CreateBotCommand extends AdvancedCommandExecutor<CreateBotArguments
 
     private CreateBotConfig config;
 
-    private final GlobalConfig globalConfig = bean(ConfigModule.class).global();
-    private final DatabaseModule databaseModule = bean(DatabaseModule.class);
-    private final BotManagement botManagement = bean(BotManagement.class);
+    private final GlobalConfig globalConfig;
+    private final DatabaseModule databaseModule;
+    private final BotManagement botManagement;
 
-    public CreateBotCommand(ServerApplication application) {
+    @Inject
+    public CreateBotCommand(ServerApplication application, ConfigModule configModule,
+                            DatabaseModule databaseModule, BotManagement botManagement) {
         super(application, CreateBotArguments.class);
+        globalConfig = configModule.global();
+        this.databaseModule = databaseModule;
+        this.botManagement = botManagement;
         this
                 .tab(() -> Collections.singletonList("<bot_name>"))
                 .tab((sender, permission) ->

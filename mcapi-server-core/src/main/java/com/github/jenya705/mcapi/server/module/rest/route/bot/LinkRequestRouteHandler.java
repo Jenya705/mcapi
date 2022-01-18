@@ -4,23 +4,27 @@ import com.github.jenya705.mcapi.LinkRequest;
 import com.github.jenya705.mcapi.Routes;
 import com.github.jenya705.mcapi.permission.Permissions;
 import com.github.jenya705.mcapi.player.Player;
-import com.github.jenya705.mcapi.server.application.Bean;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.module.link.LinkingModule;
 import com.github.jenya705.mcapi.server.module.rest.route.AbstractRouteHandler;
 import com.github.jenya705.mcapi.server.module.web.Request;
 import com.github.jenya705.mcapi.server.module.web.Response;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 /**
  * @author Jenya705
  */
+@Singleton
 public class LinkRequestRouteHandler extends AbstractRouteHandler {
 
-    @Bean
-    private LinkingModule linkingModule;
+    private final LinkingModule linkingModule;
 
-    public LinkRequestRouteHandler() {
-        super(Routes.LINK_REQUEST);
+    @Inject
+    public LinkRequestRouteHandler(ServerApplication application, LinkingModule linkingModule) {
+        super(application, Routes.LINK_REQUEST);
+        this.linkingModule = linkingModule;
     }
 
     @Override

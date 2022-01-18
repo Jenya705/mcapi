@@ -2,12 +2,14 @@ package com.github.jenya705.mcapi.server.module.config;
 
 import com.github.jenya705.mcapi.server.data.ConfigData;
 import com.github.jenya705.mcapi.server.module.rest.ObjectTunnelFunction;
+import com.google.inject.ImplementedBy;
 
 import java.util.Map;
 
 /**
  * @author Jenya705
  */
+@ImplementedBy(ConfigModuleImpl.class)
 public interface ConfigModule {
 
     ConfigData getConfig();

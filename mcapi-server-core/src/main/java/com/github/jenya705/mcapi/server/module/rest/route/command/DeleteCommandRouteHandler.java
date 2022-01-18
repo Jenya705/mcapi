@@ -1,22 +1,26 @@
 package com.github.jenya705.mcapi.server.module.rest.route.command;
 
 import com.github.jenya705.mcapi.Routes;
-import com.github.jenya705.mcapi.server.application.Bean;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.module.command.CommandModule;
 import com.github.jenya705.mcapi.server.module.rest.route.AbstractRouteHandler;
 import com.github.jenya705.mcapi.server.module.web.Request;
 import com.github.jenya705.mcapi.server.module.web.Response;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 /**
  * @author Jenya705
  */
+@Singleton
 public class DeleteCommandRouteHandler extends AbstractRouteHandler {
 
-    @Bean
-    private CommandModule commandModule;
+    private final CommandModule commandModule;
 
-    public DeleteCommandRouteHandler() {
-        super(Routes.COMMAND_DELETE);
+    @Inject
+    public DeleteCommandRouteHandler(ServerApplication application, CommandModule commandModule) {
+        super(application, Routes.COMMAND_DELETE);
+        this.commandModule = commandModule;
     }
 
     @Override

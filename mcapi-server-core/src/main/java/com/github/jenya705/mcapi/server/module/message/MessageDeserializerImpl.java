@@ -6,21 +6,20 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.github.jenya705.mcapi.error.MessageTypeNotExistException;
-import com.github.jenya705.mcapi.server.application.Bean;
-import com.github.jenya705.mcapi.server.application.OnStartup;
 import com.github.jenya705.mcapi.server.form.Form;
 import com.github.jenya705.mcapi.server.form.FormMessage;
 import com.github.jenya705.mcapi.server.form.FormPlatformProvider;
 import com.github.jenya705.mcapi.server.module.mapper.JacksonProvider;
 import com.github.jenya705.mcapi.server.module.mapper.Mapper;
 import com.github.jenya705.mcapi.server.util.ExceptionableFunction;
+import com.google.inject.Inject;
 import lombok.SneakyThrows;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 /**
@@ -28,26 +27,17 @@ import java.util.function.Consumer;
  */
 public class MessageDeserializerImpl extends StdDeserializer<TypedMessage> implements MessageDeserializer {
 
-    private final Map<String, ExceptionableFunction<JsonNode, Message>> messageDeserializers = new HashMap<>();
+    private final Map<String, ExceptionableFunction<JsonNode, Message>> messageDeserializers = new ConcurrentHashMap<>();
 
-    @Bean
-    private JacksonProvider jacksonProvider;
+    private final JacksonProvider jacksonProvider;
 
-    @Bean
-    private Mapper mapper;
-
-    @Bean
-    private FormPlatformProvider formProvider;
-
-    public MessageDeserializerImpl() {
+    @Inject
+    public MessageDeserializerImpl(Mapper mapper, JacksonProvider jacksonProvider, FormPlatformProvider formProvider) {
         super(TypedMessage.class);
-    }
-
-    @OnStartup
-    public void start() {
         mapper
                 .jsonDeserializer(TypedMessage.class, this)
                 .jsonDeserializer(Message.class, this);
+        this.jacksonProvider = jacksonProvider;
         addMessageType("default", node -> new DefaultMessage(node.asText()));
         addMessageType("form", node -> new FormMessage(
                 jacksonProvider.getMapper().treeToValue(node, Form.class), formProvider

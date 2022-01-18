@@ -7,8 +7,10 @@ import com.github.jenya705.mcapi.inventory.InventoryHolder;
 import com.github.jenya705.mcapi.inventory.InventoryItemStack;
 import com.github.jenya705.mcapi.rest.block.RestRedstoneWireConnection;
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.application.Bean;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.module.mapper.Mapper;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -19,14 +21,17 @@ import java.util.function.BiConsumer;
 /**
  * @author Jenya705
  */
+@Singleton
 public class BlockDataModuleImpl extends AbstractApplicationModule implements BlockDataModule {
 
     private final Map<String, BiConsumer<BlockData, String>> fieldSetters = new HashMap<>();
 
-    @Bean
-    private Mapper mapper;
+    private final Mapper mapper;
 
-    public BlockDataModuleImpl() {
+    @Inject
+    public BlockDataModuleImpl(ServerApplication application, Mapper mapper) {
+        super(application);
+        this.mapper = mapper;
         this
                 .field("waterlogged", Waterlogged.class, boolean.class, Waterlogged::setWaterlogged)
                 .field("lit", Liter.class, boolean.class, Liter::setLit)

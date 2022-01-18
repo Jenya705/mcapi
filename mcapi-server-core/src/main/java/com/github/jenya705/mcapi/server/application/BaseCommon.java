@@ -32,10 +32,6 @@ public interface BaseCommon {
         return app().getBean(clazz);
     }
 
-    default void autoBeans() {
-        app().injectBeansInObject(this);
-    }
-
     default boolean debug() {
         return app().isDebug();
     }

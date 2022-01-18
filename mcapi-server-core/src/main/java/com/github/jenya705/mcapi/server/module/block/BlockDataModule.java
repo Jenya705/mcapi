@@ -1,12 +1,14 @@
 package com.github.jenya705.mcapi.server.module.block;
 
 import com.github.jenya705.mcapi.block.BlockData;
+import com.google.inject.ImplementedBy;
 
 import java.util.function.BiConsumer;
 
 /**
  * @author Jenya705
  */
+@ImplementedBy(BlockDataModuleImpl.class)
 public interface BlockDataModule {
 
     void setField(BlockData data, String field, String json);

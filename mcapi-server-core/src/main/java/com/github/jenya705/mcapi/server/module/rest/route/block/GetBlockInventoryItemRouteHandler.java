@@ -6,20 +6,25 @@ import com.github.jenya705.mcapi.error.BlockNotFoundException;
 import com.github.jenya705.mcapi.error.WorldNotFoundException;
 import com.github.jenya705.mcapi.inventory.InventoryHolder;
 import com.github.jenya705.mcapi.permission.Permissions;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.module.rest.route.AbstractRouteHandler;
 import com.github.jenya705.mcapi.server.module.web.Request;
 import com.github.jenya705.mcapi.server.module.web.Response;
 import com.github.jenya705.mcapi.server.util.ItemUtils;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import java.util.Optional;
 
 /**
  * @author Jenya705
  */
+@Singleton
 public class GetBlockInventoryItemRouteHandler extends AbstractRouteHandler {
 
-    public GetBlockInventoryItemRouteHandler() {
-        super(Routes.BLOCK_INVENTORY_ITEM);
+    @Inject
+    public GetBlockInventoryItemRouteHandler(ServerApplication application) {
+        super(application, Routes.BLOCK_INVENTORY_ITEM);
     }
 
     @Override

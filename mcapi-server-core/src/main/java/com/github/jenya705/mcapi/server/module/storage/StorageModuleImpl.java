@@ -7,8 +7,10 @@ import com.github.jenya705.mcapi.permission.Permissions;
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
 import com.github.jenya705.mcapi.server.application.OnDisable;
 import com.github.jenya705.mcapi.server.application.OnStartup;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.entity.PermissionEntity;
 import com.github.jenya705.mcapi.server.module.config.ConfigModule;
+import com.google.inject.Inject;
 import lombok.SneakyThrows;
 
 import java.io.IOException;
@@ -24,7 +26,13 @@ public class StorageModuleImpl extends AbstractApplicationModule implements Stor
 
     private final Map<String, PermissionEntity> permissions = new ConcurrentHashMap<>();
 
-    public StorageModuleImpl() {
+    private final ConfigModule configModule;
+
+    @Inject
+    public StorageModuleImpl(ServerApplication application, ConfigModule configModule) throws IOException {
+        super(application);
+        this.configModule = configModule;
+        loadAndSave();
         for (DefaultPermission defaultPermission : DefaultPermission.values()) {
             if (defaultPermission.isSelector()) {
                 addPermissionWithSelectors(new PermissionEntity(
@@ -58,7 +66,7 @@ public class StorageModuleImpl extends AbstractApplicationModule implements Stor
     @OnDisable(priority = 4)
     public void loadAndSave() throws IOException {
         StorageModuleConfig config = new StorageModuleConfig(
-                bean(ConfigModule.class).createConfig(
+                configModule.createConfig(
                         core().loadConfig("storage")
                 )
         );

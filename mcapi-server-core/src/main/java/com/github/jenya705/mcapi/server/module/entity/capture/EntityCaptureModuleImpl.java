@@ -2,7 +2,10 @@ package com.github.jenya705.mcapi.server.module.entity.capture;
 
 import com.github.jenya705.mcapi.entity.CapturableEntity;
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -10,7 +13,13 @@ import java.util.stream.Collectors;
 /**
  * @author Jenya705
  */
-public class EntityCapturableModuleImpl extends AbstractApplicationModule implements EntityCaptureModule {
+@Singleton
+public class EntityCaptureModuleImpl extends AbstractApplicationModule implements EntityCaptureModule {
+
+    @Inject
+    public EntityCaptureModuleImpl(ServerApplication application) {
+        super(application);
+    }
 
     @Override
     public void capture(CapturableEntity entity, AbstractBot owner) {

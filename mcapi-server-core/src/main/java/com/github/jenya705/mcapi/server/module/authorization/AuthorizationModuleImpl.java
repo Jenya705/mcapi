@@ -3,23 +3,30 @@ package com.github.jenya705.mcapi.server.module.authorization;
 import com.github.jenya705.mcapi.error.AuthorizationBadTokenException;
 import com.github.jenya705.mcapi.error.AuthorizationFormatException;
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.application.Bean;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.entity.BotObject;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.server.module.storage.StorageModule;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 /**
  * @author Jenya705
  */
+@Singleton
 public class AuthorizationModuleImpl extends AbstractApplicationModule implements AuthorizationModule {
 
-    @Bean
-    private DatabaseModule databaseModule;
+    private final DatabaseModule databaseModule;
+    private final StorageModule storage;
 
-    @Bean
-    private StorageModule storage;
+    @Inject
+    public AuthorizationModuleImpl(ServerApplication application, DatabaseModule databaseModule, StorageModule storage) {
+        super(application);
+        this.databaseModule = databaseModule;
+        this.storage = storage;
+    }
 
     @Override
     public AbstractBot bot(String authorization) {

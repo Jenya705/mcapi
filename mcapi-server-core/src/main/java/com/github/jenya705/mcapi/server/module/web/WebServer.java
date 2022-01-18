@@ -2,11 +2,14 @@ package com.github.jenya705.mcapi.server.module.web;
 
 import com.github.jenya705.mcapi.HttpMethod;
 import com.github.jenya705.mcapi.Route;
+import com.github.jenya705.mcapi.server.module.web.reactor.ReactorServer;
 import com.github.jenya705.mcapi.server.module.web.websocket.WebSocketRouteHandler;
+import com.google.inject.ImplementedBy;
 
 /**
  * @author Jenya705
  */
+@ImplementedBy(ReactorServer.class)
 public interface WebServer {
 
     void addHandler(RoutePredicate requestPredicate, RouteHandler handler, boolean readBody);

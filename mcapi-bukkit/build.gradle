@@ -34,4 +34,5 @@ dependencies {
     compileOnly 'org.slf4j:slf4j-api:1.7.32'
     compileOnly "net.luckperms:api:5.3"
     compileOnly "com.github.MilkBowl:VaultAPI:1.7"
+    implementation 'com.google.inject:guice:5.0.1'
 }

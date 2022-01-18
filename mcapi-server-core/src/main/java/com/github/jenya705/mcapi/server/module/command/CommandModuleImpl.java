@@ -10,6 +10,7 @@ import com.github.jenya705.mcapi.error.CommandOptionsAllException;
 import com.github.jenya705.mcapi.error.TooManyOptionsException;
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
 import com.github.jenya705.mcapi.server.application.OnStartup;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.command.CommandExecutor;
 import com.github.jenya705.mcapi.server.command.ContainerCommandExecutor;
 import com.github.jenya705.mcapi.server.command.RootCommand;
@@ -20,6 +21,8 @@ import com.github.jenya705.mcapi.server.module.mapper.Mapper;
 import com.github.jenya705.mcapi.server.stringful.ArrayStringfulIterator;
 import com.github.jenya705.mcapi.server.stringful.StringfulIterator;
 import com.github.jenya705.mcapi.server.util.PatternUtils;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
@@ -31,26 +34,27 @@ import java.util.Map;
  * @author Jenya705
  */
 @Slf4j
+@Singleton
 public class CommandModuleImpl extends AbstractApplicationModule implements CommandModule {
 
-    private CommandOptionParserContainer parserContainer;
-    private CommandModuleConfig config;
+    private final CommandOptionParserContainer parserContainer;
+    private final CommandModuleConfig config;
 
     private final Map<Integer, ContainerCommandExecutor> botCommands = new HashMap<>();
 
-    @OnStartup
-    public void start() {
+    @Inject
+    public CommandModuleImpl(ServerApplication application, ConfigModule configModule, Mapper mapper) {
+        super(application);
         parserContainer = new CommandOptionParserContainer(app());
         TimerTask task = TimerTask.start(log, "Registering root command...");
         core().addCommand(RootCommand.name, new RootCommand(app()).get(), RootCommand.permission);
         task.complete();
-        ConfigModule configModule = bean(ConfigModule.class);
         config = new CommandModuleConfig(
                 configModule
                         .getConfig()
                         .required("customCommands")
         );
-        bean(Mapper.class)
+        mapper
                 .jsonDeserializer(Command.class, new ApiCommandDeserializer(this));
     }
 

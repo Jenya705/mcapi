@@ -1,7 +1,10 @@
 package com.github.jenya705.mcapi.mock.database;
 
+import com.github.jenya705.mcapi.server.application.ServerApplication;
+import com.github.jenya705.mcapi.server.module.config.ConfigModule;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModuleImpl;
 import com.github.jenya705.mcapi.server.module.database.DatabaseTypeInitializer;
+import com.google.inject.Inject;
 import lombok.SneakyThrows;
 
 import java.sql.Connection;
@@ -9,7 +12,9 @@ import java.sql.DriverManager;
 
 public class MockDatabaseModule extends DatabaseModuleImpl {
 
-    public MockDatabaseModule() {
+    @Inject
+    public MockDatabaseModule(ServerApplication application, ConfigModule configModule) {
+        super(application, configModule);
         addTypeInitializer("h2", new DatabaseTypeInitializer() {
             @Override
             @SneakyThrows

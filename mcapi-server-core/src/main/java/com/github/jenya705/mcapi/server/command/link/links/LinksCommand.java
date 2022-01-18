@@ -6,6 +6,7 @@ import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutor
 import com.github.jenya705.mcapi.server.data.ConfigData;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.server.util.PlayerUtils;
+import com.google.inject.Inject;
 
 import java.util.Collections;
 
@@ -16,10 +17,12 @@ public class LinksCommand extends AdvancedCommandExecutor<LinksArguments> {
 
     private LinksConfig config;
 
-    private final DatabaseModule databaseModule = bean(DatabaseModule.class);
+    private final DatabaseModule databaseModule;
 
-    public LinksCommand(ServerApplication application) {
+    @Inject
+    public LinksCommand(ServerApplication application, DatabaseModule databaseModule) {
         super(application, LinksArguments.class);
+        this.databaseModule = databaseModule;
         this
                 .tab(() -> Collections.singletonList("<page>"))
                 .tab((sender, permission) ->

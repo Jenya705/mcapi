@@ -4,19 +4,24 @@ import com.github.jenya705.mcapi.Routes;
 import com.github.jenya705.mcapi.UUIDHolder;
 import com.github.jenya705.mcapi.permission.Permissions;
 import com.github.jenya705.mcapi.rest.player.RestPlayerList;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.module.rest.route.AbstractRouteHandler;
 import com.github.jenya705.mcapi.server.module.web.Request;
 import com.github.jenya705.mcapi.server.module.web.Response;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import java.util.UUID;
 
 /**
  * @author Jenya705
  */
+@Singleton
 public class GetPlayerListRouteHandler extends AbstractRouteHandler {
 
-    public GetPlayerListRouteHandler() {
-        super(Routes.PLAYER_LIST);
+    @Inject
+    public GetPlayerListRouteHandler(ServerApplication application) {
+        super(application, Routes.PLAYER_LIST);
     }
 
     @Override

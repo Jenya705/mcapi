@@ -14,6 +14,7 @@ import com.github.jenya705.mcapi.server.module.config.GlobalConfig;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.server.module.link.LinkingModule;
 import com.github.jenya705.mcapi.server.util.PlayerUtils;
+import com.google.inject.Inject;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -27,12 +28,17 @@ public class UnlinkCommand extends AdvancedCommandExecutor<UnlinkArguments> {
 
     private UnlinkConfig config;
 
-    private final DatabaseModule databaseModule = bean(DatabaseModule.class);
-    private final GlobalConfig globalConfig = bean(ConfigModule.class).global();
-    private final LinkingModule linkingModule = bean(LinkingModule.class);
+    private final DatabaseModule databaseModule;
+    private final GlobalConfig globalConfig;
+    private final LinkingModule linkingModule;
 
-    public UnlinkCommand(ServerApplication application) {
+    @Inject
+    public UnlinkCommand(ServerApplication application, DatabaseModule databaseModule,
+                         ConfigModule configModule, LinkingModule linkingModule) {
         super(application, UnlinkArguments.class);
+        this.databaseModule = databaseModule;
+        this.globalConfig = configModule.global();
+        this.linkingModule = linkingModule;
         this
                 .databaseTab((sender, permission, databaseGetter) ->
                         Optional.of(sender)

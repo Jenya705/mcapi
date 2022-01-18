@@ -5,6 +5,9 @@ import com.github.jenya705.mcapi.entity.Entity;
 import com.github.jenya705.mcapi.entity.event.*;
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
 import com.github.jenya705.mcapi.server.application.OnStartup;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
@@ -20,7 +23,14 @@ import org.bukkit.event.player.PlayerQuitEvent;
 /**
  * @author Jenya705
  */
+@Singleton
 public class BukkitServerEventHandler extends AbstractApplicationModule implements Listener {
+
+    @Inject
+    public BukkitServerEventHandler(ServerApplication application, BukkitApplication plugin) {
+        super(application);
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void chat(AsyncChatEvent event) {
@@ -88,8 +98,4 @@ public class BukkitServerEventHandler extends AbstractApplicationModule implemen
                 );
     }
 
-    @OnStartup
-    public void registerSelf() {
-        Bukkit.getPluginManager().registerEvents(this, bean(BukkitApplication.class));
-    }
 }

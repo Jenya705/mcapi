@@ -1,7 +1,10 @@
 package com.github.jenya705.mcapi.server.form.component;
 
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.form.FormComponent;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -11,7 +14,8 @@ import java.util.function.Function;
 /**
  * @author Jenya705
  */
-public class ComponentMapParserImpl extends AbstractApplicationModule implements ComponentMapParser {
+@Singleton
+public class ComponentMapParserImpl implements ComponentMapParser {
 
     public Map<String, Function<Map<String, Object>, FormComponent>> formComponentBuilders = new HashMap<>();
 

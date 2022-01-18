@@ -1,8 +1,10 @@
 package com.github.jenya705.mcapi.server.ignore;
 
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.event.application.ApplicationClassActionEvent;
 import com.github.jenya705.mcapi.server.application.OnInitializing;
+import com.google.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -18,6 +20,11 @@ public class IgnoreManager extends AbstractApplicationModule {
     private static final String fileName = "ignores.txt";
 
     private List<Predicate<String>> ignorableRules;
+
+    @Inject
+    public IgnoreManager(ServerApplication application) {
+        super(application);
+    }
 
     @OnInitializing
     public void init() throws Exception {

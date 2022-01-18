@@ -2,11 +2,13 @@ package com.github.jenya705.mcapi.bukkit;
 
 import com.destroystokyo.paper.event.server.AsyncTabCompleteEvent;
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.application.Bean;
 import com.github.jenya705.mcapi.server.application.OnStartup;
+import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.command.CommandExecutor;
 import com.github.jenya705.mcapi.server.command.CommandTab;
 import com.github.jenya705.mcapi.server.stringful.ArrayStringfulIterator;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
@@ -21,10 +23,15 @@ import java.util.stream.Collectors;
 /**
  * @author Jenya705
  */
-public class PaperAsyncTabListener extends AbstractApplicationModule implements Listener {
+@Singleton
+public class PaperAsyncTabListener implements Listener {
 
-    @Bean
-    private BukkitApplication plugin;
+    private final BukkitApplication plugin;
+
+    @Inject
+    public PaperAsyncTabListener(BukkitApplication plugin) {
+        this.plugin = plugin;
+    }
 
     @EventHandler
     public void tab(AsyncTabCompleteEvent event) {

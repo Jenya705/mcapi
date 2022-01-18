@@ -1,10 +1,12 @@
 package com.github.jenya705.mcapi.server.form;
 
 import com.github.jenya705.mcapi.CommandSender;
+import com.google.inject.Singleton;
 
 /**
  * @author Jenya705
  */
+@Singleton
 public class ComponentFormProvider implements FormPlatformProvider {
 
     @Override

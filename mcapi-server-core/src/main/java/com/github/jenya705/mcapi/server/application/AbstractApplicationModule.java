@@ -5,11 +5,7 @@ package com.github.jenya705.mcapi.server.application;
  */
 public abstract class AbstractApplicationModule implements BaseCommon {
 
-    @Bean
-    private ServerApplication application;
-
-    public AbstractApplicationModule() {
-    }
+    private final ServerApplication application;
 
     public AbstractApplicationModule(ServerApplication application) {
         this.application = application;

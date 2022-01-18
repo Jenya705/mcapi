@@ -8,6 +8,7 @@ import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutor
 import com.github.jenya705.mcapi.server.data.ConfigData;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
+import com.google.inject.Inject;
 
 import java.util.UUID;
 
@@ -19,10 +20,12 @@ public class DeleteBotCommand extends AdvancedCommandExecutor<DeleteBotArguments
 
     private DeleteBotConfig config;
 
-    private final DatabaseModule databaseModule = bean(DatabaseModule.class);
+    private final DatabaseModule databaseModule;
 
-    public DeleteBotCommand(ServerApplication application) {
+    @Inject
+    public DeleteBotCommand(ServerApplication application, DatabaseModule databaseModule) {
         super(application, DeleteBotArguments.class);
+        this.databaseModule = databaseModule;
     }
 
     @Override
