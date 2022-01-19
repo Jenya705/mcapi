@@ -57,37 +57,4 @@ subprojects {
     apply plugin: 'maven-publish'
     apply plugin: 'java'
 
-    publishing {
-        publications {
-            mavenJava(MavenPublication) {
-                groupId = group
-                artifactId = archivesBaseName
-                version = project.version
-
-                from components.java
-            }
-        }
-        repositories {
-            maven {
-                def snapshotUrl = "https://repo.codemc.io/repository/maven-snapshots/"
-                def releaseUrl = "https://repo.codemc.io/repository/maven-releases/"
-
-                // You can use any other check here to set what URL should be used.
-                url = project.version.endsWith("alpha") || project.version.endsWith("beta") ? snapshotUrl : releaseUrl
-
-                // ORG_GRADLE_PROJECT_mavenUsername and ORG_GRADLE_PROJECT_mavenPassword are the environments you defined before.
-                def mavenUsername = System.getenv("ORG_GRADLE_PROJECT_mavenUsername") ? System.getenv("ORG_GRADLE_PROJECT_mavenUsername") : null
-                def mavenPassword = System.getenv("ORG_GRADLE_PROJECT_mavenPassword") ? System.getenv("ORG_GRADLE_PROJECT_mavenPassword") : null
-
-                if(mavenUsername != null && mavenPassword != null) {
-                    System.out.println("Authorizing")
-                    credentials {
-                        username = mavenUsername
-                        password = mavenPassword
-                    }
-                }
-            }
-        }
-    }
-
 }

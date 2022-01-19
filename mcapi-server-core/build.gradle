@@ -1,6 +1,46 @@
 sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
+jar {
+    baseName("mcapi")
+    dependsOn configurations.runtimeClasspath
+    from {
+        configurations.runtimeClasspath.findAll { it.name.contains("mcapi") && it.name.endsWith(".jar") }.collect { zipTree(it) }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = group
+            artifactId = "mcapi"
+            version = project.version
+
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            def snapshotUrl = "https://repo.codemc.io/repository/maven-snapshots/"
+            def releaseUrl = "https://repo.codemc.io/repository/maven-releases/"
+
+            // You can use any other check here to set what URL should be used.
+            url = project.version.endsWith("alpha") || project.version.endsWith("beta") ? snapshotUrl : releaseUrl
+
+            // ORG_GRADLE_PROJECT_mavenUsername and ORG_GRADLE_PROJECT_mavenPassword are the environments you defined before.
+            def mavenUsername = System.getenv("ORG_GRADLE_PROJECT_mavenUsername") ? System.getenv("ORG_GRADLE_PROJECT_mavenUsername") : null
+            def mavenPassword = System.getenv("ORG_GRADLE_PROJECT_mavenPassword") ? System.getenv("ORG_GRADLE_PROJECT_mavenPassword") : null
+
+            if(mavenUsername != null && mavenPassword != null) {
+                credentials {
+                    username = mavenUsername
+                    password = mavenPassword
+                }
+            }
+        }
+    }
+}
+
 dependencies {
     implementation project(":mcapi-api")
     implementation project(":mcapi-rest")
