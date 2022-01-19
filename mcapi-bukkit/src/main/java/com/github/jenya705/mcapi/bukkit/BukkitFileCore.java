@@ -13,7 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class BukkitEasyCore {
+public class BukkitFileCore {
 
     private static final Yaml yaml = generateYaml();
 
@@ -26,7 +26,7 @@ public class BukkitEasyCore {
     private final BukkitApplication plugin;
 
     @Inject
-    public BukkitEasyCore(BukkitApplication plugin) {
+    public BukkitFileCore(BukkitApplication plugin) {
         this.plugin = plugin;
     }
 

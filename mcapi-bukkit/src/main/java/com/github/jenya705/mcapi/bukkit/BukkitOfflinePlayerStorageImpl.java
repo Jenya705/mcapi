@@ -1,9 +1,7 @@
 package com.github.jenya705.mcapi.bukkit;
 
-import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
 import com.github.jenya705.mcapi.server.application.OnDisable;
 import com.github.jenya705.mcapi.server.application.OnInitializing;
-import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.log.TimerTask;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -29,11 +27,11 @@ public class BukkitOfflinePlayerStorageImpl implements BukkitOfflinePlayerStorag
 
     private final Map<String, UUID> nickUUIDMap = new HashMap<>();
 
-    private final BukkitEasyCore core;
+    private final BukkitFileCore core;
     private final BukkitApplication plugin;
 
     @Inject
-    public BukkitOfflinePlayerStorageImpl(BukkitEasyCore core, BukkitApplication plugin) {
+    public BukkitOfflinePlayerStorageImpl(BukkitFileCore core, BukkitApplication plugin) {
         this.core = core;
         this.plugin = plugin;
     }

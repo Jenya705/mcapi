@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
 import com.github.jenya705.mcapi.ApiError;
-import com.github.jenya705.mcapi.server.defaults.DefaultValueProcessor;
+import com.github.jenya705.mcapi.server.defaults.DefaultValueGetter;
 import com.github.jenya705.mcapi.server.module.rest.ObjectTunnelFunction;
 import com.github.jenya705.mcapi.server.module.rest.json.*;
 import com.google.inject.ImplementedBy;
@@ -33,7 +33,7 @@ public interface Mapper {
 
     <T> Mapper beanSerializerModifier(Class<? extends T> clazz, BeanSerializerModifier beanSerializerModifier);
 
-    DefaultValueProcessor getDefaultValueProcessor();
+    DefaultValueGetter getDefaultValueGetter();
 
     default <T> Mapper jsonSerializer(Class<T> clazz, JsonSerializerFunction<T> serializerFunction) {
         return jsonSerializer(clazz, new JacksonSerializer<>(clazz, serializerFunction));

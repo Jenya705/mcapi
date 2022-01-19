@@ -5,20 +5,17 @@ import com.github.jenya705.mcapi.server.event.EventLoop;
 import com.github.jenya705.mcapi.server.event.application.ApplicationClassActionEvent;
 import com.github.jenya705.mcapi.server.event.application.ApplicationDisableEvent;
 import com.github.jenya705.mcapi.server.log.TimerTask;
-import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
+import com.github.jenya705.mcapi.server.module.config.ConfigModule;
 import com.github.jenya705.mcapi.server.module.web.tunnel.EventTunnel;
 import com.github.jenya705.mcapi.server.util.Pair;
 import com.github.jenya705.mcapi.server.worker.Worker;
 import com.google.inject.*;
-import com.google.inject.internal.BindingImpl;
-import com.google.inject.internal.Scoping;
-import com.google.inject.spi.InstanceBinding;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -32,35 +29,28 @@ public class ServerApplication {
 
     private boolean initialized = false;
     private boolean enabled = true;
+
     private final Injector injector;
-    @Setter
-    private boolean debug = false;
+    private final AtomicBoolean debug = new AtomicBoolean(true);
     private final ServerCore core;
     private final Worker worker;
     private final EventLoop eventLoop;
-
-    private EventTunnel cachedEventTunnel;
-
-    public EventTunnel getEventTunnel() {
-        if (cachedEventTunnel == null) {
-            cachedEventTunnel = getBean(EventTunnel.class);
-        }
-        return cachedEventTunnel;
-    }
+    private final Provider<EventTunnel> eventTunnelProvider;
 
     @Inject
     public ServerApplication(ServerCore serverCore, Injector injector,
-                             Worker worker, EventLoop eventLoop) {
+                             Worker worker, EventLoop eventLoop, Provider<EventTunnel> eventTunnelProvider) {
+        log.info("Plugin is under heavy development! All api is subject to change!");
+        log.info("If you find a bug, consider to issue it on https://github.com/Jenya705/mcapi/issues");
+        log.info("Plugin wiki: https://github.com/Jenya705/mcapi/wiki");
         core = serverCore;
         this.injector = injector;
         this.worker = worker;
         this.eventLoop = eventLoop;
+        this.eventTunnelProvider = eventTunnelProvider;
     }
 
     public void start() {
-        log.info("Plugin is under heavy development! All api is subject to change!");
-        log.info("If you find a bug, consider to issue it on https://github.com/Jenya705/mcapi/issues");
-        log.info("Plugin wiki: https://github.com/Jenya705/mcapi/wiki");
         TimerTask startTask = TimerTask.start(log, "Starting application...");
         Map<Integer, Set<Pair<Object, Method>>> initializingMethods = new HashMap<>();
         Map<Integer, Set<Pair<Object, Method>>> startupMethods = new HashMap<>();
@@ -68,6 +58,11 @@ public class ServerApplication {
         for (Object obj : getBeans(it -> true)) {
             onStartMethods(initializingMethods, startupMethods, obj);
         }
+        setDebug(getBean(ConfigModule.class)
+                .getConfig()
+                .getBoolean("debug")
+                .orElse(false)
+        );
         runMethods(
                 initializingMethods,
                 "initialize",
@@ -81,7 +76,7 @@ public class ServerApplication {
                 ApplicationClassActionEvent.Action.START,
                 true
         );
-        if (debug) {
+        if (isDebug()) {
             log.info("Debug mode enabled");
         }
         startTask.complete();
@@ -145,7 +140,7 @@ public class ServerApplication {
 
     public void stop() {
         if (!initialized || !enabled) {
-            if (debug) {
+            if (isDebug()) {
                 log.warn(
                         "Someone tried to stop application when it is not enabled",
                         new RuntimeException()
@@ -194,6 +189,18 @@ public class ServerApplication {
             return null;
         }
         return binding.getProvider().get();
+    }
+
+    public void setDebug(boolean debug) {
+        this.debug.set(debug);
+    }
+
+    public boolean isDebug() {
+        return debug.get();
+    }
+
+    public EventTunnel getEventTunnel() {
+        return eventTunnelProvider.get();
     }
 
     private Collection<Object> getBeans(Predicate<Binding<?>> predicate) {

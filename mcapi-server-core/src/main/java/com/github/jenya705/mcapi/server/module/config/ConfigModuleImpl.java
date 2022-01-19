@@ -1,7 +1,8 @@
 package com.github.jenya705.mcapi.server.module.config;
 
 import com.github.jenya705.mcapi.server.ServerCore;
-import com.github.jenya705.mcapi.server.application.*;
+import com.github.jenya705.mcapi.server.application.OnDisable;
+import com.github.jenya705.mcapi.server.application.OnStartup;
 import com.github.jenya705.mcapi.server.data.ConfigData;
 import com.github.jenya705.mcapi.server.data.loadable.CallbackLoadableConfigData;
 import com.github.jenya705.mcapi.server.log.TimerTask;
@@ -83,7 +84,7 @@ public class ConfigModuleImpl implements ConfigModule {
     }
 
     @Override
-    public <T> void addDeserializer( Class<? extends T> clazz, ObjectTunnelFunction<Object, T> tunnelFunction) {
+    public <T> void addDeserializer(Class<? extends T> clazz, ObjectTunnelFunction<Object, T> tunnelFunction) {
         deserializers.put(clazz, tunnelFunction);
     }
 

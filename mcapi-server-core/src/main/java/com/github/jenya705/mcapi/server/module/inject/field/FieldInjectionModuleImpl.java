@@ -197,7 +197,7 @@ public class FieldInjectionModuleImpl extends AbstractApplicationModule implemen
                     boolean wasAccessible = field.canAccess(value);
                     if (!wasAccessible) field.setAccessible(true);
                     Object currentValue = field.get(value);
-                    mapper.getDefaultValueProcessor().writeIfNotDefault(generator, currentValue, field, false);
+                    mapper.getDefaultValueGetter().writeIfNotDefault(generator, currentValue, field, false);
                     if (!wasAccessible) field.setAccessible(false);
                 }
                 generator.writeEndObject();

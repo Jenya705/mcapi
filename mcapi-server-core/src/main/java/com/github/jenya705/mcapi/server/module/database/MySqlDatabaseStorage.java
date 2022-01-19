@@ -3,6 +3,7 @@ package com.github.jenya705.mcapi.server.module.database;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.entity.BotPermissionEntity;
+import com.github.jenya705.mcapi.server.module.storage.StorageModule;
 import lombok.SneakyThrows;
 
 import java.io.IOException;
@@ -14,8 +15,8 @@ import java.util.UUID;
  */
 public class MySqlDatabaseStorage extends DatabaseStorageImpl {
 
-    public MySqlDatabaseStorage(ServerApplication application, DatabaseModule databaseModule) throws IOException {
-        super(application, databaseModule, "mysql");
+    public MySqlDatabaseStorage(ServerApplication application, DatabaseModule databaseModule, StorageModule storageModule) throws IOException {
+        super(application, databaseModule, storageModule, "mysql");
     }
 
     @Override

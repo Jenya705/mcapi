@@ -55,9 +55,10 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
     private final String updatePermission;
     private final String upsertPermission;
 
-    public DatabaseStorageImpl(ServerApplication application, DatabaseModule databaseModule, String sqlType) throws IOException {
+    public DatabaseStorageImpl(ServerApplication application, DatabaseModule databaseModule,
+                               StorageModule storageModule, String sqlType) throws IOException {
         super(application);
-        storageModule = bean(StorageModule.class);
+        this.storageModule = storageModule;
         this.databaseModule = databaseModule;
         this.sqlType = sqlType;
         setup = loadScript("setup");

@@ -3,8 +3,8 @@ package com.github.jenya705.mcapi.server.ignore;
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.event.application.ApplicationClassActionEvent;
-import com.github.jenya705.mcapi.server.application.OnInitializing;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -15,20 +15,16 @@ import java.util.function.Predicate;
  * @author Jenya705
  */
 @Slf4j
+@Singleton
 public class IgnoreManager extends AbstractApplicationModule {
 
     private static final String fileName = "ignores.txt";
 
-    private List<Predicate<String>> ignorableRules;
+    private final List<Predicate<String>> ignorableRules = new ArrayList<>();
 
     @Inject
-    public IgnoreManager(ServerApplication application) {
+    public IgnoreManager(ServerApplication application) throws Exception {
         super(application);
-    }
-
-    @OnInitializing
-    public void init() throws Exception {
-        ignorableRules = new ArrayList<>();
         if (core().isExistsFile(fileName)) {
             String[] stringRules = new String(
                     core().loadSpecific(fileName)

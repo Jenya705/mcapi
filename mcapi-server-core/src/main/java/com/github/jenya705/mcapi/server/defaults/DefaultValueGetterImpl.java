@@ -4,7 +4,7 @@ import com.github.jenya705.mcapi.jackson.*;
 
 import java.lang.reflect.Field;
 
-public class DefaultValueProcessorImpl implements DefaultValueProcessor {
+public class DefaultValueGetterImpl implements DefaultValueGetter {
 
     @Override
     public Object getDefault(Field field) {

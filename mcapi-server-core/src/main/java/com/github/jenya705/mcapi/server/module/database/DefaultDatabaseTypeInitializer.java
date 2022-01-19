@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.server.module.database;
 
 import com.github.jenya705.mcapi.server.application.ServerApplication;
+import com.github.jenya705.mcapi.server.module.storage.StorageModule;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -17,6 +18,7 @@ public class DefaultDatabaseTypeInitializer {
 
     private final ServerApplication application;
     private final DatabaseModule databaseModule;
+    private final StorageModule storageModule;
 
     @SneakyThrows
     public Connection connection(DatabaseModuleConfig config) {
@@ -37,6 +39,7 @@ public class DefaultDatabaseTypeInitializer {
         return new DatabaseStorageImpl(
                 application,
                 databaseModule,
+                storageModule,
                 config.getType()
         );
     }

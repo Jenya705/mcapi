@@ -10,8 +10,8 @@ import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
 import com.github.jenya705.mcapi.ApiError;
 import com.github.jenya705.mcapi.Vector3;
 import com.github.jenya705.mcapi.entity.EntityError;
-import com.github.jenya705.mcapi.server.defaults.DefaultValueProcessor;
-import com.github.jenya705.mcapi.server.defaults.DefaultValueProcessorImpl;
+import com.github.jenya705.mcapi.server.defaults.DefaultValueGetter;
+import com.github.jenya705.mcapi.server.defaults.DefaultValueGetterImpl;
 import com.github.jenya705.mcapi.server.util.CacheClassMap;
 import com.google.inject.Singleton;
 import lombok.Getter;
@@ -32,7 +32,7 @@ public class MapperImpl implements Mapper, JacksonProvider {
     private final Map<Class<?>, ThrowableParser> throwableParsers = CacheClassMap.concurrent();
 
     @Getter
-    private final DefaultValueProcessor defaultValueProcessor = new DefaultValueProcessorImpl();
+    private final DefaultValueGetter defaultValueGetter = new DefaultValueGetterImpl();
 
     private static double normalizeDouble(double num) {
         if (!Double.isFinite(num)) {

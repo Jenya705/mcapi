@@ -26,7 +26,7 @@ public abstract class MenuCommand implements CommandExecutor {
     public void onCommand(CommandSender sender, StringfulIterator args, String permission) {
         try {
             menuCommand(sender, args, permission);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             if (application.isDebug()) {
                 log.error("Exception while executing menu command:", e);
             }

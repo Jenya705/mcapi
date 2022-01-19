@@ -65,11 +65,11 @@ public class ApplicationClassesBinder extends AbstractModule {
 
     public static final List<Class<?>> modules = Arrays.asList(
             ConfigModule.class,
+            StorageModule.class,
             DatabaseModule.class,
             LocalizationModule.class,
             Mapper.class,
             ComponentFormProvider.class,
-            StorageModule.class,
             AuthorizationModule.class,
             BlockDataModule.class,
             BotManagement.class,

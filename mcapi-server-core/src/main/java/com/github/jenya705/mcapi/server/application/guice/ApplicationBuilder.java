@@ -6,6 +6,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class ApplicationBuilder {
@@ -23,6 +24,10 @@ public class ApplicationBuilder {
 
     public ApplicationBuilder layer(Class<?>... classes) {
         return layer(ApplicationClassesBinder.of(classes));
+    }
+
+    public ApplicationBuilder layer(Collection<Class<?>> classes) {
+        return layer(new ApplicationClassesBinder(classes));
     }
 
     public ApplicationBuilder defaultLayers() {

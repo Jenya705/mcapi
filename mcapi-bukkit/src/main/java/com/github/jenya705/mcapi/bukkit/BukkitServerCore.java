@@ -17,7 +17,6 @@ import com.github.jenya705.mcapi.server.util.ListUtils;
 import com.github.jenya705.mcapi.world.World;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import lombok.Cleanup;
 import lombok.experimental.Delegate;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
@@ -25,12 +24,7 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
-import org.yaml.snakeyaml.DumperOptions;
-import org.yaml.snakeyaml.Yaml;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -42,7 +36,7 @@ import java.util.stream.Collectors;
 public class BukkitServerCore implements ServerCore {
 
     @Delegate
-    private final BukkitEasyCore easyCore;
+    private final BukkitFileCore fileCore;
 
     private final BukkitApplication plugin;
     private final BukkitMenuManager menuManager;
@@ -50,11 +44,11 @@ public class BukkitServerCore implements ServerCore {
     private final BukkitOfflinePlayerStorage offlinePlayerStorage;
 
     @Inject
-    public BukkitServerCore(BukkitApplication plugin, BukkitMenuManager menuManager, BukkitEasyCore easyCore,
+    public BukkitServerCore(BukkitApplication plugin, BukkitMenuManager menuManager, BukkitFileCore fileCore,
                             PermissionManagerHook permissionManagerHook, BukkitOfflinePlayerStorage offlinePlayerStorage) {
         this.plugin = plugin;
         this.menuManager = menuManager;
-        this.easyCore = easyCore;
+        this.fileCore = fileCore;
         this.permissionManagerHook = permissionManagerHook;
         this.offlinePlayerStorage = offlinePlayerStorage;
     }

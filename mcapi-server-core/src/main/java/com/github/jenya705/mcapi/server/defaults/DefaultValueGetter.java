@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
 
-public interface DefaultValueProcessor {
+public interface DefaultValueGetter {
 
     Object nothing = new Object();
 

@@ -19,7 +19,7 @@ public class BukkitFirstLayer extends AbstractModule {
     @Override
     protected void configure() {
         bind(BukkitApplication.class).toInstance(plugin);
-        bind(BukkitEasyCore.class);
+        bind(BukkitFileCore.class);
         bind(BukkitOfflinePlayerStorage.class);
         bind(BukkitMenuManager.class);
         permissionManager();

@@ -12,13 +12,11 @@ import com.github.jenya705.mcapi.server.module.database.cache.CacheStorageImpl;
 import com.github.jenya705.mcapi.server.module.database.safe.CacheDatabaseGetter;
 import com.github.jenya705.mcapi.server.module.database.safe.DatabaseGetter;
 import com.github.jenya705.mcapi.server.module.database.safe.StorageDatabaseGetter;
+import com.github.jenya705.mcapi.server.module.storage.StorageModule;
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.Locale;
@@ -47,16 +45,15 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
     private final DatabaseGetter safeAsync;
 
     @Inject
-    public DatabaseModuleImpl(ServerApplication application, ConfigModule configModule) {
+    public DatabaseModuleImpl(ServerApplication application, ConfigModule configModule, StorageModule storageModule) {
         super(application);
         databaseTypeInitializers = new ConcurrentHashMap<>();
-        addTypeInitializer("mysql", new MySqlDatabaseInitializer(app(), this));
+        addTypeInitializer("mysql", new MySqlDatabaseInitializer(app(), this, storageModule));
         addTypeInitializer("sqlite", new SqliteDatabaseInitializer(app()));
-        defaultDatabaseTypeInitializer = new DefaultDatabaseTypeInitializer(app(), this);
-        ConfigData configData =
-                configModule
-                        .getConfig()
-                        .required("database");
+        defaultDatabaseTypeInitializer = new DefaultDatabaseTypeInitializer(app(), this, storageModule);
+        ConfigData configData = configModule
+                .getConfig()
+                .required("database");
         config = new DatabaseModuleConfig(configData);
         cache = new CacheStorageImpl(
                 application,

@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.server.module.database;
 
 import com.github.jenya705.mcapi.server.application.ServerApplication;
+import com.github.jenya705.mcapi.server.module.storage.StorageModule;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -14,6 +15,7 @@ public class MySqlDatabaseInitializer implements DatabaseTypeInitializer {
 
     private final ServerApplication application;
     private final DatabaseModule databaseModule;
+    private final StorageModule storageModule;
 
     @Override
     @SneakyThrows
@@ -25,6 +27,6 @@ public class MySqlDatabaseInitializer implements DatabaseTypeInitializer {
     @Override
     @SneakyThrows
     public DatabaseStorage storage() {
-        return new MySqlDatabaseStorage(application, databaseModule);
+        return new MySqlDatabaseStorage(application, databaseModule, storageModule);
     }
 }
