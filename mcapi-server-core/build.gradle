@@ -28,10 +28,11 @@ publishing {
             url = project.version.endsWith("alpha") || project.version.endsWith("beta") ? snapshotUrl : releaseUrl
 
             // ORG_GRADLE_PROJECT_mavenUsername and ORG_GRADLE_PROJECT_mavenPassword are the environments you defined before.
-            def mavenUsername = System.getenv("CODEMC_mavenUsername") ? System.getenv("CODEMC_mavenUsername") : null
-            def mavenPassword = System.getenv("CODEMC_mavenPassword") ? System.getenv("CODEMC_mavenPassword") : null
+            def mavenUsername = System.getenv("CODEMC_mavenUsername")
+            def mavenPassword = System.getenv("CODEMC_mavenPassword")
 
             if(mavenUsername != null && mavenPassword != null) {
+                System.out.println("Setting credentials")
                 credentials {
                     username = mavenUsername
                     password = mavenPassword
