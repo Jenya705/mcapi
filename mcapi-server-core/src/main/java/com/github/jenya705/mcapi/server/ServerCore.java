@@ -130,6 +130,8 @@ public interface ServerCore {
 
     void saveSpecific(String file, byte[] bytes) throws IOException;
 
+    Collection<String> getFilesInDirectory(String directory);
+
     boolean isExistsFile(String file);
 
     String getAbsolutePath(String file);

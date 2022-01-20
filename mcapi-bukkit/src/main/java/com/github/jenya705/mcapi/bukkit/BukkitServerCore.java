@@ -11,7 +11,6 @@ import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.menu.InventoryMenuView;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.server.ServerCore;
-import com.github.jenya705.mcapi.server.application.OnInitializing;
 import com.github.jenya705.mcapi.server.command.CommandExecutor;
 import com.github.jenya705.mcapi.server.util.ListUtils;
 import com.github.jenya705.mcapi.world.World;
@@ -25,7 +24,10 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -51,10 +53,6 @@ public class BukkitServerCore implements ServerCore {
         this.fileCore = fileCore;
         this.permissionManagerHook = permissionManagerHook;
         this.offlinePlayerStorage = offlinePlayerStorage;
-    }
-
-    @OnInitializing(priority = -1)
-    public void initialize() {
         plugin.getDataFolder().mkdir();
         if (permissionManagerHook == null) {
             plugin.getLogger().severe(

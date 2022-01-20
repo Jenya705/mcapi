@@ -54,6 +54,7 @@ import com.github.jenya705.mcapi.server.module.rest.route.world.GetWorldRouteHan
 import com.github.jenya705.mcapi.server.module.selector.SelectorProvider;
 import com.github.jenya705.mcapi.server.module.storage.StorageModule;
 import com.github.jenya705.mcapi.server.module.web.WebServer;
+import com.github.jenya705.mcapi.server.module.web.tunnel.EventTunnel;
 import com.github.jenya705.mcapi.server.worker.Worker;
 import com.google.inject.AbstractModule;
 
@@ -65,6 +66,7 @@ public class ApplicationClassesBinder extends AbstractModule {
 
     public static final List<Class<?>> modules = Arrays.asList(
             ConfigModule.class,
+            EventTunnel.class,
             StorageModule.class,
             DatabaseModule.class,
             LocalizationModule.class,

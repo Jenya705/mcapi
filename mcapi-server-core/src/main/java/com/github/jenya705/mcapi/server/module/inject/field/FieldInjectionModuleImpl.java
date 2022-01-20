@@ -30,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -194,7 +195,13 @@ public class FieldInjectionModuleImpl extends AbstractApplicationModule implemen
                     if (information.getIgnoredFields().contains(field.getName())) {
                         continue;
                     }
-                    boolean wasAccessible = field.canAccess(value);
+                    boolean wasAccessible;
+                    if (Modifier.isStatic(field.getModifiers())) {
+                        wasAccessible = field.canAccess(null);
+                    }
+                    else {
+                        wasAccessible = field.canAccess(value);
+                    }
                     if (!wasAccessible) field.setAccessible(true);
                     Object currentValue = field.get(value);
                     mapper.getDefaultValueGetter().writeIfNotDefault(generator, currentValue, field, false);

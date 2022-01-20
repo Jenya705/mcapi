@@ -9,9 +9,8 @@ import org.yaml.snakeyaml.Yaml;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class BukkitFileCore {
 
@@ -31,33 +30,55 @@ public class BukkitFileCore {
     }
 
     public Map<String, Object> loadConfig(String file) throws IOException {
-        File fileObject = new File(plugin.getDataFolder(), file + ".yml");
-        if (!fileObject.exists()) fileObject.createNewFile(); // IGNORED
+        File fileObject = getFile(file + ".yml");
+        fileObject.getParentFile().mkdirs();
+        if (!fileObject.exists()) {
+            fileObject.createNewFile(); // IGNORED
+            return new LinkedHashMap<>();
+        }
         @Cleanup Reader reader = new FileReader(fileObject);
         return Objects.requireNonNullElse(yaml.load(reader), new LinkedHashMap<>());
     }
 
     public byte[] loadSpecific(String file) throws IOException {
-        File fileObject = new File(plugin.getDataFolder(), file);
-        if (!fileObject.exists()) fileObject.createNewFile(); // IGNORED
+        File fileObject = getFile(file);
+        fileObject.getParentFile().mkdirs();
+        if (!fileObject.exists()) {
+            fileObject.createNewFile(); // IGNORED
+            return new byte[0];
+        }
         return Files.readAllBytes(fileObject.toPath());
     }
 
     public void saveConfig(String file, Map<String, Object> config) throws IOException {
-        File fileObject = new File(plugin.getDataFolder(), file + ".yml");
+        File fileObject = getFile(file + ".yml");
+        fileObject.getParentFile().mkdirs();
         if (!fileObject.exists()) fileObject.createNewFile(); // IGNORED
         @Cleanup Writer writer = new FileWriter(fileObject);
         yaml.dump(config, writer);
     }
 
     public void saveSpecific(String file, byte[] bytes) throws IOException {
-        File fileObject = new File(plugin.getDataFolder(), file);
+        File fileObject = getFile(file);
+        fileObject.getParentFile().mkdirs();
         if (!fileObject.exists()) fileObject.createNewFile(); // IGNORED
         Files.write(fileObject.toPath(), bytes, StandardOpenOption.WRITE);
     }
 
     public File getFile(String file) {
         return new File(plugin.getDataFolder(), file);
+    }
+
+    public Collection<String> getFilesInDirectory(String directory) {
+        File file = getFile(directory);
+        File[] listFiles = file.listFiles();
+        if (file.isDirectory() && listFiles != null) {
+            return Arrays
+                    .stream(listFiles)
+                    .map(File::getName)
+                    .collect(Collectors.toList());
+        }
+        return Collections.emptyList();
     }
 
     public boolean isExistsFile(String file) {

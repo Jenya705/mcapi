@@ -48,7 +48,7 @@ public class PlayerOptionParser extends AbstractCommandValueOptionParser impleme
         return new PlayerOption(
                 node.get("name").asText(),
                 defaultNode(node.get("required"), false, JsonNode::asBoolean),
-                getTabs(node),
+                getTabs(node.get("tab")),
                 defaultNode(node.get("onlyFromTab"), false, JsonNode::asBoolean),
                 defaultNode(node.get("onlyLinked"), false, JsonNode::asBoolean)
         );

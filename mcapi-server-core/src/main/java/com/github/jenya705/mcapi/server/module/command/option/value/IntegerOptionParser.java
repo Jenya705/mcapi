@@ -15,7 +15,7 @@ public class IntegerOptionParser extends AbstractCommandValueOptionParser {
         return new IntegerOption(
                 node.get("name").asText(),
                 defaultNode(node.get("required"), false, JsonNode::asBoolean),
-                getTabs(node),
+                getTabs(node.get("tab")),
                 defaultNode(node.get("onlyFromTab"), false, JsonNode::asBoolean),
                 defaultNode(node.get("max"), Integer.MAX_VALUE, JsonNode::asInt),
                 defaultNode(node.get("min"), Integer.MIN_VALUE, JsonNode::asInt)

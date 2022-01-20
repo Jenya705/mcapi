@@ -45,6 +45,13 @@ public class ContainerCommandExecutor extends AbstractApplicationModule implemen
         return Collections.unmodifiableMap(nodes);
     }
 
+    public void putUnsafe(String name, Object obj) {
+        if (!(obj instanceof Map) && !(obj instanceof CommandExecutor)) {
+            throw badItemInNodes();
+        }
+        nodes.put(name.toLowerCase(Locale.ROOT), obj);
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public void onCommand(CommandSender sender, StringfulIterator args, String permission) {

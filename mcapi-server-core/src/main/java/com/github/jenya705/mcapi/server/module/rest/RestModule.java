@@ -105,11 +105,7 @@ public class RestModule extends AbstractApplicationModule {
                 .rawDeserializer(Entity.class, this::getEntity)
                 .rawDeserializer(CapturableEntity.class, this::getCapturableEntity)
                 .throwableParser(JsonProcessingException.class, e -> JsonDeserializeException.create())
-                .tunnelJsonSerializer(Command.class, RestCommand::from)
-                .tunnelJsonSerializer(CommandExecutableOption.class, RestCommandExecutableOption::from)
                 .tunnelJsonSerializer(CommandInteractionValue.class, RestCommandInteractionValue::from)
-                .tunnelJsonSerializer(CommandOption.class, RestCommandOption::from)
-                .tunnelJsonSerializer(CommandValueOption.class, RestCommandValueOption::from)
                 .tunnelJsonSerializer(CommandInteractionEvent.class, RestCommandInteractionEvent::from)
                 .tunnelJsonSerializer(JoinEvent.class, RestJoinEvent::from)
                 .tunnelJsonSerializer(LinkEvent.class, RestLinkEvent::from)
@@ -152,7 +148,6 @@ public class RestModule extends AbstractApplicationModule {
                 .tunnelJsonSerializer(Entity.class, RestEntity::from)
                 .tunnelJsonSerializer(Player.class, RestPlayer::from)
                 .tunnelJsonSerializer(PlayerAbilities.class, RestPlayerAbilities::from)
-                .jsonDeserializer(Command.class, new ApiCommandDeserializer(commandModule))
                 .jsonSerializer(Component.class, new ComponentSerializer())
                 .tunnelJsonDeserializer(
                         InventoryViewModel.class,

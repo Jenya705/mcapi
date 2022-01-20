@@ -1,12 +1,16 @@
 package com.github.jenya705.mcapi.server.module.command.option.value;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.jenya705.mcapi.command.CommandOption;
 import com.github.jenya705.mcapi.command.CommandValueOption;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.module.command.CommandOptionParser;
+import com.github.jenya705.mcapi.server.module.rest.json.JsonUtils;
 import com.github.jenya705.mcapi.server.util.IteratorUtils;
+import lombok.SneakyThrows;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -70,7 +74,7 @@ public abstract class AbstractCommandValueOptionParser implements CommandOptionP
         return constructor.get(
                 node.get("name").asText(),
                 defaultNode(node.get("required"), false, JsonNode::asBoolean),
-                getTabs(node.get("tabs")),
+                getTabs(node.get("tab")),
                 defaultNode(node.get("onlyFromTab"), false, JsonNode::asBoolean)
         );
     }
@@ -81,6 +85,12 @@ public abstract class AbstractCommandValueOptionParser implements CommandOptionP
         return realOption.getSuggestions() == null ?
                 tabFunctions.get(realOption.getTabFunction()).apply(realOption, owner) :
                 Arrays.asList(realOption.getSuggestions());
+    }
+
+    @Override
+    @SneakyThrows
+    public void write(CommandOption option, JsonGenerator generator) {
+        JsonUtils.writeFields(option, generator);
     }
 
     public AbstractCommandValueOptionParser tab(String name, BiFunction<CommandValueOption, AbstractBot, List<String>> function) {

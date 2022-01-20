@@ -107,6 +107,8 @@ public class ApiCommandExecutor extends AbstractApplicationModule implements Com
     @Override
     public List<CommandTab> onTab(CommandSender sender, StringfulIterator args, String permission) {
         int countNext = args.countNext();
+        if (countNext == 0) return null;
+        countNext--;
         return countNext < tabs.size() ?
                 tabs
                         .get(countNext)

@@ -130,6 +130,11 @@ public class MockServerCore implements ServerCore {
     }
 
     @Override
+    public Collection<String> getFilesInDirectory(String directory) {
+        return null;
+    }
+
+    @Override
     public void mkdirs(String file) {
         /* NOTHING */
     }

@@ -49,4 +49,13 @@ public class AuthorizationModuleImpl extends AbstractApplicationModule implement
         }
         return new BotObject(bot, databaseModule.storage(), storage);
     }
+
+    @Override
+    public AbstractBot botById(int id) {
+        BotEntity bot = databaseModule.storage().findBotById(id);
+        if (bot == null) {
+            throw new IllegalArgumentException("Bot with given bot id is not exist");
+        }
+        return new BotObject(bot, databaseModule.storage(), storage);
+    }
 }

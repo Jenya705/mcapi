@@ -9,13 +9,13 @@ import com.github.jenya705.mcapi.error.CommandNameFormatException;
 import com.github.jenya705.mcapi.error.CommandOptionsAllException;
 import com.github.jenya705.mcapi.error.TooManyOptionsException;
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.application.OnStartup;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.command.CommandExecutor;
 import com.github.jenya705.mcapi.server.command.ContainerCommandExecutor;
 import com.github.jenya705.mcapi.server.command.RootCommand;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.log.TimerTask;
+import com.github.jenya705.mcapi.server.module.authorization.AuthorizationModule;
 import com.github.jenya705.mcapi.server.module.config.ConfigModule;
 import com.github.jenya705.mcapi.server.module.mapper.Mapper;
 import com.github.jenya705.mcapi.server.stringful.ArrayStringfulIterator;
@@ -27,7 +27,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -40,12 +39,15 @@ public class CommandModuleImpl extends AbstractApplicationModule implements Comm
 
     private final CommandOptionParserContainer parserContainer;
     private final CommandModuleConfig config;
+    private final CommandLoader commandLoader;
 
     private final Map<Integer, ContainerCommandExecutor> botCommands = new ConcurrentHashMap<>();
 
     @Inject
-    public CommandModuleImpl(ServerApplication application, ConfigModule configModule, Mapper mapper) {
+    public CommandModuleImpl(ServerApplication application, ConfigModule configModule, Mapper mapper,
+                             CommandLoader commandLoader, AuthorizationModule authorizationModule) {
         super(application);
+        this.commandLoader = commandLoader;
         parserContainer = new CommandOptionParserContainer(app());
         TimerTask task = TimerTask.start(log, "Registering root command...");
         core().addCommand(RootCommand.name, new RootCommand(app()).get(), RootCommand.permission);
@@ -56,12 +58,23 @@ public class CommandModuleImpl extends AbstractApplicationModule implements Comm
                         .required("customCommands")
         );
         mapper
-                .jsonDeserializer(Command.class, new ApiCommandDeserializer(this));
+                .jsonDeserializer(Command.class, new ApiCommandDeserializer(this))
+                .jsonSerializer(CommandOption.class, (value, generator, serializers) ->
+                        parserContainer.getParser(value.getType()).write(value, generator)
+                );
+        commandLoader.loadAllCommands().forEach((id, commands) -> {
+            AbstractBot owner = authorizationModule.botById(id);
+            commands.forEach(command -> registerCommandWithoutCheck(command, owner, false));
+        });
     }
 
     @Override
     public void registerCommand(Command command, AbstractBot owner) {
         validateCommandName(command.getName());
+        registerCommandWithoutCheck(command, owner, true);
+    }
+
+    protected void registerCommandWithoutCheck(Command command, AbstractBot owner, boolean save) {
         Object endObject = parseOptions(command.getOptions(), command.getName(), owner);
         if (!(endObject instanceof Map) && !(endObject instanceof CommandExecutor)) {
             throw new IllegalArgumentException("CommandExecutor is null on the end");
@@ -80,9 +93,13 @@ public class CommandModuleImpl extends AbstractApplicationModule implements Comm
             core().addCommand(owner.getEntity().getName(), botCommand, globalCommandPermission);
             botCommands.put(owner.getEntity().getId(), botCommand);
         }
-        botCommand
-                .getNodes()
-                .put(command.getName().toLowerCase(Locale.ROOT), endObject);
+        if (save) {
+            worker().exceptionable(
+                    () -> commandLoader.save(command, owner),
+                    e -> log.error("Failed to save command", e)
+            );
+        }
+        botCommand.putUnsafe(command.getName(), endObject);
         botCommand.recalculatePermissions();
     }
 
