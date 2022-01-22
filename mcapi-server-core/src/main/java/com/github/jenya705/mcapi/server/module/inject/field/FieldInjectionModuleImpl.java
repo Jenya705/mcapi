@@ -10,6 +10,7 @@ import com.github.jenya705.mcapi.rest.enchantment.RestEnchantment;
 import com.github.jenya705.mcapi.rest.enchantment.RestItemEnchantment;
 import com.github.jenya705.mcapi.rest.entity.RestCapturedEntityClickEvent;
 import com.github.jenya705.mcapi.rest.entity.RestEntity;
+import com.github.jenya705.mcapi.rest.entity.RestLivingEntity;
 import com.github.jenya705.mcapi.rest.event.*;
 import com.github.jenya705.mcapi.rest.inventory.*;
 import com.github.jenya705.mcapi.rest.menu.RestMenuItem;
@@ -147,7 +148,8 @@ public class FieldInjectionModuleImpl extends AbstractApplicationModule implemen
                 RestShortBoundingBox.class,
                 RestSlab.class,
                 RestSubscribeRequest.class,
-                RestWorld.class
+                RestWorld.class,
+                RestLivingEntity.class
         );
         //</editor-fold>
     }

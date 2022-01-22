@@ -25,6 +25,7 @@ import com.github.jenya705.mcapi.rest.enchantment.RestEnchantment;
 import com.github.jenya705.mcapi.rest.enchantment.RestItemEnchantment;
 import com.github.jenya705.mcapi.rest.entity.RestCapturedEntityClickEvent;
 import com.github.jenya705.mcapi.rest.entity.RestEntity;
+import com.github.jenya705.mcapi.rest.entity.RestLivingEntity;
 import com.github.jenya705.mcapi.rest.event.*;
 import com.github.jenya705.mcapi.rest.inventory.*;
 import com.github.jenya705.mcapi.rest.player.RestPlayer;
@@ -66,7 +67,6 @@ public class RestModule extends AbstractApplicationModule {
 
     private final Mapper mapper;
     private final AuthorizationModule authorizationModule;
-    private final CommandModule commandModule;
     private final FormPlatformProvider formProvider;
     private final ComponentMapParser formComponentParser;
     private final MaterialStorage materialStorage;
@@ -74,12 +74,11 @@ public class RestModule extends AbstractApplicationModule {
 
     @Inject
     public RestModule(ServerApplication application, Mapper mapper, AuthorizationModule authorizationModule,
-                      CommandModule commandModule, FormPlatformProvider formProvider,
-                      ComponentMapParser formComponentParser, MaterialStorage materialStorage, EnchantmentStorage enchantmentStorage) {
+                      FormPlatformProvider formProvider, ComponentMapParser formComponentParser,
+                      MaterialStorage materialStorage, EnchantmentStorage enchantmentStorage) {
         super(application);
         this.mapper = mapper;
         this.authorizationModule = authorizationModule;
-        this.commandModule = commandModule;
         this.formProvider = formProvider;
         this.formComponentParser = formComponentParser;
         this.materialStorage = materialStorage;
@@ -146,6 +145,7 @@ public class RestModule extends AbstractApplicationModule {
                 .tunnelJsonSerializer(BoundingBox.class, RestBoundingBox::from)
                 .tunnelJsonSerializer(Piston.class, RestPiston::from)
                 .tunnelJsonSerializer(Entity.class, RestEntity::from)
+                .tunnelJsonSerializer(LivingEntity.class, RestLivingEntity::from)
                 .tunnelJsonSerializer(Player.class, RestPlayer::from)
                 .tunnelJsonSerializer(PlayerAbilities.class, RestPlayerAbilities::from)
                 .jsonSerializer(Component.class, new ComponentSerializer())
