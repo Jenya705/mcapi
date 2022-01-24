@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @Singleton
 public class ServerApplication {
 
-    private boolean initialized = false;
+    private boolean initialized;
     private boolean enabled = true;
 
     private final Injector injector;
