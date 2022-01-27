@@ -8,7 +8,9 @@ import com.github.jenya705.mcapi.server.data.ConfigData;
 import com.github.jenya705.mcapi.server.module.bot.BotManagement;
 import com.github.jenya705.mcapi.server.module.config.ConfigModule;
 import com.github.jenya705.mcapi.server.module.config.GlobalConfig;
+import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
+import com.github.jenya705.mcapi.server.module.message.Message;
 import com.github.jenya705.mcapi.server.util.PlayerUtils;
 import com.github.jenya705.mcapi.server.util.TokenUtils;
 import com.google.inject.Inject;
@@ -26,14 +28,17 @@ public class CreateBotCommand extends AdvancedCommandExecutor<CreateBotArguments
     private final GlobalConfig globalConfig;
     private final DatabaseModule databaseModule;
     private final BotManagement botManagement;
+    private final MessageContainer messageContainer;
 
     @Inject
     public CreateBotCommand(ServerApplication application, ConfigModule configModule,
-                            DatabaseModule databaseModule, BotManagement botManagement) {
+                            DatabaseModule databaseModule, BotManagement botManagement,
+                            MessageContainer messageContainer) {
         super(application, CreateBotArguments.class);
         globalConfig = configModule.global();
         this.databaseModule = databaseModule;
         this.botManagement = botManagement;
+        this.messageContainer = messageContainer;
         this
                 .tab(() -> Collections.singletonList("<bot_name>"))
                 .tab((sender, permission) ->
@@ -44,11 +49,11 @@ public class CreateBotCommand extends AdvancedCommandExecutor<CreateBotArguments
     @Override
     public void onCommand(CommandSender sender, CreateBotArguments args, String permission) {
         if (args.getName().length() > 64) {
-            sendMessage(sender, config.getBotNameTooLong());
+            sender.sendMessage(messageContainer.render(messageContainer.botNameTooLong(), sender));
             return;
         }
         if (args.getPlayer() != null && !hasPermission(sender, permission, "others")) {
-            sendMessage(sender, config.getNotPermittedForOthers());
+            sender.sendMessage(messageContainer.render(messageContainer.notPermitted(), sender));
             return;
         }
         getPlayer(sender, args.getPlayer())
@@ -67,15 +72,12 @@ public class CreateBotCommand extends AdvancedCommandExecutor<CreateBotArguments
                                                             generatedToken
                                                     );
                                     if (!canCreateBot) {
-                                        sendMessage(sender, config.getBotWithNameExist());
+                                        sender.sendMessage(messageContainer.render(messageContainer.botNameUsed(), sender));
                                         return;
                                     }
-                                    sendMessage(sender,
-                                            config.getSuccess(),
-                                            "%token%", generatedToken
-                                    );
+                                    sender.sendMessage(messageContainer.render(messageContainer.botCreation(generatedToken), sender));
                                 }),
-                        () -> sendMessage(sender, config.getPlayerNotFound())
+                        () -> sender.sendMessage(messageContainer.render(messageContainer.playerNotFound(args.getPlayer()), sender))
                 );
     }
 
