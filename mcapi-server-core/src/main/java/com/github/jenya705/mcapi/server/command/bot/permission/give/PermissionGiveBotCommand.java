@@ -6,10 +6,12 @@ import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.server.command.CommandTab;
+import com.github.jenya705.mcapi.server.command.NoConfig;
 import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.server.data.ConfigData;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.entity.BotPermissionEntity;
+import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
 import com.google.inject.Inject;
 
@@ -22,16 +24,15 @@ import java.util.stream.Collectors;
 /**
  * @author Jenya705
  */
+@NoConfig
 @AdditionalPermissions("others")
 public class PermissionGiveBotCommand extends AdvancedCommandExecutor<PermissionGiveBotArguments> {
 
     private final DatabaseModule databaseModule;
 
-    private PermissionGiveBotConfig config;
-
     @Inject
-    public PermissionGiveBotCommand(ServerApplication application, DatabaseModule databaseModule) {
-        super(application, PermissionGiveBotArguments.class);
+    public PermissionGiveBotCommand(ServerApplication application, MessageContainer messageContainer, DatabaseModule databaseModule) {
+        super(application, messageContainer, PermissionGiveBotArguments.class);
         this.databaseModule = databaseModule;
         this
                 .databaseTab((sender, permission, databaseGetter) ->
@@ -69,7 +70,7 @@ public class PermissionGiveBotCommand extends AdvancedCommandExecutor<Permission
                         .storage()
                         .findBotByToken(args.getBot());
                 if (!bot.getOwner().equals(uuid) && !hasPermission(sender, permission, "others")) {
-                    sendMessage(sender, config.getNotPermitted());
+                    sendMessage(sender, messageContainer().notPermitted());
                     return;
                 }
             }
@@ -78,17 +79,17 @@ public class PermissionGiveBotCommand extends AdvancedCommandExecutor<Permission
                         .storage()
                         .findBotsByName(args.getBot());
                 if (bots.isEmpty()) {
-                    sendMessage(sender, config.getBotNotExist());
+                    sendMessage(sender, messageContainer().botNotFound());
                     return;
                 }
                 if (bots.size() > 1) {
-                    sendMessage(sender, config.getTooManyBots());
+                    sendMessage(sender, messageContainer().provideToken());
                     return;
                 }
                 bot = bots.get(0);
             }
             if (!bot.getOwner().equals(uuid) && !hasPermission(sender, permission, "others")) {
-                sendMessage(sender, config.getNotPermitted());
+                sendMessage(sender, messageContainer().notPermitted());
                 return;
             }
             databaseModule
@@ -105,13 +106,7 @@ public class PermissionGiveBotCommand extends AdvancedCommandExecutor<Permission
                             .target(target)
                             .build()
                     );
-            sendMessage(sender, config.getSuccess());
+            sendMessage(sender, messageContainer().success());
         });
-    }
-
-    @Override
-    public void setConfig(ConfigData config) {
-        this.config = new PermissionGiveBotConfig(config);
-        setConfig(this.config);
     }
 }

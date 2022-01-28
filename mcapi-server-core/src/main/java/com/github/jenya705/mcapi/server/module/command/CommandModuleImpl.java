@@ -17,6 +17,7 @@ import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.log.TimerTask;
 import com.github.jenya705.mcapi.server.module.authorization.AuthorizationModule;
 import com.github.jenya705.mcapi.server.module.config.ConfigModule;
+import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
 import com.github.jenya705.mcapi.server.module.mapper.Mapper;
 import com.github.jenya705.mcapi.server.stringful.ArrayStringfulIterator;
 import com.github.jenya705.mcapi.server.stringful.StringfulIterator;
@@ -40,14 +41,17 @@ public class CommandModuleImpl extends AbstractApplicationModule implements Comm
     private final CommandOptionParserContainer parserContainer;
     private final CommandModuleConfig config;
     private final CommandLoader commandLoader;
+    private final MessageContainer messageContainer;
 
     private final Map<Integer, ContainerCommandExecutor> botCommands = new ConcurrentHashMap<>();
 
     @Inject
     public CommandModuleImpl(ServerApplication application, ConfigModule configModule, Mapper mapper,
-                             CommandLoader commandLoader, AuthorizationModule authorizationModule) {
+                             CommandLoader commandLoader, AuthorizationModule authorizationModule,
+                             MessageContainer messageContainer) {
         super(application);
         this.commandLoader = commandLoader;
+        this.messageContainer = messageContainer;
         parserContainer = new CommandOptionParserContainer(app());
         TimerTask task = TimerTask.start(log, "Registering root command...");
         core().addCommand(RootCommand.name, new RootCommand(app()).get(), RootCommand.permission);
@@ -151,7 +155,7 @@ public class CommandModuleImpl extends AbstractApplicationModule implements Comm
                 path,
                 this,
                 owner,
-                config.getCommand(),
+                messageContainer,
                 Arrays.stream(options)
                         .map(it -> (CommandValueOption) it)
                         .toArray(CommandValueOption[]::new)

@@ -26,6 +26,8 @@ import java.util.function.Supplier;
  */
 public class RootCommand extends AbstractApplicationModule implements Supplier<ContainerCommandExecutor> {
 
+    public static final int maxListElements = 10;
+
     public static final String name = "mcapi";
     public static final String permission = "mcapi.command";
 

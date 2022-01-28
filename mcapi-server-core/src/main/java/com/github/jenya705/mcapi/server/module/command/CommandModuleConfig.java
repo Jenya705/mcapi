@@ -1,7 +1,6 @@
 package com.github.jenya705.mcapi.server.module.command;
 
 import com.github.jenya705.mcapi.server.command.ContainerCommandConfig;
-import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutorConfig;
 import com.github.jenya705.mcapi.server.data.ConfigData;
 import com.github.jenya705.mcapi.server.data.loadable.Value;
 import com.github.jenya705.mcapi.server.module.config.Config;
@@ -27,9 +26,6 @@ public class CommandModuleConfig extends Config {
 
     @Value
     private ContainerCommandConfig container = new ContainerCommandConfig();
-
-    @Value
-    private AdvancedCommandExecutorConfig command = new AdvancedCommandExecutorConfig();
 
     public CommandModuleConfig(ConfigData configData) {
         load(configData);

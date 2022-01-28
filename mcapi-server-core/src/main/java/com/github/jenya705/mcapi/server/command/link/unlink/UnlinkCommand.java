@@ -5,12 +5,14 @@ import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.server.command.CommandTab;
+import com.github.jenya705.mcapi.server.command.NoConfig;
 import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.server.data.ConfigData;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.server.module.config.ConfigModule;
 import com.github.jenya705.mcapi.server.module.config.GlobalConfig;
+import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.server.module.link.LinkingModule;
 import com.github.jenya705.mcapi.server.util.PlayerUtils;
@@ -23,10 +25,9 @@ import java.util.stream.Collectors;
 /**
  * @author Jenya705
  */
+@NoConfig
 @AdditionalPermissions("others")
 public class UnlinkCommand extends AdvancedCommandExecutor<UnlinkArguments> {
-
-    private UnlinkConfig config;
 
     private final DatabaseModule databaseModule;
     private final GlobalConfig globalConfig;
@@ -34,8 +35,9 @@ public class UnlinkCommand extends AdvancedCommandExecutor<UnlinkArguments> {
 
     @Inject
     public UnlinkCommand(ServerApplication application, DatabaseModule databaseModule,
-                         ConfigModule configModule, LinkingModule linkingModule) {
-        super(application, UnlinkArguments.class);
+                         ConfigModule configModule, LinkingModule linkingModule,
+                         MessageContainer messageContainer) {
+        super(application, messageContainer, UnlinkArguments.class);
         this.databaseModule = databaseModule;
         this.globalConfig = configModule.global();
         this.linkingModule = linkingModule;
@@ -67,46 +69,40 @@ public class UnlinkCommand extends AdvancedCommandExecutor<UnlinkArguments> {
     @Override
     public void onCommand(CommandSender sender, UnlinkArguments args, String permission) {
         if (!globalConfig.isBotNameUnique()) {
-            sendMessage(sender, config.getDisabledByAdmin());
+            sendMessage(sender, messageContainer().disabledByAdmin());
             return;
         }
         if (args.getPlayer() != null && !hasPermission(sender, permission, "others")) {
-            sendMessage(sender, config.getNotPermittedForOthers());
+            sendMessage(sender, messageContainer().notPermitted());
             return;
         }
-        getPlayer(sender, args.getPlayer())
-                .ifPresentOrElse(
-                        (player) -> worker().invoke(() -> {
-                            if (!databaseModule.storage().isExistBotWithName(args.getBotName())) {
-                                sendMessage(sender, config.getNotLinked());
-                                return;
-                            }
-                            BotEntity botEntity =
-                                    databaseModule
-                                            .storage()
-                                            .findBotsByName(args.getBotName())
-                                            .get(0);
-                            BotLinkEntity linkEntity =
-                                    databaseModule
-                                            .storage()
-                                            .findLink(
-                                                    botEntity.getId(),
-                                                    player.getUuid()
-                                            );
-                            if (linkEntity == null) {
-                                sendMessage(sender, config.getNotLinked());
-                                return;
-                            }
-                            linkingModule.unlink(botEntity, player);
-                            sendMessage(sender, config.getSuccess());
-                        }),
-                        () -> sendMessage(sender, config.getPlayerNotFound())
-                );
-    }
-
-    @Override
-    public void setConfig(ConfigData config) {
-        this.config = new UnlinkConfig(config);
-        setConfig(this.config);
+        requirePlayer(
+                sender,
+                args.getPlayer(),
+                (player) -> worker().invoke(() -> {
+                    if (!databaseModule.storage().isExistBotWithName(args.getBotName())) {
+                        sendMessage(sender, messageContainer().notLinked());
+                        return;
+                    }
+                    BotEntity botEntity =
+                            databaseModule
+                                    .storage()
+                                    .findBotsByName(args.getBotName())
+                                    .get(0);
+                    BotLinkEntity linkEntity =
+                            databaseModule
+                                    .storage()
+                                    .findLink(
+                                            botEntity.getId(),
+                                            player.getUuid()
+                                    );
+                    if (linkEntity == null) {
+                        sendMessage(sender, messageContainer().notLinked());
+                        return;
+                    }
+                    linkingModule.unlink(botEntity, player);
+                    sendMessage(sender, messageContainer().success());
+                })
+        );
     }
 }

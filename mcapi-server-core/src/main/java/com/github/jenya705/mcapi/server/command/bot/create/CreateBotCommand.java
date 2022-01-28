@@ -3,12 +3,15 @@ package com.github.jenya705.mcapi.server.command.bot.create;
 import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.command.AdditionalPermissions;
+import com.github.jenya705.mcapi.server.command.NoConfig;
 import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.server.data.ConfigData;
 import com.github.jenya705.mcapi.server.module.bot.BotManagement;
 import com.github.jenya705.mcapi.server.module.config.ConfigModule;
 import com.github.jenya705.mcapi.server.module.config.GlobalConfig;
+import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
+import com.github.jenya705.mcapi.server.module.message.Message;
 import com.github.jenya705.mcapi.server.util.PlayerUtils;
 import com.github.jenya705.mcapi.server.util.TokenUtils;
 import com.google.inject.Inject;
@@ -18,10 +21,9 @@ import java.util.Collections;
 /**
  * @author Jenya705
  */
+@NoConfig
 @AdditionalPermissions("others")
 public class CreateBotCommand extends AdvancedCommandExecutor<CreateBotArguments> {
-
-    private CreateBotConfig config;
 
     private final GlobalConfig globalConfig;
     private final DatabaseModule databaseModule;
@@ -29,8 +31,9 @@ public class CreateBotCommand extends AdvancedCommandExecutor<CreateBotArguments
 
     @Inject
     public CreateBotCommand(ServerApplication application, ConfigModule configModule,
-                            DatabaseModule databaseModule, BotManagement botManagement) {
-        super(application, CreateBotArguments.class);
+                            DatabaseModule databaseModule, BotManagement botManagement,
+                            MessageContainer messageContainer) {
+        super(application, messageContainer, CreateBotArguments.class);
         globalConfig = configModule.global();
         this.databaseModule = databaseModule;
         this.botManagement = botManagement;
@@ -44,11 +47,11 @@ public class CreateBotCommand extends AdvancedCommandExecutor<CreateBotArguments
     @Override
     public void onCommand(CommandSender sender, CreateBotArguments args, String permission) {
         if (args.getName().length() > 64) {
-            sendMessage(sender, config.getBotNameTooLong());
+            sendMessage(sender, messageContainer().botNameTooLong());
             return;
         }
         if (args.getPlayer() != null && !hasPermission(sender, permission, "others")) {
-            sendMessage(sender, config.getNotPermittedForOthers());
+            sendMessage(sender, messageContainer().notPermitted());
             return;
         }
         getPlayer(sender, args.getPlayer())
@@ -67,21 +70,13 @@ public class CreateBotCommand extends AdvancedCommandExecutor<CreateBotArguments
                                                             generatedToken
                                                     );
                                     if (!canCreateBot) {
-                                        sendMessage(sender, config.getBotWithNameExist());
+                                        sendMessage(sender, messageContainer().botNameUsed());
                                         return;
                                     }
-                                    sendMessage(sender,
-                                            config.getSuccess(),
-                                            "%token%", generatedToken
-                                    );
+                                    sendMessage(sender, messageContainer().botCreation(generatedToken));
                                 }),
-                        () -> sendMessage(sender, config.getPlayerNotFound())
+                        () -> sendMessage(sender, messageContainer().playerNotFound(args.getPlayer()))
                 );
     }
 
-    @Override
-    public void setConfig(ConfigData config) {
-        this.config = new CreateBotConfig(config);
-        setConfig(this.config);
-    }
 }

@@ -24,6 +24,7 @@ import com.github.jenya705.mcapi.server.module.block.BlockDataModule;
 import com.github.jenya705.mcapi.server.module.bot.BotManagement;
 import com.github.jenya705.mcapi.server.module.command.CommandModule;
 import com.github.jenya705.mcapi.server.module.config.ConfigModule;
+import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.server.module.enchantment.EnchantmentStorage;
 import com.github.jenya705.mcapi.server.module.entity.capture.EntityCaptureModule;
@@ -65,6 +66,7 @@ import java.util.List;
 public class ApplicationClassesBinder extends AbstractModule {
 
     public static final List<Class<?>> modules = Arrays.asList(
+            MessageContainer.class,
             ConfigModule.class,
             EventTunnel.class,
             StorageModule.class,

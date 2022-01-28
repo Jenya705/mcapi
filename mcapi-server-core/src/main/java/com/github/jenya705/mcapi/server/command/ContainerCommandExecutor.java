@@ -4,10 +4,10 @@ import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.data.ConfigData;
+import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
 import com.github.jenya705.mcapi.server.stringful.StringfulIterator;
 import com.github.jenya705.mcapi.server.util.MutablePair;
 import com.github.jenya705.mcapi.server.util.Pair;
-import lombok.Getter;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,6 +23,7 @@ public class ContainerCommandExecutor extends AbstractApplicationModule implemen
 
     private final String permission;
     private final String command;
+    private final MessageContainer messageContainer;
 
     private ContainerCommandConfig config;
 
@@ -32,6 +33,7 @@ public class ContainerCommandExecutor extends AbstractApplicationModule implemen
 
     public ContainerCommandExecutor(ServerApplication application, Map<String, Object> nodes, String permission, String command) {
         super(application);
+        messageContainer = bean(MessageContainer.class);
         this.nodes = nodes;
         this.permission = permission;
         this.command = command;
@@ -59,7 +61,7 @@ public class ContainerCommandExecutor extends AbstractApplicationModule implemen
         String fullPermission = permission + pair.getRight();
         if (pair.getLeft() instanceof CommandExecutor) {
             if (!sender.hasPermission(fullPermission)) {
-                sender.sendMessage(CommandsUtils.placeholderMessage(config.getNotPermittedMessage()));
+                sender.sendMessage(messageContainer.render(messageContainer.notPermitted(), sender));
                 return;
             }
             ((CommandExecutor) pair.getLeft()).onCommand(sender, args, fullPermission);
@@ -67,18 +69,19 @@ public class ContainerCommandExecutor extends AbstractApplicationModule implemen
         else {
             Map<String, Object> node = (Map<String, Object>) pair.getLeft();
             String commandStart = "/" + command + pair.getRight().replace('.', ' ') + " ";
-            sender.sendMessage(CommandsUtils
-                    .listMessage(
-                            config.getHelpLayout(),
-                            config.getHelpElement(),
-                            config.getHelpListDelimiter(),
-                            new ArrayList<>(node.keySet()),
-                            it -> new String[]{
-                                    "%name%", it,
-                                    "%command%", commandStart + it
-                            }
-                    )
-            );
+            sender.sendMessage(messageContainer.render(
+                    messageContainer.commandHelp(
+                            node
+                                    .entrySet()
+                                    .stream()
+                                    .filter(it -> sender.hasPermission(fullPermission + "." + it.getKey()))
+                                    .filter(it -> !isGhost(it.getValue()))
+                                    .map(Map.Entry::getKey)
+                                    .collect(Collectors.toList()),
+                            commandStart
+                    ),
+                    sender
+            ));
         }
     }
 

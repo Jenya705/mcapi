@@ -3,8 +3,11 @@ package com.github.jenya705.mcapi.server.command.bot.list;
 import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.command.AdditionalPermissions;
+import com.github.jenya705.mcapi.server.command.NoConfig;
+import com.github.jenya705.mcapi.server.command.RootCommand;
 import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.server.data.ConfigData;
+import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.server.util.PlayerUtils;
 import com.google.inject.Inject;
@@ -14,16 +17,15 @@ import java.util.Collections;
 /**
  * @author Jenya705
  */
+@NoConfig
 @AdditionalPermissions("others")
 public class ListBotCommand extends AdvancedCommandExecutor<ListBotArguments> {
-
-    private ListBotConfig config;
 
     private final DatabaseModule databaseModule;
 
     @Inject
-    public ListBotCommand(ServerApplication application, DatabaseModule databaseModule) {
-        super(application, ListBotArguments.class);
+    public ListBotCommand(ServerApplication application, MessageContainer messageContainer, DatabaseModule databaseModule) {
+        super(application, messageContainer, ListBotArguments.class);
         this.databaseModule = databaseModule;
         this
                 .tab(() -> Collections.singletonList("<page>"))
@@ -35,38 +37,27 @@ public class ListBotCommand extends AdvancedCommandExecutor<ListBotArguments> {
     @Override
     public void onCommand(CommandSender sender, ListBotArguments args, String permission) {
         if (args.getPlayer() != null && !hasPermission(sender, permission, "others")) {
-            sendMessage(sender, config.getNotPermittedForOthers());
+            sendMessage(sender, messageContainer().notPermitted());
             return;
         }
-        getPlayer(sender, args.getPlayer())
-                .ifPresentOrElse(
-                        (player) ->
-                                sendListMessage(
-                                        sender,
-                                        config.getListLayout(),
-                                        config.getListElement(),
-                                        config.getListDelimiter(),
+        requirePlayer(
+                sender,
+                args.getPlayer(),
+                (player) ->
+                        sendMessage(
+                                sender,
+                                messageContainer().botList(
                                         databaseModule
                                                 .storage()
                                                 .findBotsPageByOwner(
                                                         player.getUuid(),
                                                         args.getPage(),
-                                                        config.getMaxElements()
+                                                        RootCommand.maxListElements
                                                 ),
-                                        bot -> new String[]{
-                                                "%name%", bot.getName(),
-                                                "%token%", bot.getToken()
-                                        },
-                                        "%page%", Integer.toString(args.getPage() + 1),
-                                        "%player_name%", player.getName()
-                                ),
-                        () -> sendMessage(sender, config.getPlayerNotFound())
-                );
-    }
-
-    @Override
-    public void setConfig(ConfigData config) {
-        this.config = new ListBotConfig(config);
-        setConfig(this.config);
+                                        player.getName(),
+                                        args.getPage() + 1
+                                )
+                        )
+        );
     }
 }

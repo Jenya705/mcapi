@@ -22,16 +22,6 @@ public class ContainerCommandConfig extends Config {
     @Global("notPermitted")
     private String notPermittedMessage = "&cYou are not permitted to do that";
 
-    @Value
-    private String helpLayout = "&eHelp:\n%list%";
-
-    @Value
-    private String helpElement = "&7- <click:suggest_command:%command%>&e%name%</click>";
-
-    @Value
-    @Global("listsDelimiter")
-    private String helpListDelimiter = "\n&r";
-
     public ContainerCommandConfig(ConfigData configData) {
         load(configData);
     }
