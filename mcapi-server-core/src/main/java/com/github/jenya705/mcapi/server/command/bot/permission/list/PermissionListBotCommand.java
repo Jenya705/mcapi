@@ -5,10 +5,12 @@ import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.server.command.CommandTabImpl;
-import com.github.jenya705.mcapi.server.command.CommandsUtils;
+import com.github.jenya705.mcapi.server.command.NoConfig;
+import com.github.jenya705.mcapi.server.command.RootCommand;
 import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.server.data.ConfigData;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
+import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
 import com.google.inject.Inject;
 
@@ -20,27 +22,26 @@ import java.util.stream.Collectors;
 /**
  * @author Jenya705
  */
+@NoConfig
 @AdditionalPermissions("others")
 public class PermissionListBotCommand extends AdvancedCommandExecutor<PermissionListBotArguments> {
 
     private final DatabaseModule databaseModule;
 
-    private PermissionListBotConfig config;
-
     @Inject
-    public PermissionListBotCommand(ServerApplication application, DatabaseModule databaseModule) {
-        super(application, PermissionListBotArguments.class);
+    public PermissionListBotCommand(ServerApplication application, MessageContainer messageContainer, DatabaseModule databaseModule) {
+        super(application, messageContainer, PermissionListBotArguments.class);
         this.databaseModule = databaseModule;
         this
                 .databaseTab((sender, permission, databaseGetter) ->
-                        sender instanceof Player ?
-                                databaseGetter
-                                        .getBotsByOwner(((Player) sender).getUuid())
-                                        .stream()
-                                        .map(BotEntity::getName)
-                                        .map(CommandTabImpl::of)
-                                        .collect(Collectors.toList())
-                                : null,
+                                sender instanceof Player ?
+                                        databaseGetter
+                                                .getBotsByOwner(((Player) sender).getUuid())
+                                                .stream()
+                                                .map(BotEntity::getName)
+                                                .map(CommandTabImpl::of)
+                                                .collect(Collectors.toList())
+                                        : null,
                         true
                 )
                 .tab(() -> Collections.singletonList("<is_token>"))
@@ -62,11 +63,11 @@ public class PermissionListBotCommand extends AdvancedCommandExecutor<Permission
                         .filter(it -> it.getOwner().equals(uuid))
                         .collect(Collectors.toList());
                 if (bots.isEmpty()) {
-                    sendMessage(sender, config.getBotNotExist());
+                    sendMessage(sender, messageContainer().botNotFound());
                     return;
                 }
                 else if (bots.size() > 1) {
-                    sendMessage(sender, config.getTooManyBots());
+                    sendMessage(sender, messageContainer().provideToken());
                     return;
                 }
                 bot = bots.get(0);
@@ -77,43 +78,24 @@ public class PermissionListBotCommand extends AdvancedCommandExecutor<Permission
                         .findBotByToken(args.getName());
                 if (bot == null ||
                         (!bot.getOwner().equals(uuid) && !hasPermission(sender, permission, "others"))) {
-                    sendMessage(sender, config.getNotPermitted());
+                    sendMessage(sender, messageContainer().notPermitted());
                     return;
                 }
             }
-            sendListMessage(
+            sendMessage(
                     sender,
-                    config.getListLayout(),
-                    config.getListElement(),
-                    config.getListDelimiter(),
-                    databaseModule
-                            .storage()
-                            .findPermissionsPageById(
-                                    bot.getId(),
-                                    args.getPage(),
-                                    config.getMaxElements()
-                            ),
-                    permissionEntity -> new String[]{
-                            "%toggle%",
-                            CommandsUtils.placeholderMessage(
-                                    permissionEntity.isToggled() ?
-                                            config.getPermissionEnabled() :
-                                            config.getPermissionDisabled()
-                            ),
-                            "%permission_name%",
-                            permissionEntity.toLocalPermission()
-                    },
-                    "%page%",
-                    Integer.toString(args.getPage() + 1),
-                    "%bot_name%",
-                    bot.getName()
+                    messageContainer().permissionList(
+                            databaseModule
+                                    .storage()
+                                    .findPermissionsPageById(
+                                            bot.getId(),
+                                            args.getPage(),
+                                            RootCommand.maxListElements
+                                    ),
+                            bot.getName(),
+                            args.getPage() + 1
+                    )
             );
         });
-    }
-
-    @Override
-    public void setConfig(ConfigData config) {
-        this.config = new PermissionListBotConfig(config);
-        setConfig(this.config);
     }
 }

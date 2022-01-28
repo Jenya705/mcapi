@@ -4,6 +4,7 @@ import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.server.data.ConfigData;
+import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
 import com.google.inject.Inject;
 
 import java.util.Collections;
@@ -16,8 +17,8 @@ public class ConnectedEventTunnelsCommand extends AdvancedCommandExecutor<Connec
     private ConnectedEventTunnelsConfig config;
 
     @Inject
-    public ConnectedEventTunnelsCommand(ServerApplication application) {
-        super(application, ConnectedEventTunnelsArguments.class);
+    public ConnectedEventTunnelsCommand(ServerApplication application, MessageContainer messageContainer) {
+        super(application, messageContainer, ConnectedEventTunnelsArguments.class);
         this
                 .tab(() -> Collections.singletonList("<page>"));
     }
@@ -44,6 +45,5 @@ public class ConnectedEventTunnelsCommand extends AdvancedCommandExecutor<Connec
     @Override
     public void setConfig(ConfigData config) {
         this.config = new ConnectedEventTunnelsConfig(config);
-        setConfig(this.config);
     }
 }

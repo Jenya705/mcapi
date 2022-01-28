@@ -28,6 +28,7 @@ import com.github.jenya705.mcapi.server.util.MultivaluedMap;
 import com.github.jenya705.mcapi.server.util.OnlinePlayerImitation;
 import com.github.jenya705.mcapi.server.util.ReactiveUtils;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -35,6 +36,7 @@ import java.util.stream.Stream;
 /**
  * @author Jenya705
  */
+@Singleton
 public class LinkingModuleImpl extends AbstractApplicationModule implements LinkingModule {
 
     private final LinkingModuleConfig config;

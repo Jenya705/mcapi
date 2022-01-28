@@ -1,9 +1,9 @@
 package com.github.jenya705.mcapi.server.command.tunnels.connected;
 
-import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutorConfig;
 import com.github.jenya705.mcapi.server.data.ConfigData;
 import com.github.jenya705.mcapi.server.data.loadable.Global;
 import com.github.jenya705.mcapi.server.data.loadable.Value;
+import com.github.jenya705.mcapi.server.module.config.Config;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,7 +14,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class ConnectedEventTunnelsConfig extends AdvancedCommandExecutorConfig {
+public class ConnectedEventTunnelsConfig extends Config {
 
     @Value
     private String listLayout = "&eConnected event tunnels\n%list%\nPage %page%";

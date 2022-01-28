@@ -12,9 +12,9 @@ import com.github.jenya705.mcapi.server.command.CommandExecutor;
 import com.github.jenya705.mcapi.server.command.CommandTab;
 import com.github.jenya705.mcapi.server.command.NoConfig;
 import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutor;
-import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutorConfig;
 import com.github.jenya705.mcapi.server.data.ConfigData;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
+import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
 import com.github.jenya705.mcapi.server.stringful.StringfulDataValueFunction;
 import com.github.jenya705.mcapi.server.stringful.StringfulIterator;
 import com.github.jenya705.mcapi.server.stringful.StringfulListParser;
@@ -39,12 +39,11 @@ public class ApiCommandExecutor extends AbstractApplicationModule implements Com
     private final List<String> names = new ArrayList<>();
     private final List<Supplier<List<String>>> tabs;
     private final String path;
+    private final MessageContainer messageContainer;
 
-    private final AdvancedCommandExecutorConfig config;
-
-    public ApiCommandExecutor(ServerApplication application, String path, CommandModule commandModule, AbstractBot owner, AdvancedCommandExecutorConfig config, CommandValueOption... valueOptions) {
+    public ApiCommandExecutor(ServerApplication application, String path, CommandModule commandModule, AbstractBot owner, MessageContainer messageContainer, CommandValueOption... valueOptions) {
         super(application);
-        this.config = config;
+        this.messageContainer = messageContainer;
         this.path = path;
         this.owner = owner;
         this.commandModule = commandModule;
@@ -101,7 +100,7 @@ public class ApiCommandExecutor extends AbstractApplicationModule implements Com
                                         RestCommandInteractionEvent.type
                                 )
                 )
-                .ifFailed(error -> AdvancedCommandExecutor.handleOnError(app(), error, sender, config));
+                .ifFailed(error -> AdvancedCommandExecutor.handleOnError(app(), error, sender, messageContainer));
     }
 
     @Override

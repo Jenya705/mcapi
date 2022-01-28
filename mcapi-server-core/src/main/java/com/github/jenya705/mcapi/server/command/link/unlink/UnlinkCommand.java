@@ -11,6 +11,7 @@ import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.server.module.config.ConfigModule;
 import com.github.jenya705.mcapi.server.module.config.GlobalConfig;
+import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.server.module.link.LinkingModule;
 import com.github.jenya705.mcapi.server.util.PlayerUtils;
@@ -34,8 +35,9 @@ public class UnlinkCommand extends AdvancedCommandExecutor<UnlinkArguments> {
 
     @Inject
     public UnlinkCommand(ServerApplication application, DatabaseModule databaseModule,
-                         ConfigModule configModule, LinkingModule linkingModule) {
-        super(application, UnlinkArguments.class);
+                         ConfigModule configModule, LinkingModule linkingModule,
+                         MessageContainer messageContainer) {
+        super(application, messageContainer, UnlinkArguments.class);
         this.databaseModule = databaseModule;
         this.globalConfig = configModule.global();
         this.linkingModule = linkingModule;
@@ -107,6 +109,5 @@ public class UnlinkCommand extends AdvancedCommandExecutor<UnlinkArguments> {
     @Override
     public void setConfig(ConfigData config) {
         this.config = new UnlinkConfig(config);
-        setConfig(this.config);
     }
 }

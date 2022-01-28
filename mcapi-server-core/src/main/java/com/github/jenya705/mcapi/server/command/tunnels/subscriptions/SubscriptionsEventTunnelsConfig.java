@@ -1,9 +1,9 @@
 package com.github.jenya705.mcapi.server.command.tunnels.subscriptions;
 
-import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutorConfig;
 import com.github.jenya705.mcapi.server.data.ConfigData;
 import com.github.jenya705.mcapi.server.data.loadable.Global;
 import com.github.jenya705.mcapi.server.data.loadable.Value;
+import com.github.jenya705.mcapi.server.module.config.Config;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,7 +14,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class SubscriptionsEventTunnelsConfig extends AdvancedCommandExecutorConfig {
+public class SubscriptionsEventTunnelsConfig extends Config {
 
     @Value
     private String listLayout = "&eSubscriptions %name%\n%list%\nPage %page%";

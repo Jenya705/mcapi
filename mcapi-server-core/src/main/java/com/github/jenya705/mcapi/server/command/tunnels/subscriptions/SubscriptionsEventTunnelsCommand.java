@@ -7,6 +7,7 @@ import com.github.jenya705.mcapi.server.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.server.data.ConfigData;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
+import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.server.module.web.tunnel.EventTunnelClient;
 import com.google.inject.Inject;
@@ -27,8 +28,8 @@ public class SubscriptionsEventTunnelsCommand extends AdvancedCommandExecutor<Su
     private SubscriptionsEventTunnelsConfig config;
 
     @Inject
-    public SubscriptionsEventTunnelsCommand(ServerApplication application, DatabaseModule databaseModule) {
-        super(application, SubscriptionsEventTunnelsArguments.class);
+    public SubscriptionsEventTunnelsCommand(ServerApplication application, MessageContainer messageContainer, DatabaseModule databaseModule) {
+        super(application, messageContainer, SubscriptionsEventTunnelsArguments.class);
         this.databaseModule = databaseModule;
         this
                 .tab(() -> Collections.singletonList("<token>"))
@@ -77,6 +78,5 @@ public class SubscriptionsEventTunnelsCommand extends AdvancedCommandExecutor<Su
     @Override
     public void setConfig(ConfigData config) {
         this.config = new SubscriptionsEventTunnelsConfig(config);
-        setConfig(this.config);
     }
 }
