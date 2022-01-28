@@ -3,6 +3,10 @@ package com.github.jenya705.mcapi.server.module.config.message;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.server.entity.BotPermissionEntity;
+import com.github.jenya705.mcapi.server.module.link.LinkObject;
+import com.github.jenya705.mcapi.server.module.link.LinkingModule;
+import com.github.jenya705.mcapi.server.module.localization.LocalizationModule;
+import com.github.jenya705.mcapi.server.module.web.tunnel.EventTunnelClient;
 import com.github.jenya705.mcapi.server.util.Pair;
 import com.google.inject.Singleton;
 import net.kyori.adventure.key.Key;
@@ -15,9 +19,7 @@ import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.TranslationRegistry;
 import net.kyori.adventure.util.UTF8ResourceBundleControl;
 
-import java.util.Collection;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -85,6 +87,15 @@ public class DefaultMessageContainer implements MessageContainer {
     @Override
     public Component badSuccess() {
         return badSuccess;
+    }
+
+    private static final Component declined = Component
+            .translatable("mcapi.declined")
+            .color(errorColor);
+
+    @Override
+    public Component declined() {
+        return declined;
     }
 
     private static final Component warning = Component
@@ -233,7 +244,7 @@ public class DefaultMessageContainer implements MessageContainer {
     }
 
     @Override
-    public Component linksList(Collection<Pair<BotLinkEntity, BotEntity>> linkEntities, String playerName, int page) {
+    public Component linkList(Collection<Pair<BotLinkEntity, BotEntity>> linkEntities, String playerName, int page) {
         return Component
                 .translatable("mcapi.links.list.header")
                 .args(Component.text(playerName))
@@ -266,6 +277,46 @@ public class DefaultMessageContainer implements MessageContainer {
                 .append(page(page));
     }
 
+    @Override
+    public Component eventTunnelList(Collection<? extends EventTunnelClient> eventTunnels, int page) {
+        return Component
+                .translatable("mcapi.eventtunnels.header")
+                .color(defaultColor)
+                .append(list(
+                        eventTunnels
+                                .stream()
+                                .map(client -> Component
+                                        .text(
+                                                client.getOwner() == null || client.getOwner().getEntity() == null
+                                                        ? "unknown" : client.getOwner().getEntity().getName()
+                                        )
+                                )
+                                .collect(Collectors.toList())
+                ))
+                .append(Component.newline())
+                .append(page(page));
+    }
+
+    @Override
+    public Component subscriptionList(Collection<String> subscriptions, String botName, int page) {
+        return Component
+                .translatable("mcapi.eventtunnels.subscriptions.header")
+                .args(Component.text(botName))
+                .color(defaultColor)
+                .append(stringList(subscriptions))
+                .append(Component.newline())
+                .append(page(page));
+    }
+
+    @Override
+    public Component localizedPermissionList(Collection<String> localizedPermissions, String botName) {
+        return Component
+                .translatable("mcapi.permission.localized.header")
+                .args(Component.text(botName))
+                .color(defaultColor)
+                .append(stringList(localizedPermissions));
+    }
+
     private final Component provideToken = Component
             .translatable("mcapi.bot.token.provide")
             .color(errorColor);
@@ -273,6 +324,109 @@ public class DefaultMessageContainer implements MessageContainer {
     @Override
     public Component provideToken() {
         return provideToken;
+    }
+
+    private final Component disabledByAdmin = Component
+            .translatable("mcapi.disabled.admin")
+            .color(errorColor);
+
+    @Override
+    public Component disabledByAdmin() {
+        return disabledByAdmin;
+    }
+
+    private final Component notLinked = Component
+            .translatable("mcapi.link.not")
+            .color(errorColor);
+
+    @Override
+    public Component notLinked() {
+        return notLinked;
+    }
+
+    private final Component notConnectedToGateway = Component
+            .translatable("mcapi.gateway.notconnected")
+            .color(errorColor);
+
+    @Override
+    public Component notConnectedToGateway() {
+        return notConnectedToGateway;
+    }
+
+    private final Component toggleFalseText = Component
+            .translatable("mcapi.link.request.button.toggle.false")
+            .color(errorColor)
+            .decorate(TextDecoration.UNDERLINED);
+
+    private final Component toggleTrueText = Component
+            .translatable("mcapi.link.request.button.toggle.true")
+            .color(successColor)
+            .decorate(TextDecoration.UNDERLINED);
+
+    private final Component acceptButtonText = Component
+            .translatable("mcapi.link.request.button.accept")
+            .color(successColor);
+
+    private final Component declineButtonText = Component
+            .translatable("mcapi.link.request.button.decline")
+            .color(errorColor);
+
+    @Override
+    public Component linkRequest(LinkObject request, LocalizationModule localizationModule) {
+        Component result = Component
+                .translatable("mcapi.link.request.title")
+                .args(Component.text(request.getBot().getEntity().getName()))
+                .color(defaultColor)
+                .append(list(
+                        Arrays
+                                .stream(request.getRequest().getRequireRequestPermissions())
+                                .map(it -> Component.text(localizationModule.getLinkPermissionLocalization(it)))
+                                .collect(Collectors.toList())
+                ))
+                .append(list(
+                        request
+                                .getOptionalPermissions()
+                                .entrySet()
+                                .stream()
+                                .map(permissionEntry -> Component
+                                        .text(localizationModule.getLinkPermissionLocalization(permissionEntry.getKey()))
+                                        .append(Component.space())
+                                        .append(dash)
+                                        .append(Component.space())
+                                        .append(
+                                                (permissionEntry.getValue() ? toggleTrueText : toggleFalseText)
+                                                        .clickEvent(ClickEvent.runCommand(
+                                                                LinkingModule.linkCommand + " toggle " +
+                                                                        request.getId() + " " + permissionEntry.getKey()
+                                                        ))
+                                        )
+                                )
+                                .collect(Collectors.toList())
+                ));
+        if (request.getRequest().getMinecraftRequestCommands().length != 0) {
+            result = result
+                    .append(Component.newline())
+                    .append(Component
+                            .translatable("mcapi.link.request.minecraft.command.title")
+                            .color(defaultColor)
+                    )
+                    .append(stringList(List.of(
+                            request.getRequest().getMinecraftRequestCommands()
+                    )));
+        }
+        return result
+                .append(Component.newline())
+                .append(acceptButtonText
+                        .clickEvent(ClickEvent.runCommand(
+                                LinkingModule.linkCommand + " end " + request.getId() + " true"
+                        ))
+                )
+                .append(Component.space())
+                .append(declineButtonText
+                        .clickEvent(ClickEvent.runCommand(
+                                LinkingModule.linkCommand + " end " + request.getId() + " false"
+                        ))
+                );
     }
 
     private static Component inBrackets(Component component) {

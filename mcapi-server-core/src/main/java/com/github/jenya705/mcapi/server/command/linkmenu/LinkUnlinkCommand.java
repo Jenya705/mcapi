@@ -9,6 +9,7 @@ import com.github.jenya705.mcapi.server.command.MenuCommand;
 import com.github.jenya705.mcapi.server.data.ConfigData;
 import com.github.jenya705.mcapi.server.data.loadable.Value;
 import com.github.jenya705.mcapi.server.module.config.Config;
+import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
 import com.github.jenya705.mcapi.server.module.link.LinkingModule;
 import com.github.jenya705.mcapi.server.stringful.StringfulIterator;
 import com.google.inject.Inject;
@@ -21,19 +22,7 @@ import lombok.ToString;
  */
 public class LinkUnlinkCommand extends MenuCommand implements BaseCommon {
 
-    @Getter
-    @Setter
-    @ToString
-    static class CommandConfig extends Config {
-        @Value
-        private String success = "&cUnlinked!";
-
-        public CommandConfig(ConfigData configData) {
-            load(configData);
-        }
-    }
-
-    private CommandConfig config;
+    private final MessageContainer messageContainer;
     private final LinkingModule linkingModule;
 
     private final ServerApplication application;
@@ -44,10 +33,11 @@ public class LinkUnlinkCommand extends MenuCommand implements BaseCommon {
     }
 
     @Inject
-    public LinkUnlinkCommand(ServerApplication application, LinkingModule linkingModule) {
+    public LinkUnlinkCommand(ServerApplication application, LinkingModule linkingModule, MessageContainer messageContainer) {
         super(application);
         this.application = application;
         this.linkingModule = linkingModule;
+        this.messageContainer = messageContainer;
     }
 
     @Override
@@ -58,11 +48,6 @@ public class LinkUnlinkCommand extends MenuCommand implements BaseCommon {
         Player player = (Player) sender;
         int botId = Integer.parseInt(args.next());
         linkingModule.unlink(botId, player);
-        player.sendMessage(CommandsUtils.placeholderMessage(config.getSuccess()));
-    }
-
-    @Override
-    public void setConfig(ConfigData config) {
-        this.config = new CommandConfig(config);
+        player.sendMessage(messageContainer.render(messageContainer.success(), player));
     }
 }

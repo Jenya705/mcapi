@@ -9,7 +9,6 @@ import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.rest.event.RestLinkEvent;
 import com.github.jenya705.mcapi.rest.event.RestUnlinkEvent;
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.application.OnStartup;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.command.CommandsUtils;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
@@ -20,6 +19,7 @@ import com.github.jenya705.mcapi.server.form.FormPlatformProvider;
 import com.github.jenya705.mcapi.server.form.component.*;
 import com.github.jenya705.mcapi.server.module.command.CommandModule;
 import com.github.jenya705.mcapi.server.module.config.ConfigModule;
+import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.server.module.localization.LocalizationModule;
 import com.github.jenya705.mcapi.server.module.storage.StorageModule;
@@ -39,33 +39,27 @@ import java.util.stream.Stream;
 @Singleton
 public class LinkingModuleImpl extends AbstractApplicationModule implements LinkingModule {
 
-    private final LinkingModuleConfig config;
     private final LinkIgnores linkIgnores;
 
-    private final FormPlatformProvider formProvider;
     private final DatabaseModule databaseModule;
     private final StorageModule storageModule;
     private final LocalizationModule localizationModule;
     private final CommandModule commandModule;
+    private final MessageContainer messageContainer;
 
     private final MultivaluedMap<UUID, LinkObject> links = MultivaluedMap.create();
 
     @Inject
-    public LinkingModuleImpl(ServerApplication application, FormPlatformProvider formProvider,
+    public LinkingModuleImpl(ServerApplication application,
                              DatabaseModule databaseModule, StorageModule storageModule,
                              LocalizationModule localizationModule, CommandModule commandModule,
-                             ConfigModule configModule) {
+                             MessageContainer messageContainer) {
         super(application);
-        config = new LinkingModuleConfig(
-                configModule
-                        .getConfig()
-                        .required("linking")
-        );
-        this.formProvider = formProvider;
         this.databaseModule = databaseModule;
         this.storageModule = storageModule;
         this.localizationModule = localizationModule;
         this.commandModule = commandModule;
+        this.messageContainer = messageContainer;
         eventLoop()
                 .handler(QuitEvent.class, event -> {
                     Player player = new OnlinePlayerImitation(event.getPlayer());
@@ -92,106 +86,13 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
     }
 
     public void sendMessage(Player player, LinkObject request) {
-        formProvider.sendMessage(player,
-                formProvider
-                        .newBuilder()
-                        .components(
-                                config.getLinkMessageComponents().toArray(String[]::new),
-                                Map.of(
-                                        "newline", NewLineComponent.get(),
-                                        "title", TitleComponent.of(
-                                                CommandsUtils.placeholderMessage(
-                                                        config.getTitle(),
-                                                        "%bot_name%", request.getBot().getEntity().getName()
-                                                )
-                                        ),
-                                        "content", ListComponent.joining(
-                                                new FormComponent[]{
-                                                        ContentComponent.of(CommandsUtils.listMessage(
-                                                                config.getContentLayout(),
-                                                                config.getContentRequiredElement(),
-                                                                config.getContentDelimiter(),
-                                                                Arrays.asList(request.getRequest().getRequireRequestPermissions()),
-                                                                it -> new String[]{
-                                                                        "%permission%", localizationModule.getLinkPermissionLocalization(it)
-                                                                },
-                                                                "%bot_name%", request.getBot().getEntity().getName()
-                                                        ))
-                                                },
-                                                request
-                                                        .getOptionalPermissions()
-                                                        .entrySet()
-                                                        .stream()
-                                                        .map(permissionEntry ->
-                                                                ListComponent.of(
-                                                                        ContentComponent.of(
-                                                                                CommandsUtils.placeholderMessage(
-                                                                                        config.getContentDelimiter()
-                                                                                )
-                                                                        ),
-                                                                        ContentComponent.of(
-                                                                                CommandsUtils
-                                                                                        .placeholderMessage(
-                                                                                                config.getContentOptionalElement(),
-                                                                                                "%permission%", localizationModule
-                                                                                                        .getLinkPermissionLocalization(
-                                                                                                                permissionEntry.getKey()
-                                                                                                        )
-                                                                                        )
-                                                                        ),
-                                                                        ButtonComponent.of(
-                                                                                CommandsUtils
-                                                                                        .placeholderMessage(
-                                                                                                permissionEntry.getValue() ?
-                                                                                                        config.getContentOptionalToggleFalse() :
-                                                                                                        config.getContentOptionalToggleTrue()
-                                                                                        ),
-                                                                                getCommand(
-                                                                                        "toggle %d %s",
-                                                                                        request.getId(),
-                                                                                        permissionEntry.getKey()
-                                                                                )
-                                                                        )
-                                                                )
-                                                        )
-                                                        .toArray(FormComponent[]::new),
-                                                new FormComponent[]{
-                                                        ContentComponent.of(CommandsUtils.listMessage(
-                                                                config.getContentMinecraftCommandLayout(),
-                                                                config.getContentMinecraftCommandElement(),
-                                                                config.getContentDelimiter(),
-                                                                Arrays.asList(request.getRequest().getMinecraftRequestCommands()),
-                                                                it -> new String[]{
-                                                                        "%command%",
-                                                                        String.format(
-                                                                                "%s %s", request.getBot().getEntity().getName(), it
-                                                                        )
-                                                                }
-                                                        ))
-                                                }
-                                        ),
-                                        "accept", ButtonComponent.of(
-                                                CommandsUtils.placeholderMessage(
-                                                        config.getAcceptButton()
-                                                ),
-                                                getCommand(
-                                                        "end %d true",
-                                                        request.getId()
-                                                )
-                                        ),
-                                        "decline", ButtonComponent.of(
-                                                CommandsUtils.placeholderMessage(
-                                                        config.getDeclineButton()
-                                                ),
-                                                getCommand(
-                                                        "end %d false",
-                                                        request.getId()
-                                                )
-                                        )
-                                )
-                        )
-                        .build()
-        );
+        player.sendMessage(messageContainer.render(
+                messageContainer.linkRequest(
+                        request,
+                        localizationModule
+                ),
+                player
+        ));
     }
 
     @Override
@@ -265,43 +166,46 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
                                             .toArray(String[]::new)
                             )
                     ));
-            linkObject
-                    .getOptionalPermissions()
-                    .entrySet()
-                    .stream()
-                    .filter(Map.Entry::getValue)
-                    .map(Map.Entry::getKey)
-                    .forEach(it -> savePermission(linkObject, it, player));
-            for (String requirePermission: linkObject.getRequest().getRequireRequestPermissions()) {
-                savePermission(linkObject, requirePermission, player);
+            if (enabled) {
+                linkObject
+                        .getOptionalPermissions()
+                        .entrySet()
+                        .stream()
+                        .filter(Map.Entry::getValue)
+                        .map(Map.Entry::getKey)
+                        .forEach(it -> savePermission(linkObject, it, player));
+                for (String requirePermission : linkObject.getRequest().getRequireRequestPermissions()) {
+                    savePermission(linkObject, requirePermission, player);
+                }
+                databaseModule
+                        .storage()
+                        .save(new BotLinkEntity(
+                                linkObject.getId(),
+                                player.getUuid()
+                        ));
             }
-            databaseModule
-                    .storage()
-                    .save(new BotLinkEntity(
-                            linkObject.getId(),
-                            player.getUuid()
-                    ));
         });
-        player.sendMessage(
-                CommandsUtils.placeholderMessage(
-                        enabled ?
-                                config.getEnabledEnd() :
-                                config.getDisabledEnd()
-                )
-        );
-        core()
-                .givePermission(
-                        player,
-                        true,
-                        Arrays
-                                .stream(linkObject.getRequest().getMinecraftRequestCommands())
-                                .map(it -> String.format(
-                                        CommandModule.permissionFormat,
-                                        linkObject.getBot().getEntity().getId()
-                                        ) + "." + it.replace(' ', '.')
-                                )
-                                .toArray(String[]::new)
-                );
+        player.sendMessage(messageContainer.render(
+                enabled ?
+                        messageContainer.success() :
+                        messageContainer.declined(),
+                player
+        ));
+        if (enabled) {
+            core()
+                    .givePermission(
+                            player,
+                            true,
+                            Arrays
+                                    .stream(linkObject.getRequest().getMinecraftRequestCommands())
+                                    .map(it -> String.format(
+                                                    CommandModule.permissionFormat,
+                                                    linkObject.getBot().getEntity().getId()
+                                            ) + "." + it.replace(' ', '.')
+                                    )
+                                    .toArray(String[]::new)
+                    );
+        }
     }
 
     private void validateLinkRequest(AbstractBot bot, Player player, LinkRequest request) {

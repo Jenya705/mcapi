@@ -1,10 +1,14 @@
 package com.github.jenya705.mcapi.server.module.config.message;
 
 import com.github.jenya705.mcapi.CommandSender;
+import com.github.jenya705.mcapi.LinkRequest;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.server.entity.BotPermissionEntity;
+import com.github.jenya705.mcapi.server.module.link.LinkObject;
+import com.github.jenya705.mcapi.server.module.localization.LocalizationModule;
+import com.github.jenya705.mcapi.server.module.web.tunnel.EventTunnelClient;
 import com.github.jenya705.mcapi.server.util.Pair;
 import com.google.inject.ImplementedBy;
 import net.kyori.adventure.text.Component;
@@ -40,6 +44,8 @@ public interface MessageContainer {
 
     Component badSuccess();
 
+    Component declined();
+
     Component warning();
 
     Component botCreation(String token);
@@ -66,8 +72,22 @@ public interface MessageContainer {
 
     Component permissionList(Collection<? extends BotPermissionEntity> permissionEntities, String botName, int page);
 
-    Component linksList(Collection<Pair<BotLinkEntity, BotEntity>> linkEntities, String playerName, int page);
+    Component linkList(Collection<Pair<BotLinkEntity, BotEntity>> linkEntities, String playerName, int page);
+
+    Component eventTunnelList(Collection<? extends EventTunnelClient> eventTunnels, int page);
+
+    Component subscriptionList(Collection<String> subscriptions, String botName, int page);
+
+    Component localizedPermissionList(Collection<String> localizedPermissions, String botName);
 
     Component provideToken();
+
+    Component disabledByAdmin();
+
+    Component notLinked();
+
+    Component notConnectedToGateway();
+
+    Component linkRequest(LinkObject request, LocalizationModule localizationModule);
 
 }

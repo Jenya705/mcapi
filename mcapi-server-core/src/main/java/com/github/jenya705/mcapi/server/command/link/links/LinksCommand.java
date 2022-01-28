@@ -2,6 +2,7 @@ package com.github.jenya705.mcapi.server.command.link.links;
 
 import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
+import com.github.jenya705.mcapi.server.command.NoConfig;
 import com.github.jenya705.mcapi.server.command.RootCommand;
 import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 /**
  * @author Jenya705
  */
+@NoConfig
 public class LinksCommand extends AdvancedCommandExecutor<LinksArguments> {
 
     private final DatabaseModule databaseModule;
@@ -39,7 +41,7 @@ public class LinksCommand extends AdvancedCommandExecutor<LinksArguments> {
                 player -> worker().invoke(() ->
                         sendMessage(
                                 sender,
-                                messageContainer().linksList(
+                                messageContainer().linkList(
                                         databaseModule
                                                 .storage()
                                                 .findLinksByTarget(player.getUuid())
