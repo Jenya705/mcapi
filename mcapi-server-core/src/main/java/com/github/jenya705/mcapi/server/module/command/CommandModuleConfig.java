@@ -1,6 +1,5 @@
 package com.github.jenya705.mcapi.server.module.command;
 
-import com.github.jenya705.mcapi.server.command.ContainerCommandConfig;
 import com.github.jenya705.mcapi.server.data.ConfigData;
 import com.github.jenya705.mcapi.server.data.loadable.Value;
 import com.github.jenya705.mcapi.server.module.config.Config;
@@ -23,9 +22,6 @@ public class CommandModuleConfig extends Config {
 
     @Value
     private Pattern commandNamePattern = Pattern.compile("[a-zA-Z0-9_]*");
-
-    @Value
-    private ContainerCommandConfig container = new ContainerCommandConfig();
 
     public CommandModuleConfig(ConfigData configData) {
         load(configData);

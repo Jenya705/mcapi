@@ -39,9 +39,9 @@ public class DefaultEventTunnelClient extends SimpleStatefulWebSocketConnection<
     @Getter
     private AbstractBot owner;
 
-    public DefaultEventTunnelClient(ServerApplication application) {
+    public DefaultEventTunnelClient(ServerApplication application, AuthorizationModule authorizationModule) {
         this.application = application;
-        authorizationModule = bean(AuthorizationModule.class);
+        this.authorizationModule = authorizationModule;
         this
                 .defaultState(0)
                 .state(0, message -> {

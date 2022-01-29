@@ -93,7 +93,6 @@ public class CommandModuleImpl extends AbstractApplicationModule implements Comm
             botCommand = new ContainerCommandExecutor(
                     app(), owner.getEntity().getName(), globalCommandPermission
             );
-            botCommand.withConfig(config.getContainer());
             core().addCommand(owner.getEntity().getName(), botCommand, globalCommandPermission);
             botCommands.put(owner.getEntity().getId(), botCommand);
         }

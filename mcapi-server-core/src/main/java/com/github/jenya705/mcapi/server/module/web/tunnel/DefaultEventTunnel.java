@@ -4,6 +4,7 @@ import com.github.jenya705.mcapi.server.application.BaseCommon;
 import com.github.jenya705.mcapi.server.application.OnStartup;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.log.TimerTask;
+import com.github.jenya705.mcapi.server.module.authorization.AuthorizationModule;
 import com.github.jenya705.mcapi.server.module.web.WebServer;
 import com.github.jenya705.mcapi.server.module.web.websocket.container.WebSocketRouteContainerImpl;
 import com.google.inject.Inject;
@@ -20,6 +21,7 @@ import java.util.Collection;
 public class DefaultEventTunnel extends WebSocketRouteContainerImpl<DefaultEventTunnelClient> implements EventTunnel, BaseCommon {
 
     private final ServerApplication application;
+    private final AuthorizationModule authorizationModule;
 
     @Override
     public ServerApplication app() {
@@ -27,14 +29,15 @@ public class DefaultEventTunnel extends WebSocketRouteContainerImpl<DefaultEvent
     }
 
     @Inject
-    public DefaultEventTunnel(ServerApplication application) {
+    public DefaultEventTunnel(ServerApplication application, AuthorizationModule authorizationModule) {
         this.application = application;
+        this.authorizationModule = authorizationModule;
     }
 
     @OnStartup
     public void start() {
         TimerTask task = TimerTask.start(log, "Starting event tunnel...");
-        setFactoryMethod(() -> new DefaultEventTunnelClient(app()));
+        setFactoryMethod(() -> new DefaultEventTunnelClient(app(), authorizationModule));
         bean(WebServer.class).addWebSocketHandler("/tunnel", this);
         task.complete();
     }

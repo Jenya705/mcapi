@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class DefaultRoutePredicate implements RoutePredicate, RouteParameters {
+public class  DefaultRoutePredicate implements RoutePredicate, RouteParameters {
 
     private final UriPathTemplate pathTemplate;
     private final HttpMethod method;

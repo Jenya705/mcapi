@@ -25,8 +25,6 @@ public class ContainerCommandExecutor extends AbstractApplicationModule implemen
     private final String command;
     private final MessageContainer messageContainer;
 
-    private ContainerCommandConfig config;
-
     public ContainerCommandExecutor(ServerApplication application, String permission, String command) {
         this(application, new ConcurrentHashMap<>(), permission, command);
     }
@@ -37,10 +35,6 @@ public class ContainerCommandExecutor extends AbstractApplicationModule implemen
         this.nodes = nodes;
         this.permission = permission;
         this.command = command;
-    }
-
-    public void withConfig(ContainerCommandConfig config) {
-        this.config = config;
     }
 
     public Map<String, Object> getNodes() {
@@ -140,7 +134,6 @@ public class ContainerCommandExecutor extends AbstractApplicationModule implemen
 
     @Override
     public void setConfig(ConfigData config) {
-        this.config = new ContainerCommandConfig(config);
         setConfig(config, nodes);
         recalculatePermissions(permission, nodes);
     }
