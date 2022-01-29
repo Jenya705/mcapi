@@ -12,7 +12,10 @@ import com.github.jenya705.mcapi.server.command.CommandExecutor;
 import com.github.jenya705.mcapi.server.util.PlayerUtils;
 import com.github.jenya705.mcapi.world.World;
 
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -116,6 +119,10 @@ public interface ServerCore {
     Map<String, Object> loadConfig(String file) throws IOException;
 
     byte[] loadSpecific(String file) throws IOException;
+
+    default InputStream loadSpecificStream(String file) throws IOException {
+        return new ByteArrayInputStream(loadSpecific(file));
+    }
 
     @SuppressWarnings("unchecked")
     default void saveFile(String file, FileType type, Object content) throws IOException {

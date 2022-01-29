@@ -36,14 +36,11 @@ public class DefaultMessageContainer implements MessageContainer {
 
     private static final Component dash = Component.text("-").color(signColor);
 
-    private final TranslationRegistry registry;
+    private final MessageLoader loader;
 
     public DefaultMessageContainer() {
-        registry = TranslationRegistry.create(Key.key("mcapi", "main"));
-        registry.defaultLocale(Locale.ENGLISH);
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("mcapi", Locale.ENGLISH, UTF8ResourceBundleControl.get());
-        registry.registerAll(Locale.ENGLISH, resourceBundle, false);
-        GlobalTranslator.get().addSource(registry);
+        loader = new MessageLoader();
+        loader.load();
     }
 
     @Override
