@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.server.module.localization;
 
 import com.google.inject.ImplementedBy;
+import net.kyori.adventure.text.Component;
 
 /**
  * @author Jenya705
@@ -8,7 +9,6 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(LocalizationModuleImpl.class)
 public interface LocalizationModule {
 
-    String getLinkPermissionLocalization(String permissionName);
+    Component getLinkPermissionLocalization(String permissionName);
 
-    void setLinkPermissionLocalization(String permissionName, String value);
 }

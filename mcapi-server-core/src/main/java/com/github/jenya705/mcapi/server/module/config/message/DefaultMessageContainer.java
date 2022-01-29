@@ -306,12 +306,12 @@ public class DefaultMessageContainer implements MessageContainer {
     }
 
     @Override
-    public Component localizedPermissionList(Collection<String> localizedPermissions, String botName) {
+    public Component localizedPermissionList(Collection<Component> localizedPermissions, String botName) {
         return Component
                 .translatable("mcapi.permission.localized.header")
                 .args(Component.text(botName))
                 .color(defaultColor)
-                .append(stringList(localizedPermissions));
+                .append(list(localizedPermissions));
     }
 
     private final Component provideToken = Component
@@ -377,7 +377,7 @@ public class DefaultMessageContainer implements MessageContainer {
                 .append(list(
                         Arrays
                                 .stream(request.getRequest().getRequireRequestPermissions())
-                                .map(it -> Component.text(localizationModule.getLinkPermissionLocalization(it)))
+                                .map(localizationModule::getLinkPermissionLocalization)
                                 .collect(Collectors.toList())
                 ))
                 .append(list(
@@ -385,13 +385,13 @@ public class DefaultMessageContainer implements MessageContainer {
                                 .getOptionalPermissions()
                                 .entrySet()
                                 .stream()
-                                .map(permissionEntry -> Component
-                                        .text(localizationModule.getLinkPermissionLocalization(permissionEntry.getKey()))
+                                .map(permissionEntry -> localizationModule
+                                        .getLinkPermissionLocalization(permissionEntry.getKey())
                                         .append(Component.space())
                                         .append(dash)
                                         .append(Component.space())
                                         .append(
-                                                (permissionEntry.getValue() ? toggleTrueText : toggleFalseText)
+                                                (permissionEntry.getValue() ? toggleFalseText : toggleTrueText)
                                                         .clickEvent(ClickEvent.runCommand(
                                                                 LinkingModule.linkCommand + " toggle " +
                                                                         request.getId() + " " + permissionEntry.getKey()

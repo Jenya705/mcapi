@@ -78,7 +78,7 @@ public interface MessageContainer {
 
     Component subscriptionList(Collection<String> subscriptions, String botName, int page);
 
-    Component localizedPermissionList(Collection<String> localizedPermissions, String botName);
+    Component localizedPermissionList(Collection<Component> localizedPermissions, String botName);
 
     Component provideToken();
 
