@@ -10,15 +10,11 @@ import com.github.jenya705.mcapi.rest.event.RestLinkEvent;
 import com.github.jenya705.mcapi.rest.event.RestUnlinkEvent;
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
-import com.github.jenya705.mcapi.server.command.CommandsUtils;
+import com.github.jenya705.mcapi.server.command.CommandDescription;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.server.entity.BotPermissionEntity;
-import com.github.jenya705.mcapi.server.form.FormComponent;
-import com.github.jenya705.mcapi.server.form.FormPlatformProvider;
-import com.github.jenya705.mcapi.server.form.component.*;
 import com.github.jenya705.mcapi.server.module.command.CommandModule;
-import com.github.jenya705.mcapi.server.module.config.ConfigModule;
 import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.server.module.localization.LocalizationModule;
@@ -31,6 +27,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -79,6 +76,11 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
         validateLinkRequest(bot, player, request);
         LinkObject obj = new LinkObject(
                 request, bot,
+                Arrays
+                        .stream(request.getMinecraftRequestCommands())
+                        .map(it -> commandModule.getBotCommandExecutor(bot, it))
+                        .map(it -> it instanceof CommandDescription ? (CommandDescription) it : null)
+                        .collect(Collectors.toList()),
                 bot.getEntity().getId()
         );
         links.add(player.getUuid(), obj);

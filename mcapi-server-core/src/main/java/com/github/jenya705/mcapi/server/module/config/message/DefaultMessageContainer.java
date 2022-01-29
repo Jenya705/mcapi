@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi.server.module.config.message;
 
+import com.github.jenya705.mcapi.server.command.CommandDescription;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.server.entity.BotPermissionEntity;
@@ -401,15 +402,24 @@ public class DefaultMessageContainer implements MessageContainer {
                                 .collect(Collectors.toList())
                 ));
         if (request.getRequest().getMinecraftRequestCommands().length != 0) {
+            List<Component> commands = new ArrayList<>();
+            for (int i = 0; i < request.getRequest().getMinecraftRequestCommands().length; ++i) {
+                CommandDescription commandDescription = null;
+                if (request.getCommandDescriptions().size() > i) {
+                    commandDescription = request.getCommandDescriptions().get(i);
+                }
+                commands.add(Component.text(
+                        request.getRequest().getMinecraftRequestCommands()[i] +
+                                (commandDescription == null ? "" : " " + commandDescription.description())
+                ));
+            }
             result = result
                     .append(Component.newline())
                     .append(Component
                             .translatable("mcapi.link.request.minecraft.command.title")
                             .color(defaultColor)
                     )
-                    .append(stringList(List.of(
-                            request.getRequest().getMinecraftRequestCommands()
-                    )));
+                    .append(list(commands));
         }
         return result
                 .append(Component.newline())

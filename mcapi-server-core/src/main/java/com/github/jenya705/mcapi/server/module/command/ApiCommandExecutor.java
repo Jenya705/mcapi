@@ -8,6 +8,7 @@ import com.github.jenya705.mcapi.entity.event.EntityCommandInteractionEvent;
 import com.github.jenya705.mcapi.rest.command.RestCommandInteractionEvent;
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
+import com.github.jenya705.mcapi.server.command.CommandDescription;
 import com.github.jenya705.mcapi.server.command.CommandExecutor;
 import com.github.jenya705.mcapi.server.command.CommandTab;
 import com.github.jenya705.mcapi.server.command.NoConfig;
@@ -29,7 +30,7 @@ import java.util.stream.Collectors;
  * @author Jenya705
  */
 @NoConfig
-public class ApiCommandExecutor extends AbstractApplicationModule implements CommandExecutor {
+public class ApiCommandExecutor extends AbstractApplicationModule implements CommandExecutor, CommandDescription {
 
     public static final String others = "__others__";
 
@@ -40,6 +41,7 @@ public class ApiCommandExecutor extends AbstractApplicationModule implements Com
     private final List<Supplier<List<String>>> tabs;
     private final String path;
     private final MessageContainer messageContainer;
+    private final String description;
 
     public ApiCommandExecutor(ServerApplication application, String path, CommandModule commandModule, AbstractBot owner, MessageContainer messageContainer, CommandValueOption... valueOptions) {
         super(application);
@@ -50,14 +52,23 @@ public class ApiCommandExecutor extends AbstractApplicationModule implements Com
         if (valueOptions.length == 0) {
             parser = null;
             tabs = null;
+            description = "";
             return;
         }
         int requiredStart = Integer.MAX_VALUE;
+        StringBuilder descriptionBuilder = new StringBuilder();
         for (int i = 0; i < valueOptions.length; ++i) {
             CommandValueOption option = valueOptions[i];
-            if (!option.isRequired()) requiredStart = Math.min(i, requiredStart);
+            if (!option.isRequired()) {
+                requiredStart = Math.min(i, requiredStart);
+                descriptionBuilder.append(" [").append(option.getName()).append("]");
+            }
+            else {
+                descriptionBuilder.append(" <").append(option.getName()).append(">");
+            }
             names.add(option.getName());
         }
+        description = descriptionBuilder.substring(1);
         parser = new StringfulListParser(
                 requiredStart,
                 Arrays.stream(valueOptions)
@@ -67,6 +78,11 @@ public class ApiCommandExecutor extends AbstractApplicationModule implements Com
         tabs = Arrays.stream(valueOptions)
                 .map(this::generateTabFunction)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public String description() {
+        return description;
     }
 
     @Override
