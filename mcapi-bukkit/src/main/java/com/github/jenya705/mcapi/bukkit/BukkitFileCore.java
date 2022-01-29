@@ -50,6 +50,11 @@ public class BukkitFileCore {
         return Files.readAllBytes(fileObject.toPath());
     }
 
+    public InputStream loadSpecificStream(String file) throws IOException {
+        File fileObject = getFile(file);
+        return new FileInputStream(fileObject);
+    }
+
     public void saveConfig(String file, Map<String, Object> config) throws IOException {
         File fileObject = getFile(file + ".yml");
         fileObject.getParentFile().mkdirs();
