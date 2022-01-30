@@ -2,6 +2,7 @@ package com.github.jenya705.mcapi.server.util;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 /**
@@ -15,6 +16,10 @@ public interface MultivaluedMap<T, V> extends Map<T, List<V>> {
 
     static <T, V> MultivaluedMap<T, V> create() {
         return new MultivaluedMapImpl<>();
+    }
+
+    static <T, V> MultivaluedMap<T, V> concurrent() {
+        return of(new ConcurrentHashMap<>());
     }
 
     void add(T key, V value);

@@ -44,7 +44,7 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
     private final CommandModule commandModule;
     private final MessageContainer messageContainer;
 
-    private final MultivaluedMap<UUID, LinkObject> links = MultivaluedMap.create();
+    private final MultivaluedMap<UUID, LinkObject> links = MultivaluedMap.concurrent();
 
     @Inject
     public LinkingModuleImpl(ServerApplication application,
@@ -259,10 +259,6 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
         return getPlayerLinks(player)
                 .stream()
                 .filter(it -> it.getId() == index);
-    }
-
-    private static String getCommand(String command, Object... formats) {
-        return linkCommand + " " + String.format(command, formats);
     }
 
     private void savePermission(LinkObject linkObject, String permission, Player player) {
