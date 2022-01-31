@@ -1,7 +1,5 @@
 package com.github.jenya705.mcapi.server.worker;
 
-import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.module.config.ConfigModule;
 import com.github.jenya705.mcapi.server.util.FutureUtils;
 import com.google.inject.Inject;

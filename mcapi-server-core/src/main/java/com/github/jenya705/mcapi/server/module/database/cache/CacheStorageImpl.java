@@ -8,7 +8,6 @@ import com.github.jenya705.mcapi.server.entity.BotPermissionEntity;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.google.inject.Provider;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

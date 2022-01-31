@@ -1,9 +1,6 @@
 package com.github.jenya705.mcapi.server.form.component;
 
-import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.form.FormComponent;
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import java.util.HashMap;

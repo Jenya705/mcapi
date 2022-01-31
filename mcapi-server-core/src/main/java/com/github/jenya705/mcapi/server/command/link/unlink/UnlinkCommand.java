@@ -7,7 +7,6 @@ import com.github.jenya705.mcapi.server.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.server.command.CommandTab;
 import com.github.jenya705.mcapi.server.command.NoConfig;
 import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutor;
-import com.github.jenya705.mcapi.server.data.ConfigData;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.server.module.config.ConfigModule;

@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.bukkit;
 
-import com.github.jenya705.mcapi.server.application.guice.ApplicationBuilder;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
+import com.github.jenya705.mcapi.server.application.guice.ApplicationBuilder;
 import com.google.inject.Singleton;
 import lombok.Getter;
 import lombok.Setter;

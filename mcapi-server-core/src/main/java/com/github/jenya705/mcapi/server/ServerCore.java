@@ -13,7 +13,6 @@ import com.github.jenya705.mcapi.server.util.PlayerUtils;
 import com.github.jenya705.mcapi.world.World;
 
 import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;

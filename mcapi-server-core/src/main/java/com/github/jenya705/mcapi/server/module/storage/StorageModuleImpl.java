@@ -34,18 +34,16 @@ public class StorageModuleImpl extends AbstractApplicationModule implements Stor
         this.configModule = configModule;
         loadAndSave();
         for (DefaultPermission defaultPermission : DefaultPermission.values()) {
+            PermissionEntity permissionEntity = new PermissionEntity(
+                    defaultPermission.getName(),
+                    defaultPermission.isGlobal(),
+                    defaultPermission.isEnabledDefault()
+            );
             if (defaultPermission.isSelector()) {
-                addPermissionWithSelectors(new PermissionEntity(
-                        defaultPermission.getName(),
-                        defaultPermission.isGlobal(),
-                        defaultPermission.isEnabledDefault()
-                ));
-            } else {
-                addPermission(new PermissionEntity(
-                        defaultPermission.getName(),
-                        defaultPermission.isGlobal(),
-                        defaultPermission.isEnabledDefault()
-                ));
+                addPermissionWithSelectors(permissionEntity);
+            }
+            else {
+                addPermission(permissionEntity);
             }
         }
         for (VanillaMaterial material : VanillaMaterial.values()) {

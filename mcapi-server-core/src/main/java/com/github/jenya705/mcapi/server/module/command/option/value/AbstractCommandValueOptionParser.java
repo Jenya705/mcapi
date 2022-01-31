@@ -10,7 +10,6 @@ import com.github.jenya705.mcapi.server.module.rest.json.JsonUtils;
 import com.github.jenya705.mcapi.server.util.IteratorUtils;
 import lombok.SneakyThrows;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;

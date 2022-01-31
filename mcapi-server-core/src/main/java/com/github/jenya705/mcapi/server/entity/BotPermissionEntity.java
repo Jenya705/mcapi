@@ -2,7 +2,6 @@ package com.github.jenya705.mcapi.server.entity;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

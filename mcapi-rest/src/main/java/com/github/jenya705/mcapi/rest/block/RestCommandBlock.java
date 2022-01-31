@@ -1,7 +1,5 @@
 package com.github.jenya705.mcapi.rest.block;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jenya705.mcapi.block.data.CommandBlock;
 import lombok.AllArgsConstructor;
 import lombok.Data;

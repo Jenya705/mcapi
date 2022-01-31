@@ -173,7 +173,13 @@ public class ApplicationClassesBinder extends AbstractModule {
 
     @Override
     protected void configure() {
-        classes.forEach(this::bind);
+        classes.forEach(clazz -> {
+            try {
+                getProvider(clazz).get();
+            } catch (Exception e) {
+                bind(clazz);
+            }
+        });
     }
 
     public ApplicationBuilderLayer asLayer() {

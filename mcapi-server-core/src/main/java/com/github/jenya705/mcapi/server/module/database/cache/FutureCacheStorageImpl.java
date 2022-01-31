@@ -6,7 +6,6 @@ import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.server.entity.BotPermissionEntity;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
-import com.google.inject.Provider;
 
 import java.util.Collection;
 import java.util.UUID;

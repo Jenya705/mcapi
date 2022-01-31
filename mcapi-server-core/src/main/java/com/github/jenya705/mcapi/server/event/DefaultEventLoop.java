@@ -1,7 +1,5 @@
 package com.github.jenya705.mcapi.server.event;
 
-import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.util.CacheClassMap;
 import com.github.jenya705.mcapi.server.worker.Worker;
 import com.google.inject.Inject;

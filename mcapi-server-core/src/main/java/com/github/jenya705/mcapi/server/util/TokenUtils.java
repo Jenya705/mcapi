@@ -2,9 +2,7 @@ package com.github.jenya705.mcapi.server.util;
 
 import lombok.experimental.UtilityClass;
 
-import java.security.SecureRandom;
 import java.util.Date;
-import java.util.Random;
 import java.util.UUID;
 
 /**

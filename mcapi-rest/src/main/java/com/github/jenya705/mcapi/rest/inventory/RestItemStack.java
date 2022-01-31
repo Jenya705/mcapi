@@ -1,7 +1,5 @@
 package com.github.jenya705.mcapi.rest.inventory;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jenya705.mcapi.inventory.ItemStack;
 import com.github.jenya705.mcapi.jackson.DefaultNull;
 import com.github.jenya705.mcapi.rest.enchantment.RestItemEnchantment;

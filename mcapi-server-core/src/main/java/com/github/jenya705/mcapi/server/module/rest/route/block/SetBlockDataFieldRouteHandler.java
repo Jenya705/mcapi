@@ -2,7 +2,6 @@ package com.github.jenya705.mcapi.server.module.rest.route.block;
 
 import com.github.jenya705.mcapi.Routes;
 import com.github.jenya705.mcapi.block.Block;
-import com.github.jenya705.mcapi.block.BlockData;
 import com.github.jenya705.mcapi.error.BlockNotFoundException;
 import com.github.jenya705.mcapi.error.WorldNotFoundException;
 import com.github.jenya705.mcapi.server.application.ServerApplication;

@@ -10,17 +10,16 @@ import com.github.jenya705.mcapi.server.module.localization.LocalizationModule;
 import com.github.jenya705.mcapi.server.module.web.tunnel.EventTunnelClient;
 import com.github.jenya705.mcapi.server.util.Pair;
 import com.google.inject.Singleton;
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.translation.GlobalTranslator;
-import net.kyori.adventure.translation.TranslationRegistry;
-import net.kyori.adventure.util.UTF8ResourceBundleControl;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
