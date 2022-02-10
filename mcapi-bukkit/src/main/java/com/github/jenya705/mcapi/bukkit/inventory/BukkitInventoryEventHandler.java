@@ -6,6 +6,7 @@ import com.github.jenya705.mcapi.bukkit.wrapper.BukkitWrapper;
 import com.github.jenya705.mcapi.entity.event.EntityInventoryMoveEvent;
 import com.github.jenya705.mcapi.server.event.EventLoop;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -21,6 +22,7 @@ import java.util.Objects;
 /**
  * @author Jenya705
  */
+@Singleton
 public class BukkitInventoryEventHandler implements Listener {
 
     private final EventLoop eventLoop;

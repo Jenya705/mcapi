@@ -51,10 +51,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -200,9 +197,9 @@ public class RestModule extends AbstractApplicationModule {
                         LinkRequest.class,
                         RestLinkRequest.class,
                         rest -> new EntityLinkRequest(
-                                rest.getRequireRequestPermissions(),
-                                rest.getOptionalRequestPermissions(),
-                                rest.getMinecraftRequestCommands()
+                                Objects.requireNonNullElse(rest.getRequireRequestPermissions(), new String[0]),
+                                Objects.requireNonNullElse(rest.getOptionalRequestPermissions(), new String[0]),
+                                Objects.requireNonNullElse(rest.getMinecraftRequestCommands(), new String[0])
                         )
                 )
                 .tunnelJsonDeserializer(

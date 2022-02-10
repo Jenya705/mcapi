@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.bukkit;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import lombok.Cleanup;
 import org.bukkit.Bukkit;
 import org.yaml.snakeyaml.DumperOptions;
@@ -12,6 +13,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Singleton
 public class BukkitFileCore {
 
     private static final Yaml yaml = generateYaml();
