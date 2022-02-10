@@ -1,11 +1,13 @@
 package com.github.jenya705.mcapi.bukkit;
 
 import com.github.jenya705.mcapi.Material;
-import com.github.jenya705.mcapi.OfflinePlayer;
+import com.github.jenya705.mcapi.bukkit.wrapper.BukkitWrapper;
+import com.github.jenya705.mcapi.player.OfflinePlayer;
 import com.github.jenya705.mcapi.bukkit.inventory.BukkitInventoryViewWrapper;
 import com.github.jenya705.mcapi.bukkit.menu.BukkitInventoryMenuImpl;
 import com.github.jenya705.mcapi.bukkit.menu.BukkitMenuManager;
 import com.github.jenya705.mcapi.bukkit.permission.PermissionManagerHook;
+import com.github.jenya705.mcapi.bukkit.player.BukkitOfflinePlayerStorage;
 import com.github.jenya705.mcapi.entity.Entity;
 import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.menu.InventoryMenuView;
@@ -180,6 +182,7 @@ public class BukkitServerCore implements ServerCore {
         return BukkitWrapper.world(Bukkit.getWorld(rawOrMinecraft(id)));
     }
 
+    @SuppressWarnings("deprecated use")
     private NamespacedKey rawOrMinecraft(String namespace) {
         String[] split = namespace.split(":", 2);
         if (split.length == 1) {

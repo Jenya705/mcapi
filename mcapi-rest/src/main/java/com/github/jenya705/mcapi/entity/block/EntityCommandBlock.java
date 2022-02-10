@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi.entity.block;
 
+import com.github.jenya705.mcapi.block.Block;
 import com.github.jenya705.mcapi.block.BlockFace;
 import com.github.jenya705.mcapi.block.data.CommandBlock;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EntityCommandBlock implements CommandBlock {
 
+    private Block block;
     private String command;
     private BlockFace direction;
 

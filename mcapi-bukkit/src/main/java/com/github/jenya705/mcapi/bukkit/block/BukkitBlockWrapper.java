@@ -8,6 +8,8 @@ import com.github.jenya705.mcapi.block.BlockData;
 import com.github.jenya705.mcapi.bukkit.BukkitLocationWrapper;
 import lombok.AllArgsConstructor;
 
+import java.util.Objects;
+
 /**
  * @author Jenya705
  */
@@ -35,4 +37,14 @@ public class BukkitBlockWrapper implements Block {
     public BlockData getBlockData() {
         return BukkitBlockDataRegistry.instance.getData(bukkitBlock);
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) return true;
+        if (other instanceof BukkitBlockWrapper blockWrapper) {
+            return Objects.equals(blockWrapper.bukkitBlock, bukkitBlock);
+        }
+        return false;
+    }
+
 }

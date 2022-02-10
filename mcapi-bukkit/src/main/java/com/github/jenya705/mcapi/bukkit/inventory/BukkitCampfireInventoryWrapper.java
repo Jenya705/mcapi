@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.bukkit.inventory;
 
-import com.github.jenya705.mcapi.bukkit.BukkitWrapper;
+import com.github.jenya705.mcapi.bukkit.wrapper.BukkitWrapper;
 import com.github.jenya705.mcapi.bukkit.block.state.CapturedState;
 import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.inventory.ItemStack;

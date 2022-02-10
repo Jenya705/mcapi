@@ -2,7 +2,7 @@ package com.github.jenya705.mcapi.bukkit.block.data;
 
 import com.github.jenya705.mcapi.block.BlockFace;
 import com.github.jenya705.mcapi.block.LevelPowerable;
-import com.github.jenya705.mcapi.bukkit.BukkitWrapper;
+import com.github.jenya705.mcapi.bukkit.wrapper.BukkitWrapper;
 import com.github.jenya705.mcapi.bukkit.block.AbstractBukkitBlockData;
 import com.github.jenya705.mcapi.bukkit.block.BukkitLevelPowerableWrapper;
 import lombok.experimental.Delegate;

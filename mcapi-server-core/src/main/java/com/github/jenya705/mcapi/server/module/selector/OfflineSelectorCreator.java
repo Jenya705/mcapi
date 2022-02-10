@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.server.module.selector;
 
-import com.github.jenya705.mcapi.OfflinePlayer;
+import com.github.jenya705.mcapi.player.OfflinePlayer;
 import com.github.jenya705.mcapi.error.PlayerNotFoundException;
 import com.github.jenya705.mcapi.server.application.BaseCommon;
 import com.github.jenya705.mcapi.server.application.ServerApplication;

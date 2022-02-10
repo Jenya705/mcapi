@@ -13,11 +13,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RestPiston {
 
+    private RestBlock block;
     private String direction;
     private boolean extended;
 
     public static RestPiston from(Piston piston) {
         return new RestPiston(
+                RestBlock.from(piston.getBlock()),
                 piston.getDirection().name(),
                 piston.isExtended()
         );

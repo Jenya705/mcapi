@@ -1,7 +1,6 @@
 package com.github.jenya705.mcapi.player;
 
 import com.github.jenya705.mcapi.CommandSender;
-import com.github.jenya705.mcapi.OfflinePlayer;
 import com.github.jenya705.mcapi.entity.LivingEntity;
 import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.inventory.InventoryView;

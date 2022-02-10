@@ -1,9 +1,9 @@
 package com.github.jenya705.mcapi.bukkit.block;
 
+import com.github.jenya705.mcapi.block.Block;
 import com.github.jenya705.mcapi.block.BlockFace;
 import com.github.jenya705.mcapi.block.Directional;
-import com.github.jenya705.mcapi.bukkit.BukkitWrapper;
-import org.bukkit.block.Block;
+import com.github.jenya705.mcapi.bukkit.wrapper.BukkitWrapper;
 
 /**
  * @author Jenya705
@@ -12,7 +12,7 @@ public class BukkitDirectionalWrapper
         extends AbstractBukkitBlockData<org.bukkit.block.data.Directional>
         implements Directional {
 
-    public BukkitDirectionalWrapper(Block block) {
+    public BukkitDirectionalWrapper(org.bukkit.block.Block block) {
         super(block);
     }
 
@@ -26,4 +26,8 @@ public class BukkitDirectionalWrapper
         updateData(it -> it.setFacing(BukkitWrapper.blockFace(direction)));
     }
 
+    @Override
+    public Block getBlock() {
+        return BukkitWrapper.block(getBukkitBlock());
+    }
 }

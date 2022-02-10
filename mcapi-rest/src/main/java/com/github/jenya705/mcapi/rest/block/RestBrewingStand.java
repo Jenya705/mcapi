@@ -17,6 +17,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class RestBrewingStand {
 
+    private RestBlock block;
     private RestInventory inventory;
     private int fuelLevel;
     private int brewingTime;
@@ -24,6 +25,7 @@ public class RestBrewingStand {
 
     public static RestBrewingStand from(BrewingStand from) {
         return new RestBrewingStand(
+                RestBlock.from(from.getBlock()),
                 RestInventory.from(from.getInventory()),
                 from.getFuelLevel(),
                 from.getBrewingTime(),

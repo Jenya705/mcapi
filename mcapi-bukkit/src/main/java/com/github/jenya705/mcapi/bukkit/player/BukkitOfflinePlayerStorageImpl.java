@@ -1,5 +1,7 @@
-package com.github.jenya705.mcapi.bukkit;
+package com.github.jenya705.mcapi.bukkit.player;
 
+import com.github.jenya705.mcapi.bukkit.BukkitApplication;
+import com.github.jenya705.mcapi.bukkit.BukkitFileCore;
 import com.github.jenya705.mcapi.server.application.OnDisable;
 import com.github.jenya705.mcapi.server.application.OnInitializing;
 import com.github.jenya705.mcapi.server.log.TimerTask;

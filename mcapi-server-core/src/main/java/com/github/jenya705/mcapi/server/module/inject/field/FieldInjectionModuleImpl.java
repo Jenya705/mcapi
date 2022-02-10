@@ -89,6 +89,10 @@ public class FieldInjectionModuleImpl extends AbstractApplicationModule implemen
                         clazz, injectedClassInformation
                 );
                 registerClassSerializer(clazz);
+            } catch (ClassNotFoundException e) {
+                if (debug()) {
+                    log.warn("Class is not exist:", e);
+                }
             } catch (Throwable e) {
                 log.warn(String.format("Failed to load field ignores of %s", className), e);
             }
@@ -113,6 +117,7 @@ public class FieldInjectionModuleImpl extends AbstractApplicationModule implemen
                 RestCommand.class,
                 RestCommandExecutableOption.class,
                 RestCommandInteractionEvent.class,
+                RestInventoryMoveEvent.class,
                 RestCommandInteractionValue.class,
                 RestEnchantment.class,
                 RestItemEnchantment.class,

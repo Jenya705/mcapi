@@ -1,10 +1,14 @@
 package com.github.jenya705.mcapi.bukkit;
 
+import com.github.jenya705.mcapi.bukkit.block.BukkitBlockDataRegistry;
+import com.github.jenya705.mcapi.bukkit.inventory.BukkitInventoryEventHandler;
 import com.github.jenya705.mcapi.bukkit.menu.BukkitMenuManager;
 import com.github.jenya705.mcapi.bukkit.permission.LuckPermsHook;
 import com.github.jenya705.mcapi.bukkit.permission.PermissionManagerHook;
 import com.github.jenya705.mcapi.bukkit.permission.VaultPermissionHook;
+import com.github.jenya705.mcapi.bukkit.player.BukkitOfflinePlayerStorage;
 import com.github.jenya705.mcapi.bukkit.utils.FailureOperation;
+import com.github.jenya705.mcapi.bukkit.wrapper.BukkitFullWrapper;
 import com.github.jenya705.mcapi.server.ServerCore;
 import com.google.inject.AbstractModule;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +23,7 @@ public class BukkitFirstLayer extends AbstractModule {
     @Override
     protected void configure() {
         bind(BukkitApplication.class).toInstance(plugin);
+        bind(BukkitBlockDataRegistry.class).toInstance(BukkitBlockDataRegistry.instance);
         bind(BukkitFileCore.class);
         bind(BukkitOfflinePlayerStorage.class);
         bind(BukkitMenuManager.class);

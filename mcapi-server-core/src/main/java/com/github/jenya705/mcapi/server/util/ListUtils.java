@@ -26,6 +26,7 @@ public class ListUtils {
     public <T> List<T> join(T[]... arrays) {
         List<T> newList = new ArrayList<>();
         for (T[] array : arrays) {
+            if (array == null) continue;
             newList.addAll(Arrays.asList(array));
         }
         return newList;

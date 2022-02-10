@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.bukkit;
 
 import com.github.jenya705.mcapi.Location;
+import com.github.jenya705.mcapi.bukkit.wrapper.BukkitWrapper;
 import com.github.jenya705.mcapi.world.World;
 import lombok.AllArgsConstructor;
 

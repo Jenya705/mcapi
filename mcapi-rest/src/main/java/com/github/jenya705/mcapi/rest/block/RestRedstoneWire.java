@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RestRedstoneWire {
 
+    private RestBlock block;
     private int power;
     private String west;
     private String south;
@@ -22,6 +23,7 @@ public class RestRedstoneWire {
 
     public static RestRedstoneWire from(RedstoneWire wire) {
         return new RestRedstoneWire(
+                RestBlock.from(wire.getBlock()),
                 wire.getPower(),
                 wire.getConnection(BlockFace.WEST).name(),
                 wire.getConnection(BlockFace.SOUTH).name(),

@@ -16,6 +16,7 @@ import com.github.jenya705.mcapi.error.*;
 import com.github.jenya705.mcapi.event.*;
 import com.github.jenya705.mcapi.inventory.*;
 import com.github.jenya705.mcapi.menu.InventoryMenuView;
+import com.github.jenya705.mcapi.player.OfflinePlayer;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.player.PlayerAbilities;
 import com.github.jenya705.mcapi.rest.*;
@@ -109,6 +110,7 @@ public class RestModule extends AbstractApplicationModule {
                 .tunnelJsonSerializer(QuitEvent.class, RestQuitEvent::from)
                 .tunnelJsonSerializer(SubscribeEvent.class, RestSubscribeEvent::from)
                 .tunnelJsonSerializer(UnlinkEvent.class, RestUnlinkEvent::from)
+                .tunnelJsonSerializer(InventoryMoveEvent.class, RestInventoryMoveEvent::from)
                 .tunnelJsonSerializer(CommandSender.class, RestCommandSender::from)
                 .tunnelJsonSerializer(ApiError.class, RestError::from)
                 .tunnelJsonSerializer(Form.class, RestForm::from)

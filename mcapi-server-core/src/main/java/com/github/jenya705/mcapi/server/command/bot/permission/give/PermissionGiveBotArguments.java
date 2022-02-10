@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.server.command.bot.permission.give;
 
-import com.github.jenya705.mcapi.OfflinePlayer;
+import com.github.jenya705.mcapi.player.OfflinePlayer;
 import com.github.jenya705.mcapi.server.stringful.Argument;
 import com.github.jenya705.mcapi.server.stringful.Index;
 import lombok.Data;

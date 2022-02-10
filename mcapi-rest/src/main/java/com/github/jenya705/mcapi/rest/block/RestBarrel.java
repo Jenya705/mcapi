@@ -17,12 +17,14 @@ import java.util.UUID;
 @AllArgsConstructor
 public class RestBarrel {
 
+    private RestBlock block;
     private UUID[] watchers;
     private RestInventory inventory;
     private String direction;
 
     public static RestBarrel from(Barrel barrel) {
         return new RestBarrel(
+                RestBlock.from(barrel.getBlock()),
                 barrel
                         .getWatchers()
                         .stream()

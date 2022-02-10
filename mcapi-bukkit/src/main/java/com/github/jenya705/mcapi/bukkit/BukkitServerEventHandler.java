@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi.bukkit;
 
+import com.github.jenya705.mcapi.bukkit.wrapper.BukkitWrapper;
 import com.github.jenya705.mcapi.entity.CapturableEntity;
 import com.github.jenya705.mcapi.entity.Entity;
 import com.github.jenya705.mcapi.entity.event.*;

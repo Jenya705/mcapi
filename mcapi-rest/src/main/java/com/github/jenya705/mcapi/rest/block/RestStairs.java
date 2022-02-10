@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RestStairs {
 
+    private RestBlock block;
     private String direction;
     private boolean waterlogged;
     private String shape;
@@ -20,6 +21,7 @@ public class RestStairs {
 
     public static RestStairs from(Stairs stairs) {
         return new RestStairs(
+                RestBlock.from(stairs.getBlock()),
                 stairs.getDirection().name(),
                 stairs.isWaterlogged(),
                 stairs.getShape().name(),

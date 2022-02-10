@@ -2,7 +2,7 @@ package com.github.jenya705.mcapi.bukkit.player;
 
 import com.github.jenya705.mcapi.bukkit.BukkitCommandSenderWrapper;
 import com.github.jenya705.mcapi.bukkit.BukkitUtils;
-import com.github.jenya705.mcapi.bukkit.BukkitWrapper;
+import com.github.jenya705.mcapi.bukkit.wrapper.BukkitWrapper;
 import com.github.jenya705.mcapi.bukkit.entity.BukkitLivingEntityWrapper;
 import com.github.jenya705.mcapi.bukkit.inventory.BukkitInventoryViewWrapper;
 import com.github.jenya705.mcapi.entity.LivingEntity;
@@ -15,6 +15,7 @@ import lombok.experimental.Delegate;
 import net.kyori.adventure.text.Component;
 
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * @author Jenya705
@@ -139,4 +140,14 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements B
     public Locale getLocale() {
         return player.locale();
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) return true;
+        if (other instanceof BukkitPlayerWrapper playerWrapper) {
+            return Objects.equals(playerWrapper.player, player);
+        }
+        return false;
+    }
+
 }

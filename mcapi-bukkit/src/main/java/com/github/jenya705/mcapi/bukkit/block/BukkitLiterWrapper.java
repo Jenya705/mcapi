@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.bukkit.block;
 
 import com.github.jenya705.mcapi.block.Liter;
+import com.github.jenya705.mcapi.bukkit.wrapper.BukkitWrapper;
 import org.bukkit.block.Block;
 
 /**
@@ -24,4 +25,8 @@ public class BukkitLiterWrapper
         updateData(it -> it.setLit(lit));
     }
 
+    @Override
+    public com.github.jenya705.mcapi.block.Block getBlock() {
+        return BukkitWrapper.block(getBukkitBlock());
+    }
 }

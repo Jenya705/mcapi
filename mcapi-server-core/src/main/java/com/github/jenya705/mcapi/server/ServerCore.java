@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.server;
 
 import com.github.jenya705.mcapi.Material;
-import com.github.jenya705.mcapi.OfflinePlayer;
+import com.github.jenya705.mcapi.player.OfflinePlayer;
 import com.github.jenya705.mcapi.entity.Entity;
 import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.inventory.InventoryView;

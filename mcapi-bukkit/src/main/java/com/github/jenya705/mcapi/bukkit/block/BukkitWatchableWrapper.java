@@ -1,7 +1,8 @@
 package com.github.jenya705.mcapi.bukkit.block;
 
+import com.github.jenya705.mcapi.block.Block;
 import com.github.jenya705.mcapi.block.Watchable;
-import com.github.jenya705.mcapi.bukkit.BukkitWrapper;
+import com.github.jenya705.mcapi.bukkit.wrapper.BukkitWrapper;
 import com.github.jenya705.mcapi.bukkit.block.state.CapturedState;
 import com.github.jenya705.mcapi.player.Player;
 import lombok.RequiredArgsConstructor;
@@ -28,5 +29,10 @@ public class BukkitWatchableWrapper implements Watchable {
                 .filter(it -> it instanceof org.bukkit.entity.Player)
                 .map(it -> BukkitWrapper.player((org.bukkit.entity.Player) it))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Block getBlock() {
+        return BukkitWrapper.block(state.getBlock());
     }
 }

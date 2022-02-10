@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RestDoor {
 
+    private RestBlock block;
     private boolean open;
     private boolean powered;
     private String half;
@@ -21,6 +22,7 @@ public class RestDoor {
 
     public static RestDoor from(Door door) {
         return new RestDoor(
+                RestBlock.from(door.getBlock()),
                 door.isOpen(),
                 door.isPowered(),
                 door.getHalf().name(),

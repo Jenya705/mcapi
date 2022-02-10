@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.bukkit.menu;
 
 import com.github.jenya705.mcapi.bukkit.BukkitApplication;
-import com.github.jenya705.mcapi.bukkit.BukkitWrapper;
+import com.github.jenya705.mcapi.bukkit.wrapper.BukkitWrapper;
 import com.github.jenya705.mcapi.menu.InventoryMenuView;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.server.application.OnStartup;

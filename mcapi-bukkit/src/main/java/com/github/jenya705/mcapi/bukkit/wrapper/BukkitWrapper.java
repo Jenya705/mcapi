@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.bukkit;
+package com.github.jenya705.mcapi.bukkit.wrapper;
 
 import com.github.jenya705.mcapi.*;
 import com.github.jenya705.mcapi.block.Block;
@@ -8,13 +8,17 @@ import com.github.jenya705.mcapi.block.Shape;
 import com.github.jenya705.mcapi.block.data.Door;
 import com.github.jenya705.mcapi.block.data.RedstoneWire;
 import com.github.jenya705.mcapi.block.data.Slab;
+import com.github.jenya705.mcapi.bukkit.BukkitCommandSenderWrapper;
+import com.github.jenya705.mcapi.bukkit.BukkitLocationWrapper;
 import com.github.jenya705.mcapi.bukkit.block.BukkitBlockWrapper;
 import com.github.jenya705.mcapi.bukkit.enchantment.BukkitEnchantmentWrapper;
 import com.github.jenya705.mcapi.bukkit.enchantment.BukkitItemEnchantmentWrapper;
 import com.github.jenya705.mcapi.bukkit.entity.BukkitEntityWrapper;
 import com.github.jenya705.mcapi.bukkit.entity.BukkitLivingEntityWrapper;
 import com.github.jenya705.mcapi.bukkit.inventory.*;
+import com.github.jenya705.mcapi.bukkit.player.BukkitOfflinePlayerWrapper;
 import com.github.jenya705.mcapi.bukkit.player.BukkitPlayerWrapper;
+import com.github.jenya705.mcapi.bukkit.world.BukkitWorldWrapper;
 import com.github.jenya705.mcapi.enchantment.Enchantment;
 import com.github.jenya705.mcapi.enchantment.ItemEnchantment;
 import com.github.jenya705.mcapi.entity.Entity;
@@ -23,10 +27,12 @@ import com.github.jenya705.mcapi.inventory.InventoryView;
 import com.github.jenya705.mcapi.inventory.ItemStack;
 import com.github.jenya705.mcapi.inventory.PlayerInventory;
 import com.github.jenya705.mcapi.player.GameMode;
+import com.github.jenya705.mcapi.player.OfflinePlayer;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.world.World;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.type.Stairs;
 
@@ -91,6 +97,19 @@ public class BukkitWrapper {
         return BukkitWorldWrapper.of(world);
     }
 
+    public org.bukkit.block.Block block(Block block) {
+        Location location = block.getLocation();
+        NamespacedKey key = NamespacedKey.fromString(location.getWorld().getName());
+        if (key == null) return null;
+        org.bukkit.World world = Bukkit.getWorld(key);
+        if (world == null) return null;
+        return world.getBlockAt(
+                (int) location.getX(),
+                (int) location.getY(),
+                (int) location.getZ()
+        );
+    }
+
     public Block block(org.bukkit.block.Block block) {
         return BukkitBlockWrapper.of(block);
     }
@@ -140,6 +159,10 @@ public class BukkitWrapper {
     }
 
     public Inventory inventory(org.bukkit.inventory.Inventory inventory) {
+        if (inventory == null) return null;
+        if (inventory instanceof org.bukkit.inventory.PlayerInventory playerInventory) {
+            return playerInventory(playerInventory);
+        }
         return BukkitInventoryWrapper.of(inventory);
     }
 
@@ -241,4 +264,15 @@ public class BukkitWrapper {
         }
         return bukkitInventory;
     }
+
+    public Object bukkitHolderToLocal(Object holder) {
+        if (holder instanceof org.bukkit.block.BlockState state) {
+            return BukkitWrapper.block(state.getBlock());
+        }
+        if (holder instanceof org.bukkit.entity.Player player) {
+            return BukkitWrapper.player(player);
+        }
+        return null;
+    }
+
 }

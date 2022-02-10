@@ -17,6 +17,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class RestChest {
 
+    private RestBlock block;
     private UUID[] watchers;
     private RestInventory inventory;
     private boolean waterlogged;
@@ -24,6 +25,7 @@ public class RestChest {
 
     public static RestChest from(Chest chest) {
         return new RestChest(
+                RestBlock.from(chest.getBlock()),
                 chest
                         .getWatchers()
                         .stream()

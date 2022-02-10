@@ -17,6 +17,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class RestFurnace {
 
+    private RestBlock block;
     private RestInventory inventory;
     private UUID[] watchers;
     private String direction;
@@ -27,6 +28,7 @@ public class RestFurnace {
 
     public static RestFurnace from(Furnace furnace) {
         return new RestFurnace(
+                RestBlock.from(furnace.getBlock()),
                 RestInventory.from(furnace.getInventory()),
                 furnace
                         .getWatchers()

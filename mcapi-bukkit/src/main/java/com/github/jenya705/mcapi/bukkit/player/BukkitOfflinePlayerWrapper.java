@@ -1,6 +1,6 @@
-package com.github.jenya705.mcapi.bukkit;
+package com.github.jenya705.mcapi.bukkit.player;
 
-import com.github.jenya705.mcapi.OfflinePlayer;
+import com.github.jenya705.mcapi.player.OfflinePlayer;
 import lombok.AllArgsConstructor;
 
 import java.util.UUID;

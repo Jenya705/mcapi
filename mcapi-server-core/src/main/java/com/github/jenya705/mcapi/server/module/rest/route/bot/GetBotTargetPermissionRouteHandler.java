@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.server.module.rest.route.bot;
 
-import com.github.jenya705.mcapi.OfflinePlayer;
+import com.github.jenya705.mcapi.player.OfflinePlayer;
 import com.github.jenya705.mcapi.Routes;
 import com.github.jenya705.mcapi.entity.EntityPermission;
 import com.github.jenya705.mcapi.error.SelectorEmptyException;

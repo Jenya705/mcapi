@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.event;
 
-import com.github.jenya705.mcapi.OfflinePlayer;
+import com.github.jenya705.mcapi.player.OfflinePlayer;
 
 /**
  * @author Jenya705

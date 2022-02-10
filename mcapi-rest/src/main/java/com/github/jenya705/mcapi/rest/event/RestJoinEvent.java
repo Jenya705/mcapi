@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.rest.event;
 
 import com.github.jenya705.mcapi.event.JoinEvent;
+import com.github.jenya705.mcapi.rest.player.RestPlayer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,7 @@ public class RestJoinEvent {
 
     public static final String type = "join";
 
-    private UUID player;
+    private RestPlayer player;
 
     public String getType() {
         return type;
@@ -25,7 +26,7 @@ public class RestJoinEvent {
 
     public static RestJoinEvent from(JoinEvent event) {
         return new RestJoinEvent(
-                event.getPlayer().getUuid()
+                RestPlayer.from(event.getPlayer())
         );
     }
 

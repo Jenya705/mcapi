@@ -1,4 +1,6 @@
-package com.github.jenya705.mcapi;
+package com.github.jenya705.mcapi.player;
+
+import com.github.jenya705.mcapi.UUIDHolder;
 
 /**
  * @author Jenya705

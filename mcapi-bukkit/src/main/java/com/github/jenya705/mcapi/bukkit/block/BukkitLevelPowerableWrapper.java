@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.bukkit.block;
 
 import com.github.jenya705.mcapi.block.LevelPowerable;
+import com.github.jenya705.mcapi.bukkit.wrapper.BukkitWrapper;
 import org.bukkit.block.Block;
 
 /**
@@ -27,5 +28,10 @@ public class BukkitLevelPowerableWrapper
     @Override
     public int getMaxPower() {
         return data().getMaximumPower();
+    }
+
+    @Override
+    public com.github.jenya705.mcapi.block.Block getBlock() {
+        return BukkitWrapper.block(getBukkitBlock());
     }
 }

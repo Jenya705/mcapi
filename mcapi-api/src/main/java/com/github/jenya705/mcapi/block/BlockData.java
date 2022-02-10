@@ -5,4 +5,6 @@ package com.github.jenya705.mcapi.block;
  */
 public interface BlockData {
 
+    Block getBlock();
+
 }

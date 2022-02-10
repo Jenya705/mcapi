@@ -2,7 +2,7 @@ package com.github.jenya705.mcapi.bukkit.block;
 
 import com.github.jenya705.mcapi.block.Bisected;
 import com.github.jenya705.mcapi.block.Half;
-import com.github.jenya705.mcapi.bukkit.BukkitWrapper;
+import com.github.jenya705.mcapi.bukkit.wrapper.BukkitWrapper;
 import org.bukkit.block.Block;
 
 /**
@@ -26,4 +26,8 @@ public class BukkitBisectedWrapper
         updateData(it -> it.setHalf(BukkitWrapper.half(half)));
     }
 
+    @Override
+    public com.github.jenya705.mcapi.block.Block getBlock() {
+        return BukkitWrapper.block(getBukkitBlock());
+    }
 }

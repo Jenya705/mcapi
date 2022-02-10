@@ -17,12 +17,14 @@ import java.util.UUID;
 @AllArgsConstructor
 public class RestShulkerBox {
 
+    private RestBlock block;
     private RestInventory inventory;
     private String direction;
     private UUID[] watchers;
 
     public static RestShulkerBox from(ShulkerBox shulkerBox) {
         return new RestShulkerBox(
+                RestBlock.from(shulkerBox.getBlock()),
                 RestInventory.from(shulkerBox.getInventory()),
                 shulkerBox.getDirection().name(),
                 shulkerBox

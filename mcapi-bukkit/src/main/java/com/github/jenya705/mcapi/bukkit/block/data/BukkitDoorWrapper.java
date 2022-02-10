@@ -4,7 +4,7 @@ import com.github.jenya705.mcapi.block.Bisected;
 import com.github.jenya705.mcapi.block.Directional;
 import com.github.jenya705.mcapi.block.Openable;
 import com.github.jenya705.mcapi.block.Powerable;
-import com.github.jenya705.mcapi.bukkit.BukkitWrapper;
+import com.github.jenya705.mcapi.bukkit.wrapper.BukkitWrapper;
 import com.github.jenya705.mcapi.bukkit.block.*;
 import lombok.experimental.Delegate;
 import org.bukkit.block.data.type.Door;

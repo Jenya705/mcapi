@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.bukkit.block.state;
 
 import com.github.jenya705.mcapi.bukkit.BukkitUtils;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.block.BlockState;
 
@@ -10,6 +11,7 @@ import org.bukkit.block.BlockState;
 @RequiredArgsConstructor
 public class SharedCapturedState implements CapturedState {
 
+    @Getter
     private final org.bukkit.block.Block block;
 
     private BlockState state;

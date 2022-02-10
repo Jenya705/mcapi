@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RestCampfire {
 
+    private RestBlock block;
     private RestInventory inventory;
     private boolean signalFire;
     private boolean waterlogged;
@@ -24,6 +25,7 @@ public class RestCampfire {
 
     public static RestCampfire from(Campfire campfire) {
         return new RestCampfire(
+                RestBlock.from(campfire.getBlock()),
                 RestInventory.from(campfire.getInventory()),
                 campfire.isSignalFire(),
                 campfire.isWaterlogged(),

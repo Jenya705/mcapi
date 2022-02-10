@@ -4,7 +4,7 @@ import com.github.jenya705.mcapi.block.Bisected;
 import com.github.jenya705.mcapi.block.Directional;
 import com.github.jenya705.mcapi.block.Shape;
 import com.github.jenya705.mcapi.block.Waterlogged;
-import com.github.jenya705.mcapi.bukkit.BukkitWrapper;
+import com.github.jenya705.mcapi.bukkit.wrapper.BukkitWrapper;
 import com.github.jenya705.mcapi.bukkit.block.AbstractBukkitBlockData;
 import com.github.jenya705.mcapi.bukkit.block.BukkitBisectedWrapper;
 import com.github.jenya705.mcapi.bukkit.block.BukkitDirectionalWrapper;

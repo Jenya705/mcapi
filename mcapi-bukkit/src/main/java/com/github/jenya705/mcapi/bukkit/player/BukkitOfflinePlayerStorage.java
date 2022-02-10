@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.bukkit;
+package com.github.jenya705.mcapi.bukkit.player;
 
 import com.google.inject.ImplementedBy;
 

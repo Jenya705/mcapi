@@ -36,6 +36,8 @@ public class Permissions {
 
     public final String EVENT_TUNNEL_MENU_CLICK = "event_tunnel.menu_click";
 
+    public final String EVENT_TUNNEL_INVENTORY_MOVE = "event_tunnel.inventory_move";
+
     public final String LINK_REQUEST = "link.request";
 
     public final String COMMAND_CREATE = "command.create";

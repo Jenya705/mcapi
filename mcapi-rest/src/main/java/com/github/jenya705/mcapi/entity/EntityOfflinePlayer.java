@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.entity;
 
-import com.github.jenya705.mcapi.OfflinePlayer;
+import com.github.jenya705.mcapi.player.OfflinePlayer;
 import com.github.jenya705.mcapi.rest.RestOfflinePlayer;
 import lombok.AllArgsConstructor;
 import lombok.Data;

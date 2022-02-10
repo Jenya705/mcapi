@@ -1,7 +1,8 @@
-package com.github.jenya705.mcapi.bukkit;
+package com.github.jenya705.mcapi.bukkit.world;
 
 import com.github.jenya705.mcapi.Location;
 import com.github.jenya705.mcapi.block.Block;
+import com.github.jenya705.mcapi.bukkit.wrapper.BukkitWrapper;
 import com.github.jenya705.mcapi.bukkit.block.BukkitBlockWrapper;
 import com.github.jenya705.mcapi.entity.Entity;
 import com.github.jenya705.mcapi.world.World;
