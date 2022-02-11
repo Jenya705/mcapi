@@ -265,14 +265,4 @@ public class BukkitWrapper {
         return bukkitInventory;
     }
 
-    public Object bukkitHolderToLocal(Object holder) {
-        if (holder instanceof org.bukkit.block.BlockState state) {
-            return BukkitWrapper.block(state.getBlock());
-        }
-        if (holder instanceof org.bukkit.entity.Player player) {
-            return BukkitWrapper.player(player);
-        }
-        return null;
-    }
-
 }

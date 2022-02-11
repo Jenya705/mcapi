@@ -4,19 +4,17 @@ import com.github.jenya705.mcapi.block.Directional;
 import com.github.jenya705.mcapi.block.Watchable;
 import com.github.jenya705.mcapi.block.Waterlogged;
 import com.github.jenya705.mcapi.block.data.Chest;
-import com.github.jenya705.mcapi.bukkit.block.BukkitDirectionalWrapper;
-import com.github.jenya705.mcapi.bukkit.block.BukkitInventoryHolderWrapper;
-import com.github.jenya705.mcapi.bukkit.block.BukkitWatchableWrapper;
-import com.github.jenya705.mcapi.bukkit.block.BukkitWaterloggedWrapper;
+import com.github.jenya705.mcapi.bukkit.block.*;
 import com.github.jenya705.mcapi.bukkit.block.state.CapturedState;
 import com.github.jenya705.mcapi.bukkit.block.state.SharedCapturedState;
 import com.github.jenya705.mcapi.inventory.InventoryHolder;
+import lombok.Getter;
 import lombok.experimental.Delegate;
 
 /**
  * @author Jenya705
  */
-public class BukkitChestWrapper implements Chest {
+public class BukkitChestWrapper implements Chest, BukkitStateContainer {
 
     @Delegate
     private final InventoryHolder inventoryHolderDelegate;
@@ -26,9 +24,11 @@ public class BukkitChestWrapper implements Chest {
     private final Directional directionalDelegate;
     @Delegate
     private final Waterlogged waterloggedDelegate;
+    @Getter
+    private final CapturedState state;
 
     public BukkitChestWrapper(org.bukkit.block.Block bukkitChest) {
-        CapturedState state = new SharedCapturedState(bukkitChest);
+        state = new SharedCapturedState(bukkitChest);
         inventoryHolderDelegate = new BukkitInventoryHolderWrapper(state);
         watchableDelegate = new BukkitWatchableWrapper(state);
         directionalDelegate = new BukkitDirectionalWrapper(bukkitChest);

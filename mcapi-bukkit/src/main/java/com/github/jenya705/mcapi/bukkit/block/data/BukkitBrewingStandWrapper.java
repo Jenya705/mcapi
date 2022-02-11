@@ -2,21 +2,23 @@ package com.github.jenya705.mcapi.bukkit.block.data;
 
 import com.github.jenya705.mcapi.block.Watchable;
 import com.github.jenya705.mcapi.block.data.BrewingStand;
+import com.github.jenya705.mcapi.bukkit.block.BukkitStateContainer;
 import com.github.jenya705.mcapi.bukkit.block.BukkitWatchableWrapper;
 import com.github.jenya705.mcapi.bukkit.block.state.CapturedState;
 import com.github.jenya705.mcapi.bukkit.block.state.SharedCapturedState;
 import com.github.jenya705.mcapi.bukkit.inventory.BukkitBrewerInventory;
 import com.github.jenya705.mcapi.inventory.BrewerInventory;
+import lombok.Getter;
 import lombok.experimental.Delegate;
 
 /**
  * @author Jenya705
  */
-public class BukkitBrewingStandWrapper implements BrewingStand {
+public class BukkitBrewingStandWrapper implements BrewingStand, BukkitStateContainer {
 
     @Delegate
     private final Watchable watchableDelegate;
-
+    @Getter
     private final CapturedState state;
 
     private BrewerInventory inventory;

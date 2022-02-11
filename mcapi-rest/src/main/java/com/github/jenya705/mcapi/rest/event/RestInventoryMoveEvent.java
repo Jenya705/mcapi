@@ -21,6 +21,7 @@ public class RestInventoryMoveEvent {
 
     public static final String type = "inventory_move";
 
+    @DefaultNull
     private RestInventory inventory;
     @DefaultNull
     private RestInventory from;
@@ -32,11 +33,12 @@ public class RestInventoryMoveEvent {
 
     public static RestInventoryMoveEvent from(InventoryMoveEvent event) {
         return new RestInventoryMoveEvent(
-                RestInventory.from(event.getInventory()),
+                event.getInventory() == null ?
+                        null : RestInventory.from(event.getInventory()),
                 Objects.equals(event.getInventory(), event.getFrom()) || event.getFrom() == null ?
                         null : RestInventory.from(event.getFrom()),
                 RestItemStack.from(event.getItem()),
-                event.getHolder(),
+                event.getHolder() == null ? null : event.getHolder(),
                 Objects.equals(event.getHolder(), event.getChanger()) ?
                         null : event.getChanger()
         );

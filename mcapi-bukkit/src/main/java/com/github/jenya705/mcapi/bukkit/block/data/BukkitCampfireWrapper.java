@@ -6,17 +6,19 @@ import com.github.jenya705.mcapi.block.Waterlogged;
 import com.github.jenya705.mcapi.block.data.Campfire;
 import com.github.jenya705.mcapi.bukkit.block.BukkitDirectionalWrapper;
 import com.github.jenya705.mcapi.bukkit.block.BukkitLiterWrapper;
+import com.github.jenya705.mcapi.bukkit.block.BukkitStateContainer;
 import com.github.jenya705.mcapi.bukkit.block.BukkitWaterloggedWrapper;
 import com.github.jenya705.mcapi.bukkit.block.state.CapturedState;
 import com.github.jenya705.mcapi.bukkit.block.state.SharedCapturedState;
 import com.github.jenya705.mcapi.bukkit.inventory.BukkitCampfireInventoryWrapper;
 import com.github.jenya705.mcapi.inventory.Inventory;
+import lombok.Getter;
 import lombok.experimental.Delegate;
 
 /**
  * @author Jenya705
  */
-public class BukkitCampfireWrapper implements Campfire {
+public class BukkitCampfireWrapper implements Campfire, BukkitStateContainer {
 
     @Delegate
     private final Directional directionalDelegate;
@@ -27,6 +29,7 @@ public class BukkitCampfireWrapper implements Campfire {
 
     private final Inventory campfireInventory;
 
+    @Getter
     private final CapturedState state;
 
     private final org.bukkit.block.Block block;

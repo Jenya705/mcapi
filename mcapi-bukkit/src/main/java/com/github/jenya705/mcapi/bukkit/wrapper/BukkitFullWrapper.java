@@ -2,8 +2,11 @@ package com.github.jenya705.mcapi.bukkit.wrapper;
 
 import com.github.jenya705.mcapi.block.Block;
 import com.github.jenya705.mcapi.block.BlockData;
+import com.github.jenya705.mcapi.bukkit.BukkitUtils;
 import com.github.jenya705.mcapi.bukkit.block.BukkitBlockDataRegistry;
+import com.github.jenya705.mcapi.bukkit.block.BukkitStateContainer;
 import com.github.jenya705.mcapi.bukkit.player.BukkitPlayerWrapper;
+import com.github.jenya705.mcapi.inventory.InventoryHolder;
 import com.github.jenya705.mcapi.player.Player;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -22,31 +25,29 @@ public class BukkitFullWrapper {
         this.blockDataRegistry = blockDataRegistry;
     }
 
-    public Object holderToLocal(Object bukkit) {
+    public InventoryHolder holderToLocal(org.bukkit.inventory.InventoryHolder bukkit) {
         if (bukkit instanceof org.bukkit.entity.Entity entity) {
-            return BukkitWrapper.entity(entity);
+            return (InventoryHolder) BukkitWrapper.entity(entity);
         }
         if (bukkit instanceof org.bukkit.block.BlockState state) {
-           return blockDataRegistry.getData(state.getBlock());
-        }
-        if (bukkit instanceof org.bukkit.block.Block block) {
-            return BukkitWrapper.block(block);
+           return (InventoryHolder) blockDataRegistry.getData(state.getBlock());
         }
         return null;
     }
 
-    public Object holderToBukkit(Object local) {
+    public org.bukkit.inventory.InventoryHolder holderToBukkit(InventoryHolder local) {
         if (local instanceof Player player) {
             if (player instanceof BukkitPlayerWrapper playerWrapper) {
-                return playerWrapper;
+                return playerWrapper.getBukkit();
             }
-            return BukkitPlayerWrapper.of(Bukkit.getPlayer(player.getUuid()));
+            return Bukkit.getPlayer(player.getUuid());
         }
         if (local instanceof BlockData data) {
-            return BukkitWrapper.block(data.getBlock());
-        }
-        if (local instanceof Block block) {
-            return BukkitWrapper.block(block);
+            if (data instanceof BukkitStateContainer stateContainer) {
+                return stateContainer.getState().state();
+            }
+            return (org.bukkit.inventory.InventoryHolder) BukkitUtils
+                    .notAsyncSupplier(() -> BukkitWrapper.block(data.getBlock()).getState());
         }
         return null;
     }

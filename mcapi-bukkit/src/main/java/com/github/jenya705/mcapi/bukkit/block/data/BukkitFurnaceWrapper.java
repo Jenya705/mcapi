@@ -6,18 +6,21 @@ import com.github.jenya705.mcapi.block.Watchable;
 import com.github.jenya705.mcapi.block.data.Furnace;
 import com.github.jenya705.mcapi.bukkit.block.BukkitDirectionalWrapper;
 import com.github.jenya705.mcapi.bukkit.block.BukkitLiterWrapper;
+import com.github.jenya705.mcapi.bukkit.block.BukkitStateContainer;
 import com.github.jenya705.mcapi.bukkit.block.BukkitWatchableWrapper;
 import com.github.jenya705.mcapi.bukkit.block.state.CapturedState;
 import com.github.jenya705.mcapi.bukkit.block.state.SharedCapturedState;
 import com.github.jenya705.mcapi.bukkit.inventory.BukkitFurnaceInventoryWrapper;
 import com.github.jenya705.mcapi.inventory.FurnaceInventory;
+import lombok.Getter;
 import lombok.experimental.Delegate;
 
 /**
  * @author Jenya705
  */
-public class BukkitFurnaceWrapper implements Furnace {
+public class BukkitFurnaceWrapper implements Furnace, BukkitStateContainer {
 
+    @Getter
     private final CapturedState state;
 
     @Delegate

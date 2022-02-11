@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.bukkit;
 
-import com.github.jenya705.mcapi.bukkit.inventory.BukkitInventoryEventHandler;
+import com.github.jenya705.mcapi.bukkit.inventory.BukkitInventoryMoveEventHandler;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.application.guice.ApplicationBuilder;
 import com.google.inject.Singleton;
@@ -31,7 +31,7 @@ public class BukkitApplication extends JavaPlugin {
     private final ApplicationBuilder applicationBuilder = new ApplicationBuilder()
             .layer(new BukkitFirstLayer(this))
             .defaultLayers()
-            .layer(BukkitInventoryEventHandler.class)
+            .layer(BukkitInventoryMoveEventHandler.class)
             .layer(BukkitServerEventHandler.class)
             ;
 

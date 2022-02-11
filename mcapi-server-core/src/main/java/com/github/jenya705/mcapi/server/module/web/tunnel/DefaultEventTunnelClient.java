@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * @author Jenya705
@@ -34,7 +35,7 @@ public class DefaultEventTunnelClient extends SimpleStatefulWebSocketConnection<
     private final AuthorizationModule authorizationModule;
 
     @Getter
-    private final Set<String> subscriptions = new HashSet<>();
+    private final Set<String> subscriptions = new CopyOnWriteArraySet<>();
 
     @Getter
     private AbstractBot owner;

@@ -5,6 +5,7 @@ import com.github.jenya705.mcapi.server.command.CommandDescription;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import lombok.Data;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,15 +27,19 @@ public class LinkObject {
         this.id = id;
         this.bot = bot;
         this.commandDescriptions = commandDescriptions;
-        optionalPermissions = new HashMap<>();
-        for (String optionalPermission : this.request.getOptionalRequestPermissions()) {
-            optionalPermissions.put(optionalPermission, true);
+        if (this.request.getOptionalRequestPermissions().length == 0) {
+            optionalPermissions = Collections.emptyMap();
+        }
+        else {
+            optionalPermissions = new HashMap<>();
+            for (String optionalPermission : this.request.getOptionalRequestPermissions()) {
+                optionalPermissions.put(optionalPermission, true);
+            }
         }
     }
 
     public boolean isOptionalPermissionToggled(String name) {
-        if (!optionalPermissions.containsKey(name)) return false;
-        return optionalPermissions.get(name);
+        return optionalPermissions.getOrDefault(name, false);
     }
 
     public void toggleOptionalPermission(String name) {

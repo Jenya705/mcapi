@@ -5,6 +5,7 @@ import com.github.jenya705.mcapi.block.Watchable;
 import com.github.jenya705.mcapi.bukkit.wrapper.BukkitWrapper;
 import com.github.jenya705.mcapi.bukkit.block.state.CapturedState;
 import com.github.jenya705.mcapi.player.Player;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.block.Container;
 
@@ -15,8 +16,9 @@ import java.util.stream.Collectors;
  * @author Jenya705
  */
 @RequiredArgsConstructor
-public class BukkitWatchableWrapper implements Watchable {
+public class BukkitWatchableWrapper implements Watchable, BukkitStateContainer {
 
+    @Getter
     private final CapturedState state;
 
     @Override

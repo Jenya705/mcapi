@@ -5,16 +5,18 @@ import com.github.jenya705.mcapi.block.Watchable;
 import com.github.jenya705.mcapi.block.data.Barrel;
 import com.github.jenya705.mcapi.bukkit.block.BukkitDirectionalWrapper;
 import com.github.jenya705.mcapi.bukkit.block.BukkitInventoryHolderWrapper;
+import com.github.jenya705.mcapi.bukkit.block.BukkitStateContainer;
 import com.github.jenya705.mcapi.bukkit.block.BukkitWatchableWrapper;
 import com.github.jenya705.mcapi.bukkit.block.state.CapturedState;
 import com.github.jenya705.mcapi.bukkit.block.state.SharedCapturedState;
 import com.github.jenya705.mcapi.inventory.InventoryHolder;
+import lombok.Getter;
 import lombok.experimental.Delegate;
 
 /**
  * @author Jenya705
  */
-public class BukkitBarrelWrapper implements Barrel {
+public class BukkitBarrelWrapper implements Barrel, BukkitStateContainer {
 
     @Delegate
     private final InventoryHolder inventoryHolderDelegate;
@@ -22,9 +24,11 @@ public class BukkitBarrelWrapper implements Barrel {
     private final Watchable watchableDelegate;
     @Delegate
     private final Directional directionalDelegate;
+    @Getter
+    private final CapturedState state;
 
     public BukkitBarrelWrapper(org.bukkit.block.Block bukkitBarrel) {
-        CapturedState state = new SharedCapturedState(bukkitBarrel);
+        state = new SharedCapturedState(bukkitBarrel);
         inventoryHolderDelegate = new BukkitInventoryHolderWrapper(state);
         watchableDelegate = new BukkitWatchableWrapper(state);
         directionalDelegate = new BukkitDirectionalWrapper(bukkitBarrel);
