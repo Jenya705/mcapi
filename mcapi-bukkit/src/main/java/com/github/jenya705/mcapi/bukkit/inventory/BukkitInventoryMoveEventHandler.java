@@ -5,6 +5,7 @@ import com.github.jenya705.mcapi.bukkit.wrapper.BukkitFullWrapper;
 import com.github.jenya705.mcapi.bukkit.wrapper.BukkitWrapper;
 import com.github.jenya705.mcapi.entity.event.EntityInventoryMoveEvent;
 import com.github.jenya705.mcapi.server.event.EventLoop;
+import com.github.jenya705.mcapi.server.util.Pair;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.bukkit.entity.Player;
@@ -17,11 +18,9 @@ import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author Jenya705
@@ -32,26 +31,13 @@ public class BukkitInventoryMoveEventHandler implements Listener {
     private final EventLoop eventLoop;
     private final BukkitFullWrapper fullWrapper;
 
-    private final Map<UUID, Boolean> itemTaken = new HashMap<>();
+    private final Map<UUID, Pair<Boolean, Integer>> itemTaken = new HashMap<>();
 
     @Inject
     public BukkitInventoryMoveEventHandler(EventLoop eventLoop, BukkitFullWrapper fullWrapper, BukkitApplication plugin) {
         this.eventLoop = eventLoop;
         this.fullWrapper = fullWrapper;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
-    }
-
-    @EventHandler
-    public void moveItem(InventoryMoveItemEvent event) {
-        if (event.getInitiator().getHolder() instanceof Player player) {
-            inventoryMoveEvent(
-                    event.getDestination(),
-                    event.getInitiator(),
-                    event.getItem(),
-                    event.getDestination().getHolder(),
-                    player
-            );
-        }
     }
 
     @EventHandler
@@ -70,11 +56,12 @@ public class BukkitInventoryMoveEventHandler implements Listener {
         }
     }
 
-    private void inventoryMoveEvent(Inventory destination, Inventory source, ItemStack itemStack, InventoryHolder holder, Player player) {
-        if (Objects.equals(source, destination)) return; // no moving from inventory to inventory
+    private void inventoryMoveEvent(Inventory destination, Inventory source, int destinationSlot, int fromSlot, ItemStack itemStack, InventoryHolder holder, Player player) {
         eventLoop.invoke(new EntityInventoryMoveEvent(
                 BukkitWrapper.inventory(destination),
                 BukkitWrapper.inventory(source),
+                destinationSlot,
+                fromSlot,
                 BukkitWrapper.itemStack(itemStack),
                 fullWrapper.holderToLocal(holder),
                 BukkitWrapper.player(player)
@@ -83,16 +70,23 @@ public class BukkitInventoryMoveEventHandler implements Listener {
 
     private Inventory getItemTakenInventory(InventoryClickEvent event, Player player) {
         if (itemTaken.containsKey(player.getUniqueId())) {
-            return itemTaken.get(player.getUniqueId()) ?
+            return itemTaken.get(player.getUniqueId()).getLeft() ?
                     event.getInventory() : player.getInventory();
         }
         return null;
     }
 
-    private void updateItemTaken(InventoryClickEvent event, Player player) {
+    private int getItemTakenSlot(Player player) {
+        if (itemTaken.containsKey(player.getUniqueId())) {
+            return itemTaken.get(player.getUniqueId()).getRight();
+        }
+        return -1;
+    }
+
+    private void updateItemTaken(InventoryClickEvent event, Player player, int slot) {
         itemTaken.put(
                 player.getUniqueId(),
-                Objects.equals(event.getInventory(), event.getClickedInventory())
+                new Pair<>(Objects.equals(event.getInventory(), event.getClickedInventory()), slot)
         );
     }
 
@@ -106,7 +100,7 @@ public class BukkitInventoryMoveEventHandler implements Listener {
                 action == InventoryAction.PICKUP_ONE ||
                 action == InventoryAction.PICKUP_SOME ||
                 action == InventoryAction.PICKUP_HALF) {
-            updateItemTaken(event, player);
+            updateItemTaken(event, player, event.getSlot());
             return true;
         }
         return false;
@@ -117,7 +111,7 @@ public class BukkitInventoryMoveEventHandler implements Listener {
         ItemStack cursor = event.getCursor();
         if (action == InventoryAction.SWAP_WITH_CURSOR) {
             consumePlacingWithoutChecking(event, player, cursor.getAmount());
-            updateItemTaken(event, player);
+            updateItemTaken(event, player, event.getSlot());
             return true;
         }
         ItemStack item = event.getCurrentItem();
@@ -149,6 +143,8 @@ public class BukkitInventoryMoveEventHandler implements Listener {
         inventoryMoveEvent(
                 event.getClickedInventory(),
                 getItemTakenInventory(event, player),
+                event.getSlot(),
+                getItemTakenSlot(player),
                 newCursor,
                 holderInventory.getHolder(),
                 player
@@ -188,6 +184,8 @@ public class BukkitInventoryMoveEventHandler implements Listener {
         inventoryMoveEvent(
                 null,
                 source,
+                -1,
+                getItemTakenSlot(player),
                 endItem,
                 source == null ? null : source.getHolder(),
                 player
@@ -201,20 +199,22 @@ public class BukkitInventoryMoveEventHandler implements Listener {
             Inventory clickedInventory = event.getClickedInventory();
             Inventory destination = getNotClickedInventory(event);
             ItemStack item = event.getCurrentItem();
-            int itemSpace = BukkitInventoryUtils.getItemSpace(destination, item);
-            if (itemSpace <= 0) {
-                return true;
-            }
-            int amount = Math.min(item.getAmount(), itemSpace);
-            ItemStack resultItem = new ItemStack(item);
-            resultItem.setAmount(amount);
-            inventoryMoveEvent(
-                    destination,
-                    clickedInventory,
-                    resultItem,
-                    destination.getHolder(),
-                    player
-            );
+            List<Pair<Integer, Integer>> possibleSlots = BukkitInventoryUtils.getPossibleItemIndexes(destination, item);
+            possibleSlots.forEach(pair -> {
+                int slot = pair.getLeft();
+                int amount = pair.getRight();
+                ItemStack endItem = new ItemStack(item);
+                endItem.setAmount(amount);
+                inventoryMoveEvent(
+                        destination,
+                        clickedInventory,
+                        slot,
+                        event.getSlot(),
+                        endItem,
+                        clickedInventory.getHolder(),
+                        player
+                );
+            });
             return true;
         }
         return false;

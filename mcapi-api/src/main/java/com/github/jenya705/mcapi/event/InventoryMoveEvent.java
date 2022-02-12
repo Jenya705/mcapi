@@ -9,9 +9,13 @@ import com.github.jenya705.mcapi.player.Player;
  */
 public interface InventoryMoveEvent {
 
-    Inventory getInventory();
+    Inventory getDestination();
 
     Inventory getFrom();
+
+    int getDestinationSlot();
+
+    int getFromSlot();
 
     ItemStack getItem();
 

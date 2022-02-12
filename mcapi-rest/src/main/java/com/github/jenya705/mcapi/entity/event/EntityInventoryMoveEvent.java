@@ -14,8 +14,10 @@ import lombok.Data;
 @AllArgsConstructor
 public class EntityInventoryMoveEvent implements InventoryMoveEvent {
 
-    private Inventory inventory;
+    private Inventory destination;
     private Inventory from;
+    private int destinationSlot;
+    private int fromSlot;
     private ItemStack item;
     private Object holder;
     private Player changer;

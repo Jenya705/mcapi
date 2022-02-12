@@ -38,15 +38,8 @@ public class BukkitPlayerInventoryWrapper implements PlayerInventory {
 
     @Override
     public ItemStack getItem(int item) {
-        // because bukkit player inventory working not correct for mcapi
-        // we need to set real index (for bukkit) of item
-        int realIndex;
-        if (item < 27) realIndex=item+9;
-        else if (item < 36) realIndex=item-27;
-        else if (item < 40) realIndex=75-item;
-        else if (item == 40) return getOffHand();
-        else return getMainHand();
-        return inventoryWrapper.getItem(realIndex);
+        if (item == 41) return getMainHand();
+        return inventoryWrapper.getItem(item);
     }
 
     @Override
