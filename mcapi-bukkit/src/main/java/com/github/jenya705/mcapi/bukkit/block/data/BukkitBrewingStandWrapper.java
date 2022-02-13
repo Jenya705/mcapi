@@ -2,6 +2,7 @@ package com.github.jenya705.mcapi.bukkit.block.data;
 
 import com.github.jenya705.mcapi.block.Watchable;
 import com.github.jenya705.mcapi.block.data.BrewingStand;
+import com.github.jenya705.mcapi.bukkit.block.AbstractBukkitBlockState;
 import com.github.jenya705.mcapi.bukkit.block.BukkitStateContainer;
 import com.github.jenya705.mcapi.bukkit.block.BukkitWatchableWrapper;
 import com.github.jenya705.mcapi.bukkit.block.state.CapturedState;
@@ -14,18 +15,18 @@ import lombok.experimental.Delegate;
 /**
  * @author Jenya705
  */
-public class BukkitBrewingStandWrapper implements BrewingStand, BukkitStateContainer {
+public class BukkitBrewingStandWrapper
+        extends AbstractBukkitBlockState<org.bukkit.block.BrewingStand>
+        implements BrewingStand, BukkitStateContainer {
 
     @Delegate
     private final Watchable watchableDelegate;
-    @Getter
-    private final CapturedState state;
 
     private BrewerInventory inventory;
 
     public BukkitBrewingStandWrapper(org.bukkit.block.Block block) {
-        state = new SharedCapturedState(block);
-        watchableDelegate = new BukkitWatchableWrapper(state);
+        super(block);
+        watchableDelegate = new BukkitWatchableWrapper(getState());
     }
 
     public static BukkitBrewingStandWrapper of(org.bukkit.block.Block block) {
@@ -51,8 +52,5 @@ public class BukkitBrewingStandWrapper implements BrewingStand, BukkitStateConta
         return state().getBrewingTime();
     }
 
-    private org.bukkit.block.BrewingStand state() {
-        return state.state();
-    }
 
 }

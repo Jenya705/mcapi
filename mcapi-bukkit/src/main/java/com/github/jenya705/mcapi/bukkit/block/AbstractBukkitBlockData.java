@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.block.Block;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -25,6 +26,15 @@ public abstract class AbstractBukkitBlockData<T extends org.bukkit.block.data.Bl
         T data = data();
         consumer.accept(data);
         BukkitUtils.notAsyncTask(() -> bukkitBlock.setBlockData(data));
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) return true;
+        if (other instanceof AbstractBukkitBlockData bukkitBlockData) {
+            return Objects.equals(bukkitBlockData.bukkitBlock, bukkitBlock);
+        }
+        return false;
     }
 
 }

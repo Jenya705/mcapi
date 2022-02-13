@@ -1,9 +1,8 @@
 package com.github.jenya705.mcapi.entity.event;
 
 import com.github.jenya705.mcapi.event.InventoryMoveEvent;
-import com.github.jenya705.mcapi.inventory.Inventory;
+import com.github.jenya705.mcapi.inventory.InventoryHolder;
 import com.github.jenya705.mcapi.inventory.ItemStack;
-import com.github.jenya705.mcapi.player.Player;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -14,12 +13,11 @@ import lombok.Data;
 @AllArgsConstructor
 public class EntityInventoryMoveEvent implements InventoryMoveEvent {
 
-    private Inventory destination;
-    private Inventory from;
     private int destinationSlot;
-    private int fromSlot;
+    private int sourceSlot;
     private ItemStack item;
-    private Object holder;
-    private Player changer;
+    private InventoryHolder destination;
+    private InventoryHolder source;
+    private InventoryHolder initiator;
 
 }

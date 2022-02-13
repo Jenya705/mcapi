@@ -1,32 +1,23 @@
 package com.github.jenya705.mcapi.event;
 
-import com.github.jenya705.mcapi.inventory.Inventory;
+import com.github.jenya705.mcapi.inventory.InventoryHolder;
 import com.github.jenya705.mcapi.inventory.ItemStack;
-import com.github.jenya705.mcapi.player.Player;
 
 /**
  * @author Jenya705
  */
 public interface InventoryMoveEvent {
 
-    Inventory getDestination();
-
-    Inventory getFrom();
-
     int getDestinationSlot();
 
-    int getFromSlot();
+    int getSourceSlot();
 
     ItemStack getItem();
 
-    /**
-     *
-     * Returns block (inventory holder), entity (inventory holder), null (no holder)
-     *
-     * @return holder which can be entity, block or null
-     */
-    Object getHolder();
+    InventoryHolder getDestination();
 
-    Player getChanger();
+    InventoryHolder getSource();
+
+    InventoryHolder getInitiator();
 
 }

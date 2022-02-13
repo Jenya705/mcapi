@@ -14,6 +14,7 @@ ALL_SUBSCRIPTIONS = [
     "block_place",
     "quit",
     "subscribe",
+    "command_interaction",
     "unlink"
 ]
 

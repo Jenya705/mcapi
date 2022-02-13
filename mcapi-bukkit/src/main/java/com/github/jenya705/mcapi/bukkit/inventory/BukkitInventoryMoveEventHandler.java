@@ -18,7 +18,6 @@ import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 
 import java.util.*;
 
@@ -41,12 +40,33 @@ public class BukkitInventoryMoveEventHandler implements Listener {
     }
 
     @EventHandler
+    public void moveInventory(InventoryMoveItemEvent event) {
+        ItemStack item = event.getItem();
+        BukkitInventoryUtils
+                .getPossibleItemIndexes(event.getDestination(), item)
+                .forEach(pair -> {
+                    int index = pair.getLeft();
+                    int amount = pair.getRight();
+                    ItemStack endItem = new ItemStack(item);
+                    endItem.setAmount(amount);
+                    inventoryMoveEvent(
+                            index,
+                            -1,
+                            endItem,
+                            event.getDestination().getHolder(),
+                            event.getSource().getHolder(),
+                            event.getInitiator().getHolder()
+                    );
+                });
+    }
+
+    @EventHandler
     public void clickInventory(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player player)) return;
         if (consumeTaking(event, player) ||
                 consumePlacing(event, player) ||
                 consumeDropping(event, player) ||
-                consumeMovingToOtherInventory(event, player)) return;
+                consumeMovingToOtherInventory(event, player)) {}
     }
 
     @EventHandler
@@ -56,15 +76,31 @@ public class BukkitInventoryMoveEventHandler implements Listener {
         }
     }
 
-    private void inventoryMoveEvent(Inventory destination, Inventory source, int destinationSlot, int fromSlot, ItemStack itemStack, InventoryHolder holder, Player player) {
+    private void inventoryMoveEvent(int destinationSlot,
+                                    int fromSlot,
+                                    ItemStack itemStack,
+                                    InventoryHolder destinationHolder,
+                                    InventoryHolder sourceHolder,
+                                    InventoryHolder initiator) {
+        com.github.jenya705.mcapi.inventory.InventoryHolder mcapiDestinationHolder =
+                fullWrapper.holderToLocal(destinationHolder);
+        com.github.jenya705.mcapi.inventory.InventoryHolder mcapiSourceHolder =
+                Objects.equals(destinationHolder, sourceHolder) ?
+                        mcapiDestinationHolder :
+                        fullWrapper.holderToLocal(sourceHolder);
+        com.github.jenya705.mcapi.inventory.InventoryHolder mcapiInitiatorHolder =
+                Objects.equals(destinationHolder, initiator) ?
+                        mcapiDestinationHolder :
+                        Objects.equals(sourceHolder, initiator) ?
+                                mcapiSourceHolder :
+                                fullWrapper.holderToLocal(initiator);
         eventLoop.invoke(new EntityInventoryMoveEvent(
-                BukkitWrapper.inventory(destination),
-                BukkitWrapper.inventory(source),
                 destinationSlot,
                 fromSlot,
                 BukkitWrapper.itemStack(itemStack),
-                fullWrapper.holderToLocal(holder),
-                BukkitWrapper.player(player)
+                mcapiDestinationHolder,
+                mcapiSourceHolder,
+                mcapiInitiatorHolder
         ));
     }
 
@@ -109,6 +145,7 @@ public class BukkitInventoryMoveEventHandler implements Listener {
     private boolean consumePlacing(InventoryClickEvent event, Player player) {
         InventoryAction action = event.getAction();
         ItemStack cursor = event.getCursor();
+        if (cursor == null) return true;
         if (action == InventoryAction.SWAP_WITH_CURSOR) {
             consumePlacingWithoutChecking(event, player, cursor.getAmount());
             updateItemTaken(event, player, event.getSlot());
@@ -136,17 +173,16 @@ public class BukkitInventoryMoveEventHandler implements Listener {
 
     private void consumePlacingWithoutChecking(InventoryClickEvent event, Player player, int amount) {
         ItemStack cursor = event.getCursor();
-        if (cursor == null) return;
         Inventory holderInventory = event.getClickedInventory();
+        if (cursor == null || holderInventory == null) return;
         ItemStack newCursor = new ItemStack(cursor);
         newCursor.setAmount(amount);
         inventoryMoveEvent(
-                event.getClickedInventory(),
-                getItemTakenInventory(event, player),
                 event.getSlot(),
                 getItemTakenSlot(player),
                 newCursor,
                 holderInventory.getHolder(),
+                getItemTakenInventory(event, player).getHolder(),
                 player
         );
     }
@@ -182,11 +218,10 @@ public class BukkitInventoryMoveEventHandler implements Listener {
         ItemStack endItem = new ItemStack(dropped);
         endItem.setAmount(amount);
         inventoryMoveEvent(
-                null,
-                source,
                 -1,
                 getItemTakenSlot(player),
                 endItem,
+                null,
                 source == null ? null : source.getHolder(),
                 player
         );
@@ -206,11 +241,10 @@ public class BukkitInventoryMoveEventHandler implements Listener {
                 ItemStack endItem = new ItemStack(item);
                 endItem.setAmount(amount);
                 inventoryMoveEvent(
-                        destination,
-                        clickedInventory,
                         slot,
                         event.getSlot(),
                         endItem,
+                        destination.getHolder(),
                         clickedInventory.getHolder(),
                         player
                 );

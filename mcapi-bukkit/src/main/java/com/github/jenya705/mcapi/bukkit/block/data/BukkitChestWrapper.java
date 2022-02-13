@@ -14,7 +14,9 @@ import lombok.experimental.Delegate;
 /**
  * @author Jenya705
  */
-public class BukkitChestWrapper implements Chest, BukkitStateContainer {
+public class BukkitChestWrapper
+        extends AbstractBukkitBlockState<org.bukkit.block.Chest>
+        implements Chest {
 
     @Delegate
     private final InventoryHolder inventoryHolderDelegate;
@@ -24,13 +26,11 @@ public class BukkitChestWrapper implements Chest, BukkitStateContainer {
     private final Directional directionalDelegate;
     @Delegate
     private final Waterlogged waterloggedDelegate;
-    @Getter
-    private final CapturedState state;
 
     public BukkitChestWrapper(org.bukkit.block.Block bukkitChest) {
-        state = new SharedCapturedState(bukkitChest);
-        inventoryHolderDelegate = new BukkitInventoryHolderWrapper(state);
-        watchableDelegate = new BukkitWatchableWrapper(state);
+        super(bukkitChest);
+        inventoryHolderDelegate = new BukkitInventoryHolderWrapper(getState());
+        watchableDelegate = new BukkitWatchableWrapper(getState());
         directionalDelegate = new BukkitDirectionalWrapper(bukkitChest);
         waterloggedDelegate = new BukkitWaterloggedWrapper(bukkitChest);
     }

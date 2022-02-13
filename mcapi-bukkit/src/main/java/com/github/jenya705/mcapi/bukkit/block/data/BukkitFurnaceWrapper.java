@@ -4,10 +4,7 @@ import com.github.jenya705.mcapi.block.Directional;
 import com.github.jenya705.mcapi.block.Liter;
 import com.github.jenya705.mcapi.block.Watchable;
 import com.github.jenya705.mcapi.block.data.Furnace;
-import com.github.jenya705.mcapi.bukkit.block.BukkitDirectionalWrapper;
-import com.github.jenya705.mcapi.bukkit.block.BukkitLiterWrapper;
-import com.github.jenya705.mcapi.bukkit.block.BukkitStateContainer;
-import com.github.jenya705.mcapi.bukkit.block.BukkitWatchableWrapper;
+import com.github.jenya705.mcapi.bukkit.block.*;
 import com.github.jenya705.mcapi.bukkit.block.state.CapturedState;
 import com.github.jenya705.mcapi.bukkit.block.state.SharedCapturedState;
 import com.github.jenya705.mcapi.bukkit.inventory.BukkitFurnaceInventoryWrapper;
@@ -18,17 +15,16 @@ import lombok.experimental.Delegate;
 /**
  * @author Jenya705
  */
-public class BukkitFurnaceWrapper implements Furnace, BukkitStateContainer {
-
-    @Getter
-    private final CapturedState state;
+public class BukkitFurnaceWrapper
+        extends AbstractBukkitBlockState<org.bukkit.block.Furnace>
+        implements Furnace {
 
     @Delegate
     private final Directional directionalDelegate;
     @Delegate
     private final Watchable watchableDelegate;
     @Delegate
-    private Liter literDelegate;
+    private final Liter literDelegate;
 
     private FurnaceInventory inventory;
 
@@ -37,7 +33,7 @@ public class BukkitFurnaceWrapper implements Furnace, BukkitStateContainer {
     }
 
     public BukkitFurnaceWrapper(CapturedState state, org.bukkit.block.Block block) {
-        this.state = state;
+        super(state, block);
         directionalDelegate = new BukkitDirectionalWrapper(block);
         watchableDelegate = new BukkitWatchableWrapper(state);
         literDelegate = new BukkitLiterWrapper(block);
@@ -71,10 +67,6 @@ public class BukkitFurnaceWrapper implements Furnace, BukkitStateContainer {
     @Override
     public int getBurnTime() {
         return state().getBurnTime();
-    }
-
-    private org.bukkit.block.Furnace state() {
-        return state.state();
     }
 
 }

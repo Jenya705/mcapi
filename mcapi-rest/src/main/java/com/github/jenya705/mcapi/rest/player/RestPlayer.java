@@ -6,6 +6,7 @@ import com.github.jenya705.mcapi.jackson.DefaultNull;
 import com.github.jenya705.mcapi.jackson.DefaultString;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.rest.RestLocation;
+import com.github.jenya705.mcapi.rest.inventory.RestInventory;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,6 +36,7 @@ public class RestPlayer {
     private float health;
     @DefaultBoolean(false)
     private boolean ai;
+    private RestInventory inventory;
 
     public static RestPlayer from(Player player) {
         return new RestPlayer(
@@ -46,7 +48,8 @@ public class RestPlayer {
                 RestPlayerAbilities.from(player.getAbilities()),
                 player.customName(),
                 player.getHealth(),
-                player.hasAI()
+                player.hasAI(),
+                RestInventory.from(player.getInventory())
         );
     }
 
