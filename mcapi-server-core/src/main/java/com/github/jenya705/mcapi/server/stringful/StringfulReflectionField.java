@@ -38,4 +38,8 @@ public class StringfulReflectionField implements StringfulReflectionObject {
     public Class<?> getType() {
         return field.getType();
     }
+
+    @Override
+    public void validate() {
+    }
 }

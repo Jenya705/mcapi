@@ -56,6 +56,7 @@ public class StringfulParserImpl<T> implements StringfulParser<T> {
                     indexAnnotation.value() :
                     Math.min(indexAnnotation.value(), requiredStart);
         }
+        reflectionObject.validate();
         setDataValue(indexAnnotation.value(), generateReflectionObjectFunction(reflectionObject));
     }
 

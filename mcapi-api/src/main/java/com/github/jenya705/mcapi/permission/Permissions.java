@@ -38,6 +38,12 @@ public class Permissions {
 
     public final String EVENT_TUNNEL_INVENTORY_MOVE = "event_tunnel.inventory_move";
 
+    public final String EVENT_TUNNEL_INVENTORY_MOVE_LISTEN = EVENT_TUNNEL_INVENTORY_MOVE + ".listen";
+
+    public final String EVENT_TUNNEL_INVENTORY_MOVE_UUID_HOLDER = EVENT_TUNNEL_INVENTORY_MOVE + ".uuid_holder";
+
+    public final String EVENT_TUNNEL_INVENTORY_MOVE_BLOCK = EVENT_TUNNEL_INVENTORY_MOVE + ".block";
+
     public final String LINK_REQUEST = "link.request";
 
     public final String COMMAND_CREATE = "command.create";

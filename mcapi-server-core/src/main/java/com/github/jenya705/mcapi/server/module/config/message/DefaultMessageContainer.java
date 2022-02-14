@@ -139,6 +139,14 @@ public class DefaultMessageContainer implements MessageContainer {
                 .color(errorColor);
     }
 
+    @Override
+    public Component worldNotFound(String id) {
+        return Component
+                .translatable("mcapi.world.notfound")
+                .args(Component.text(id))
+                .color(errorColor);
+    }
+
     private final Component onlyForPlayers = Component
             .translatable("mcapi.player.only")
             .color(errorColor);

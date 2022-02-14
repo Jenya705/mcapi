@@ -12,7 +12,9 @@ import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.entity.BotPermissionEntity;
 import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
+import com.github.jenya705.mcapi.server.util.PlayerUtils;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,6 +26,7 @@ import java.util.stream.Collectors;
  * @author Jenya705
  */
 @NoConfig
+@Singleton
 @AdditionalPermissions("others")
 public class PermissionGiveBotCommand extends AdvancedCommandExecutor<PermissionGiveBotArguments> {
 
@@ -60,7 +63,14 @@ public class PermissionGiveBotCommand extends AdvancedCommandExecutor<Permission
 
     @Override
     public void onCommand(CommandSender sender, PermissionGiveBotArguments args, String permission) {
-        UUID target = args.getTarget() == null ? null : args.getTarget().getUuid();
+        Object playerId = PlayerUtils.parsePlayerId(args.getTarget());
+        UUID target = playerId instanceof UUID ?
+                (UUID) playerId :
+                playerId == null ?
+                        null :
+                        core()
+                                .getOfflinePlayer(playerId.toString())
+                                .getUuid();
         worker().invoke(() -> {
             BotEntity bot;
             UUID uuid = sender instanceof Player ? ((Player) sender).getUuid() : null;

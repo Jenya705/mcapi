@@ -5,6 +5,7 @@ import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.command.bot.create.CreateBotCommand;
 import com.github.jenya705.mcapi.server.command.bot.delete.DeleteBotCommand;
 import com.github.jenya705.mcapi.server.command.bot.list.ListBotCommand;
+import com.github.jenya705.mcapi.server.command.bot.permission.block.PermissionBlockBotCommand;
 import com.github.jenya705.mcapi.server.command.bot.permission.give.PermissionGiveBotCommand;
 import com.github.jenya705.mcapi.server.command.bot.permission.list.PermissionListBotCommand;
 import com.github.jenya705.mcapi.server.command.link.links.LinksCommand;
@@ -48,6 +49,7 @@ public class RootCommand extends AbstractApplicationModule implements Supplier<C
                         .branch("permission", permissionBranch -> permissionBranch
                                 .leaf("list", bean(PermissionListBotCommand.class))
                                 .leaf("give", bean(PermissionGiveBotCommand.class))
+                                .leaf("block", bean(PermissionBlockBotCommand.class))
                         )
                 )
                 .branch("tunnel", branch -> branch

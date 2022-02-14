@@ -29,14 +29,18 @@ public class StringfulReflectionMethod implements StringfulReflectionObject {
     @Override
     @SneakyThrows
     public void invoke(Object data, Object value) {
-        if (method.getParameterTypes().length != 1) {
-            throw new IllegalArgumentException("Method parameter types length is not 1");
-        }
         method.invoke(data, value);
     }
 
     @Override
     public Class<?> getType() {
         return method.getParameterTypes()[0];
+    }
+
+    @Override
+    public void validate() {
+        if (method.getParameterTypes().length != 1) {
+            throw new IllegalArgumentException("Method parameter types length is not 1");
+        }
     }
 }

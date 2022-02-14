@@ -52,7 +52,7 @@ public class BukkitUtils {
         }
         ValueContainer<T> value = atomicValue.get();
         if (value == null) {
-            throw new IllegalArgumentException("Bukkit server is lagging");
+            throw new RuntimeException("Bukkit server is lagging");
         }
         return value.getValue();
     }

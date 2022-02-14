@@ -1,13 +1,13 @@
 package com.github.jenya705.mcapi.mock;
 
 import com.github.jenya705.mcapi.Material;
-import com.github.jenya705.mcapi.player.OfflinePlayer;
 import com.github.jenya705.mcapi.entity.Entity;
 import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.inventory.InventoryView;
 import com.github.jenya705.mcapi.menu.InventoryMenuView;
 import com.github.jenya705.mcapi.mock.filesystem.MockFileSystem;
 import com.github.jenya705.mcapi.mock.filesystem.MockFileSystemImpl;
+import com.github.jenya705.mcapi.player.OfflinePlayer;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.server.ServerCore;
 import com.github.jenya705.mcapi.server.command.CommandExecutor;
@@ -71,6 +71,11 @@ public class MockServerCore implements ServerCore {
 
     @Override
     public World getWorld(String id) {
+        return null;
+    }
+
+    @Override
+    public Collection<? extends World> getWorlds() {
         return null;
     }
 

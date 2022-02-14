@@ -1,7 +1,7 @@
 package com.github.jenya705.mcapi.rest.command;
 
+import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.event.CommandInteractionEvent;
-import com.github.jenya705.mcapi.rest.RestCommandSender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +20,7 @@ public class RestCommandInteractionEvent {
 
     private String path;
     private RestCommandInteractionValue[] values;
-    private RestCommandSender commandSender;
+    private CommandSender commandSender;
 
     public String getType() {
         return type;
@@ -33,7 +33,7 @@ public class RestCommandInteractionEvent {
                         .stream(event.getValues())
                         .map(RestCommandInteractionValue::from)
                         .toArray(RestCommandInteractionValue[]::new),
-                RestCommandSender.from(event.getSender())
+                event.getSender()
         );
     }
 }

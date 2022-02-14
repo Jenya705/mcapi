@@ -13,7 +13,6 @@ import com.github.jenya705.mcapi.server.module.web.websocket.stateful.SimpleStat
 import lombok.Getter;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -73,7 +72,8 @@ public class DefaultEventTunnelClient extends SimpleStatefulWebSocketConnection<
     public boolean subscribe(String subscription) {
         String gatewayPermission = String.format(permissionFormat, subscription);
         return owner != null &&
-                owner.hasPermission(gatewayPermission) &&
+                (owner.hasPermission(gatewayPermission) ||
+                        owner.hasPermission(gatewayPermission + ".listen")) &&
                 subscriptions.add(subscription);
     }
 

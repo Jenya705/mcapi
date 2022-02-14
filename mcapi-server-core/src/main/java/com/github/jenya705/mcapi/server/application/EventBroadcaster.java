@@ -54,11 +54,6 @@ public class EventBroadcaster extends AbstractApplicationModule {
                                 .filter(client -> client.isSubscribed(RestCapturedEntityClickEvent.type))
                                 .forEach(client -> client.send(it))
                 )
-                .asyncHandler(
-                        InventoryMoveEvent.class,
-                        it -> eventTunnel()
-                                .broadcast(RestInventoryMoveEvent.from(it), RestInventoryMoveEvent.type)
-                )
         ;
     }
 }

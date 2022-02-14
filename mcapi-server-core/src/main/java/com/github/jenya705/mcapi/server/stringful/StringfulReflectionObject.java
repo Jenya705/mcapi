@@ -15,4 +15,6 @@ public interface StringfulReflectionObject {
 
     Class<?> getType();
 
+    void validate();
+
 }

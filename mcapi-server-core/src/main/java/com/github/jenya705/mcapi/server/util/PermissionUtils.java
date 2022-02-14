@@ -3,6 +3,7 @@ package com.github.jenya705.mcapi.server.util;
 import com.github.jenya705.mcapi.block.Block;
 import com.github.jenya705.mcapi.entity.Entity;
 import com.github.jenya705.mcapi.permission.Permissions;
+import com.github.jenya705.mcapi.world.World;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -41,6 +42,14 @@ public class PermissionUtils {
 
     public String captureEntity(Entity entity) {
         return captureEntity(entity.getType());
+    }
+
+    public String worldPermission(String permission, World world) {
+        return permission + "." + world.getName();
+    }
+
+    public String blockPermission(String permission, Block block) {
+        return worldPermission(permission, block.getLocation().getWorld());
     }
 
 }

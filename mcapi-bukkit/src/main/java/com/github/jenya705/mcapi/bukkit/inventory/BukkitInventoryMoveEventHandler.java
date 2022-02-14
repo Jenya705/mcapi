@@ -27,6 +27,8 @@ import java.util.*;
 @Singleton
 public class BukkitInventoryMoveEventHandler implements Listener {
 
+    private static final InventoryHolder airHolder = null;
+
     private final EventLoop eventLoop;
     private final BukkitFullWrapper fullWrapper;
 
@@ -174,15 +176,16 @@ public class BukkitInventoryMoveEventHandler implements Listener {
     private void consumePlacingWithoutChecking(InventoryClickEvent event, Player player, int amount) {
         ItemStack cursor = event.getCursor();
         Inventory holderInventory = event.getClickedInventory();
-        if (cursor == null || holderInventory == null) return;
+        if (cursor == null || cursor.getType().isAir() || holderInventory == null) return;
         ItemStack newCursor = new ItemStack(cursor);
         newCursor.setAmount(amount);
+        Inventory itemTaken = getItemTakenInventory(event, player);
         inventoryMoveEvent(
                 event.getSlot(),
                 getItemTakenSlot(player),
                 newCursor,
                 holderInventory.getHolder(),
-                getItemTakenInventory(event, player).getHolder(),
+                itemTaken == null ? null : itemTaken.getHolder(),
                 player
         );
     }
@@ -221,7 +224,7 @@ public class BukkitInventoryMoveEventHandler implements Listener {
                 -1,
                 getItemTakenSlot(player),
                 endItem,
-                null,
+                airHolder,
                 source == null ? null : source.getHolder(),
                 player
         );

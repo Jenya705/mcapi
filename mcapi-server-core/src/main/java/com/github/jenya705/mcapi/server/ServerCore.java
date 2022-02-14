@@ -1,11 +1,11 @@
 package com.github.jenya705.mcapi.server;
 
 import com.github.jenya705.mcapi.Material;
-import com.github.jenya705.mcapi.player.OfflinePlayer;
 import com.github.jenya705.mcapi.entity.Entity;
 import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.inventory.InventoryView;
 import com.github.jenya705.mcapi.menu.InventoryMenuView;
+import com.github.jenya705.mcapi.player.OfflinePlayer;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.server.application.FileType;
 import com.github.jenya705.mcapi.server.command.CommandExecutor;
@@ -46,6 +46,8 @@ public interface ServerCore {
     Entity getEntity(UUID uuid);
 
     World getWorld(String id);
+
+    Collection<? extends World> getWorlds();
 
     Collection<? extends Entity> getEntities();
 

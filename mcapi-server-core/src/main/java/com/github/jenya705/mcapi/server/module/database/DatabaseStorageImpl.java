@@ -5,7 +5,9 @@ import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.server.entity.BotPermissionEntity;
+import com.github.jenya705.mcapi.server.entity.PermissionEntity;
 import com.github.jenya705.mcapi.server.module.database.cache.CacheStorage;
+import com.github.jenya705.mcapi.server.module.database.cache.FakeCacheStorage;
 import com.github.jenya705.mcapi.server.module.storage.StorageModule;
 import com.github.jenya705.mcapi.server.util.FileUtils;
 import lombok.AccessLevel;
@@ -100,12 +102,14 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
     @Override
     @SneakyThrows
     public BotEntity findBotById(int id) {
-        BotEntity bot = cache().getCachedBot(id);
+        BotEntity bot = isCacheFake() ? null : cache().getCachedBot(id);
         if (bot == null) {
             bot = parseSingleElement(BotEntity.mapResultSet(
                     databaseModule.query(findBotById, id)
             ));
-            cache().cache(Objects.requireNonNullElseGet(bot, BotEntity::empty));
+            if (!isCacheFake()) {
+                cache().cache(Objects.requireNonNullElseGet(bot, BotEntity::empty));
+            }
         }
         return bot;
     }
@@ -113,12 +117,14 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
     @Override
     @SneakyThrows
     public BotEntity findBotByToken(String token) {
-        BotEntity bot = cache().getCachedBot(token);
+        BotEntity bot = isCacheFake() ? null : cache().getCachedBot(token);
         if (bot == null) {
             bot = parseSingleElement(BotEntity.mapResultSet(
                     databaseModule.query(findBotByToken, token)
             ));
-            cache().cache(Objects.requireNonNullElseGet(bot, BotEntity::empty));
+            if (!isCacheFake()) {
+                cache().cache(Objects.requireNonNullElseGet(bot, BotEntity::empty));
+            }
         }
         return bot;
     }
@@ -180,10 +186,9 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
     @Override
     @SneakyThrows
     public BotPermissionEntity findPermission(int botId, String permission, UUID target) {
-        if (storageModule.getPermission(permission) == null) return null;
         UUID realTarget = parseTarget(target);
         BotPermissionEntity permissionEntity =
-                cache().getPermission(botId, permission, target);
+                isCacheFake() ? null : cache().getPermission(botId, permission, target);
         if (permissionEntity == null) {
             List<BotPermissionEntity> permissionEntities =
                     BotPermissionEntity.mapResultSet(
@@ -195,23 +200,37 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
                                     realTarget.getLeastSignificantBits()
                             )
                     );
+            boolean targetEquals = false;
             if (!permissionEntities.isEmpty()) {
-                for (BotPermissionEntity entity: permissionEntities) {
-                    permissionEntity = entity;
-                    if (Objects.equals(entity.getTarget(), target)) {
+                for (BotPermissionEntity entity : permissionEntities) {
+                    if (entity.isRegex()) {
+                        permissionEntity = entity;
                         break;
+                    }
+                    if (permissionEntity == null || permissionEntity.getPermission().length() < entity.getPermission().length()) {
+                        permissionEntity = entity;
+                        targetEquals = Objects.equals(entity.getTarget(), target);
+                        continue;
+                    }
+                    if (!targetEquals && Objects.equals(entity.getTarget(), target)) {
+                        permissionEntity = entity;
+                        targetEquals = true;
                     }
                 }
             }
-            cache().cache(Objects.requireNonNullElseGet(permissionEntity, () ->
-                    new BotPermissionEntity(
-                            botId,
-                            permission,
-                            target,
-                            false,
-                            storageModule.getPermission(permission).isEnabled()
-                    )
-            ));
+            if (!isCacheFake()) {
+                PermissionEntity storagePermission = storageModule.getPermission(permission);
+                if (permissionEntity == null && storagePermission == null) return null;
+                cache().cache(Objects.requireNonNullElseGet(permissionEntity, () ->
+                        new BotPermissionEntity(
+                                botId,
+                                permission,
+                                target,
+                                false,
+                                storagePermission.isEnabled()
+                        )
+                ));
+            }
         }
         return permissionEntity;
     }
@@ -224,7 +243,9 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
             permissions = BotPermissionEntity.mapResultSet(
                     databaseModule.query(findPermissionsById, botId)
             );
-            permissions.forEach(cache()::cache);
+            if (!isCacheFake()) {
+                permissions.forEach(cache()::cache);
+            }
         }
         return castCollection(permissions);
     }
@@ -253,7 +274,7 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
     @Override
     @SneakyThrows
     public BotLinkEntity findLink(int botId, UUID target) {
-        BotLinkEntity link = cache()
+        BotLinkEntity link = isCacheFake() ? null : cache()
                 .getCachedLinksWithNullSafety(botId)
                 .stream()
                 .filter(it -> it.getTarget().equals(target))
@@ -275,7 +296,9 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
                             target.getLeastSignificantBits()
                     )
             ));
-            cache().cache(link);
+            if (!isCacheFake()) {
+                cache().cache(link);
+            }
         }
         return link;
     }
@@ -283,12 +306,14 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
     @Override
     @SneakyThrows
     public List<BotLinkEntity> findLinksById(int botId) {
-        Collection<BotLinkEntity> links = cache().getCachedLinks(botId);
+        Collection<BotLinkEntity> links = isCacheFake() ? null : cache().getCachedLinks(botId);
         if (links == null) {
             links = BotLinkEntity.mapResultSet(
                     databaseModule.query(findLinksByBot, botId)
             );
-            links.forEach(cache()::cache);
+            if (!isCacheFake()) {
+                links.forEach(cache()::cache);
+            }
         }
         return castCollection(links);
     }
@@ -296,7 +321,7 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
     @Override
     @SneakyThrows
     public List<BotLinkEntity> findLinksByTarget(UUID target) {
-        Collection<BotLinkEntity> links = cache().getCachedLinks(target);
+        Collection<BotLinkEntity> links = isCacheFake() ? null : cache().getCachedLinks(target);
         if (links == null) {
             links = BotLinkEntity.mapResultSet(
                     databaseModule.query(
@@ -305,21 +330,25 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
                             target.getLeastSignificantBits()
                     )
             );
-            links.forEach(cache()::cache);
+            if (!isCacheFake()) {
+                links.forEach(cache()::cache);
+            }
         }
         return castCollection(links);
     }
 
     @Override
     public void delete(BotEntity botEntity) {
-        cache()
-                .getCachedLinksWithNullSafety(botEntity.getId())
-                .forEach(cache()::unCache);
-        cache()
-                .getCachedPermissionsWithNullSafety(botEntity.getId())
-                .forEach(cache()::unCache);
-        cache()
-                .unCache(botEntity);
+        if (!isCacheFake()) {
+            cache()
+                    .getCachedLinksWithNullSafety(botEntity.getId())
+                    .forEach(cache()::unCache);
+            cache()
+                    .getCachedPermissionsWithNullSafety(botEntity.getId())
+                    .forEach(cache()::unCache);
+            cache()
+                    .unCache(botEntity);
+        }
         databaseModule.update(
                 deleteBot,
                 botEntity.getId()
@@ -336,16 +365,18 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
 
     @Override
     public void delete(BotLinkEntity linkEntity) {
-        for (BotPermissionEntity permissionEntity : cache()
-                .getCachedPermissionsWithNullSafety(linkEntity.getBotId())
-                .stream()
-                .filter(it -> Objects.equals(it.getTarget(), linkEntity.getTarget()))
-                .collect(Collectors.toList())
-        ) {
-            cache().unCache(permissionEntity);
+        if (!isCacheFake()) {
+            for (BotPermissionEntity permissionEntity : cache()
+                    .getCachedPermissionsWithNullSafety(linkEntity.getBotId())
+                    .stream()
+                    .filter(it -> Objects.equals(it.getTarget(), linkEntity.getTarget()))
+                    .collect(Collectors.toList())
+            ) {
+                cache().unCache(permissionEntity);
+            }
+            cache()
+                    .unCache(linkEntity);
         }
-        cache()
-                .unCache(linkEntity);
         databaseModule.update(
                 deleteLink,
                 linkEntity.getBotId(),
@@ -372,7 +403,9 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
                 permissionEntity.isToggled(),
                 permissionEntity.isRegex()
         );
-        cache().cache(permissionEntity);
+        if (!isCacheFake()) {
+            cache().cache(permissionEntity);
+        }
     }
 
     @Override
@@ -383,7 +416,9 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
                 linkEntity.getTarget().getMostSignificantBits(),
                 linkEntity.getTarget().getLeastSignificantBits()
         );
-        cache().cache(linkEntity);
+        if (!isCacheFake()) {
+            cache().cache(linkEntity);
+        }
     }
 
     @Override
@@ -395,7 +430,9 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
                 botEntity.getOwner().getMostSignificantBits(),
                 botEntity.getOwner().getLeastSignificantBits()
         );
-        cache().cache(botEntity);
+        if (!isCacheFake()) {
+            cache().cache(botEntity);
+        }
     }
 
     @Override
@@ -409,7 +446,9 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
                 realTarget.getMostSignificantBits(),
                 realTarget.getLeastSignificantBits()
         );
-        cache().cache(permissionEntity);
+        if (!isCacheFake()) {
+            cache().cache(permissionEntity);
+        }
     }
 
     @Override
@@ -422,7 +461,9 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
                 botEntity.getOwner().getLeastSignificantBits(),
                 botEntity.getId()
         );
-        cache().cache(botEntity);
+        if (!isCacheFake()) {
+            cache().cache(botEntity);
+        }
     }
 
     @Override
@@ -438,7 +479,9 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
                 permissionEntity.isRegex(),
                 permissionEntity.isToggled()
         );
-        cache().cache(permissionEntity);
+        if (!isCacheFake()) {
+            cache().cache(permissionEntity);
+        }
     }
 
     protected String loadScript(String fileName) throws IOException {
@@ -488,4 +531,9 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
                 (List<T>) collection :
                 new ArrayList<>(collection);
     }
+
+    protected boolean isCacheFake() {
+        return cache() instanceof FakeCacheStorage;
+    }
+
 }

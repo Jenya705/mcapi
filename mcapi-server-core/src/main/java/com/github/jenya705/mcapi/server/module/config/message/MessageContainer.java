@@ -53,6 +53,8 @@ public interface MessageContainer {
 
     Component playerNotFound(String name);
 
+    Component worldNotFound(String id);
+
     Component onlyForPlayers();
 
     Component botNameUsed();

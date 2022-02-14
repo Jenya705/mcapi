@@ -4,6 +4,7 @@ import com.github.jenya705.mcapi.server.application.EventBroadcaster;
 import com.github.jenya705.mcapi.server.command.bot.create.CreateBotCommand;
 import com.github.jenya705.mcapi.server.command.bot.delete.DeleteBotCommand;
 import com.github.jenya705.mcapi.server.command.bot.list.ListBotCommand;
+import com.github.jenya705.mcapi.server.command.bot.permission.block.PermissionBlockBotCommand;
 import com.github.jenya705.mcapi.server.command.bot.permission.give.PermissionGiveBotCommand;
 import com.github.jenya705.mcapi.server.command.bot.permission.list.PermissionListBotCommand;
 import com.github.jenya705.mcapi.server.command.link.links.LinksCommand;
@@ -19,6 +20,7 @@ import com.github.jenya705.mcapi.server.event.EventLoop;
 import com.github.jenya705.mcapi.server.form.ComponentFormProvider;
 import com.github.jenya705.mcapi.server.form.component.ComponentMapParser;
 import com.github.jenya705.mcapi.server.ignore.IgnoreManager;
+import com.github.jenya705.mcapi.server.inventory.InventoryMoveEventHandler;
 import com.github.jenya705.mcapi.server.module.authorization.AuthorizationModule;
 import com.github.jenya705.mcapi.server.module.block.BlockDataModule;
 import com.github.jenya705.mcapi.server.module.bot.BotManagement;
@@ -92,6 +94,7 @@ public class ApplicationClassesBinder extends AbstractModule {
             IgnoreManager.class,
             ComponentMapParser.class,
             EventBroadcaster.class,
+            InventoryMoveEventHandler.class,
             EventLoop.class,
             Worker.class
     );
@@ -135,6 +138,7 @@ public class ApplicationClassesBinder extends AbstractModule {
             DeleteBotCommand.class,
             PermissionListBotCommand.class,
             PermissionGiveBotCommand.class,
+            PermissionBlockBotCommand.class,
             ConnectedEventTunnelsCommand.class,
             SubscriptionsEventTunnelsCommand.class,
             LinkEndCommand.class,

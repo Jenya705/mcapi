@@ -9,6 +9,7 @@ import com.github.jenya705.mcapi.server.module.config.ConfigModule;
 import com.github.jenya705.mcapi.server.module.database.cache.CacheConfig;
 import com.github.jenya705.mcapi.server.module.database.cache.CacheStorage;
 import com.github.jenya705.mcapi.server.module.database.cache.CacheStorageImpl;
+import com.github.jenya705.mcapi.server.module.database.cache.FakeCacheStorage;
 import com.github.jenya705.mcapi.server.module.database.safe.CacheDatabaseGetter;
 import com.github.jenya705.mcapi.server.module.database.safe.DatabaseGetter;
 import com.github.jenya705.mcapi.server.module.database.safe.StorageDatabaseGetter;
@@ -19,9 +20,9 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.*;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Jenya705
@@ -47,7 +48,7 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
     @Inject
     public DatabaseModuleImpl(ServerApplication application, ConfigModule configModule, StorageModule storageModule) {
         super(application);
-        databaseTypeInitializers = new ConcurrentHashMap<>();
+        databaseTypeInitializers = new HashMap<>();
         addTypeInitializer("mysql", new MySqlDatabaseInitializer(app(), this, storageModule));
         addTypeInitializer("sqlite", new SqliteDatabaseInitializer(app()));
         defaultDatabaseTypeInitializer = new DefaultDatabaseTypeInitializer(app(), this, storageModule);
@@ -55,14 +56,6 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
                 .getConfig()
                 .required("database");
         config = new DatabaseModuleConfig(configData);
-        cache = new CacheStorageImpl(
-                application,
-                new CacheConfig(
-                        configData
-                                .required("cache")
-                ),
-                this
-        );
         TimerTask task = TimerTask.start(log, "Creating connection with %s...", config.getType());
         connection = createConnection();
         task.complete();
@@ -71,8 +64,23 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
         task.complete();
         storage.setup();
         safeAsync = new StorageDatabaseGetter(storage);
-        safeSync = new CacheDatabaseGetter(cache);
-        safeSyncWithFuture = new CacheDatabaseGetter(cache.withFuture());
+        if (config.isDisableCaching()) {
+            cache = new FakeCacheStorage(this);
+            safeSync = safeAsync;
+            safeSyncWithFuture = safeAsync;
+        }
+        else {
+            cache = new CacheStorageImpl(
+                    application,
+                    new CacheConfig(
+                            configData
+                                    .required("cache")
+                    ),
+                    this
+            );
+            safeSync = new CacheDatabaseGetter(cache);
+            safeSyncWithFuture = new CacheDatabaseGetter(cache.withFuture());
+        }
     }
 
     protected Connection createConnection() {

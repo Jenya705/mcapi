@@ -23,10 +23,12 @@ public class RestInventoryMoveEvent {
 
     @DefaultInteger(-1)
     private int destinationSlot;
+    @DefaultInteger(-1)
     private int sourceSlot;
     private RestItemStack item;
     @DefaultNull
     private InventoryHolder destination;
+    @DefaultNull
     private Object source;
     @DefaultNull
     private Object initiator;
@@ -45,7 +47,7 @@ public class RestInventoryMoveEvent {
                         Objects.equals(event.getSource(), event.getInitiator()) ?
                                 "source" :
                                 event.getInitiator()
-                );
+        );
     }
 
 }
