@@ -37,6 +37,7 @@ import com.github.jenya705.mcapi.server.module.mapper.Mapper;
 import com.github.jenya705.mcapi.server.module.material.MaterialStorage;
 import com.github.jenya705.mcapi.server.module.menu.MenuModule;
 import com.github.jenya705.mcapi.server.module.message.MessageDeserializer;
+import com.github.jenya705.mcapi.server.module.options.RawOptionsParser;
 import com.github.jenya705.mcapi.server.module.rest.RestModule;
 import com.github.jenya705.mcapi.server.module.rest.route.SendMessageRouteHandler;
 import com.github.jenya705.mcapi.server.module.rest.route.block.*;
@@ -70,6 +71,7 @@ public class ApplicationClassesBinder extends AbstractModule {
     public static final List<Class<?>> modules = Arrays.asList(
             MessageContainer.class,
             Mapper.class,
+            RawOptionsParser.class,
             ConfigModule.class,
             StorageModule.class,
             DatabaseModule.class,

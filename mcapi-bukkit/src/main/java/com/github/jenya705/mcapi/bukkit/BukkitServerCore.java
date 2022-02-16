@@ -191,14 +191,11 @@ public class BukkitServerCore implements ServerCore {
         return BukkitWrapper.world(Bukkit.getWorld(rawOrMinecraft(id)));
     }
 
-    @SuppressWarnings("deprecated use")
     private NamespacedKey rawOrMinecraft(String namespace) {
-        String[] split = namespace.split(":", 2);
-        if (split.length == 1) {
-            return NamespacedKey.minecraft(namespace);
+        if (namespace.contains(":")) {
+            return NamespacedKey.fromString(namespace);
         }
-        // We need to use deprecated function, because we can not do it by other way
-        return new NamespacedKey(split[0], split[1]);
+        return NamespacedKey.minecraft(namespace);
     }
 
 }

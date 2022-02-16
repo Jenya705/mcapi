@@ -59,6 +59,10 @@ public class BotPermissionEntity {
                 .replace(".*", "*");
     }
 
+    public boolean isGlobal() {
+        return target == null || target.equals(identityTarget);
+    }
+
     public static String toRegex(String permission) {
         return permission
                 .replace(".", "\\.")

@@ -1,5 +1,9 @@
 package com.github.jenya705.mcapi.server.module.config.message;
 
+import com.github.jenya705.mcapi.Vector3;
+import com.github.jenya705.mcapi.block.Block;
+import com.github.jenya705.mcapi.player.OfflinePlayer;
+import com.github.jenya705.mcapi.server.ServerCore;
 import com.github.jenya705.mcapi.server.command.CommandDescription;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.entity.BotLinkEntity;
@@ -9,9 +13,11 @@ import com.github.jenya705.mcapi.server.module.link.LinkingModule;
 import com.github.jenya705.mcapi.server.module.localization.LocalizationModule;
 import com.github.jenya705.mcapi.server.module.web.tunnel.EventTunnelClient;
 import com.github.jenya705.mcapi.server.util.Pair;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -37,8 +43,11 @@ public class DefaultMessageContainer implements MessageContainer {
     private static final Component dash = Component.text("-").color(signColor);
 
     private final MessageLoader loader;
+    private final ServerCore core;
 
-    public DefaultMessageContainer() {
+    @Inject
+    public DefaultMessageContainer(ServerCore core) {
+        this.core = core;
         loader = new MessageLoader();
         loader.load();
     }
@@ -241,6 +250,37 @@ public class DefaultMessageContainer implements MessageContainer {
                                 .map(it -> Component
                                         .text(it.toLocalPermission())
                                         .color(it.isToggled() ? successColor : errorColor)
+                                        .append(Component.space())
+                                        .append(Component
+                                                .translatable("mcapi.permission.list.target")
+                                                .color(neutralColor)
+                                                .hoverEvent(HoverEvent.showText((
+                                                                it.isGlobal() ?
+                                                                        Component
+                                                                                .translatable("mcapi.permission.target.global") :
+                                                                        Component.empty()
+                                                                                .append(Component
+                                                                                        .translatable("mcapi.permission.target.uuid")
+                                                                                        .args(core
+                                                                                                .getOptionalOfflinePlayer(it.getTarget())
+                                                                                                .map(OfflinePlayer::getName)
+                                                                                                .map(player -> (Component)
+                                                                                                        Component
+                                                                                                                .translatable("mcapi.permission.target.player")
+                                                                                                                .args(Component.text(player))
+                                                                                                )
+                                                                                                .orElse(Component.text(it.getTarget().toString()))
+                                                                                        )
+                                                                                )
+                                                                                .append(Component.newline())
+                                                                                .append(Component.newline())
+                                                                                .append(Component
+                                                                                        .translatable("mcapi.permission.target.block")
+                                                                                        .args(vector(Block.fromUuid(it.getTarget())))
+                                                                                )
+                                                        ).color(signColor)
+                                                ))
+                                        )
                                 )
                                 .collect(Collectors.toList())
                 ))
@@ -449,6 +489,16 @@ public class DefaultMessageContainer implements MessageContainer {
                 .append(Component.text("["))
                 .append(component)
                 .append(Component.text("]"));
+    }
+
+    private static Component vector(Vector3 vector3) {
+        return inBrackets(
+                Component.text(
+                        vector3.getX() + ", " +
+                                vector3.getY() + ", " +
+                                vector3.getZ()
+                )
+        );
     }
 
     private static Component stringList(Collection<? extends String> list) {

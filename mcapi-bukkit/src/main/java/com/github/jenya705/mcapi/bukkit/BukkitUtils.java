@@ -32,6 +32,27 @@ public class BukkitUtils {
         }
     }
 
+    public void blockingNotAsyncTask(Runnable runnable) {
+        if (Bukkit.isPrimaryThread()) {
+            runnable.run();
+        }
+        else {
+            Bukkit.getServer().getScheduler().runTask(getPlugin(), () -> {
+                runnable.run();
+                synchronized (runnable) {
+                    runnable.notifyAll();
+                }
+            });
+            synchronized (runnable) {
+                try {
+                    runnable.wait(10 * 1000); // 10 secs
+                } catch (InterruptedException e) {
+                    // ignored
+                }
+            }
+        }
+    }
+
     public <T> T notAsyncSupplier(Supplier<T> supplier) {
         if (Bukkit.isPrimaryThread()) {
             return supplier.get();

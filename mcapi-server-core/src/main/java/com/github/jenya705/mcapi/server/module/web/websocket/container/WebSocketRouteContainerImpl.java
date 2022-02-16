@@ -16,9 +16,6 @@ import java.util.function.Supplier;
  */
 public class WebSocketRouteContainerImpl<T extends WebSocketContainerConnection> implements WebSocketRouteContainer<T> {
 
-    private final Map<WebSocketConnection, T> webSocketConnections = new ConcurrentHashMap<>();
-    private Function<WebSocketConnection, T> factoryMethod;
-
     @RequiredArgsConstructor
     private static class ProxyWebSocketConnection<T extends WebSocketContainerConnection>
             implements WebSocketConnection {
@@ -41,7 +38,11 @@ public class WebSocketRouteContainerImpl<T extends WebSocketContainerConnection>
         public void send(Object obj) {
             delegate.send(obj);
         }
+
     }
+
+    private final Map<WebSocketConnection, T> webSocketConnections = new ConcurrentHashMap<>();
+    private Function<WebSocketConnection, T> factoryMethod;
 
     public WebSocketRouteContainerImpl() {
     }
