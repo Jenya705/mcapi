@@ -23,6 +23,14 @@ public interface Block extends UUIDHolder {
         return new UUID((x << 32) | z, y);
     }
 
+    static Vector3 fromUuid(UUID uuid) {
+        return Vector3.of(
+                (uuid.getMostSignificantBits() & xMask) >> 32,
+                uuid.getLeastSignificantBits() & yMask,
+                uuid.getMostSignificantBits() & zMask
+        );
+    }
+
     Location getLocation();
 
     Material getMaterial();

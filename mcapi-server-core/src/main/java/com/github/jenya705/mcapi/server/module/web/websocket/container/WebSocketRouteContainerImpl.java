@@ -2,10 +2,12 @@ package com.github.jenya705.mcapi.server.module.web.websocket.container;
 
 import com.github.jenya705.mcapi.server.module.web.websocket.WebSocketConnection;
 import com.github.jenya705.mcapi.server.module.web.websocket.WebSocketMessage;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -14,8 +16,32 @@ import java.util.function.Supplier;
  */
 public class WebSocketRouteContainerImpl<T extends WebSocketContainerConnection> implements WebSocketRouteContainer<T> {
 
-    private final Map<WebSocketConnection, T> webSocketConnections = new HashMap<>();
+    private final Map<WebSocketConnection, T> webSocketConnections = new ConcurrentHashMap<>();
     private Function<WebSocketConnection, T> factoryMethod;
+
+    @RequiredArgsConstructor
+    private static class ProxyWebSocketConnection<T extends WebSocketContainerConnection>
+            implements WebSocketConnection {
+
+        private final WebSocketConnection delegate;
+        private final WebSocketRouteContainerImpl<T> thatObject;
+
+        @Override
+        public <E> Optional<E> header(String key, Class<? extends E> clazz) {
+            return delegate.header(key, clazz);
+        }
+
+        @Override
+        public void close() {
+            thatObject.removeConnection(delegate);
+            delegate.close();
+        }
+
+        @Override
+        public void send(Object obj) {
+            delegate.send(obj);
+        }
+    }
 
     public WebSocketRouteContainerImpl() {
     }
@@ -45,13 +71,13 @@ public class WebSocketRouteContainerImpl<T extends WebSocketContainerConnection>
     public void onConnect(WebSocketConnection connection) {
         T localConnection = factoryMethod.apply(connection);
         webSocketConnections.put(connection, localConnection);
-        localConnection.delegate(connection);
+        localConnection.delegate(new ProxyWebSocketConnection<>(connection, this));
         localConnection.onConnection();
     }
 
     @Override
     public void onClose(WebSocketConnection connection) {
-        getConnection(connection).onClose();
+        removeConnection(connection).onClose();
     }
 
     @Override
@@ -65,9 +91,18 @@ public class WebSocketRouteContainerImpl<T extends WebSocketContainerConnection>
     }
 
     private T getConnection(WebSocketConnection connection) {
+        validateConnection(connection);
+        return webSocketConnections.get(connection);
+    }
+
+    private T removeConnection(WebSocketConnection connection) {
+        return webSocketConnections.remove(connection);
+    }
+
+    private void validateConnection(WebSocketConnection connection) {
         if (!webSocketConnections.containsKey(connection)) {
             throw new IllegalArgumentException("This connection is not registered");
         }
-        return webSocketConnections.get(connection);
     }
+
 }

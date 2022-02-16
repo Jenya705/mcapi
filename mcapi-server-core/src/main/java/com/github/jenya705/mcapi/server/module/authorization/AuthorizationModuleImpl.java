@@ -7,6 +7,7 @@ import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.entity.BotObject;
+import com.github.jenya705.mcapi.server.module.authorization.debug.DebugBotFactory;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.server.module.storage.StorageModule;
 import com.google.inject.Inject;
@@ -20,12 +21,15 @@ public class AuthorizationModuleImpl extends AbstractApplicationModule implement
 
     private final DatabaseModule databaseModule;
     private final StorageModule storage;
+    private final DebugBotFactory debugBotFactory;
 
     @Inject
-    public AuthorizationModuleImpl(ServerApplication application, DatabaseModule databaseModule, StorageModule storage) {
+    public AuthorizationModuleImpl(ServerApplication application, DatabaseModule databaseModule,
+                                   StorageModule storage, DebugBotFactory debugBotFactory) {
         super(application);
         this.databaseModule = databaseModule;
         this.storage = storage;
+        this.debugBotFactory = debugBotFactory;
     }
 
     @Override
@@ -43,6 +47,8 @@ public class AuthorizationModuleImpl extends AbstractApplicationModule implement
 
     @Override
     public AbstractBot rawBot(String token) {
+        AbstractBot debugBot = debugBotFactory.create(token);
+        if (debugBot != null) return debugBot;
         BotEntity bot = databaseModule.storage().findBotByToken(token);
         if (bot == null) {
             throw AuthorizationBadTokenException.create();

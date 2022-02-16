@@ -67,8 +67,12 @@ public class CommandModuleImpl extends AbstractApplicationModule implements Comm
                         parserContainer.getParser(value.getType()).write(value, generator)
                 );
         commandLoader.loadAllCommands().forEach((id, commands) -> {
-            AbstractBot owner = authorizationModule.botById(id);
-            commands.forEach(command -> registerCommandWithoutCheck(command, owner, false));
+            try {
+                AbstractBot owner = authorizationModule.botById(id);
+                commands.forEach(command -> registerCommandWithoutCheck(command, owner, false));
+            } catch (Exception e) {
+                log.error("Failed to load bot commands:", e);
+            }
         });
     }
 
