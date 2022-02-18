@@ -20,13 +20,4 @@ public class RawOptionsTest {
         Assertions.assertEquals("another", message.getOptions("another").get(0).get());
     }
 
-    @Test
-    public void quoteTest() {
-        RawOptionsParser parser = new RawOptionsParserImpl(new MapperImpl());
-        RawOptionsMessage message = parser.parse("some=\"bye hi\",another=another,something=\"hello!! 32\"");
-        Assertions.assertEquals("bye hi", message.getOptions("some").get(0).get());
-        Assertions.assertEquals("another", message.getOptions("another").get(0).get());
-        Assertions.assertEquals("hello!! 32", message.getOptions("something").get(0).get());
-    }
-
 }

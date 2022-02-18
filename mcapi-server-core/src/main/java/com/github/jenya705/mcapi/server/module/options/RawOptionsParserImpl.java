@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 @Singleton
 public class RawOptionsParserImpl implements RawOptionsParser {
 
-    private static final Pattern parsePattern = Pattern.compile("(\\w*)=((\"([^,\"]*)\")|([^\"][^,\"]*[^\",]))\\s*(,|$)");
+    private static final Pattern parsePattern = Pattern.compile("(\\w*)=([^,]*)\\s*(,|$)");
 
     private final Mapper mapper;
 
@@ -40,7 +40,7 @@ public class RawOptionsParserImpl implements RawOptionsParser {
             }
             currentIndex = patternMatcher.end();
             String name = patternMatcher.group(1);
-            String value = Objects.requireNonNullElse(patternMatcher.group(5), patternMatcher.group(4));
+            String value = patternMatcher.group(2);
             result.add(name, new RawOptionsElementImpl(value, mapper));
         }
         return result;
