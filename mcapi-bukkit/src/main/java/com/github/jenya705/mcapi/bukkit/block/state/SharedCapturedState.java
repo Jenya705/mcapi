@@ -19,9 +19,14 @@ public class SharedCapturedState implements CapturedState {
     @Override
     public BlockState getState() {
         if (state == null) {
-            state = BukkitUtils.notAsyncSupplier(block::getState);
+            updateState();
         }
         return state;
+    }
+
+    @Override
+    public void updateState() {
+        state = BukkitUtils.notAsyncSupplier(block::getState);
     }
 
     @Override

@@ -34,9 +34,9 @@ import com.github.jenya705.mcapi.server.module.inject.field.FieldInjectionModule
 import com.github.jenya705.mcapi.server.module.link.LinkingModule;
 import com.github.jenya705.mcapi.server.module.localization.LocalizationModule;
 import com.github.jenya705.mcapi.server.module.mapper.Mapper;
-import com.github.jenya705.mcapi.server.module.material.MaterialStorage;
 import com.github.jenya705.mcapi.server.module.menu.MenuModule;
 import com.github.jenya705.mcapi.server.module.message.MessageDeserializer;
+import com.github.jenya705.mcapi.server.module.object.ObjectStorage;
 import com.github.jenya705.mcapi.server.module.options.RawOptionsParser;
 import com.github.jenya705.mcapi.server.module.rest.RestModule;
 import com.github.jenya705.mcapi.server.module.rest.route.SendMessageRouteHandler;
@@ -86,7 +86,7 @@ public class ApplicationClassesBinder extends AbstractModule {
             EntityCaptureModule.class,
             FieldInjectionModule.class,
             LinkingModule.class,
-            MaterialStorage.class,
+            ObjectStorage.class,
             MenuModule.class,
             MessageDeserializer.class,
             RestModule.class,

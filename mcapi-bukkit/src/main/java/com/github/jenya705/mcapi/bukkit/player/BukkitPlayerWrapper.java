@@ -27,7 +27,7 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements B
     @Delegate
     private final LivingEntity entityDelegate;
 
-    private PlayerAbilities abilities;
+    private final PlayerAbilities abilities;
 
     private final PlayerInventory inventory;
     private final Inventory enderChest;
@@ -35,6 +35,7 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements B
     public BukkitPlayerWrapper(org.bukkit.entity.Player player) {
         super(player);
         this.player = player;
+        abilities = new BukkitPlayerAbilities(player);
         entityDelegate = new BukkitLivingEntityWrapper(player);
         enderChest = BukkitWrapper.inventory(player.getEnderChest());
         inventory = BukkitWrapper.playerInventory(player.getInventory());
@@ -130,9 +131,6 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements B
 
     @Override
     public PlayerAbilities getAbilities() {
-        if (abilities == null) {
-            abilities = new BukkitPlayerAbilities(player);
-        }
         return abilities;
     }
 

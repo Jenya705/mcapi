@@ -18,6 +18,7 @@ import com.github.jenya705.mcapi.bukkit.entity.BukkitLivingEntityWrapper;
 import com.github.jenya705.mcapi.bukkit.inventory.*;
 import com.github.jenya705.mcapi.bukkit.player.BukkitOfflinePlayerWrapper;
 import com.github.jenya705.mcapi.bukkit.player.BukkitPlayerWrapper;
+import com.github.jenya705.mcapi.bukkit.potion.BukkitPotionEffectWrapper;
 import com.github.jenya705.mcapi.bukkit.world.BukkitWorldWrapper;
 import com.github.jenya705.mcapi.enchantment.Enchantment;
 import com.github.jenya705.mcapi.enchantment.ItemEnchantment;
@@ -29,6 +30,9 @@ import com.github.jenya705.mcapi.inventory.PlayerInventory;
 import com.github.jenya705.mcapi.player.GameMode;
 import com.github.jenya705.mcapi.player.OfflinePlayer;
 import com.github.jenya705.mcapi.player.Player;
+import com.github.jenya705.mcapi.potion.PotionEffect;
+import com.github.jenya705.mcapi.potion.PotionEffectType;
+import com.github.jenya705.mcapi.potion.VanillaPotionEffectType;
 import com.github.jenya705.mcapi.world.World;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
@@ -263,6 +267,32 @@ public class BukkitWrapper {
             bukkitInventory.setItem(index++, bukkitItemStack);
         }
         return bukkitInventory;
+    }
+
+    public PotionEffectType potionEffectType(org.bukkit.potion.PotionEffectType type) {
+        return VanillaPotionEffectType.valueOf(type.getName().toUpperCase(Locale.ROOT));
+    }
+
+    public org.bukkit.potion.PotionEffectType potionEffectType(PotionEffectType type) {
+        return org.bukkit.potion.PotionEffectType.getByName(type.getKey());
+    }
+
+    public PotionEffect potionEffect(org.bukkit.potion.PotionEffect potionEffect) {
+        return BukkitPotionEffectWrapper.of(potionEffect);
+    }
+
+    public org.bukkit.potion.PotionEffect potionEffect(PotionEffect potionEffect) {
+        if (potionEffect instanceof BukkitPotionEffectWrapper potionEffectWrapper) {
+            return potionEffectWrapper.getBukkitPotionEffect();
+        }
+        return new org.bukkit.potion.PotionEffect(
+                potionEffectType(potionEffect.getType()),
+                (int) (potionEffect.getDuration() / 50),
+                potionEffect.getAmplifier(),
+                potionEffect.isAmbient(),
+                !potionEffect.isHidden(),
+                !potionEffect.isHidden()
+        );
     }
 
 }

@@ -74,7 +74,7 @@ public final class BoundingBox {
         return getWidthX() * getWidthZ() * getHeight();
     }
 
-    public Vector3 sizeAsVector() {
+    public Vector3 size() {
         return Vector3.of(
                 getWidthX(),
                 getHeight(),

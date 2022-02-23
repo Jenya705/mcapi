@@ -5,10 +5,14 @@ import com.github.jenya705.mcapi.jackson.DefaultBoolean;
 import com.github.jenya705.mcapi.jackson.DefaultFloat;
 import com.github.jenya705.mcapi.jackson.DefaultNull;
 import com.github.jenya705.mcapi.rest.RestLocation;
+import com.github.jenya705.mcapi.rest.potion.RestPotionEffect;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.kyori.adventure.text.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Jenya705
@@ -27,6 +31,8 @@ public class RestLivingEntity {
     private boolean ai;
     @DefaultFloat(20.0f)
     private float health;
+    @DefaultNull
+    private List<RestPotionEffect> effects;
 
     public static RestLivingEntity from(LivingEntity livingEntity) {
         return new RestLivingEntity(
@@ -36,7 +42,14 @@ public class RestLivingEntity {
                 ),
                 livingEntity.customName(),
                 livingEntity.hasAI(),
-                livingEntity.getHealth()
+                livingEntity.getHealth(),
+                livingEntity.getEffects().isEmpty() ?
+                        null :
+                        livingEntity
+                                .getEffects()
+                                .stream()
+                                .map(RestPotionEffect::from)
+                                .collect(Collectors.toList())
         );
     }
 

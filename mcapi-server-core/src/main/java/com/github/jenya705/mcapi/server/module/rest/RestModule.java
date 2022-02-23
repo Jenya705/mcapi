@@ -19,6 +19,8 @@ import com.github.jenya705.mcapi.menu.InventoryMenuView;
 import com.github.jenya705.mcapi.player.OfflinePlayer;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.player.PlayerAbilities;
+import com.github.jenya705.mcapi.potion.PotionEffect;
+import com.github.jenya705.mcapi.potion.PotionEffectType;
 import com.github.jenya705.mcapi.rest.*;
 import com.github.jenya705.mcapi.rest.block.*;
 import com.github.jenya705.mcapi.rest.command.RestCommandInteractionEvent;
@@ -32,6 +34,7 @@ import com.github.jenya705.mcapi.rest.event.*;
 import com.github.jenya705.mcapi.rest.inventory.*;
 import com.github.jenya705.mcapi.rest.player.RestPlayer;
 import com.github.jenya705.mcapi.rest.player.RestPlayerAbilities;
+import com.github.jenya705.mcapi.rest.potion.RestPotionEffect;
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
 import com.github.jenya705.mcapi.server.application.OnStartup;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
@@ -44,7 +47,7 @@ import com.github.jenya705.mcapi.server.inventory.InventoryViewModel;
 import com.github.jenya705.mcapi.server.module.authorization.AuthorizationModule;
 import com.github.jenya705.mcapi.server.module.enchantment.EnchantmentStorage;
 import com.github.jenya705.mcapi.server.module.mapper.Mapper;
-import com.github.jenya705.mcapi.server.module.material.MaterialStorage;
+import com.github.jenya705.mcapi.server.module.object.ObjectStorage;
 import com.github.jenya705.mcapi.server.util.PlayerUtils;
 import com.github.jenya705.mcapi.world.World;
 import com.google.inject.Inject;
@@ -64,19 +67,19 @@ public class RestModule extends AbstractApplicationModule {
     private final AuthorizationModule authorizationModule;
     private final FormPlatformProvider formProvider;
     private final ComponentMapParser formComponentParser;
-    private final MaterialStorage materialStorage;
+    private final ObjectStorage objectStorage;
     private final EnchantmentStorage enchantmentStorage;
 
     @Inject
     public RestModule(ServerApplication application, Mapper mapper, AuthorizationModule authorizationModule,
                       FormPlatformProvider formProvider, ComponentMapParser formComponentParser,
-                      MaterialStorage materialStorage, EnchantmentStorage enchantmentStorage) {
+                      ObjectStorage objectStorage, EnchantmentStorage enchantmentStorage) {
         super(application);
         this.mapper = mapper;
         this.authorizationModule = authorizationModule;
         this.formProvider = formProvider;
         this.formComponentParser = formComponentParser;
-        this.materialStorage = materialStorage;
+        this.objectStorage = objectStorage;
         this.enchantmentStorage = enchantmentStorage;
     }
 
@@ -101,8 +104,11 @@ public class RestModule extends AbstractApplicationModule {
                         .getOptionalWorld(id)
                         .orElseThrow(() -> WorldNotFoundException.create(id))
                 )
+                .rawDeserializer(PotionEffectType.class, objectStorage::getPotionEffect)
+                .rawDeserializer(Material.class, objectStorage::getMaterial)
                 .rawDeserializer(CapturableEntity.class, this::getCapturableEntity)
                 .throwableParser(JsonProcessingException.class, e -> JsonDeserializeException.create())
+                .tunnelJsonSerializer(PotionEffect.class, RestPotionEffect::from)
                 .tunnelJsonSerializer(CommandInteractionValue.class, RestCommandInteractionValue::from)
                 .tunnelJsonSerializer(CommandInteractionEvent.class, RestCommandInteractionEvent::from)
                 .tunnelJsonSerializer(JoinEvent.class, RestJoinEvent::from)
@@ -153,7 +159,7 @@ public class RestModule extends AbstractApplicationModule {
                         InventoryViewModel.class,
                         RestInventoryView.class,
                         rest -> new InventoryViewModel(
-                                materialStorage.getMaterial(rest.getAirMaterial()),
+                                objectStorage.getMaterial(rest.getAirMaterial()),
                                 buildInventory(
                                         Arrays
                                                 .stream(rest.getItems())
@@ -228,7 +234,7 @@ public class RestModule extends AbstractApplicationModule {
 
     private ItemStack parseItemStack(RestItemStack rest) {
         return new EntityItemStack(
-                materialStorage.getMaterial(rest.getMaterial()),
+                objectStorage.getMaterial(rest.getMaterial()),
                 rest.getAmount(),
                 rest.getCustomName(),
                 rest.getEnchantments() != null ?

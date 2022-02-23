@@ -1,9 +1,14 @@
 package com.github.jenya705.mcapi.bukkit.entity;
 
 import com.github.jenya705.mcapi.bukkit.BukkitUtils;
+import com.github.jenya705.mcapi.bukkit.wrapper.BukkitWrapper;
 import com.github.jenya705.mcapi.entity.Entity;
 import com.github.jenya705.mcapi.entity.LivingEntity;
+import com.github.jenya705.mcapi.potion.PotionEffect;
 import lombok.experimental.Delegate;
+
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * @author Jenya705
@@ -23,6 +28,15 @@ public class BukkitLivingEntityWrapper implements LivingEntity {
     public static BukkitLivingEntityWrapper of(org.bukkit.entity.LivingEntity livingEntity) {
         if (livingEntity == null) return null;
         return new BukkitLivingEntityWrapper(livingEntity);
+    }
+
+    @Override
+    public Collection<PotionEffect> getEffects() {
+        return livingEntity
+                .getActivePotionEffects()
+                .stream()
+                .map(BukkitWrapper::potionEffect)
+                .collect(Collectors.toList());
     }
 
     @Override

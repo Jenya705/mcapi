@@ -8,9 +8,12 @@ import com.github.jenya705.mcapi.inventory.PlayerInventory;
 import com.github.jenya705.mcapi.player.GameMode;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.player.PlayerAbilities;
+import com.github.jenya705.mcapi.potion.PotionEffect;
 import lombok.AllArgsConstructor;
 import net.kyori.adventure.text.Component;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.UUID;
 
 /**
@@ -65,6 +68,11 @@ public class OnlinePlayerImitation implements Player {
     @Override
     public Component customName() {
         return Component.text(player.getName());
+    }
+
+    @Override
+    public Collection<PotionEffect> getEffects() {
+        return Collections.emptyList();
     }
 
     @Override

@@ -14,4 +14,6 @@ public interface CapturedState {
 
     <T extends BlockState> T state();
 
+    void updateState();
+
 }

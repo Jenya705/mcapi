@@ -58,19 +58,7 @@ public class BukkitUtils {
             return supplier.get();
         }
         AtomicReference<ValueContainer<T>> atomicValue = new AtomicReference<>();
-        Bukkit.getServer().getScheduler().runTask(getPlugin(), () -> {
-            atomicValue.set(new ValueContainer<>(supplier.get()));
-            synchronized (atomicValue) {
-                atomicValue.notifyAll();
-            }
-        });
-        synchronized (atomicValue) {
-            try {
-                atomicValue.wait(1000 * 10); // 10 sec waiting
-            } catch (InterruptedException e) {
-                // ignored
-            }
-        }
+        blockingNotAsyncTask(() -> atomicValue.set(new ValueContainer<>(supplier.get())));
         ValueContainer<T> value = atomicValue.get();
         if (value == null) {
             throw new RuntimeException("Bukkit server is lagging");

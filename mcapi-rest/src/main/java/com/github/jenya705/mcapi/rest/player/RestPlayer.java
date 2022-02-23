@@ -7,12 +7,15 @@ import com.github.jenya705.mcapi.jackson.DefaultString;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.rest.RestLocation;
 import com.github.jenya705.mcapi.rest.inventory.RestInventory;
+import com.github.jenya705.mcapi.rest.potion.RestPotionEffect;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.kyori.adventure.text.Component;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * @author Jenya705
@@ -37,6 +40,8 @@ public class RestPlayer {
     @DefaultBoolean(false)
     private boolean ai;
     private RestInventory inventory;
+    @DefaultNull
+    private List<RestPotionEffect> effects;
 
     public static RestPlayer from(Player player) {
         return new RestPlayer(
@@ -49,7 +54,14 @@ public class RestPlayer {
                 player.customName(),
                 player.getHealth(),
                 player.hasAI(),
-                RestInventory.from(player.getInventory())
+                RestInventory.from(player.getInventory()),
+                player.getEffects().isEmpty() ?
+                        null :
+                        player
+                                .getEffects()
+                                .stream()
+                                .map(RestPotionEffect::from)
+                                .collect(Collectors.toList())
         );
     }
 
