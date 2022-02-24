@@ -1,11 +1,11 @@
 package com.github.jenya705.mcapi.bukkit.wrapper;
 
-import com.github.jenya705.mcapi.block.Block;
 import com.github.jenya705.mcapi.block.BlockData;
 import com.github.jenya705.mcapi.bukkit.BukkitUtils;
 import com.github.jenya705.mcapi.bukkit.block.BukkitBlockDataRegistry;
 import com.github.jenya705.mcapi.bukkit.block.BukkitStateContainer;
 import com.github.jenya705.mcapi.bukkit.player.BukkitPlayerWrapper;
+import com.github.jenya705.mcapi.entity.Entity;
 import com.github.jenya705.mcapi.inventory.InventoryHolder;
 import com.github.jenya705.mcapi.player.Player;
 import com.google.inject.Inject;
@@ -27,10 +27,14 @@ public class BukkitFullWrapper {
 
     public InventoryHolder holderToLocal(org.bukkit.inventory.InventoryHolder bukkit) {
         if (bukkit instanceof org.bukkit.entity.Entity entity) {
-            return (InventoryHolder) BukkitWrapper.entity(entity);
+            Entity wrappedEntity = BukkitWrapper.entity(entity);
+            return wrappedEntity instanceof InventoryHolder ?
+                    (InventoryHolder) wrappedEntity : null;
         }
         if (bukkit instanceof org.bukkit.block.BlockState state) {
-           return (InventoryHolder) blockDataRegistry.getData(state.getBlock());
+            BlockData wrappedBlockData = blockDataRegistry.getData(state.getBlock());
+            return wrappedBlockData instanceof InventoryHolder ?
+                    (InventoryHolder) wrappedBlockData : null;
         }
         return null;
     }

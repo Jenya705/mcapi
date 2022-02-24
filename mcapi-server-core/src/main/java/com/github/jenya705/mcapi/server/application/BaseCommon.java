@@ -39,4 +39,5 @@ public interface BaseCommon {
     default void debug(Runnable runnable) {
         if (debug()) runnable.run();
     }
+
 }

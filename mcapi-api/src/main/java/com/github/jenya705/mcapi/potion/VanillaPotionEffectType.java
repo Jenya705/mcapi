@@ -1,7 +1,6 @@
 package com.github.jenya705.mcapi.potion;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 /**
  * @author Jenya705
@@ -22,7 +21,7 @@ public enum VanillaPotionEffectType implements PotionEffectType {
     HERO_OF_THE_VILLAGE("hero_of_the_village", false),
     HUNGER("hunger", false),
     INSTANT_DAMAGE("instant_damage", true),
-    INSTANT_HEALTH("instance_health", true),
+    INSTANT_HEALTH("instant_health", true),
     INVISIBILITY("invisibility", false),
     JUMP_BOOST("jump_boost", false),
     LEVITATION("levitation", false),
@@ -32,7 +31,7 @@ public enum VanillaPotionEffectType implements PotionEffectType {
     POISON("poison", false),
     REGENERATION("regeneration", false),
     RESISTANCE("resistance", false),
-    SATURATION("saturation", false),
+    SATURATION("saturation", true),
     SLOW_FALLING("slow_falling", false),
     SPEED("speed", false),
     SLOWNESS("slowness", false),
@@ -40,8 +39,7 @@ public enum VanillaPotionEffectType implements PotionEffectType {
     UNLUCK("unluck", false),
     WATER_BREATHING("water_breathing", false),
     WEAKNESS("weakness", false),
-    WITHER("wither", false)
-    ;
+    WITHER("wither", false);
 
     private final String key;
     private final boolean instant;

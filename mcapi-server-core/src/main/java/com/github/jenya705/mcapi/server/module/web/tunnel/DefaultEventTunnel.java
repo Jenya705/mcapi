@@ -5,6 +5,7 @@ import com.github.jenya705.mcapi.server.application.OnStartup;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.log.TimerTask;
 import com.github.jenya705.mcapi.server.module.authorization.AuthorizationModule;
+import com.github.jenya705.mcapi.server.module.mapper.Mapper;
 import com.github.jenya705.mcapi.server.module.web.WebServer;
 import com.github.jenya705.mcapi.server.module.web.websocket.container.WebSocketRouteContainerImpl;
 import com.google.inject.Inject;
@@ -12,6 +13,7 @@ import com.google.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
+import java.util.function.Predicate;
 
 /**
  * @author Jenya705
@@ -22,6 +24,7 @@ public class DefaultEventTunnel extends WebSocketRouteContainerImpl<DefaultEvent
 
     private final ServerApplication application;
     private final AuthorizationModule authorizationModule;
+    private final Mapper mapper;
 
     @Override
     public ServerApplication app() {
@@ -29,9 +32,10 @@ public class DefaultEventTunnel extends WebSocketRouteContainerImpl<DefaultEvent
     }
 
     @Inject
-    public DefaultEventTunnel(ServerApplication application, AuthorizationModule authorizationModule) {
+    public DefaultEventTunnel(ServerApplication application, AuthorizationModule authorizationModule, Mapper mapper) {
         this.application = application;
         this.authorizationModule = authorizationModule;
+        this.mapper = mapper;
     }
 
     @OnStartup
@@ -44,10 +48,16 @@ public class DefaultEventTunnel extends WebSocketRouteContainerImpl<DefaultEvent
 
     @Override
     public void broadcast(Object obj, String type) {
+        broadcast(obj, type, it -> true);
+    }
+
+    @Override
+    public void broadcast(Object obj, String type, Predicate<EventTunnelClient> predicate) {
+        String json = mapper.asJson(obj);
         getClients()
                 .stream()
-                .filter(client -> client.isSubscribed(type))
-                .forEach(client -> client.send(obj));
+                .filter(client -> client.isSubscribed(type) && predicate.test(client))
+                .forEach(client -> client.sendRaw(json));
     }
 
     @Override

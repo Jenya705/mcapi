@@ -46,14 +46,19 @@ public class ReactorWebSocketConnection implements WebSocketConnection {
 
     @Override
     public void send(Object obj) {
+        sendRaw(server.getMapper().asJson(obj));
+    }
+
+    @Override
+    public void sendRaw(String str) {
         if (sink != null) {
-            sink.next(server.getMapper().asJson(obj));
+            sink.next(str);
         }
         else {
-            toSend.add(server.getMapper().asJson(obj));
+            toSend.add(str);
         }
     }
-    
+
     public void setSink(FluxSink<String> sink) {
         this.sink = sink;
         toSend.forEach(this.sink::next);

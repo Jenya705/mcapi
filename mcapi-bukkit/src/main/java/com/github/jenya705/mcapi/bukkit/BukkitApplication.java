@@ -3,6 +3,7 @@ package com.github.jenya705.mcapi.bukkit;
 import com.github.jenya705.mcapi.bukkit.inventory.BukkitInventoryMoveEventHandler;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.application.guice.ApplicationBuilder;
+import com.github.jenya705.mcapi.server.worker.Worker;
 import com.google.inject.Singleton;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,7 +31,7 @@ public class BukkitApplication extends JavaPlugin {
     @Getter
     private final ApplicationBuilder applicationBuilder = new ApplicationBuilder()
             .layer(new BukkitFirstLayer(this))
-            .defaultLayers()
+            .defaultLayers(Worker.class)
             .layer(BukkitInventoryMoveEventHandler.class)
             .layer(BukkitServerEventHandler.class)
             ;
@@ -51,7 +52,9 @@ public class BukkitApplication extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        application.stop();
+        if (application != null) {
+            application.stop();
+        }
     }
 
     @Override

@@ -5,9 +5,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class ApplicationBuilder {
 
@@ -27,14 +25,19 @@ public class ApplicationBuilder {
     }
 
     public ApplicationBuilder layer(Collection<Class<?>> classes) {
-        return layer(new ApplicationClassesBinder(classes));
+        return layer(classes, Collections.emptyList());
     }
 
-    public ApplicationBuilder defaultLayers() {
+    public ApplicationBuilder layer(Collection<Class<?>> classes, Collection<Class<?>> except) {
+        return layer(new ApplicationClassesBinder(classes, except));
+    }
+
+    public ApplicationBuilder defaultLayers(Class<?>... except) {
+        List<Class<?>> exceptList = Arrays.asList(except);
         return layer(ServerApplication.class)
-                .layer(ApplicationClassesBinder.ofModules().asLayer())
-                .layer(ApplicationClassesBinder.ofRoutes().asLayer())
-                .layer(ApplicationClassesBinder.ofCommands().asLayer());
+                .layer(new ApplicationClassesBinder(ApplicationClassesBinder.modules, exceptList))
+                .layer(new ApplicationClassesBinder(ApplicationClassesBinder.routes, exceptList))
+                .layer(new ApplicationClassesBinder(ApplicationClassesBinder.commands, exceptList));
     }
 
     public ServerApplication build() {

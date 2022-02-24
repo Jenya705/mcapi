@@ -62,9 +62,7 @@ import com.github.jenya705.mcapi.server.module.web.tunnel.EventTunnel;
 import com.github.jenya705.mcapi.server.worker.Worker;
 import com.google.inject.AbstractModule;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class ApplicationClassesBinder extends AbstractModule {
 
@@ -170,7 +168,12 @@ public class ApplicationClassesBinder extends AbstractModule {
     private final Collection<Class<?>> classes;
 
     public ApplicationClassesBinder(Collection<Class<?>> classes) {
-        this.classes = classes;
+        this(classes, Collections.emptyList());
+    }
+
+    public ApplicationClassesBinder(Collection<Class<?>> classes, Collection<Class<?>> except) {
+        this.classes = new ArrayList<>(classes);
+        this.classes.removeAll(except);
     }
 
     public ApplicationClassesBinder(Class<?>... classes) {

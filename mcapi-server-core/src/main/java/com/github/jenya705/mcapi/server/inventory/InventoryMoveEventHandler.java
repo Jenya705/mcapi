@@ -33,15 +33,12 @@ public class InventoryMoveEventHandler {
         Predicate<EventTunnelClient> sourcePredicate = permissionPredicate(event.getSource());
         Predicate<EventTunnelClient> destinationPredicate = permissionPredicate(event.getDestination());
         eventTunnel
-                .getClients()
-                .stream()
-                .filter(it -> it.isSubscribed(RestInventoryMoveEvent.type))
-                .filter(client ->
-                        initiatorPredicate.test(client) ||
-                        sourcePredicate.test(client) ||
-                        destinationPredicate.test(client)
-                )
-                .forEach(it -> it.send(event));
+                .broadcast(
+                        event, RestInventoryMoveEvent.type,
+                        client -> initiatorPredicate.test(client) ||
+                                sourcePredicate.test(client) ||
+                                destinationPredicate.test(client)
+                );
     }
 
     private Predicate<EventTunnelClient> permissionPredicate(InventoryHolder holder) {

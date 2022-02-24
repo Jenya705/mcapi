@@ -48,11 +48,10 @@ public class EventBroadcaster extends AbstractApplicationModule {
                 .asyncHandler(
                         CapturedEntityClickEvent.class,
                         it -> eventTunnel()
-                                .getClients()
-                                .stream()
-                                .filter(client -> client.getOwner().getEntity().getId() == it.getEntity().getOwner())
-                                .filter(client -> client.isSubscribed(RestCapturedEntityClickEvent.type))
-                                .forEach(client -> client.send(it))
+                                .broadcast(
+                                        it, RestCapturedEntityClickEvent.type,
+                                        client -> client.getOwner().getEntity().getId() == it.getEntity().getOwner()
+                                )
                 )
         ;
     }

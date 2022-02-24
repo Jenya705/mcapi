@@ -17,6 +17,7 @@ import com.github.jenya705.mcapi.rest.menu.RestMenuItem;
 import com.github.jenya705.mcapi.rest.player.RestPlayer;
 import com.github.jenya705.mcapi.rest.player.RestPlayerAbilities;
 import com.github.jenya705.mcapi.rest.player.RestPlayerList;
+import com.github.jenya705.mcapi.rest.potion.RestPotionEffect;
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
 import com.github.jenya705.mcapi.server.application.OnDisable;
 import com.github.jenya705.mcapi.server.application.OnStartup;
@@ -154,7 +155,9 @@ public class FieldInjectionModuleImpl extends AbstractApplicationModule implemen
                 RestSlab.class,
                 RestSubscribeRequest.class,
                 RestWorld.class,
-                RestLivingEntity.class
+                RestLivingEntity.class,
+                RestBeacon.class,
+                RestPotionEffect.class
         );
         //</editor-fold>
     }

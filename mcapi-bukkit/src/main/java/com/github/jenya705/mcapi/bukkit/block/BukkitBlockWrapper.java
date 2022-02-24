@@ -6,17 +6,24 @@ import com.github.jenya705.mcapi.VanillaMaterial;
 import com.github.jenya705.mcapi.block.Block;
 import com.github.jenya705.mcapi.block.BlockData;
 import com.github.jenya705.mcapi.bukkit.BukkitLocationWrapper;
-import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.util.Objects;
 
 /**
  * @author Jenya705
  */
-@AllArgsConstructor
 public class BukkitBlockWrapper implements Block {
 
     private final org.bukkit.block.Block bukkitBlock;
+
+    @Getter
+    private final Material material;
+
+    public BukkitBlockWrapper(org.bukkit.block.Block bukkitBlock) {
+        this.bukkitBlock = bukkitBlock;
+        this.material = VanillaMaterial.getMaterial(bukkitBlock.getType().name());
+    }
 
     public static BukkitBlockWrapper of(org.bukkit.block.Block bukkitBlock) {
         if (bukkitBlock == null) return null;
@@ -26,11 +33,6 @@ public class BukkitBlockWrapper implements Block {
     @Override
     public Location getLocation() {
         return BukkitLocationWrapper.of(bukkitBlock.getLocation());
-    }
-
-    @Override
-    public Material getMaterial() {
-        return VanillaMaterial.getMaterial(bukkitBlock.getType().name());
     }
 
     @Override

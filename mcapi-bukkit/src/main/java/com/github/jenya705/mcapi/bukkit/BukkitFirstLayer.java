@@ -7,7 +7,9 @@ import com.github.jenya705.mcapi.bukkit.permission.PermissionManagerHook;
 import com.github.jenya705.mcapi.bukkit.permission.VaultPermissionHook;
 import com.github.jenya705.mcapi.bukkit.player.BukkitOfflinePlayerStorage;
 import com.github.jenya705.mcapi.bukkit.utils.FailureOperation;
+import com.github.jenya705.mcapi.bukkit.worker.BukkitWorker;
 import com.github.jenya705.mcapi.server.ServerCore;
+import com.github.jenya705.mcapi.server.worker.Worker;
 import com.google.inject.AbstractModule;
 import lombok.RequiredArgsConstructor;
 import net.milkbowl.vault.permission.Permission;
@@ -25,6 +27,7 @@ public class BukkitFirstLayer extends AbstractModule {
         bind(BukkitFileCore.class);
         bind(BukkitOfflinePlayerStorage.class);
         bind(BukkitMenuManager.class);
+        bind(Worker.class).to(BukkitWorker.class);
         permissionManager();
         bind(ServerCore.class).to(BukkitServerCore.class);
         paperFeatures();

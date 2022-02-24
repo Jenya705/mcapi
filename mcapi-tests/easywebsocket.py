@@ -41,4 +41,4 @@ async def main(token, subscriptions = ALL_SUBSCRIPTIONS, uri = "ws://localhost:8
         while True:
             print("Received object:\n" + json.dumps(await receive_object(ws), indent = 4))
 
-asyncio.run(main(sys.argv[1]))
+asyncio.run(main(sys.argv[1], uri=f'ws://{sys.argv[2]}/tunnel' if len(sys.argv) > 2 else "ws://localhost:8080/tunnel"))

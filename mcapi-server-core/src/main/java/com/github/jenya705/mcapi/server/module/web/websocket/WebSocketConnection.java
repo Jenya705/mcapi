@@ -16,4 +16,7 @@ public interface WebSocketConnection {
     void close();
 
     void send(Object obj);
+
+    void sendRaw(String str);
+
 }

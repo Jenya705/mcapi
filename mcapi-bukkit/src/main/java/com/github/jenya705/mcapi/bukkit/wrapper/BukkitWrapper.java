@@ -33,7 +33,6 @@ import com.github.jenya705.mcapi.player.OfflinePlayer;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.potion.PotionEffect;
 import com.github.jenya705.mcapi.potion.PotionEffectType;
-import com.github.jenya705.mcapi.potion.VanillaPotionEffectType;
 import com.github.jenya705.mcapi.world.World;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
@@ -275,11 +274,11 @@ public class BukkitWrapper {
     }
 
     public PotionEffectType potionEffectType(org.bukkit.potion.PotionEffectType type) {
-        return VanillaPotionEffectType.valueOf(type.getName().toUpperCase(Locale.ROOT));
+        return BukkitPotionWrapper.potionEffectType(type);
     }
 
     public org.bukkit.potion.PotionEffectType potionEffectType(PotionEffectType type) {
-        return org.bukkit.potion.PotionEffectType.getByName(type.getKey());
+        return BukkitPotionWrapper.potionEffectType(type);
     }
 
     public PotionEffect potionEffect(org.bukkit.potion.PotionEffect potionEffect) {

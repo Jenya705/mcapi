@@ -20,4 +20,6 @@ public interface EventTunnelClient {
     boolean isSubscribed(String subscription);
 
     void send(Object obj);
+
+    void sendRaw(String str);
 }

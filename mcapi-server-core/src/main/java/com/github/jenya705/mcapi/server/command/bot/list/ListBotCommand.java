@@ -42,7 +42,7 @@ public class ListBotCommand extends AdvancedCommandExecutor<ListBotArguments> {
         requirePlayer(
                 sender,
                 args.getPlayer(),
-                (player) ->
+                (player) -> worker().invoke(() ->
                         sendMessage(
                                 sender,
                                 messageContainer().botList(
@@ -57,6 +57,7 @@ public class ListBotCommand extends AdvancedCommandExecutor<ListBotArguments> {
                                         args.getPage() + 1
                                 )
                         )
+                )
         );
     }
 }

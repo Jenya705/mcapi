@@ -39,6 +39,10 @@ public class WebSocketRouteContainerImpl<T extends WebSocketContainerConnection>
             delegate.send(obj);
         }
 
+        @Override
+        public void sendRaw(String str) {
+            delegate.sendRaw(str);
+        }
     }
 
     private final Map<WebSocketConnection, T> webSocketConnections = new ConcurrentHashMap<>();
