@@ -23,6 +23,7 @@ import com.github.jenya705.mcapi.bukkit.world.BukkitWorldWrapper;
 import com.github.jenya705.mcapi.enchantment.Enchantment;
 import com.github.jenya705.mcapi.enchantment.ItemEnchantment;
 import com.github.jenya705.mcapi.entity.Entity;
+import com.github.jenya705.mcapi.entity.LivingEntity;
 import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.inventory.InventoryView;
 import com.github.jenya705.mcapi.inventory.ItemStack;
@@ -81,12 +82,16 @@ public class BukkitWrapper {
 
     public Entity entity(org.bukkit.entity.Entity entity) {
         if (entity instanceof org.bukkit.entity.LivingEntity livingEntity) {
-            if (entity instanceof org.bukkit.entity.Player player) {
-                return BukkitPlayerWrapper.of(player);
-            }
-            return BukkitLivingEntityWrapper.of(livingEntity);
+            return livingEntity(livingEntity);
         }
         return BukkitEntityWrapper.of(entity);
+    }
+
+    public LivingEntity livingEntity(org.bukkit.entity.LivingEntity livingEntity) {
+        if (livingEntity instanceof org.bukkit.entity.Player player) {
+            return player(player);
+        }
+        return BukkitLivingEntityWrapper.of(livingEntity);
     }
 
     public Player player(org.bukkit.entity.Player player) {

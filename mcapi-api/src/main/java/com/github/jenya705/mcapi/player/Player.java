@@ -35,11 +35,7 @@ public interface Player extends LivingEntity, CommandSender, OfflinePlayer, Inve
         return Locale.ENGLISH;
     }
 
-    default InventoryView openInventory(InventoryView inventory) {
-        return openInventory(inventory, true);
-    }
-
-    InventoryView openInventory(InventoryView inventory, boolean sayAboutSelf);
+    InventoryView openInventory(InventoryView inventory);
 
     InventoryView openInventory(Inventory inventory);
 
@@ -49,4 +45,13 @@ public interface Player extends LivingEntity, CommandSender, OfflinePlayer, Inve
     default String getId() {
         return getUuid().toString();
     }
+
+    default boolean isDead() {
+        return getHealth() <= 0;
+    }
+
+    default boolean isAlive() {
+        return !isDead();
+    }
+
 }

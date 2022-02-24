@@ -5,6 +5,7 @@ import com.github.jenya705.mcapi.bukkit.block.state.SharedCapturedState;
 import lombok.Getter;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  * @author Jenya705
@@ -34,6 +35,15 @@ public abstract class AbstractBukkitBlockState<T extends org.bukkit.block.BlockS
 
     protected T state() {
         return state.state();
+    }
+
+    public void updateState(Consumer<T> consumer) {
+        consumer.accept(state());
+        state.updateState();
+    }
+
+    public void updateState() {
+        state.updateState();
     }
 
 }

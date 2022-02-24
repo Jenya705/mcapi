@@ -2,6 +2,7 @@ package com.github.jenya705.mcapi.bukkit.inventory;
 
 import com.github.jenya705.mcapi.Material;
 import com.github.jenya705.mcapi.VanillaMaterial;
+import com.github.jenya705.mcapi.bukkit.BukkitUtils;
 import com.github.jenya705.mcapi.bukkit.wrapper.BukkitWrapper;
 import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.player.Player;
@@ -41,7 +42,7 @@ public class BukkitSharedInventoryViewWrapper implements BukkitInventoryViewWrap
     @Override
     public void open(Player player) {
         viewers.add(player);
-        player.openInventory(this, false);
+        BukkitInventoryUtils.open(this, player);
     }
 
     @Override

@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.inventory.InventoryView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,6 +41,11 @@ public class BukkitMenuManagerImpl implements Listener, BukkitMenuManager {
     public void unregister(Player player) {
         InventoryMenuView inventoryMenu = menus.remove(player.getUuid());
         if (inventoryMenu != null) inventoryMenu.close(player);
+    }
+
+    @Override
+    public boolean isMenu(InventoryView inventoryView) {
+        return menus.containsKey(inventoryView.getPlayer().getUniqueId());
     }
 
     @EventHandler

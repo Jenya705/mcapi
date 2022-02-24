@@ -51,19 +51,8 @@ public class BukkitPlayerWrapper extends BukkitCommandSenderWrapper implements B
     }
 
     @Override
-    public InventoryView openInventory(InventoryView inventory, boolean sayAboutSelf) {
-        if (sayAboutSelf) {
-            inventory.open(this);
-            return inventory;
-        }
-        org.bukkit.inventory.Inventory bukkitInventory;
-        if (inventory instanceof BukkitInventoryViewWrapper bukkitInventoryViewWrapper) {
-            bukkitInventory = bukkitInventoryViewWrapper.getBukkitInventory();
-        }
-        else {
-            bukkitInventory = BukkitWrapper.copyInventory(inventory);
-        }
-        BukkitUtils.notAsyncTask(() -> player.openInventory(bukkitInventory));
+    public InventoryView openInventory(InventoryView inventory) {
+        inventory.open(this);
         return inventory;
     }
 

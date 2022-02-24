@@ -77,7 +77,7 @@ public class OnlinePlayerImitation implements Player {
 
     @Override
     public float getHealth() {
-        return 0f;
+        return 20f;
     }
 
     @Override
@@ -126,8 +126,8 @@ public class OnlinePlayerImitation implements Player {
     }
 
     @Override
-    public InventoryView openInventory(InventoryView inventory, boolean sayAboutSelf) {
-        return null;
+    public InventoryView openInventory(InventoryView inventory) {
+        return inventory;
     }
 
     @Override

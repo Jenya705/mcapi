@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.block.BlockState;
 
+import java.util.function.Consumer;
+
 /**
  * @author Jenya705
  */
@@ -19,13 +21,13 @@ public class SharedCapturedState implements CapturedState {
     @Override
     public BlockState getState() {
         if (state == null) {
-            updateState();
+            reloadState();
         }
         return state;
     }
 
     @Override
-    public void updateState() {
+    public void reloadState() {
         state = BukkitUtils.notAsyncSupplier(block::getState);
     }
 
@@ -33,5 +35,11 @@ public class SharedCapturedState implements CapturedState {
     @SuppressWarnings("unchecked")
     public <T extends BlockState> T state() {
         return (T) getState();
+    }
+
+    @Override
+    public void updateState() {
+        if (state == null) return; // nothing to update
+        BukkitUtils.notAsyncTask(() -> state.update());
     }
 }

@@ -1,5 +1,8 @@
 package com.github.jenya705.mcapi.bukkit.inventory;
 
+import com.github.jenya705.mcapi.bukkit.BukkitUtils;
+import com.github.jenya705.mcapi.bukkit.player.BukkitPlayer;
+import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.server.util.Pair;
 import lombok.experimental.UtilityClass;
 import org.bukkit.inventory.Inventory;
@@ -50,6 +53,14 @@ public class BukkitInventoryUtils {
             currentIndex++;
         }
         return result;
+    }
+
+    public void open(BukkitInventoryViewWrapper inventory, Player player) {
+        if (!(player instanceof BukkitPlayer bukkitPlayer)) {
+            throw new IllegalArgumentException("Player class is not bukkit wrapper class");
+        }
+        org.bukkit.inventory.Inventory bukkitInventory = inventory.getBukkitInventory();
+        BukkitUtils.notAsyncTask(() -> bukkitPlayer.getBukkit().openInventory(bukkitInventory));
     }
 
 }

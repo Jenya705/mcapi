@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.bukkit.inventory;
 
 import com.github.jenya705.mcapi.bukkit.BukkitApplication;
+import com.github.jenya705.mcapi.bukkit.menu.BukkitMenuManager;
 import com.github.jenya705.mcapi.bukkit.wrapper.BukkitFullWrapper;
 import com.github.jenya705.mcapi.bukkit.wrapper.BukkitWrapper;
 import com.github.jenya705.mcapi.entity.event.EntityInventoryMoveEvent;
@@ -10,6 +11,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -62,7 +64,7 @@ public class BukkitInventoryMoveEventHandler implements Listener {
                 });
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void clickInventory(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player player)) return;
         if (consumeTaking(event, player) ||
@@ -71,7 +73,7 @@ public class BukkitInventoryMoveEventHandler implements Listener {
                 consumeMovingToOtherInventory(event, player)) {}
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void closeInventory(InventoryCloseEvent event) {
         if (event.getPlayer() instanceof Player player) {
             clearItemTaken(player);

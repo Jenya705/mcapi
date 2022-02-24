@@ -9,4 +9,8 @@ public class ValueContainer<T> {
 
     private final T value;
 
+    public MutableValueContainer<T> mutable() {
+        return new MutableValueContainer<>(value);
+    }
+
 }

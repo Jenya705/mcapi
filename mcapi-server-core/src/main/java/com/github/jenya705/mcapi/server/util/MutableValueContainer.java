@@ -14,4 +14,8 @@ public class MutableValueContainer<T> {
 
     private T value;
 
+    public ValueContainer<T> immutable() {
+        return new ValueContainer<>(value);
+    }
+
 }
