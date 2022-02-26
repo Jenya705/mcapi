@@ -61,7 +61,7 @@ public class DebugBotFactory extends AbstractApplicationModule {
                             .collect(Collectors.toList()),
                     new DefaultPermissionManager(
                             storageModule,
-                            MapUtils.hashMap(
+                            MapUtils.concurrentHashMap(
                                     Objects.requireNonNullElse(
                                                     optionsMessage
                                                             .getOptions("perm"),

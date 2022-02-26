@@ -30,7 +30,7 @@ public class BukkitWorkerFuture<V> implements Future<V> {
     }
 
     public void setException(Throwable exception) {
-        validateResult();
+        checkResultExistent();
         synchronized (this) {
             this.exception = exception;
             notifyAll();
@@ -38,14 +38,14 @@ public class BukkitWorkerFuture<V> implements Future<V> {
     }
 
     public void setValue(V value) {
-        validateResult();
+        checkResultExistent();
         synchronized (this) {
             this.value = new ValueContainer<>(value);
             notifyAll();
         }
     }
 
-    private void validateResult() {
+    private void checkResultExistent() {
         if (value != null || exception != null) {
             throw new IllegalStateException("Result is already given");
         }
