@@ -35,12 +35,13 @@ public class BukkitPotionWrapper {
     }
 
     public org.bukkit.potion.PotionEffectType potionEffectType(PotionEffectType effectType) {
+        if (!effectType.getKey().getDomain().equals("minecraft")) return null;
         for (var overridePotionEffectType: overridePotionEffectTypes) {
             if (overridePotionEffectType.getLeft().equals(effectType)) {
                 return overridePotionEffectType.getRight();
             }
         }
-        return org.bukkit.potion.PotionEffectType.getByName(effectType.getKey().substring("minecraft:".length()));
+        return org.bukkit.potion.PotionEffectType.getByName(effectType.getKey().getKey());
     }
 
 }

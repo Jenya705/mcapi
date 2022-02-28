@@ -28,7 +28,7 @@ import com.github.jenya705.mcapi.server.util.CacheClassMap;
 import com.google.inject.Inject;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -39,7 +39,6 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Slf4j
 public class FieldInjectionModuleImpl extends AbstractApplicationModule implements FieldInjectionModule {
 
     private static final String fileName = "field-ignores";
@@ -58,15 +57,16 @@ public class FieldInjectionModuleImpl extends AbstractApplicationModule implemen
     }
 
     private final Mapper mapper;
-
     private final Map<Class<?>, InjectedClassInformation<?>> injectableClasses = CacheClassMap.concurrent();
+    private final Logger log;
 
     @Inject
     @SuppressWarnings("unchecked")
-    public FieldInjectionModuleImpl(ServerApplication application, Mapper mapper) throws IOException {
+    public FieldInjectionModuleImpl(ServerApplication application, Mapper mapper, Logger log) throws IOException {
         super(application);
         this.mapper = mapper;
-        TimerTask task = TimerTask.start(log, "Loading field ignores");
+        this.log = log;
+        TimerTask task = TimerTask.start(log, "Loading field ignores...");
         Map<String, Object> loadedIgnorableFields = Objects.requireNonNullElse(
                 core().loadConfig(fileName), Collections.emptyMap());
         for (Map.Entry<String, Object> entry : loadedIgnorableFields.entrySet()) {
@@ -165,7 +165,7 @@ public class FieldInjectionModuleImpl extends AbstractApplicationModule implemen
     @OnDisable(priority = 5)
     @OnStartup(priority = 5)
     public void save() throws IOException {
-        TimerTask task = TimerTask.start(log, "Saving field ignores");
+        TimerTask task = TimerTask.start(log, "Saving field ignores...");
         Map<String, Object> ignorableFieldsMap = new HashMap<>();
         injectableClasses.forEach((clazz, ignores) -> {
             Map<String, Boolean> thisClassResult = new HashMap<>();

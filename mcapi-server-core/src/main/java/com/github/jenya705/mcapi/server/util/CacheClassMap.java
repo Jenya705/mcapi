@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.server.util;
 
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,6 +18,7 @@ public class CacheClassMap<T> implements Map<Class<?>, T> {
         return new CacheClassMap<>(new ConcurrentHashMap<>(), new ConcurrentHashMap<>());
     }
 
+    @UtilityClass
     private static final class NullClass {}
 
     private final Map<Class<?>, T> map;

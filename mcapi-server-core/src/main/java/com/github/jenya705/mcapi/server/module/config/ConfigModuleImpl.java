@@ -12,7 +12,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,7 +22,6 @@ import java.util.regex.Pattern;
 /**
  * @author Jenya705
  */
-@Slf4j
 @Getter
 @Singleton
 public class ConfigModuleImpl implements ConfigModule {
@@ -30,14 +29,16 @@ public class ConfigModuleImpl implements ConfigModule {
     private final ConfigData config;
     private final GlobalConfig global;
     private final ServerCore core;
+    private final Logger log;
 
     private final Map<Class<?>, ObjectTunnelFunction<Object, ?>> deserializers = CacheClassMap.concurrent();
     private final Map<Class<?>, ObjectTunnelFunction<?, Object>> serializers = CacheClassMap.concurrent();
 
     @Inject
     @SuppressWarnings("unchecked")
-    public ConfigModuleImpl(ServerCore core) throws IOException {
+    public ConfigModuleImpl(ServerCore core, Logger log) throws IOException {
         this.core = core;
+        this.log = log;
         this
                 .raw(String.class)
                 .raw(byte.class)

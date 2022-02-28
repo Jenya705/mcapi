@@ -10,7 +10,7 @@ import com.github.jenya705.mcapi.server.module.web.WebServer;
 import com.github.jenya705.mcapi.server.module.web.websocket.container.WebSocketRouteContainerImpl;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 
 import java.util.Collection;
 import java.util.function.Predicate;
@@ -18,13 +18,13 @@ import java.util.function.Predicate;
 /**
  * @author Jenya705
  */
-@Slf4j
 @Singleton
 public class DefaultEventTunnel extends WebSocketRouteContainerImpl<DefaultEventTunnelClient> implements EventTunnel, BaseCommon {
 
     private final ServerApplication application;
     private final AuthorizationModule authorizationModule;
     private final Mapper mapper;
+    private final Logger log;
 
     @Override
     public ServerApplication app() {
@@ -32,10 +32,12 @@ public class DefaultEventTunnel extends WebSocketRouteContainerImpl<DefaultEvent
     }
 
     @Inject
-    public DefaultEventTunnel(ServerApplication application, AuthorizationModule authorizationModule, Mapper mapper) {
+    public DefaultEventTunnel(ServerApplication application, AuthorizationModule authorizationModule,
+                              Mapper mapper, Logger log) {
         this.application = application;
         this.authorizationModule = authorizationModule;
         this.mapper = mapper;
+        this.log = log;
     }
 
     @OnStartup

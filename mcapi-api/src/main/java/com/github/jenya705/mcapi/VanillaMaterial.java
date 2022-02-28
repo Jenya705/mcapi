@@ -1249,7 +1249,7 @@ public enum VanillaMaterial implements Material {
     private final boolean hasGravity;
     private final boolean burnable;
     private final boolean fuel;
-    private final String key;
+    private final NamespacedKey key;
 
     VanillaMaterial(boolean block, boolean item, boolean edible, boolean hasGravity, boolean burnable, boolean fuel, String key) {
         this.block = block;
@@ -1258,7 +1258,7 @@ public enum VanillaMaterial implements Material {
         this.hasGravity = hasGravity;
         this.burnable = burnable;
         this.fuel = fuel;
-        this.key = "minecraft:" + key;
+        this.key = NamespacedKey.minecraft(key);
     }
 
     @Override

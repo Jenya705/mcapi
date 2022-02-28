@@ -31,7 +31,7 @@ public class RestItemStack {
 
     public static RestItemStack from(ItemStack itemStack) {
         return new RestItemStack(
-                itemStack.getMaterial().getKey(),
+                itemStack.getMaterial().getKey().toString(),
                 itemStack.getAmount(),
                 itemStack.customName(),
                 Optional.of(

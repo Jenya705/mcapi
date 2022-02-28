@@ -21,7 +21,7 @@ public class RestPotionEffect {
 
     public static RestPotionEffect from(PotionEffect effect) {
         return new RestPotionEffect(
-                effect.getType().getKey(),
+                effect.getType().getKey().toString(),
                 effect.getAmplifier(),
                 effect.getDuration(),
                 effect.isAmbient(),

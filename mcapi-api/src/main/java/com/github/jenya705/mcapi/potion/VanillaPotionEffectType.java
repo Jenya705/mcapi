@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi.potion;
 
+import com.github.jenya705.mcapi.NamespacedKey;
 import lombok.Getter;
 
 /**
@@ -41,11 +42,11 @@ public enum VanillaPotionEffectType implements PotionEffectType {
     WEAKNESS("weakness", false),
     WITHER("wither", false);
 
-    private final String key;
+    private final NamespacedKey key;
     private final boolean instant;
 
     VanillaPotionEffectType(String key, boolean instant) {
-        this.key = "minecraft:" + key;
+        this.key = NamespacedKey.minecraft(key);
         this.instant = instant;
     }
 

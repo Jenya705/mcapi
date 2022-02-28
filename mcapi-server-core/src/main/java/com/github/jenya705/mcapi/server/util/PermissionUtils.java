@@ -17,7 +17,7 @@ public class PermissionUtils {
     }
 
     public String getData(Block block) {
-        return getData(block.getMaterial().getKey());
+        return getData(block.getMaterial().getKey().toString());
     }
 
     public String updateData(String material) {
@@ -25,7 +25,7 @@ public class PermissionUtils {
     }
 
     public String updateData(Block block) {
-        return updateData(block.getMaterial().getKey());
+        return updateData(block.getMaterial().getKey().toString());
     }
 
     public String getEntity(String entityType) {

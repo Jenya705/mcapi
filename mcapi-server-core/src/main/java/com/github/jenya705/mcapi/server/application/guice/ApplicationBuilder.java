@@ -34,7 +34,8 @@ public class ApplicationBuilder {
 
     public ApplicationBuilder defaultLayers(Class<?>... except) {
         List<Class<?>> exceptList = Arrays.asList(except);
-        return layer(ServerApplication.class)
+        return layer(new ApplicationLoggerBinder())
+                .layer(ServerApplication.class)
                 .layer(new ApplicationClassesBinder(ApplicationClassesBinder.modules, exceptList))
                 .layer(new ApplicationClassesBinder(ApplicationClassesBinder.routes, exceptList))
                 .layer(new ApplicationClassesBinder(ApplicationClassesBinder.commands, exceptList));

@@ -30,7 +30,7 @@ public class ObjectStorageImpl implements ObjectStorage {
 
     @Override
     public boolean registerMaterial(Material material) {
-        return materials.putIfAbsent(material.getKey().toLowerCase(Locale.ROOT), material) == null;
+        return materials.putIfAbsent(material.getKey().toString().toLowerCase(Locale.ROOT), material) == null;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class ObjectStorageImpl implements ObjectStorage {
 
     @Override
     public boolean registerPotionEffect(PotionEffectType effectType) {
-        return effects.putIfAbsent(effectType.getKey().toLowerCase(Locale.ROOT), effectType) == null;
+        return effects.putIfAbsent(effectType.getKey().toString().toLowerCase(Locale.ROOT), effectType) == null;
     }
 
     @Override

@@ -9,6 +9,7 @@ import com.github.jenya705.mcapi.server.module.mapper.Mapper;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.util.*;
@@ -16,7 +17,6 @@ import java.util.*;
 /**
  * @author Jenya705
  */
-@Slf4j
 @Singleton
 public class CommandLoader {
 
@@ -25,12 +25,14 @@ public class CommandLoader {
     private final Mapper mapper;
     private final JacksonProvider jacksonProvider;
     private final ServerCore core;
+    private final Logger log;
 
     @Inject
-    public CommandLoader(Mapper mapper, JacksonProvider jacksonProvider, ServerCore core) {
+    public CommandLoader(Mapper mapper, JacksonProvider jacksonProvider, ServerCore core, Logger log) {
         this.mapper = mapper;
         this.jacksonProvider = jacksonProvider;
         this.core = core;
+        this.log = log;
     }
 
     public void save(Command command, AbstractBot owner) throws IOException {

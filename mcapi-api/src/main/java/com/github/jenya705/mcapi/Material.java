@@ -1,5 +1,7 @@
 package com.github.jenya705.mcapi;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * @author Jenya705
  */
@@ -17,6 +19,6 @@ public interface Material {
 
     boolean isFuel();
 
-    String getKey();
+    @NotNull NamespacedKey getKey();
 
 }

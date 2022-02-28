@@ -20,7 +20,7 @@ public class RestBlock {
     public static RestBlock from(Block block) {
         return new RestBlock(
                 RestLocation.from(block.getLocation()),
-                block.getMaterial().getKey()
+                block.getMaterial().getKey().toString()
         );
     }
 

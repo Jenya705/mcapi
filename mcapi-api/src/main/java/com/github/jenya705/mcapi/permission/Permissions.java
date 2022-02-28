@@ -16,27 +16,27 @@ public class Permissions {
 
     public final String PLAYER_HAS_PERMISSION = "player.has_permission";
 
-    public final String EVENT_TUNNEL_MESSAGE = "event_tunnel.message";
+    public final String EVENT_TUNNEL_MESSAGE = "event_tunnel.message.listen";
 
-    public final String EVENT_TUNNEL_COMMAND_INTERACTION = "event_tunnel.command_interaction";
+    public final String EVENT_TUNNEL_COMMAND_INTERACTION = "event_tunnel.command_interaction.listen";
 
-    public final String EVENT_TUNNEL_LINK = "event_tunnel.link";
+    public final String EVENT_TUNNEL_LINK = "event_tunnel.link.listen";
 
-    public final String EVENT_TUNNEL_UNLINK = "event_tunnel.unlink";
+    public final String EVENT_TUNNEL_UNLINK = "event_tunnel.unlink.listen";
 
-    public final String EVENT_TUNNEL_JOIN = "event_tunnel.join";
+    public final String EVENT_TUNNEL_JOIN = "event_tunnel.join.listen";
 
-    public final String EVENT_TUNNEL_QUIT = "event_tunnel.quit";
+    public final String EVENT_TUNNEL_QUIT = "event_tunnel.quit.listen";
 
-    public final String EVENT_TUNNEL_BLOCK_BREAK = "event_tunnel.block_break";
+    public final String EVENT_TUNNEL_BLOCK_BREAK = "event_tunnel.block_break.listen";
 
-    public final String EVENT_TUNNEL_BLOCK_PLACE = "event_tunnel.block_place";
+    public final String EVENT_TUNNEL_BLOCK_PLACE = "event_tunnel.block_place.listen";
 
-    public final String EVENT_TUNNEL_CAPTURED_ENTITY_CLICK = "event_tunnel.captured_entity_click";
+    public final String EVENT_TUNNEL_CAPTURED_ENTITY_CLICK = "event_tunnel.captured_entity_click.listen";
 
-    public final String EVENT_TUNNEL_MENU_CLICK = "event_tunnel.menu_click";
+    public final String EVENT_TUNNEL_MENU_CLICK = "event_tunnel.menu_click.listen";
 
-    public final String EVENT_TUNNEL_INVENTORY_MOVE = "event_tunnel.inventory_move";
+    public final String EVENT_TUNNEL_INVENTORY_MOVE = "event_tunnel.inventory_move.listen";
 
     public final String EVENT_TUNNEL_INVENTORY_MOVE_LISTEN = EVENT_TUNNEL_INVENTORY_MOVE + ".listen";
 

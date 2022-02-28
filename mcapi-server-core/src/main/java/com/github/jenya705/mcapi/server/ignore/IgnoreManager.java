@@ -5,7 +5,7 @@ import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.event.application.ApplicationClassActionEvent;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,17 +14,18 @@ import java.util.function.Predicate;
 /**
  * @author Jenya705
  */
-@Slf4j
 @Singleton
 public class IgnoreManager extends AbstractApplicationModule {
 
     private static final String fileName = "ignores.txt";
 
     private final List<Predicate<String>> ignorableRules = new ArrayList<>();
+    private final Logger log;
 
     @Inject
-    public IgnoreManager(ServerApplication application) throws Exception {
+    public IgnoreManager(ServerApplication application, Logger log) throws Exception {
         super(application);
+        this.log = log;
         if (core().isExistsFile(fileName)) {
             String[] stringRules = new String(
                     core().loadSpecific(fileName)

@@ -17,7 +17,7 @@ import com.github.jenya705.mcapi.server.module.storage.StorageModule;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 
 import java.sql.*;
 import java.util.HashMap;
@@ -27,7 +27,6 @@ import java.util.Map;
 /**
  * @author Jenya705
  */
-@Slf4j
 @Singleton
 public class DatabaseModuleImpl extends AbstractApplicationModule implements DatabaseModule {
 
@@ -45,9 +44,12 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
     private final DatabaseGetter safeSyncWithFuture;
     private final DatabaseGetter safeAsync;
 
+    private final Logger log;
+
     @Inject
-    public DatabaseModuleImpl(ServerApplication application, ConfigModule configModule, StorageModule storageModule) {
+    public DatabaseModuleImpl(ServerApplication application, ConfigModule configModule, StorageModule storageModule, Logger log) {
         super(application);
+        this.log = log;
         databaseTypeInitializers = new HashMap<>();
         addTypeInitializer("mysql", new MySqlDatabaseInitializer(app(), this, storageModule));
         addTypeInitializer("sqlite", new SqliteDatabaseInitializer(app()));

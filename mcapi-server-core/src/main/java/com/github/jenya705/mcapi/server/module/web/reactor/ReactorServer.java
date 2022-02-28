@@ -16,8 +16,8 @@ import com.github.jenya705.mcapi.utils.ZipUtils;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 import org.reactivestreams.Publisher;
+import org.slf4j.Logger;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.netty.DisposableServer;
@@ -36,7 +36,6 @@ import java.util.function.BiFunction;
 /**
  * @author Jenya705
  */
-@Slf4j
 @Getter
 @Singleton
 public class ReactorServer extends AbstractApplicationModule implements WebServer {
@@ -48,14 +47,16 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
 
     private final Mapper mapper;
     private final WebConfig config;
+    private final Logger log;
 
     private HttpServer server;
     private DisposableServer nettyServer;
 
     @Inject
-    public ReactorServer(ServerApplication application, Mapper mapper, ConfigModule configModule) {
+    public ReactorServer(ServerApplication application, Mapper mapper, ConfigModule configModule, Logger log) {
         super(application);
         this.mapper = mapper;
+        this.log = log;
         config = new WebConfig(
                 configModule
                         .getConfig()

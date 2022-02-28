@@ -36,8 +36,8 @@ public class RestBeacon {
                         .stream()
                         .map(LivingEntity::getUuid)
                         .collect(Collectors.toList()),
-                beacon.getPrimaryEffect() == null ? null : beacon.getPrimaryEffect().getKey(),
-                beacon.getSecondaryEffect() == null ? null : beacon.getSecondaryEffect().getKey(),
+                beacon.getPrimaryEffect() == null ? null : beacon.getPrimaryEffect().getKey().toString(),
+                beacon.getSecondaryEffect() == null ? null : beacon.getSecondaryEffect().getKey().toString(),
                 beacon.getTier()
         );
     }

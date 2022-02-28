@@ -22,7 +22,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 public class DefaultEventTunnelClient extends SimpleStatefulWebSocketConnection<Integer> implements EventTunnelClient, BaseCommon {
 
-    private static final String permissionFormat = "event_tunnel.%s";
+    private static final String permissionFormat = "event_tunnel.%s.listen";
 
     private final ServerApplication application;
 
@@ -72,8 +72,7 @@ public class DefaultEventTunnelClient extends SimpleStatefulWebSocketConnection<
     public boolean subscribe(String subscription) {
         String gatewayPermission = String.format(permissionFormat, subscription);
         return owner != null &&
-                (owner.hasPermission(gatewayPermission) ||
-                        owner.hasPermission(gatewayPermission + ".listen")) &&
+                owner.hasPermission(gatewayPermission) &&
                 subscriptions.add(subscription);
     }
 

@@ -48,8 +48,6 @@ import java.util.Locale;
 @UtilityClass
 public class BukkitWrapper {
 
-    private final int minecraftNamespaceLength = "minecraft:".length();
-
     public CommandSender sender(org.bukkit.command.CommandSender sender) {
         if (sender instanceof org.bukkit.entity.Player) {
             return BukkitPlayerWrapper.of((org.bukkit.entity.Player) sender);
@@ -159,10 +157,10 @@ public class BukkitWrapper {
     }
 
     public org.bukkit.Material material(Material material) {
-        return material == null ?
+        return material == null && material.getKey().getDomain().equals("minecraft") ?
                 org.bukkit.Material.AIR :
                 org.bukkit.Material.valueOf(
-                        material.getKey().substring(minecraftNamespaceLength).toUpperCase(Locale.ROOT)
+                        material.getKey().getKey().toUpperCase(Locale.ROOT)
                 );
     }
 
@@ -261,6 +259,9 @@ public class BukkitWrapper {
         for (ItemStack itemStack : inventoryView.getInventory().getAllItems()) {
             org.bukkit.inventory.ItemStack bukkitItemStack;
             if (itemStack == null || VanillaMaterial.AIR.equals(itemStack.getMaterial())) {
+                if (!inventoryView.getAirMaterial().isItem()) {
+                    continue;
+                }
                 bukkitItemStack = new org.bukkit.inventory.ItemStack(
                         material(inventoryView.getAirMaterial())
                 );

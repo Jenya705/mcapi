@@ -11,7 +11,7 @@ import com.github.jenya705.mcapi.server.util.Pair;
 import com.github.jenya705.mcapi.server.worker.Worker;
 import com.google.inject.*;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 /**
  * @author Jenya705
  */
-@Slf4j
 @Getter
 @Singleton
 public class ServerApplication {
@@ -31,6 +30,7 @@ public class ServerApplication {
     private boolean enabled = true;
 
     private final Injector injector;
+    private final Logger log;
     private final AtomicBoolean debug = new AtomicBoolean(true);
     private final ServerCore core;
     private final Worker worker;
@@ -38,12 +38,13 @@ public class ServerApplication {
     private final Provider<EventTunnel> eventTunnelProvider;
 
     @Inject
-    public ServerApplication(ServerCore serverCore, Injector injector,
+    public ServerApplication(ServerCore serverCore, Injector injector, Logger log,
                              Worker worker, EventLoop eventLoop, Provider<EventTunnel> eventTunnelProvider) {
         log.info("Plugin is under heavy development! All api is subject to change!");
         log.info("If you find a bug, consider to issue it on https://github.com/Jenya705/mcapi/issues");
         log.info("Plugin wiki: https://github.com/Jenya705/mcapi/wiki");
         core = serverCore;
+        this.log = log;
         this.injector = injector;
         this.worker = worker;
         this.eventLoop = eventLoop;
@@ -143,7 +144,7 @@ public class ServerApplication {
     }
 
     public void stop() {
-        if (!initialized || !enabled) {
+        if (!initialized && !enabled) {
             if (isDebug()) {
                 log.warn(
                         "Someone tried to stop application when it is not enabled",

@@ -8,12 +8,12 @@ import com.github.jenya705.mcapi.server.log.TimerTask;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.slf4j.Logger;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -23,7 +23,6 @@ import java.util.UUID;
 /**
  * @author Jenya705
  */
-@Slf4j
 @Singleton
 public class BukkitOfflinePlayerStorageImpl implements BukkitOfflinePlayerStorage, Listener {
 
@@ -31,11 +30,13 @@ public class BukkitOfflinePlayerStorageImpl implements BukkitOfflinePlayerStorag
 
     private final BukkitFileCore core;
     private final BukkitApplication plugin;
+    private final Logger log;
 
     @Inject
-    public BukkitOfflinePlayerStorageImpl(BukkitFileCore core, BukkitApplication plugin) {
+    public BukkitOfflinePlayerStorageImpl(BukkitFileCore core, BukkitApplication plugin, Logger log) {
         this.core = core;
         this.plugin = plugin;
+        this.log = log;
     }
 
     @SneakyThrows

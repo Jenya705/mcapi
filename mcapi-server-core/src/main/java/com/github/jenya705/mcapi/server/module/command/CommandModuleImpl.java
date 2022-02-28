@@ -24,7 +24,7 @@ import com.github.jenya705.mcapi.server.stringful.StringfulIterator;
 import com.github.jenya705.mcapi.server.util.PatternUtils;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -34,7 +34,6 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author Jenya705
  */
-@Slf4j
 @Singleton
 public class CommandModuleImpl extends AbstractApplicationModule implements CommandModule {
 
@@ -42,16 +41,18 @@ public class CommandModuleImpl extends AbstractApplicationModule implements Comm
     private final CommandModuleConfig config;
     private final CommandLoader commandLoader;
     private final MessageContainer messageContainer;
+    private final Logger log;
 
     private final Map<Integer, ContainerCommandExecutor> botCommands = new ConcurrentHashMap<>();
 
     @Inject
     public CommandModuleImpl(ServerApplication application, ConfigModule configModule, Mapper mapper,
                              CommandLoader commandLoader, AuthorizationModule authorizationModule,
-                             MessageContainer messageContainer) {
+                             MessageContainer messageContainer, Logger log) {
         super(application);
         this.commandLoader = commandLoader;
         this.messageContainer = messageContainer;
+        this.log = log;
         parserContainer = new CommandOptionParserContainer(app());
         TimerTask task = TimerTask.start(log, "Registering root command...");
         core().addCommand(RootCommand.name, new RootCommand(app()).get(), RootCommand.permission);
