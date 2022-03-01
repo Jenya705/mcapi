@@ -8,7 +8,7 @@ import com.github.jenya705.mcapi.server.command.RootCommand;
 import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
-import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
+import com.github.jenya705.mcapi.server.module.database.EventDatabaseStorage;
 import com.github.jenya705.mcapi.server.module.web.tunnel.EventTunnelClient;
 import com.google.inject.Inject;
 
@@ -23,12 +23,13 @@ import java.util.stream.Collectors;
 @AdditionalPermissions("others")
 public class SubscriptionsEventTunnelsCommand extends AdvancedCommandExecutor<SubscriptionsEventTunnelsArguments> {
 
-    private final DatabaseModule databaseModule;
+    private final EventDatabaseStorage databaseStorage;
 
     @Inject
-    public SubscriptionsEventTunnelsCommand(ServerApplication application, MessageContainer messageContainer, DatabaseModule databaseModule) {
+    public SubscriptionsEventTunnelsCommand(ServerApplication application, MessageContainer messageContainer,
+                                            EventDatabaseStorage databaseStorage) {
         super(application, messageContainer, SubscriptionsEventTunnelsArguments.class);
-        this.databaseModule = databaseModule;
+        this.databaseStorage = databaseStorage;
         this
                 .tab(() -> Collections.singletonList("<token>"))
                 .tab(() -> Collections.singletonList("<page>"));
@@ -36,9 +37,7 @@ public class SubscriptionsEventTunnelsCommand extends AdvancedCommandExecutor<Su
 
     @Override
     public void onCommand(CommandSender sender, SubscriptionsEventTunnelsArguments args, String permission) {
-        BotEntity bot = databaseModule
-                .storage()
-                .findBotByToken(args.getToken());
+        BotEntity bot = databaseStorage.findBotByToken(args.getToken());
         UUID executorUuid = sender instanceof Player ? ((Player) sender).getUuid() : null;
         if (bot == null || (
                 !bot.getOwner().equals(executorUuid) && !hasPermission(sender, permission, "others"))) {

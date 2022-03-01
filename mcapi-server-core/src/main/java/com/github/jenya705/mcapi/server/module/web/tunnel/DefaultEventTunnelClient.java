@@ -13,6 +13,7 @@ import com.github.jenya705.mcapi.server.module.web.websocket.stateful.SimpleStat
 import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -22,7 +23,10 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 public class DefaultEventTunnelClient extends SimpleStatefulWebSocketConnection<Integer> implements EventTunnelClient, BaseCommon {
 
-    private static final String permissionFormat = "event_tunnel.%s.listen";
+    private static final String permissionPrefix = "event_tunnel.";
+    private static final String permissionSuffix = ".listen";
+
+    private static final String permissionFormat = permissionPrefix + "%s" + permissionSuffix;
 
     private final ServerApplication application;
 
@@ -79,6 +83,16 @@ public class DefaultEventTunnelClient extends SimpleStatefulWebSocketConnection<
     @Override
     public boolean isSubscribed(String subscription) {
         return subscriptions.contains(subscription);
+    }
+
+    public void recalculate() {
+        Set<String> oldSubscriptions = new HashSet<>(subscriptions);
+        subscriptions.clear();
+        List<String> failed = new ArrayList<>();
+        for (String subscription: oldSubscriptions) {
+            if (!subscribe(subscription)) failed.add(subscription);
+        }
+        send(new RestSubscribeRequest(failed.toArray(String[]::new)));
     }
 
     @Override

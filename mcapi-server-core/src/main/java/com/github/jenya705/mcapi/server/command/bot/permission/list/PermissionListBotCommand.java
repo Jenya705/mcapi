@@ -11,6 +11,7 @@ import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutor
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
+import com.github.jenya705.mcapi.server.module.database.EventDatabaseStorage;
 import com.google.inject.Inject;
 
 import java.util.Collections;
@@ -25,12 +26,12 @@ import java.util.stream.Collectors;
 @AdditionalPermissions("others")
 public class PermissionListBotCommand extends AdvancedCommandExecutor<PermissionListBotArguments> {
 
-    private final DatabaseModule databaseModule;
+    private final EventDatabaseStorage databaseStorage;
 
     @Inject
-    public PermissionListBotCommand(ServerApplication application, MessageContainer messageContainer, DatabaseModule databaseModule) {
+    public PermissionListBotCommand(ServerApplication application, MessageContainer messageContainer, EventDatabaseStorage databaseStorage) {
         super(application, messageContainer, PermissionListBotArguments.class);
-        this.databaseModule = databaseModule;
+        this.databaseStorage = databaseStorage;
         this
                 .databaseTab((sender, permission, databaseGetter) ->
                                 sender instanceof Player ?
@@ -55,8 +56,7 @@ public class PermissionListBotCommand extends AdvancedCommandExecutor<Permission
             BotEntity bot;
             UUID uuid = sender instanceof Player ? ((Player) sender).getUuid() : null;
             if (!isToken) {
-                List<BotEntity> bots = databaseModule
-                        .storage()
+                List<BotEntity> bots = databaseStorage
                         .findBotsByName(args.getName())
                         .stream()
                         .filter(it -> it.getOwner().equals(uuid))
@@ -72,9 +72,7 @@ public class PermissionListBotCommand extends AdvancedCommandExecutor<Permission
                 bot = bots.get(0);
             }
             else {
-                bot = databaseModule
-                        .storage()
-                        .findBotByToken(args.getName());
+                bot = databaseStorage.findBotByToken(args.getName());
                 if (bot == null ||
                         (!bot.getOwner().equals(uuid) && !hasPermission(sender, permission, "others"))) {
                     sendMessage(sender, messageContainer().notPermitted());
@@ -84,8 +82,7 @@ public class PermissionListBotCommand extends AdvancedCommandExecutor<Permission
             sendMessage(
                     sender,
                     messageContainer().permissionList(
-                            databaseModule
-                                    .storage()
+                            databaseStorage
                                     .findPermissionsPageById(
                                             bot.getId(),
                                             args.getPage(),

@@ -67,7 +67,7 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
         task.complete();
         storage.setup();
         safeAsync = new StorageDatabaseGetter(storage);
-        if (config.isCache()) {
+        if (config.isCacheEnabled()) {
             cache = new CacheStorageImpl(
                     application,
                     new CacheConfig(

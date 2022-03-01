@@ -11,7 +11,7 @@ import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutor
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.entity.BotPermissionEntity;
 import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
-import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
+import com.github.jenya705.mcapi.server.module.database.EventDatabaseStorage;
 import com.github.jenya705.mcapi.server.util.PlayerUtils;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -30,12 +30,12 @@ import java.util.stream.Collectors;
 @AdditionalPermissions("others")
 public class PermissionGiveBotCommand extends AdvancedCommandExecutor<PermissionGiveBotArguments> {
 
-    private final DatabaseModule databaseModule;
+    private final EventDatabaseStorage databaseStorage;
 
     @Inject
-    public PermissionGiveBotCommand(ServerApplication application, MessageContainer messageContainer, DatabaseModule databaseModule) {
+    public PermissionGiveBotCommand(ServerApplication application, MessageContainer messageContainer, EventDatabaseStorage databaseStorage) {
         super(application, messageContainer, PermissionGiveBotArguments.class);
-        this.databaseModule = databaseModule;
+        this.databaseStorage = databaseStorage;
         this
                 .databaseTab((sender, permission, databaseGetter) ->
                                 sender instanceof Player ?
@@ -75,18 +75,14 @@ public class PermissionGiveBotCommand extends AdvancedCommandExecutor<Permission
             BotEntity bot;
             UUID uuid = sender instanceof Player ? ((Player) sender).getUuid() : null;
             if (args.isToken() || !(sender instanceof Player)) {
-                bot = databaseModule
-                        .storage()
-                        .findBotByToken(args.getBot());
+                bot = databaseStorage.findBotByToken(args.getBot());
                 if (!bot.getOwner().equals(uuid) && !hasPermission(sender, permission, "others")) {
                     sendMessage(sender, messageContainer().notPermitted());
                     return;
                 }
             }
             else {
-                List<BotEntity> bots = databaseModule
-                        .storage()
-                        .findBotsByName(args.getBot());
+                List<BotEntity> bots = databaseStorage.findBotsByName(args.getBot());
                 if (bots.isEmpty()) {
                     sendMessage(sender, messageContainer().botNotFound());
                     return;
@@ -97,25 +93,30 @@ public class PermissionGiveBotCommand extends AdvancedCommandExecutor<Permission
                 }
                 bot = bots.get(0);
             }
-            if (!bot.getOwner().equals(uuid) && !hasPermission(sender, permission, "others")) {
-                sendMessage(sender, messageContainer().notPermitted());
-                return;
-            }
-            databaseModule
-                    .storage()
-                    .upsert(BotPermissionEntity
-                            .builder()
-                            .botId(bot.getId())
-                            .permission(args.isRegex() ?
-                                    args.getPermission() :
-                                    BotPermissionEntity.toRegex(args.getPermission())
+                    if (!bot.getOwner().equals(uuid) && !hasPermission(sender, permission, "others")) {
+                        sendMessage(sender, messageContainer().notPermitted());
+                        return;
+                    }
+                    if (databaseStorage
+                            .upsert(BotPermissionEntity
+                                    .builder()
+                                    .botId(bot.getId())
+                                    .permission(args.isRegex() ?
+                                            args.getPermission() :
+                                            BotPermissionEntity.toRegex(args.getPermission())
+                                    )
+                                    .regex(args.isRegex())
+                                    .toggled(args.isToggled())
+                                    .target(target)
+                                    .build()
                             )
-                            .regex(args.isRegex())
-                            .toggled(args.isToggled())
-                            .target(target)
-                            .build()
-                    );
-            sendMessage(sender, messageContainer().success());
-        });
+                    ) {
+                        sendMessage(sender, messageContainer().success());
+                    }
+                    else {
+                        sendMessage(sender, messageContainer().failedInternal());
+                    }
+                }
+        );
     }
 }

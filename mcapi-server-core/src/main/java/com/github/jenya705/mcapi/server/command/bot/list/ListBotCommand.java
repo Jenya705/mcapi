@@ -8,6 +8,7 @@ import com.github.jenya705.mcapi.server.command.RootCommand;
 import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
+import com.github.jenya705.mcapi.server.module.database.EventDatabaseStorage;
 import com.github.jenya705.mcapi.server.util.PlayerUtils;
 import com.google.inject.Inject;
 
@@ -20,12 +21,12 @@ import java.util.Collections;
 @AdditionalPermissions("others")
 public class ListBotCommand extends AdvancedCommandExecutor<ListBotArguments> {
 
-    private final DatabaseModule databaseModule;
+    private final EventDatabaseStorage databaseStorage;
 
     @Inject
-    public ListBotCommand(ServerApplication application, MessageContainer messageContainer, DatabaseModule databaseModule) {
+    public ListBotCommand(ServerApplication application, MessageContainer messageContainer, EventDatabaseStorage databaseStorage) {
         super(application, messageContainer, ListBotArguments.class);
-        this.databaseModule = databaseModule;
+        this.databaseStorage = databaseStorage;
         this
                 .tab(() -> Collections.singletonList("<page>"))
                 .tab((sender, permission) ->
@@ -46,8 +47,7 @@ public class ListBotCommand extends AdvancedCommandExecutor<ListBotArguments> {
                         sendMessage(
                                 sender,
                                 messageContainer().botList(
-                                        databaseModule
-                                                .storage()
+                                        databaseStorage
                                                 .findBotsPageByOwner(
                                                         player.getUuid(),
                                                         args.getPage(),

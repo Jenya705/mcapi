@@ -3,6 +3,10 @@ package com.github.jenya705.mcapi.server.module.web.tunnel;
 import com.github.jenya705.mcapi.server.application.BaseCommon;
 import com.github.jenya705.mcapi.server.application.OnStartup;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
+import com.github.jenya705.mcapi.server.entity.BotPermissionEntity;
+import com.github.jenya705.mcapi.server.event.EventLoop;
+import com.github.jenya705.mcapi.server.event.database.DatabaseUpdateDoneEvent;
+import com.github.jenya705.mcapi.server.event.database.DatabaseUpdateEvent;
 import com.github.jenya705.mcapi.server.log.TimerTask;
 import com.github.jenya705.mcapi.server.module.authorization.AuthorizationModule;
 import com.github.jenya705.mcapi.server.module.mapper.Mapper;
@@ -33,11 +37,23 @@ public class DefaultEventTunnel extends WebSocketRouteContainerImpl<DefaultEvent
 
     @Inject
     public DefaultEventTunnel(ServerApplication application, AuthorizationModule authorizationModule,
-                              Mapper mapper, Logger log) {
+                              Mapper mapper, Logger log, EventLoop eventLoop) {
         this.application = application;
         this.authorizationModule = authorizationModule;
         this.mapper = mapper;
         this.log = log;
+        eventLoop.asyncHandler(DatabaseUpdateDoneEvent.class, e -> {
+            System.out.println(e.getEntity());
+            if (e.getEntity() instanceof BotPermissionEntity) {
+                BotPermissionEntity permissionEntity = (BotPermissionEntity) e.getEntity();
+                if (permissionEntity.isRegex()) return;
+                getClients()
+                        .stream()
+                        .filter(client -> client.getOwner().getEntity().getId() == permissionEntity.getBotId())
+                        .filter(client -> client instanceof DefaultEventTunnelClient)
+                        .forEach(client -> ((DefaultEventTunnelClient) client).recalculate());
+            }
+        });
     }
 
     @OnStartup

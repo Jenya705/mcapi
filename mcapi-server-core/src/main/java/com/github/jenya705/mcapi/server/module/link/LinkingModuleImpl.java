@@ -17,6 +17,7 @@ import com.github.jenya705.mcapi.server.entity.BotPermissionEntity;
 import com.github.jenya705.mcapi.server.module.command.CommandModule;
 import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
+import com.github.jenya705.mcapi.server.module.database.EventDatabaseStorage;
 import com.github.jenya705.mcapi.server.module.localization.LocalizationModule;
 import com.github.jenya705.mcapi.server.module.storage.StorageModule;
 import com.github.jenya705.mcapi.server.util.ListUtils;
@@ -38,7 +39,7 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
 
     private final LinkIgnores linkIgnores;
 
-    private final DatabaseModule databaseModule;
+    private final EventDatabaseStorage databaseStorage;
     private final StorageModule storageModule;
     private final LocalizationModule localizationModule;
     private final CommandModule commandModule;
@@ -48,11 +49,11 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
 
     @Inject
     public LinkingModuleImpl(ServerApplication application,
-                             DatabaseModule databaseModule, StorageModule storageModule,
+                             EventDatabaseStorage databaseStorage, StorageModule storageModule,
                              LocalizationModule localizationModule, CommandModule commandModule,
                              MessageContainer messageContainer) {
         super(application);
-        this.databaseModule = databaseModule;
+        this.databaseStorage = databaseStorage;
         this.storageModule = storageModule;
         this.localizationModule = localizationModule;
         this.commandModule = commandModule;
@@ -100,12 +101,10 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
     @Override
     public void unlink(int id, Player player) {
         worker().invoke(() -> {
-            BotLinkEntity link = databaseModule
-                    .storage()
+            BotLinkEntity link = databaseStorage
                     .findLink(id, player.getUuid());
             if (link == null) return;
-            databaseModule
-                    .storage()
+            databaseStorage
                     .delete(link);
             eventTunnel()
                     .getClients()
@@ -179,8 +178,7 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
                 for (String requirePermission : linkObject.getRequest().getRequireRequestPermissions()) {
                     savePermission(linkObject, requirePermission, player);
                 }
-                databaseModule
-                        .storage()
+                databaseStorage
                         .save(new BotLinkEntity(
                                 linkObject.getId(),
                                 player.getUuid()
@@ -212,8 +210,7 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
 
     private void validateLinkRequest(AbstractBot bot, Player player, LinkRequest request) {
         ReactiveUtils.ifTrueThrow(
-                databaseModule
-                        .storage()
+                databaseStorage
                         .findLink(bot.getEntity().getId(), player.getUuid()) != null,
                 LinkExistException::create
         );
@@ -262,8 +259,7 @@ public class LinkingModuleImpl extends AbstractApplicationModule implements Link
     }
 
     private void savePermission(LinkObject linkObject, String permission, Player player) {
-        databaseModule
-                .storage()
+        databaseStorage
                 .upsert(new BotPermissionEntity(
                         linkObject.getId(),
                         BotPermissionEntity.toRegex(permission),

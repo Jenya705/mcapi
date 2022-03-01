@@ -41,6 +41,8 @@ public interface MessageContainer {
 
     Component success();
 
+    Component failedInternal();
+
     Component badSuccess();
 
     Component declined();

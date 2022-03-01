@@ -15,7 +15,6 @@ import com.github.jenya705.mcapi.server.command.linkmenu.LinkTogglePermissionCom
 import com.github.jenya705.mcapi.server.command.linkmenu.LinkUnlinkCommand;
 import com.github.jenya705.mcapi.server.command.tunnels.connected.ConnectedEventTunnelsCommand;
 import com.github.jenya705.mcapi.server.command.tunnels.subscriptions.SubscriptionsEventTunnelsCommand;
-import com.github.jenya705.mcapi.server.event.DefaultEventLoop;
 import com.github.jenya705.mcapi.server.event.EventLoop;
 import com.github.jenya705.mcapi.server.form.ComponentFormProvider;
 import com.github.jenya705.mcapi.server.form.component.ComponentMapParser;
@@ -28,6 +27,7 @@ import com.github.jenya705.mcapi.server.module.command.CommandModule;
 import com.github.jenya705.mcapi.server.module.config.ConfigModule;
 import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
+import com.github.jenya705.mcapi.server.module.database.EventDatabaseStorage;
 import com.github.jenya705.mcapi.server.module.enchantment.EnchantmentStorage;
 import com.github.jenya705.mcapi.server.module.entity.capture.EntityCaptureModule;
 import com.github.jenya705.mcapi.server.module.inject.field.FieldInjectionModule;
@@ -68,11 +68,13 @@ public class ApplicationClassesBinder extends AbstractModule {
 
     public static final List<Class<?>> modules = Arrays.asList(
             MessageContainer.class,
+            EventLoop.class,
             Mapper.class,
             RawOptionsParser.class,
             ConfigModule.class,
             StorageModule.class,
             DatabaseModule.class,
+            EventDatabaseStorage.class,
             BlockDataModule.class,
             AuthorizationModule.class,
             EventTunnel.class,
@@ -90,12 +92,10 @@ public class ApplicationClassesBinder extends AbstractModule {
             RestModule.class,
             SelectorProvider.class,
             WebServer.class,
-            DefaultEventLoop.class,
             IgnoreManager.class,
             ComponentMapParser.class,
             EventBroadcaster.class,
             InventoryMoveEventHandler.class,
-            EventLoop.class,
             Worker.class
     );
 
@@ -182,13 +182,7 @@ public class ApplicationClassesBinder extends AbstractModule {
 
     @Override
     protected void configure() {
-        classes.forEach(clazz -> {
-            try {
-                getProvider(clazz).get();
-            } catch (Exception e) {
-                bind(clazz);
-            }
-        });
+        classes.forEach(this::bind);
     }
 
     public ApplicationBuilderLayer asLayer() {

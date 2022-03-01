@@ -3,6 +3,7 @@ package com.github.jenya705.mcapi.server.module.database;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.server.entity.BotPermissionEntity;
+import com.google.inject.ImplementedBy;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,6 +17,7 @@ import java.util.UUID;
  *
  * @author Jenya705
  */
+@ImplementedBy(EventDatabaseStorageImpl.class)
 public interface EventDatabaseStorage {
 
     BotEntity findBotById(int id);

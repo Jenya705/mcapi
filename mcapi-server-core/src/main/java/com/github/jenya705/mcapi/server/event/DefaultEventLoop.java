@@ -4,11 +4,13 @@ import com.github.jenya705.mcapi.server.util.CacheClassMap;
 import com.github.jenya705.mcapi.server.worker.Worker;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 /**
@@ -20,10 +22,12 @@ public class DefaultEventLoop implements EventLoop {
     private final Map<Class<?>, Collection<Consumer<Object>>> handlers = CacheClassMap.concurrent();
 
     private final Worker worker;
+    private final Logger log;
 
     @Inject
-    public DefaultEventLoop(Worker worker) {
+    public DefaultEventLoop(Worker worker, Logger log) {
         this.worker = worker;
+        this.log = log;
     }
 
     @Override
@@ -37,10 +41,7 @@ public class DefaultEventLoop implements EventLoop {
     @Override
     public <T> EventLoop asyncHandler(Class<? extends T> clazz, Consumer<T> handler) {
         return handler(clazz, it ->
-                worker
-                        .invoke(() ->
-                                handler.accept(it)
-                        )
+                worker.invoke(() -> handler.accept(it))
         );
     }
 
@@ -48,6 +49,12 @@ public class DefaultEventLoop implements EventLoop {
     public void invoke(Object event) {
         handlers
                 .getOrDefault(event.getClass(), Collections.emptyList())
-                .forEach(objectConsumer -> objectConsumer.accept(event));
+                .forEach(objectConsumer -> {
+                    try {
+                        objectConsumer.accept(event);
+                    } catch (Exception e) {
+                        log.warn("Exception caught in event handler:", e);
+                    }
+                });
     }
 }

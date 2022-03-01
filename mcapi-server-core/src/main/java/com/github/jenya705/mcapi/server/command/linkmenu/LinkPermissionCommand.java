@@ -7,7 +7,7 @@ import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.command.MenuCommand;
 import com.github.jenya705.mcapi.server.command.NoConfig;
 import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
-import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
+import com.github.jenya705.mcapi.server.module.database.EventDatabaseStorage;
 import com.github.jenya705.mcapi.server.module.localization.LocalizationModule;
 import com.github.jenya705.mcapi.server.stringful.StringfulIterator;
 import com.google.inject.Inject;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @NoConfig
 public class LinkPermissionCommand extends MenuCommand implements BaseCommon {
 
-    private final DatabaseModule databaseModule;
+    private final EventDatabaseStorage databaseStorage;
     private final LocalizationModule localizationModule;
     private final ServerApplication application;
     private final MessageContainer messageContainer;
@@ -31,11 +31,11 @@ public class LinkPermissionCommand extends MenuCommand implements BaseCommon {
     }
 
     @Inject
-    public LinkPermissionCommand(ServerApplication application, DatabaseModule databaseModule,
+    public LinkPermissionCommand(ServerApplication application, EventDatabaseStorage databaseStorage,
                                  LocalizationModule localizationModule, MessageContainer messageContainer) {
         super(application);
         this.application = application;
-        this.databaseModule = databaseModule;
+        this.databaseStorage = databaseStorage;
         this.localizationModule = localizationModule;
         this.messageContainer = messageContainer;
     }
@@ -49,8 +49,7 @@ public class LinkPermissionCommand extends MenuCommand implements BaseCommon {
                 player.sendMessage(
                         messageContainer.render(
                                 messageContainer.localizedPermissionList(
-                                        databaseModule
-                                                .storage()
+                                        databaseStorage
                                                 .findPermissionsByIdAndTarget(botId, player.getUuid())
                                                 .stream()
                                                 .filter(it -> !it.isRegex())
@@ -58,8 +57,7 @@ public class LinkPermissionCommand extends MenuCommand implements BaseCommon {
                                                         .getLinkPermissionLocalization(it.toLocalPermission())
                                                 )
                                                 .collect(Collectors.toList()),
-                                        databaseModule
-                                                .storage()
+                                        databaseStorage
                                                 .findBotById(botId)
                                                 .getName()
                                 ),

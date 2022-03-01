@@ -8,7 +8,7 @@ import com.github.jenya705.mcapi.server.command.NoConfig;
 import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
-import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
+import com.github.jenya705.mcapi.server.module.database.EventDatabaseStorage;
 import com.google.inject.Inject;
 
 import java.util.UUID;
@@ -20,20 +20,18 @@ import java.util.UUID;
 @AdditionalPermissions("others")
 public class DeleteBotCommand extends AdvancedCommandExecutor<DeleteBotArguments> {
 
-    private final DatabaseModule databaseModule;
+    private final EventDatabaseStorage databaseStorage;
 
     @Inject
-    public DeleteBotCommand(ServerApplication application, MessageContainer messageContainer, DatabaseModule databaseModule) {
+    public DeleteBotCommand(ServerApplication application, MessageContainer messageContainer, EventDatabaseStorage databaseStorage) {
         super(application, messageContainer, DeleteBotArguments.class);
-        this.databaseModule = databaseModule;
+        this.databaseStorage = databaseStorage;
     }
 
     @Override
     public void onCommand(CommandSender sender, DeleteBotArguments args, String permission) {
         worker().invoke(() -> {
-            BotEntity botEntity = databaseModule
-                    .storage()
-                    .findBotByToken(args.getToken());
+            BotEntity botEntity = databaseStorage.findBotByToken(args.getToken());
             UUID senderUuid = sender instanceof Player ? ((Player) sender).getUuid() : null;
             if ((botEntity == null || !botEntity.getOwner().equals(senderUuid)) &&
                     hasPermission(sender, permission, "others")) {
@@ -44,10 +42,12 @@ public class DeleteBotCommand extends AdvancedCommandExecutor<DeleteBotArguments
                 sendMessage(sender, messageContainer().botDeleteNotify());
                 return;
             }
-            databaseModule
-                    .storage()
-                    .delete(botEntity);
-            sendMessage(sender, messageContainer().badSuccess());
+            if (databaseStorage.delete(botEntity)) {
+                sendMessage(sender, messageContainer().badSuccess());
+            }
+            else {
+                sendMessage(sender, messageContainer().failedInternal());
+            }
         });
     }
 }

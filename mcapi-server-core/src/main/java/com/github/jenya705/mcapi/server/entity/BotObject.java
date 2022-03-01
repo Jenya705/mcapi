@@ -1,6 +1,6 @@
 package com.github.jenya705.mcapi.server.entity;
 
-import com.github.jenya705.mcapi.server.module.database.DatabaseStorage;
+import com.github.jenya705.mcapi.server.module.database.EventDatabaseStorage;
 import com.github.jenya705.mcapi.server.module.storage.StorageModule;
 import lombok.AllArgsConstructor;
 
@@ -14,7 +14,7 @@ import java.util.UUID;
 public class BotObject implements AbstractBot {
 
     private final BotEntity entity;
-    private final DatabaseStorage scriptStorage;
+    private final EventDatabaseStorage scriptStorage;
     private final StorageModule storage;
 
     @Override
