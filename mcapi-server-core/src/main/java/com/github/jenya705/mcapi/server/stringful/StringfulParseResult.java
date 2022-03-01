@@ -9,13 +9,13 @@ public interface StringfulParseResult<T> {
 
     boolean isPresent();
 
-    default boolean isFailed() {
-        return !isPresent();
-    }
-
     T get();
 
     StringfulParseError error();
+
+    default boolean isFailed() {
+        return !isPresent();
+    }
 
     default StringfulParseResult<T> ifPresent(Consumer<T> function) {
         if (isPresent()) function.accept(get());

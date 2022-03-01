@@ -26,7 +26,7 @@ public class DatabaseModuleConfig extends Config {
     @Value
     private String database = "minecraft";
     @Value
-    private boolean disableCaching = false;
+    private boolean cache = true;
 
     public DatabaseModuleConfig(ConfigData config) {
         load(config);

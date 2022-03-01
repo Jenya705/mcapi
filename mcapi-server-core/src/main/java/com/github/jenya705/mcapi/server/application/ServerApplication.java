@@ -38,14 +38,14 @@ public class ServerApplication {
     private final Provider<EventTunnel> eventTunnelProvider;
 
     @Inject
-    public ServerApplication(ServerCore serverCore, Injector injector, Logger log,
+    public ServerApplication(ServerCore core, Injector injector, Logger log,
                              Worker worker, EventLoop eventLoop, Provider<EventTunnel> eventTunnelProvider) {
         log.info("Plugin is under heavy development! All api is subject to change!");
         log.info("If you find a bug, consider to issue it on https://github.com/Jenya705/mcapi/issues");
         log.info("Plugin wiki: https://github.com/Jenya705/mcapi/wiki");
-        core = serverCore;
-        this.log = log;
+        this.core = core;
         this.injector = injector;
+        this.log = log;
         this.worker = worker;
         this.eventLoop = eventLoop;
         this.eventTunnelProvider = eventTunnelProvider;

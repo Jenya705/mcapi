@@ -20,6 +20,7 @@ import lombok.SneakyThrows;
 import org.slf4j.Logger;
 
 import java.sql.*;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -66,12 +67,7 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
         task.complete();
         storage.setup();
         safeAsync = new StorageDatabaseGetter(storage);
-        if (config.isDisableCaching()) {
-            cache = new FakeCacheStorage(this);
-            safeSync = safeAsync;
-            safeSyncWithFuture = safeAsync;
-        }
-        else {
+        if (config.isCache()) {
             cache = new CacheStorageImpl(
                     application,
                     new CacheConfig(
@@ -82,6 +78,11 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
             );
             safeSync = new CacheDatabaseGetter(cache);
             safeSyncWithFuture = new CacheDatabaseGetter(cache.withFuture());
+        }
+        else {
+            cache = new FakeCacheStorage(this);
+            safeSync = safeAsync;
+            safeSyncWithFuture = safeAsync;
         }
     }
 
@@ -113,6 +114,7 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
     @Override
     @SneakyThrows
     public void update(String sql, Object... objects) {
+        debugSql(sql, objects);
         synchronized (this) {
             if (objects.length == 0) {
                 Statement statement = connection.createStatement();
@@ -131,6 +133,7 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
     @Override
     @SneakyThrows
     public ResultSet query(String sql, Object... objects) {
+        debugSql(sql, objects);
         synchronized (this) {
             if (objects.length == 0) {
                 return connection.createStatement().executeQuery(sql);
@@ -167,6 +170,12 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
             created = defaultDatabaseTypeInitializer.storage(config);
         }
         return created;
+    }
+
+    private void debugSql(String sql, Object... objects) {
+        if (debug()) {
+            log.info("SQL: {}#{}", sql, Arrays.asList(objects));
+        }
     }
 
     @Override

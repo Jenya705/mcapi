@@ -34,10 +34,9 @@ public class ListUtils {
 
     public <T> List<T> join(Collection<? extends Collection<T>> lists) {
         List<T> newList = new ArrayList<>();
-        for (Collection<T> list: lists) {
+        for (Collection<T> list : lists) {
             newList.addAll(list);
         }
         return newList;
     }
-
 }

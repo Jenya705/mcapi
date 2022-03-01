@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
@@ -11,7 +12,7 @@ import java.util.Objects;
  */
 @Getter
 @ToString(includeFieldNames = false)
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Vector3 {
 
     public static final double epsilon = 1e-4;
@@ -20,7 +21,7 @@ public final class Vector3 {
     private final double y;
     private final double z;
 
-    public Vector3() {
+    private Vector3() {
         this(0, 0, 0);
     }
 

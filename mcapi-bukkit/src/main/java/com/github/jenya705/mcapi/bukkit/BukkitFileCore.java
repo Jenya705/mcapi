@@ -39,7 +39,7 @@ public class BukkitFileCore {
             return new LinkedHashMap<>();
         }
         @Cleanup Reader reader = new FileReader(fileObject);
-        return Objects.requireNonNullElse(yaml.load(reader), new LinkedHashMap<>());
+        return Objects.requireNonNullElseGet(yaml.load(reader), LinkedHashMap::new);
     }
 
     public byte[] loadSpecific(String file) throws IOException {
@@ -79,7 +79,7 @@ public class BukkitFileCore {
     public Collection<String> getFilesInDirectory(String directory) {
         File file = getFile(directory);
         File[] listFiles = file.listFiles();
-        if (file.isDirectory() && listFiles != null) {
+        if (listFiles != null) {
             return Arrays
                     .stream(listFiles)
                     .map(File::getName)

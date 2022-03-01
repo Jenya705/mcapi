@@ -63,7 +63,7 @@ public class BukkitWrapper {
     }
 
     public Vector3 vector(org.bukkit.util.Vector vector) {
-        return new Vector3(
+        return Vector3.of(
                 vector.getX(),
                 vector.getY(),
                 vector.getZ()

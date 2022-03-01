@@ -30,14 +30,14 @@ public class RestShortBoundingBox {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof RestShortBoundingBox)) return false;
         if (obj == this) return true;
+        if (!(obj instanceof RestShortBoundingBox)) return false;
         RestShortBoundingBox other = (RestShortBoundingBox) obj;
         return Objects.equals(asVector(), other.asVector());
     }
 
     public Vector3 asVector() {
-        return new Vector3(
+        return Vector3.of(
                 widthX,
                 height,
                 widthZ

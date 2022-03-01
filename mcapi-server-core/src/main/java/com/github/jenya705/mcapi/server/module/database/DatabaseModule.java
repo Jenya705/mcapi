@@ -14,8 +14,6 @@ import java.util.concurrent.Executors;
 @ImplementedBy(DatabaseModuleImpl.class)
 public interface DatabaseModule {
 
-    ExecutorService async = Executors.newSingleThreadExecutor();
-
     void update(String sql, Object... objects);
 
     ResultSet query(String sql, Object... objects);

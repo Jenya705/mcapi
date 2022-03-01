@@ -16,7 +16,7 @@ public interface Location {
     World getWorld();
 
     default Vector3 asVector() {
-        return new Vector3(getX(), getY(), getZ());
+        return Vector3.of(getX(), getY(), getZ());
     }
 
 }
