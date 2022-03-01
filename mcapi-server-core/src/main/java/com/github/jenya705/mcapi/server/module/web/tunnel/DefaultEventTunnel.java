@@ -43,7 +43,6 @@ public class DefaultEventTunnel extends WebSocketRouteContainerImpl<DefaultEvent
         this.mapper = mapper;
         this.log = log;
         eventLoop.asyncHandler(DatabaseUpdateDoneEvent.class, e -> {
-            System.out.println(e.getEntity());
             if (e.getEntity() instanceof BotPermissionEntity) {
                 BotPermissionEntity permissionEntity = (BotPermissionEntity) e.getEntity();
                 if (permissionEntity.isRegex()) return;
