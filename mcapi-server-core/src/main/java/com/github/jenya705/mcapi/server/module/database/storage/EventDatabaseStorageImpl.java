@@ -1,4 +1,4 @@
-package com.github.jenya705.mcapi.server.module.database;
+package com.github.jenya705.mcapi.server.module.database.storage;
 
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.entity.BotLinkEntity;
@@ -7,6 +7,7 @@ import com.github.jenya705.mcapi.server.event.EventLoop;
 import com.github.jenya705.mcapi.server.event.database.DatabaseFoundEvent;
 import com.github.jenya705.mcapi.server.event.database.DatabaseUpdateDoneEvent;
 import com.github.jenya705.mcapi.server.event.database.DatabaseUpdateEvent;
+import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -41,27 +42,27 @@ public class EventDatabaseStorageImpl implements EventDatabaseStorage {
 
     @Override
     public List<BotEntity> findBotsByOwner(UUID owner) {
-        return found(databaseModule.storage().findBotsByOwner(owner), BotEntity.class);
+        return found(databaseModule.storage().findBotsByOwner(owner));
     }
 
     @Override
     public List<BotEntity> findAllBots() {
-        return found(databaseModule.storage().findAllBots(), BotEntity.class);
+        return found(databaseModule.storage().findAllBots());
     }
 
     @Override
     public List<BotEntity> findBotsPageByOwner(UUID owner, int page, int size) {
-        return found(databaseModule.storage().findBotsPageByOwner(owner, page, size), BotEntity.class);
+        return found(databaseModule.storage().findBotsPageByOwner(owner, page, size));
     }
 
     @Override
     public List<BotPermissionEntity> findPermissionsPageById(int id, int page, int size) {
-        return found(databaseModule.storage().findPermissionsPageById(id, page, size), BotPermissionEntity.class);
+        return found(databaseModule.storage().findPermissionsPageById(id, page, size));
     }
 
     @Override
     public List<BotEntity> findBotsByName(String name) {
-        return found(databaseModule.storage().findBotsByName(name), BotEntity.class);
+        return found(databaseModule.storage().findBotsByName(name));
     }
 
     @Override
@@ -71,17 +72,17 @@ public class EventDatabaseStorageImpl implements EventDatabaseStorage {
 
     @Override
     public List<BotPermissionEntity> findPermissionsById(int botId) {
-        return found(databaseModule.storage().findPermissionsById(botId), BotPermissionEntity.class);
+        return found(databaseModule.storage().findPermissionsById(botId));
     }
 
     @Override
     public List<BotPermissionEntity> findPermissionsByIdAndTarget(int botId, UUID target) {
-        return found(databaseModule.storage().findPermissionsByIdAndTarget(botId, target), BotPermissionEntity.class);
+        return found(databaseModule.storage().findPermissionsByIdAndTarget(botId, target));
     }
 
     @Override
     public List<BotLinkEntity> findAllLinks() {
-        return found(databaseModule.storage().findAllLinks(), BotLinkEntity.class);
+        return found(databaseModule.storage().findAllLinks());
     }
 
     @Override
@@ -91,12 +92,12 @@ public class EventDatabaseStorageImpl implements EventDatabaseStorage {
 
     @Override
     public List<BotLinkEntity> findLinksById(int botId) {
-        return found(databaseModule.storage().findLinksById(botId), BotLinkEntity.class);
+        return found(databaseModule.storage().findLinksById(botId));
     }
 
     @Override
     public List<BotLinkEntity> findLinksByTarget(UUID target) {
-        return found(databaseModule.storage().findLinksByTarget(target), BotLinkEntity.class);
+        return found(databaseModule.storage().findLinksByTarget(target));
     }
 
     @Override
@@ -140,13 +141,13 @@ public class EventDatabaseStorageImpl implements EventDatabaseStorage {
     }
 
     private <T> T found(T entity) {
-        DatabaseFoundEvent<T> event = new DatabaseFoundEvent<>(entity);
+        DatabaseFoundEvent<T> event = DatabaseFoundEvent.single(entity);
         eventLoop.invoke(event);
         return event.getSingle();
     }
 
-    private <T> List<T> found(List<? extends T> entities, Class<T> originalClass) {
-        DatabaseFoundEvent<T> event = new DatabaseFoundEvent<>(entities, originalClass);
+    private <T> List<T> found(List<? extends T> entities) {
+        DatabaseFoundEvent<T> event = new DatabaseFoundEvent<>(entities);
         eventLoop.invoke(event);
         return event.getEntities();
     }

@@ -8,7 +8,7 @@ import com.github.jenya705.mcapi.server.command.NoConfig;
 import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
-import com.github.jenya705.mcapi.server.module.database.EventDatabaseStorage;
+import com.github.jenya705.mcapi.server.module.database.storage.EventDatabaseStorage;
 import com.google.inject.Inject;
 
 import java.util.UUID;
@@ -46,7 +46,7 @@ public class DeleteBotCommand extends AdvancedCommandExecutor<DeleteBotArguments
                 sendMessage(sender, messageContainer().badSuccess());
             }
             else {
-                sendMessage(sender, messageContainer().failedInternal());
+                sendMessage(sender, messageContainer().failedCancelled());
             }
         });
     }

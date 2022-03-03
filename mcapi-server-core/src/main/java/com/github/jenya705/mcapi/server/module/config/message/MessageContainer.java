@@ -12,6 +12,7 @@ import com.github.jenya705.mcapi.server.util.Pair;
 import com.google.inject.ImplementedBy;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.translation.GlobalTranslator;
+import net.kyori.adventure.translation.Translatable;
 
 import java.util.Collection;
 import java.util.Locale;
@@ -40,6 +41,8 @@ public interface MessageContainer {
     Component notPermitted();
 
     Component success();
+
+    Component failedCancelled();
 
     Component failedInternal();
 

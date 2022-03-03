@@ -8,12 +8,14 @@ import com.github.jenya705.mcapi.server.command.RootCommand;
 import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
-import com.github.jenya705.mcapi.server.module.database.EventDatabaseStorage;
+import com.github.jenya705.mcapi.server.module.database.storage.EventDatabaseStorage;
 import com.github.jenya705.mcapi.server.module.web.tunnel.EventTunnelClient;
+import com.github.jenya705.mcapi.server.util.ListUtils;
 import com.google.inject.Inject;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -39,27 +41,27 @@ public class SubscriptionsEventTunnelsCommand extends AdvancedCommandExecutor<Su
     public void onCommand(CommandSender sender, SubscriptionsEventTunnelsArguments args, String permission) {
         BotEntity bot = databaseStorage.findBotByToken(args.getToken());
         UUID executorUuid = sender instanceof Player ? ((Player) sender).getUuid() : null;
-        if (bot == null || (
-                !bot.getOwner().equals(executorUuid) && !hasPermission(sender, permission, "others"))) {
+        if (bot == null ||
+                !(bot.getOwner().equals(executorUuid) || hasPermission(sender, permission, "others"))
+        ) {
             sendMessage(sender, messageContainer().notPermitted());
             return;
         }
-        Collection<String> subscriptions =
+        List<Collection<String>> connectionSubscriptions =
                 eventTunnel()
                         .getClients()
                         .stream()
                         .filter(it -> it.getOwner().getEntity().getId() == bot.getId())
-                        .findFirst()
                         .map(EventTunnelClient::getSubscriptions)
-                        .orElse(null);
-        if (subscriptions == null) {
+                        .collect(Collectors.toList());
+        if (connectionSubscriptions.isEmpty()) {
             sendMessage(sender, messageContainer().notConnectedToGateway());
             return;
         }
         sendMessage(
                 sender,
                 messageContainer().subscriptionList(
-                        subscriptions
+                        ListUtils.joinCollection( connectionSubscriptions)
                                 .stream()
                                 .skip((long) RootCommand.maxListElements * args.getPage())
                                 .limit(RootCommand.maxListElements)

@@ -10,8 +10,7 @@ import com.github.jenya705.mcapi.server.command.RootCommand;
 import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
-import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
-import com.github.jenya705.mcapi.server.module.database.EventDatabaseStorage;
+import com.github.jenya705.mcapi.server.module.database.storage.EventDatabaseStorage;
 import com.google.inject.Inject;
 
 import java.util.Collections;

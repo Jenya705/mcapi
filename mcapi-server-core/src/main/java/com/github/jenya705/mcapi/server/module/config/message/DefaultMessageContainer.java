@@ -88,6 +88,15 @@ public class DefaultMessageContainer implements MessageContainer {
         return success;
     }
 
+    private static final Component failedCancelled = Component
+            .translatable("mcapi.failed.cancelled")
+            .color(errorColor);
+
+    @Override
+    public Component failedCancelled() {
+        return failedCancelled;
+    }
+
     private static final Component failedInternal = Component
             .translatable("mcapi.failed.internal")
             .color(errorColor);

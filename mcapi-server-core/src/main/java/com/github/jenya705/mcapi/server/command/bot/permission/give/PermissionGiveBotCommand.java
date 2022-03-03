@@ -11,7 +11,7 @@ import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutor
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.entity.BotPermissionEntity;
 import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
-import com.github.jenya705.mcapi.server.module.database.EventDatabaseStorage;
+import com.github.jenya705.mcapi.server.module.database.storage.EventDatabaseStorage;
 import com.github.jenya705.mcapi.server.util.PlayerUtils;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;

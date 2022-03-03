@@ -1,5 +1,7 @@
 package com.github.jenya705.mcapi.server.module.database;
 
+import com.github.jenya705.mcapi.server.module.database.storage.DatabaseStorage;
+
 import java.sql.Connection;
 
 /**

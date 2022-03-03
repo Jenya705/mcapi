@@ -7,7 +7,7 @@ import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.command.MenuCommand;
 import com.github.jenya705.mcapi.server.command.NoConfig;
 import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
-import com.github.jenya705.mcapi.server.module.database.EventDatabaseStorage;
+import com.github.jenya705.mcapi.server.module.database.storage.EventDatabaseStorage;
 import com.github.jenya705.mcapi.server.module.localization.LocalizationModule;
 import com.github.jenya705.mcapi.server.stringful.StringfulIterator;
 import com.google.inject.Inject;

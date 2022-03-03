@@ -14,21 +14,14 @@ public class DatabaseFoundEvent<T> {
 
     private final List<T> entities;
 
-    private final Class<T> originalClass;
-
-    public DatabaseFoundEvent(List<? extends T> entities, Class<T> originalClass) {
-        this.entities = new ArrayList<>(entities);
-        this.originalClass = originalClass;
-    }
-
     @SuppressWarnings("unchecked")
-    public DatabaseFoundEvent(T entity) {
-        this.entities = new MutableSingletonList<>(entity);
-        this.originalClass = (Class<T>) entity.getClass();
+    public DatabaseFoundEvent(List<? extends T> entities) {
+        this.entities = entities instanceof MutableSingletonList ?
+                (List<T>) entities : new ArrayList<>(entities);
     }
 
-    public boolean isType(Class<?> clazz) {
-        return originalClass.isAssignableFrom(clazz);
+    public static <T> DatabaseFoundEvent<T> single(T entity) {
+        return new DatabaseFoundEvent<>(new MutableSingletonList<>(entity));
     }
 
     /**

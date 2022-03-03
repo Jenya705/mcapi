@@ -57,7 +57,7 @@ public class OnlinePlayerImitation implements Player {
 
     @Override
     public String getType() {
-        return "player";
+        return "minecraft:player";
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.github.jenya705.mcapi.server.module.database;
 
 import com.github.jenya705.mcapi.server.application.ServerApplication;
+import com.github.jenya705.mcapi.server.module.database.storage.DatabaseStorage;
+import com.github.jenya705.mcapi.server.module.database.storage.DatabaseStorageImpl;
 import com.github.jenya705.mcapi.server.module.storage.StorageModule;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;

@@ -13,6 +13,7 @@ import com.github.jenya705.mcapi.server.module.database.cache.FakeCacheStorage;
 import com.github.jenya705.mcapi.server.module.database.safe.CacheDatabaseGetter;
 import com.github.jenya705.mcapi.server.module.database.safe.DatabaseGetter;
 import com.github.jenya705.mcapi.server.module.database.safe.StorageDatabaseGetter;
+import com.github.jenya705.mcapi.server.module.database.storage.DatabaseStorage;
 import com.github.jenya705.mcapi.server.module.storage.StorageModule;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;

@@ -4,7 +4,7 @@ import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.server.entity.BotPermissionEntity;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
-import com.github.jenya705.mcapi.server.module.database.DatabaseStorage;
+import com.github.jenya705.mcapi.server.module.database.storage.DatabaseStorage;
 
 import java.util.Collection;
 import java.util.UUID;

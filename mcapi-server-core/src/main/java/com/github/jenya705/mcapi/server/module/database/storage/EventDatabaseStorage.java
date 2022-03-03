@@ -1,19 +1,24 @@
-package com.github.jenya705.mcapi.server.module.database;
+package com.github.jenya705.mcapi.server.module.database.storage;
 
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.server.entity.BotPermissionEntity;
-import com.github.jenya705.mcapi.server.module.config.GlobalConfig;
+import com.google.inject.ImplementedBy;
 
 import java.util.List;
 import java.util.UUID;
 
 /**
+ *
+ * Database storage with event invoking <br><br>
+ *
+ * All update events can be cancelled, so functions return false if cancelled otherwise true <br>
+ * All query events can be modified, so functions return <strong>modified</strong> object
+ *
  * @author Jenya705
  */
-public interface DatabaseStorage {
-
-    void setup();
+@ImplementedBy(EventDatabaseStorageImpl.class)
+public interface EventDatabaseStorage {
 
     BotEntity findBotById(int id);
 
@@ -43,33 +48,20 @@ public interface DatabaseStorage {
 
     List<BotLinkEntity> findLinksByTarget(UUID target);
 
-    void delete(BotEntity botEntity);
+    boolean delete(BotEntity botEntity);
 
-    void delete(BotLinkEntity linkEntity);
+    boolean delete(BotLinkEntity linkEntity);
 
-    void save(BotPermissionEntity permissionEntity);
+    boolean save(BotPermissionEntity permissionEntity);
 
-    void save(BotLinkEntity linkEntity);
+    boolean save(BotLinkEntity linkEntity);
 
-    void save(BotEntity botEntity);
+    boolean save(BotEntity botEntity);
 
-    void update(BotPermissionEntity permissionEntity);
+    boolean update(BotPermissionEntity permissionEntity);
 
-    void update(BotEntity botEntity);
+    boolean update(BotEntity botEntity);
 
-    void upsert(BotPermissionEntity permissionEntity);
+    boolean upsert(BotPermissionEntity permissionEntity);
 
-    default boolean isExistBotWithName(String name) {
-        return !findBotsByName(name).isEmpty();
-    }
-
-    default boolean canCreateBot(String name, GlobalConfig globalConfig) {
-        return globalConfig.isBotNameUnique() && !isExistBotWithName(name);
-    }
-
-    default boolean isExistPermission(int botId, String permissionName, UUID target) {
-        return findPermission(
-                botId, permissionName, target
-        ) != null;
-    }
 }
