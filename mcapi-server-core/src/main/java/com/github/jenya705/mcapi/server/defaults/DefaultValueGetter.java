@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.server.defaults;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.google.inject.ImplementedBy;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -8,6 +9,7 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
 
+@ImplementedBy(DefaultValueGetterImpl.class)
 public interface DefaultValueGetter {
 
     Object nothing = new Object();
