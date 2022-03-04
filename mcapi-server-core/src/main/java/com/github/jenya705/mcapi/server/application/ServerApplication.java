@@ -42,7 +42,7 @@ public class ServerApplication {
                              Worker worker, EventLoop eventLoop, Provider<EventTunnel> eventTunnelProvider) {
         log.info("Plugin is under heavy development! All api is subject to change!");
         log.info("If you find a bug, consider to issue it on https://github.com/Jenya705/mcapi/issues");
-        log.info("Plugin wiki: https://github.com/Jenya705/mcapi/wiki");
+        log.info("Plugin wiki: https://jenyaszf.gitbook.io/mcapi");
         this.core = core;
         this.injector = injector;
         this.log = log;

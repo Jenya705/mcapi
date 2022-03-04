@@ -61,7 +61,7 @@ public class SubscriptionsEventTunnelsCommand extends AdvancedCommandExecutor<Su
         sendMessage(
                 sender,
                 messageContainer().subscriptionList(
-                        ListUtils.joinCollection( connectionSubscriptions)
+                        ListUtils.joinCollection(connectionSubscriptions)
                                 .stream()
                                 .skip((long) RootCommand.maxListElements * args.getPage())
                                 .limit(RootCommand.maxListElements)
