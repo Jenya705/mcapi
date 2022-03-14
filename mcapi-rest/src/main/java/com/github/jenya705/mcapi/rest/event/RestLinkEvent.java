@@ -15,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class RestLinkEvent {
 
-    public static final String type = "link";
+    public static final String type = "player_link";
 
     private boolean failed;
     private UUID player;

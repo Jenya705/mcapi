@@ -64,7 +64,7 @@ public class WebSocketRouteContainerImpl<T extends WebSocketContainerConnection>
     }
 
     public void setFactoryMethod(Supplier<T> factoryMethod) {
-        this.factoryMethod = it -> factoryMethod.get();
+        setFactoryMethod(it -> factoryMethod.get());
     }
 
     @Override

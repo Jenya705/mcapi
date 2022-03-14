@@ -16,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class RestQuitEvent {
 
-    public static final String type = "quit";
+    public static final String type = "player_quit";
 
     private RestOfflinePlayer player;
 

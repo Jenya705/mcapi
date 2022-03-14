@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RestPlayerBlockPlaceEvent {
 
-    public static final String type = "block_place";
+    public static final String type = "player_block_place";
 
     private RestPlayer player;
     private RestBlock placedBlock;

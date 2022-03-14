@@ -15,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class RestMessageEvent {
 
-    public static final String type = "message";
+    public static final String type = "chat_message";
 
     private String message;
     private UUID author;

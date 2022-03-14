@@ -16,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class RestJoinEvent {
 
-    public static final String type = "join";
+    public static final String type = "player_join";
 
     private RestPlayer player;
 

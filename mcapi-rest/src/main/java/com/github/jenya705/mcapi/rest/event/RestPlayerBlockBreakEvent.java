@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RestPlayerBlockBreakEvent {
 
-    public static final String type = "block_break";
+    public static final String type = "player_block_break";
 
     private RestPlayer player;
     private RestBlock brokenBlock;
