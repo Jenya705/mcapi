@@ -40,6 +40,9 @@ public class DefaultEventLoop implements EventLoop {
 
     @Override
     public <T> EventLoop asyncHandler(Class<? extends T> clazz, Consumer<T> handler) {
+        if (clazz.getAnnotation(NotAsyncEvent.class) != null) {
+            throw new IllegalArgumentException("Event can not be handled asynchronously");
+        }
         return handler(clazz, it ->
                 worker.invoke(() -> handler.accept(it))
         );
