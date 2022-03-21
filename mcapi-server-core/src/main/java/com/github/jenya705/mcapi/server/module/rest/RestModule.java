@@ -87,6 +87,7 @@ public class RestModule extends AbstractApplicationModule {
     @SuppressWarnings("unchecked")
     public void start() {
         mapper
+                .rawDeserializer(NamespacedKey.class, NamespacedKey::from)
                 .rawDeserializer(AbstractBot.class, authorizationModule::bot)
                 .rawDeserializer(Player.class, id ->
                         core()
@@ -101,7 +102,7 @@ public class RestModule extends AbstractApplicationModule {
                 .rawDeserializer(UUID.class, this::getUuid)
                 .rawDeserializer(Entity.class, this::getEntity)
                 .rawDeserializer(World.class, id -> core()
-                        .getOptionalWorld(id)
+                        .getOptionalWorld(NamespacedKey.from(id))
                         .orElseThrow(() -> WorldNotFoundException.create(id))
                 )
                 .rawDeserializer(PotionEffectType.class, objectStorage::getPotionEffect)

@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.server;
 
 import com.github.jenya705.mcapi.Material;
+import com.github.jenya705.mcapi.NamespacedKey;
 import com.github.jenya705.mcapi.entity.Entity;
 import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.inventory.InventoryView;
@@ -45,7 +46,7 @@ public interface ServerCore {
 
     Entity getEntity(UUID uuid);
 
-    World getWorld(String id);
+    World getWorld(NamespacedKey id);
 
     Collection<? extends World> getWorlds();
 
@@ -106,7 +107,7 @@ public interface ServerCore {
         return PlayerUtils.getOfflinePlayer(id, this);
     }
 
-    default Optional<? extends World> getOptionalWorld(String id) {
+    default Optional<? extends World> getOptionalWorld(NamespacedKey id) {
         return Optional.ofNullable(getWorld(id));
     }
 

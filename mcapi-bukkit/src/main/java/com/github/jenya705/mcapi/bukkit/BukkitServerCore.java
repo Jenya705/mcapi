@@ -187,15 +187,8 @@ public class BukkitServerCore implements ServerCore {
     }
 
     @Override
-    public World getWorld(String id) {
-        return BukkitWrapper.world(Bukkit.getWorld(rawOrMinecraft(id)));
-    }
-
-    private NamespacedKey rawOrMinecraft(String namespace) {
-        if (namespace.contains(":")) {
-            return NamespacedKey.fromString(namespace);
-        }
-        return NamespacedKey.minecraft(namespace);
+    public World getWorld(com.github.jenya705.mcapi.NamespacedKey id) {
+        return BukkitWrapper.world(Bukkit.getWorld(BukkitWrapper.namespacedKey(id)));
     }
 
 }

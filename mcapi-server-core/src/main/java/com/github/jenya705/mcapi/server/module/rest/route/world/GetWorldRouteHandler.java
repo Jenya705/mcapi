@@ -7,6 +7,7 @@ import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.module.rest.route.AbstractRouteHandler;
 import com.github.jenya705.mcapi.server.module.web.Request;
 import com.github.jenya705.mcapi.server.module.web.Response;
+import com.github.jenya705.mcapi.world.World;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -23,14 +24,10 @@ public class GetWorldRouteHandler extends AbstractRouteHandler {
 
     @Override
     public void handle(Request request, Response response) throws Exception {
-        String id = request.paramOrException("id");
+        World world = request.paramOrException("id", World.class);
         request
                 .bot()
                 .needPermission(Permissions.WORLD_GET);
-        response.ok(
-                core()
-                        .getOptionalWorld(id)
-                        .orElseThrow(() -> WorldNotFoundException.create(id))
-        );
+        response.ok(world);
     }
 }

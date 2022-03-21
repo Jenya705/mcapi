@@ -1,14 +1,13 @@
 package com.github.jenya705.mcapi.server.command.bot.permission.block;
 
 import com.github.jenya705.mcapi.CommandSender;
+import com.github.jenya705.mcapi.NamespacedKey;
 import com.github.jenya705.mcapi.Vector3;
 import com.github.jenya705.mcapi.block.Block;
-import com.github.jenya705.mcapi.player.OfflinePlayer;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.server.command.CommandTab;
-import com.github.jenya705.mcapi.server.command.CommandTabImpl;
 import com.github.jenya705.mcapi.server.command.NoConfig;
 import com.github.jenya705.mcapi.server.command.advanced.AdvancedCommandExecutor;
 import com.github.jenya705.mcapi.server.command.bot.permission.give.PermissionGiveBotArguments;
@@ -57,7 +56,7 @@ public class PermissionBlockBotCommand extends AdvancedCommandExecutor<Permissio
                 .tab(() -> core()
                         .getWorlds()
                         .stream()
-                        .map(World::getName)
+                        .map(world -> world.getId().toString())
                         .collect(Collectors.toList())
                 )
                 .tab(() -> Arrays.asList("<is_token>", "true", "false"))
@@ -75,7 +74,7 @@ public class PermissionBlockBotCommand extends AdvancedCommandExecutor<Permissio
             world = ((Player) sender).getLocation().getWorld();
         }
         else {
-            world = core().getWorld(args.getWorld());
+            world = core().getWorld(NamespacedKey.from(args.getWorld()));
         }
         if (world == null) {
             sendMessage(sender, messageContainer().worldNotFound(args.getWorld()));

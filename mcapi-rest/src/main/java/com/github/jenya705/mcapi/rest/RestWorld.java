@@ -19,7 +19,7 @@ public class RestWorld {
 
     public static RestWorld from(World world) {
         return new RestWorld(
-                world.getName(),
+                world.getId().toString(),
                 world.getWorldDimension().name(),
                 world.getWorldWeather().name()
         );

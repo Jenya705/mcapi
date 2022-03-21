@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.entity;
 
 import com.github.jenya705.mcapi.Location;
+import com.github.jenya705.mcapi.NamespacedKey;
 import com.github.jenya705.mcapi.block.Block;
 import com.github.jenya705.mcapi.world.World;
 import com.github.jenya705.mcapi.world.WorldDimension;
@@ -19,7 +20,7 @@ import java.util.Collection;
 @AllArgsConstructor
 public class EntityWorld implements World {
 
-    private String name;
+    private NamespacedKey id;
     private WorldDimension worldDimension;
     private WorldWeather worldWeather;
 

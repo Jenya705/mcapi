@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.world;
 
 import com.github.jenya705.mcapi.Location;
+import com.github.jenya705.mcapi.NamespacedKey;
 import com.github.jenya705.mcapi.block.Block;
 import com.github.jenya705.mcapi.entity.Entity;
 
@@ -11,7 +12,7 @@ import java.util.Collection;
  */
 public interface World {
 
-    String getName();
+    NamespacedKey getId();
 
     Block getBlock(Location location);
 

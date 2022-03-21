@@ -3,13 +3,13 @@ package com.github.jenya705.mcapi.server.module.rest.route.block;
 import com.github.jenya705.mcapi.Routes;
 import com.github.jenya705.mcapi.block.Block;
 import com.github.jenya705.mcapi.error.BlockNotFoundException;
-import com.github.jenya705.mcapi.error.WorldNotFoundException;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.module.block.BlockDataModule;
 import com.github.jenya705.mcapi.server.module.rest.route.AbstractRouteHandler;
 import com.github.jenya705.mcapi.server.module.web.Request;
 import com.github.jenya705.mcapi.server.module.web.Response;
 import com.github.jenya705.mcapi.server.util.PermissionUtils;
+import com.github.jenya705.mcapi.world.World;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -31,18 +31,14 @@ public class SetBlockDataFieldRouteHandler extends AbstractRouteHandler {
 
     @Override
     public void handle(Request request, Response response) throws Exception {
-        String id = request.paramOrException("id");
+        World world = request.paramOrException("id", World.class);
         int x = request.paramOrException("x", int.class);
         int y = request.paramOrException("y", int.class);
         int z = request.paramOrException("z", int.class);
         String field = request.paramOrException("name");
         Block block = Optional.ofNullable(
-                core()
-                        .getOptionalWorld(id)
-                        .orElseThrow(() -> WorldNotFoundException.create(id))
-                        .getBlock(x, y, z)
-        )
-                .orElseThrow(BlockNotFoundException::create);
+                world.getBlock(x, y, z)
+        ).orElseThrow(BlockNotFoundException::create);
         request
                 .bot()
                 .needPermission(PermissionUtils.updateData(block));

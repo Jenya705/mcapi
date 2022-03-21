@@ -105,7 +105,7 @@ public class BukkitWrapper {
 
     public org.bukkit.block.Block block(Block block) {
         Location location = block.getLocation();
-        NamespacedKey key = NamespacedKey.fromString(location.getWorld().getName());
+        NamespacedKey key = namespacedKey(location.getWorld().getId());
         if (key == null) return null;
         org.bukkit.World world = Bukkit.getWorld(key);
         if (world == null) return null;
@@ -298,6 +298,14 @@ public class BukkitWrapper {
                 !potionEffect.isHidden(),
                 !potionEffect.isHidden()
         );
+    }
+
+    public com.github.jenya705.mcapi.NamespacedKey namespacedKey(NamespacedKey namespacedKey) {
+        return com.github.jenya705.mcapi.NamespacedKey.from(namespacedKey.toString());
+    }
+
+    public NamespacedKey namespacedKey(com.github.jenya705.mcapi.NamespacedKey namespacedKey) {
+        return NamespacedKey.fromString(namespacedKey.toString());
     }
 
 }

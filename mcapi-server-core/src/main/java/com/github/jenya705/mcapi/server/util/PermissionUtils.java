@@ -45,7 +45,7 @@ public class PermissionUtils {
     }
 
     public String worldPermission(String permission, World world) {
-        return permission + "." + world.getName();
+        return permission + "." + world.getId();
     }
 
     public String blockPermission(String permission, Block block) {

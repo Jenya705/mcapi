@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.bukkit.world;
 
 import com.github.jenya705.mcapi.Location;
+import com.github.jenya705.mcapi.NamespacedKey;
 import com.github.jenya705.mcapi.block.Block;
 import com.github.jenya705.mcapi.bukkit.wrapper.BukkitWrapper;
 import com.github.jenya705.mcapi.bukkit.block.BukkitBlockWrapper;
@@ -28,13 +29,13 @@ public class BukkitWorldWrapper implements World {
     }
 
     @Override
-    public String getName() {
-        return bukkitWorld.getKey().toString();
+    public NamespacedKey getId() {
+        return BukkitWrapper.namespacedKey(bukkitWorld.getKey());
     }
 
     @Override
     public Block getBlock(Location location) {
-        if (!location.getWorld().getName().equalsIgnoreCase(getName())) return null;
+        if (!location.getWorld().getId().equals(getId())) return null;
         return getBlock(
                 (int) location.getX(),
                 (int) location.getY(),
@@ -85,6 +86,6 @@ public class BukkitWorldWrapper implements World {
     public boolean equals(Object obj) {
         if (!(obj instanceof World other)) return false;
         if (obj == this) return true;
-        return Objects.equals(getName(), other.getName());
+        return Objects.equals(getId(), other.getId());
     }
 }
