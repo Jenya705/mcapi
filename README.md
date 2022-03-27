@@ -12,3 +12,8 @@ Web / Rest api for server owners and players! Built on top of reactor-netty.
 * download [websockets](https://pypi.org/project/websockets/) python library 
 * execute it using: `python easywebsocket.py <put your bot token here>`
 * thats all! do something to see received events
+
+## Libraries
+
+### JavaScript
+* [mcapi](https://github.com/Jenya705/mcapijs)
