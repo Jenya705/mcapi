@@ -9,12 +9,15 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Jenya705
  */
 @Singleton
 public class ExecutorServiceWorker implements Worker {
+
+    private static final AtomicInteger workerThreadsCounter = new AtomicInteger(1);
 
     private final ExecutorService threadPool;
     private final ExecutorServiceWorkerConfig config;
@@ -27,7 +30,13 @@ public class ExecutorServiceWorker implements Worker {
                         .required("worker")
         );
         if (config.getThreads() > 0) {
-            threadPool = Executors.newFixedThreadPool(config.getThreads());
+            threadPool = Executors.newFixedThreadPool(config.getThreads(), runnable -> {
+                Thread thread = new Thread(runnable);
+                thread.setName("mcapi-worker-thread-" + workerThreadsCounter.getAndIncrement());
+                thread.setDaemon(false);
+                thread.setPriority(Thread.NORM_PRIORITY);
+                return thread;
+            });
         }
         else {
             threadPool = null;

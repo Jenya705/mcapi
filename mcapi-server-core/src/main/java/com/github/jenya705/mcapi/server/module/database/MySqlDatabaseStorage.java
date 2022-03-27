@@ -16,7 +16,7 @@ import java.util.UUID;
  */
 public class MySqlDatabaseStorage extends DatabaseStorageImpl {
 
-    public MySqlDatabaseStorage(ServerApplication application, DatabaseModule databaseModule, StorageModule storageModule) throws IOException {
+    public MySqlDatabaseStorage(ServerApplication application, SQLDatabaseModule databaseModule, StorageModule storageModule) throws IOException {
         super(application, databaseModule, storageModule, "mysql");
     }
 

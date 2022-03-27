@@ -7,6 +7,7 @@ import com.github.jenya705.mcapi.server.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.server.entity.BotPermissionEntity;
 import com.github.jenya705.mcapi.server.entity.PermissionEntity;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
+import com.github.jenya705.mcapi.server.module.database.SQLDatabaseModule;
 import com.github.jenya705.mcapi.server.module.database.cache.CacheStorage;
 import com.github.jenya705.mcapi.server.module.database.cache.FakeCacheStorage;
 import com.github.jenya705.mcapi.server.module.storage.StorageModule;
@@ -31,6 +32,7 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
     private final String sqlType;
 
     // Scripts
+    // TODO change it to prepared statements.
     private final String setup;
     private final String findAllBots;
     private final String findBotById;
@@ -58,7 +60,7 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
     private final String updatePermission;
     private final String upsertPermission;
 
-    public DatabaseStorageImpl(ServerApplication application, DatabaseModule databaseModule,
+    public DatabaseStorageImpl(ServerApplication application, SQLDatabaseModule databaseModule,
                                StorageModule storageModule, String sqlType) throws IOException {
         super(application);
         this.storageModule = storageModule;

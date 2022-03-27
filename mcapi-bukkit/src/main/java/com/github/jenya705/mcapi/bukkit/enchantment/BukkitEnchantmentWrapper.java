@@ -1,5 +1,7 @@
 package com.github.jenya705.mcapi.bukkit.enchantment;
 
+import com.github.jenya705.mcapi.NamespacedKey;
+import com.github.jenya705.mcapi.bukkit.wrapper.BukkitWrapper;
 import com.github.jenya705.mcapi.enchantment.Enchantment;
 import lombok.AllArgsConstructor;
 
@@ -17,7 +19,7 @@ public class BukkitEnchantmentWrapper implements Enchantment {
     }
 
     @Override
-    public String getKey() {
-        return enchantment.getKey().toString();
+    public NamespacedKey getKey() {
+        return BukkitWrapper.namespacedKey(enchantment.getKey());
     }
 }

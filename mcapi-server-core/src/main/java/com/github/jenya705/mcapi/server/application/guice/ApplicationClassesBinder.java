@@ -28,7 +28,6 @@ import com.github.jenya705.mcapi.server.module.config.ConfigModule;
 import com.github.jenya705.mcapi.server.module.config.message.MessageContainer;
 import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.server.module.database.storage.EventDatabaseStorage;
-import com.github.jenya705.mcapi.server.module.enchantment.EnchantmentStorage;
 import com.github.jenya705.mcapi.server.module.entity.capture.EntityCaptureModule;
 import com.github.jenya705.mcapi.server.module.inject.field.FieldInjectionModule;
 import com.github.jenya705.mcapi.server.module.link.LinkingModule;
@@ -82,7 +81,6 @@ public class ApplicationClassesBinder extends AbstractModule {
             LocalizationModule.class,
             BotManagement.class,
             CommandModule.class,
-            EnchantmentStorage.class,
             EntityCaptureModule.class,
             FieldInjectionModule.class,
             LinkingModule.class,

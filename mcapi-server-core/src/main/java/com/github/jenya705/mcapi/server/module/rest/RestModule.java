@@ -45,7 +45,6 @@ import com.github.jenya705.mcapi.server.form.component.ComponentMapParser;
 import com.github.jenya705.mcapi.server.inventory.InventoryContainer;
 import com.github.jenya705.mcapi.server.inventory.InventoryViewModel;
 import com.github.jenya705.mcapi.server.module.authorization.AuthorizationModule;
-import com.github.jenya705.mcapi.server.module.enchantment.EnchantmentStorage;
 import com.github.jenya705.mcapi.server.module.mapper.Mapper;
 import com.github.jenya705.mcapi.server.module.object.ObjectStorage;
 import com.github.jenya705.mcapi.server.util.PlayerUtils;
@@ -68,19 +67,17 @@ public class RestModule extends AbstractApplicationModule {
     private final FormPlatformProvider formProvider;
     private final ComponentMapParser formComponentParser;
     private final ObjectStorage objectStorage;
-    private final EnchantmentStorage enchantmentStorage;
 
     @Inject
     public RestModule(ServerApplication application, Mapper mapper, AuthorizationModule authorizationModule,
                       FormPlatformProvider formProvider, ComponentMapParser formComponentParser,
-                      ObjectStorage objectStorage, EnchantmentStorage enchantmentStorage) {
+                      ObjectStorage objectStorage) {
         super(application);
         this.mapper = mapper;
         this.authorizationModule = authorizationModule;
         this.formProvider = formProvider;
         this.formComponentParser = formComponentParser;
         this.objectStorage = objectStorage;
-        this.enchantmentStorage = enchantmentStorage;
     }
 
     @OnStartup
@@ -248,7 +245,7 @@ public class RestModule extends AbstractApplicationModule {
                                 .stream()
                                 .map(enchantment -> new EntityItemEnchantment(
                                         enchantment.getLevel(),
-                                        enchantmentStorage.getEnchantment(enchantment.getKey())
+                                        objectStorage.getEnchantment(enchantment.getKey())
                                 ))
                                 .collect(Collectors.toList()) :
                         Collections.emptyList()

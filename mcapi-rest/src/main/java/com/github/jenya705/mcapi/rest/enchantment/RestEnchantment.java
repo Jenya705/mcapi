@@ -17,7 +17,7 @@ public class RestEnchantment {
 
     public static RestEnchantment from(Enchantment enchantment) {
         return new RestEnchantment(
-                enchantment.getKey()
+                enchantment.getKey().toString()
         );
     }
 

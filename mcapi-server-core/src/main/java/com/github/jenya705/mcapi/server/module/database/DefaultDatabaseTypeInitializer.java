@@ -19,7 +19,7 @@ public class DefaultDatabaseTypeInitializer {
     private static final String urlFormat = "jdbc:%s://%s/%s";
 
     private final ServerApplication application;
-    private final DatabaseModule databaseModule;
+    private final SQLDatabaseModule databaseModule;
     private final StorageModule storageModule;
 
     @SneakyThrows

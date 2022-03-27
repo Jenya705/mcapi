@@ -15,7 +15,7 @@ import java.sql.Connection;
 public class MySqlDatabaseInitializer implements DatabaseTypeInitializer {
 
     private final ServerApplication application;
-    private final DatabaseModule databaseModule;
+    private final SQLDatabaseModule databaseModule;
     private final StorageModule storageModule;
 
     @Override

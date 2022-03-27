@@ -18,7 +18,7 @@ public class RestItemEnchantment {
 
     public static RestItemEnchantment from(ItemEnchantment itemEnchantment) {
         return new RestItemEnchantment(
-                itemEnchantment.getKey(),
+                itemEnchantment.getKey().toString(),
                 itemEnchantment.getLevel()
         );
     }

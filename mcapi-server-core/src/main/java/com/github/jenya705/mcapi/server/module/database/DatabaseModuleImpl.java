@@ -30,28 +30,31 @@ import java.util.Map;
  * @author Jenya705
  */
 @Singleton
-public class DatabaseModuleImpl extends AbstractApplicationModule implements DatabaseModule {
+public class DatabaseModuleImpl extends AbstractApplicationModule implements SQLDatabaseModule {
+
+    private final ServerApplication application;
 
     private final Map<String, DatabaseTypeInitializer> databaseTypeInitializers;
 
     private final DefaultDatabaseTypeInitializer defaultDatabaseTypeInitializer;
 
-    private final Connection connection;
-    private final DatabaseStorage storage;
-
     private final DatabaseModuleConfig config;
-
-    private final CacheStorage cache;
-    private final DatabaseGetter safeSync;
-    private final DatabaseGetter safeSyncWithFuture;
-    private final DatabaseGetter safeAsync;
+    private final CacheConfig cacheConfig;
 
     private final Logger log;
+
+    private CacheStorage cache;
+    private DatabaseGetter safeSync;
+    private DatabaseGetter safeSyncWithFuture;
+    private DatabaseGetter safeAsync;
+    private DatabaseStorage storage;
+    private Connection connection;
 
     @Inject
     public DatabaseModuleImpl(ServerApplication application, ConfigModule configModule, StorageModule storageModule, Logger log) {
         super(application);
         this.log = log;
+        this.application = application;
         databaseTypeInitializers = new HashMap<>();
         addTypeInitializer("mysql", new MySqlDatabaseInitializer(app(), this, storageModule));
         addTypeInitializer("sqlite", new SqliteDatabaseInitializer(app()));
@@ -60,31 +63,7 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
                 .getConfig()
                 .required("database");
         config = new DatabaseModuleConfig(configData);
-        TimerTask task = TimerTask.start(log, "Creating connection with %s...", config.getType());
-        connection = createConnection();
-        task.complete();
-        task.start("Loading storage...");
-        storage = createStorage(config.getType());
-        task.complete();
-        storage.setup();
-        safeAsync = new StorageDatabaseGetter(storage);
-        if (config.isCacheEnabled()) {
-            cache = new CacheStorageImpl(
-                    application,
-                    new CacheConfig(
-                            configData
-                                    .required("cache")
-                    ),
-                    this
-            );
-            safeSync = new CacheDatabaseGetter(cache);
-            safeSyncWithFuture = new CacheDatabaseGetter(cache.withFuture());
-        }
-        else {
-            cache = new FakeCacheStorage(this);
-            safeSync = safeAsync;
-            safeSyncWithFuture = safeAsync;
-        }
+        cacheConfig = new CacheConfig(configData.required("cache"));
     }
 
     protected Connection createConnection() {
@@ -107,9 +86,36 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
         return connection;
     }
 
+    protected void validateConnection() {
+        if (connection == null) {
+            TimerTask task = TimerTask.start(log, "Creating connection with database...");
+            connection = createConnection();
+            storage = createStorage(config.getType());
+            storage.setup();
+            safeAsync = new StorageDatabaseGetter(storage);
+            if (config.isCacheEnabled()) {
+                cache = new CacheStorageImpl(
+                        application,
+                        cacheConfig,
+                        this
+                );
+                safeSync = new CacheDatabaseGetter(cache);
+                safeSyncWithFuture = new CacheDatabaseGetter(cache.withFuture());
+            }
+            else {
+                cache = new FakeCacheStorage(this);
+                safeSync = safeAsync;
+                safeSyncWithFuture = safeAsync;
+            }
+            task.complete();
+        }
+    }
+
     @OnDisable
     public void disable() throws SQLException {
-        if (connection != null) connection.close();
+        if (connection != null) {
+            connection.close();
+        }
     }
 
     @Override
@@ -118,11 +124,11 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
         debugSql(sql, objects);
         synchronized (this) {
             if (objects.length == 0) {
-                Statement statement = connection.createStatement();
+                Statement statement = getConnection().createStatement();
                 statement.executeUpdate(sql);
             }
             else {
-                PreparedStatement statement = connection.prepareStatement(sql);
+                PreparedStatement statement = getConnection().prepareStatement(sql);
                 for (int i = 0; i < objects.length; ++i) {
                     statement.setObject(i + 1, objects[i]);
                 }
@@ -137,10 +143,10 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
         debugSql(sql, objects);
         synchronized (this) {
             if (objects.length == 0) {
-                return connection.createStatement().executeQuery(sql);
+                return getConnection().createStatement().executeQuery(sql);
             }
             else {
-                PreparedStatement statement = connection.prepareStatement(sql);
+                PreparedStatement statement = getConnection().prepareStatement(sql);
                 for (int i = 0; i < objects.length; ++i) {
                     statement.setObject(i + 1, objects[i]);
                 }
@@ -157,6 +163,12 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements Dat
     @Override
     public CacheStorage cache() {
         return cache;
+    }
+
+    @Override
+    public Connection getConnection() {
+        validateConnection();
+        return connection;
     }
 
     private DatabaseStorage createStorage(String sqlType) {

@@ -12,8 +12,7 @@ import java.util.UUID;
 /**
  * @author Jenya705
  */
-
-public class FakeCacheStorage implements FutureCacheStorage {
+public final class FakeCacheStorage implements FutureCacheStorage {
 
     private final DatabaseModule databaseModule;
 
