@@ -16,4 +16,4 @@ Web / Rest api for server owners and players! Built on top of reactor-netty.
 ## Libraries
 
 ### JavaScript
-* [mcapi](https://github.com/Jenya705/mcapijs)
+* [mcapijs](https://github.com/Jenya705/mcapijs)
