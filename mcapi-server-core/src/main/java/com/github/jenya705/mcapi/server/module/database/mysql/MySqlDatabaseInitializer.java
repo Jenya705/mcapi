@@ -1,6 +1,8 @@
-package com.github.jenya705.mcapi.server.module.database;
+package com.github.jenya705.mcapi.server.module.database.mysql;
 
 import com.github.jenya705.mcapi.server.application.ServerApplication;
+import com.github.jenya705.mcapi.server.module.database.DatabaseTypeInitializer;
+import com.github.jenya705.mcapi.server.module.database.SQLDatabaseModule;
 import com.github.jenya705.mcapi.server.module.database.storage.DatabaseStorage;
 import com.github.jenya705.mcapi.server.module.storage.StorageModule;
 import lombok.AllArgsConstructor;

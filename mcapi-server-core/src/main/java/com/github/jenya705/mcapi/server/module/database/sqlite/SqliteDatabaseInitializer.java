@@ -1,6 +1,10 @@
-package com.github.jenya705.mcapi.server.module.database;
+package com.github.jenya705.mcapi.server.module.database.sqlite;
 
 import com.github.jenya705.mcapi.server.application.ServerApplication;
+import com.github.jenya705.mcapi.server.module.database.DatabaseTypeInitializer;
+import com.github.jenya705.mcapi.server.module.database.SQLDatabaseModule;
+import com.github.jenya705.mcapi.server.module.database.storage.DatabaseStorage;
+import com.github.jenya705.mcapi.server.module.storage.StorageModule;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -16,6 +20,8 @@ public class SqliteDatabaseInitializer implements DatabaseTypeInitializer {
     private static final String sqliteUrlFormat = "jdbc:sqlite://%s";
 
     private final ServerApplication application;
+    private final SQLDatabaseModule databaseModule;
+    private final StorageModule storageModule;
 
     @Override
     @SneakyThrows
@@ -29,5 +35,11 @@ public class SqliteDatabaseInitializer implements DatabaseTypeInitializer {
                                 .getAbsolutePath("database.db")
                 )
         );
+    }
+
+    @Override
+    @SneakyThrows
+    public DatabaseStorage storage() {
+        return new SqliteDatabaseStorage(application, databaseModule, storageModule);
     }
 }

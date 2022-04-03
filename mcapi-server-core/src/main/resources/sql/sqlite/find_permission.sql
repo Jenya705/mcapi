@@ -1,0 +1,1 @@
+select * from mcapi_permissions where bot_id = ? and ((target_most = ? and target_least = ?) or (target_most = 0 and target_least = 0));

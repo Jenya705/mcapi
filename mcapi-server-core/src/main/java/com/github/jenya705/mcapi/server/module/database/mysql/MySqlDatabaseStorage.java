@@ -1,8 +1,9 @@
-package com.github.jenya705.mcapi.server.module.database;
+package com.github.jenya705.mcapi.server.module.database.mysql;
 
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.entity.BotPermissionEntity;
+import com.github.jenya705.mcapi.server.module.database.SQLDatabaseModule;
 import com.github.jenya705.mcapi.server.module.database.storage.DatabaseStorageImpl;
 import com.github.jenya705.mcapi.server.module.storage.StorageModule;
 import lombok.SneakyThrows;

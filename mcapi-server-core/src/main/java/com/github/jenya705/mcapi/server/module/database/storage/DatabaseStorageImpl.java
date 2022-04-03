@@ -19,6 +19,7 @@ import lombok.SneakyThrows;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -32,7 +33,6 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
     private final String sqlType;
 
     // Scripts
-    // TODO change it to prepared statements.
     private final String setup;
     private final String findAllBots;
     private final String findBotById;
@@ -203,24 +203,7 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
                                     realTarget.getLeastSignificantBits()
                             )
                     );
-            boolean targetEquals = false;
-            if (!permissionEntities.isEmpty()) {
-                for (BotPermissionEntity entity : permissionEntities) {
-                    if (entity.isRegex()) {
-                        permissionEntity = entity;
-                        break;
-                    }
-                    if (permissionEntity == null || permissionEntity.getPermission().length() < entity.getPermission().length()) {
-                        permissionEntity = entity;
-                        targetEquals = Objects.equals(entity.getTarget(), target);
-                        continue;
-                    }
-                    if (!targetEquals && Objects.equals(entity.getTarget(), target)) {
-                        permissionEntity = entity;
-                        targetEquals = true;
-                    }
-                }
-            }
+            permissionEntity = chooseRightPermission(target, permissionEntities, ent -> true);
             if (!isCacheFake()) {
                 PermissionEntity storagePermission = storageModule.getPermission(permission);
                 if (permissionEntity == null && storagePermission == null) return null;
@@ -233,6 +216,30 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
                                 storagePermission.isEnabled()
                         )
                 ));
+            }
+        }
+        return permissionEntity;
+    }
+
+    protected static BotPermissionEntity chooseRightPermission(UUID target, List<BotPermissionEntity> permissionEntities, Predicate<BotPermissionEntity> isRight) {
+        BotPermissionEntity permissionEntity = null;
+        boolean targetEquals = false;
+        if (!permissionEntities.isEmpty()) {
+            for (BotPermissionEntity entity : permissionEntities) {
+                if (!isRight.test(entity)) continue;
+                if (entity.isRegex()) {
+                    permissionEntity = entity;
+                    break;
+                }
+                if (permissionEntity == null || permissionEntity.getPermission().length() < entity.getPermission().length()) {
+                    permissionEntity = entity;
+                    targetEquals = Objects.equals(entity.getTarget(), target);
+                    continue;
+                }
+                if (!targetEquals && Objects.equals(entity.getTarget(), target)) {
+                    permissionEntity = entity;
+                    targetEquals = true;
+                }
             }
         }
         return permissionEntity;

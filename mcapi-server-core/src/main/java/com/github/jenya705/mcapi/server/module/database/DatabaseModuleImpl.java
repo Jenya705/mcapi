@@ -10,9 +10,11 @@ import com.github.jenya705.mcapi.server.module.database.cache.CacheConfig;
 import com.github.jenya705.mcapi.server.module.database.cache.CacheStorage;
 import com.github.jenya705.mcapi.server.module.database.cache.CacheStorageImpl;
 import com.github.jenya705.mcapi.server.module.database.cache.FakeCacheStorage;
+import com.github.jenya705.mcapi.server.module.database.mysql.MySqlDatabaseInitializer;
 import com.github.jenya705.mcapi.server.module.database.safe.CacheDatabaseGetter;
 import com.github.jenya705.mcapi.server.module.database.safe.DatabaseGetter;
 import com.github.jenya705.mcapi.server.module.database.safe.StorageDatabaseGetter;
+import com.github.jenya705.mcapi.server.module.database.sqlite.SqliteDatabaseInitializer;
 import com.github.jenya705.mcapi.server.module.database.storage.DatabaseStorage;
 import com.github.jenya705.mcapi.server.module.storage.StorageModule;
 import com.google.inject.Inject;
@@ -25,6 +27,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author Jenya705
@@ -43,12 +46,12 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements SQL
 
     private final Logger log;
 
-    private CacheStorage cache;
-    private DatabaseGetter safeSync;
-    private DatabaseGetter safeSyncWithFuture;
-    private DatabaseGetter safeAsync;
-    private DatabaseStorage storage;
-    private Connection connection;
+    private final AtomicReference<CacheStorage> cache = new AtomicReference<>();
+    private final AtomicReference<DatabaseGetter> safeSync = new AtomicReference<>();
+    private final AtomicReference<DatabaseGetter> safeSyncWithFuture = new AtomicReference<>();
+    private final AtomicReference<DatabaseGetter> safeAsync = new AtomicReference<>();
+    private final AtomicReference<DatabaseStorage> storage = new AtomicReference<>();
+    private final AtomicReference<Connection> connection = new AtomicReference<>();
 
     @Inject
     public DatabaseModuleImpl(ServerApplication application, ConfigModule configModule, StorageModule storageModule, Logger log) {
@@ -57,7 +60,7 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements SQL
         this.application = application;
         databaseTypeInitializers = new HashMap<>();
         addTypeInitializer("mysql", new MySqlDatabaseInitializer(app(), this, storageModule));
-        addTypeInitializer("sqlite", new SqliteDatabaseInitializer(app()));
+        addTypeInitializer("sqlite", new SqliteDatabaseInitializer(app(), this, storageModule));
         defaultDatabaseTypeInitializer = new DefaultDatabaseTypeInitializer(app(), this, storageModule);
         ConfigData configData = configModule
                 .getConfig()
@@ -86,26 +89,30 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements SQL
         return connection;
     }
 
-    protected void validateConnection() {
-        if (connection == null) {
+    @SneakyThrows
+    protected synchronized void validateConnection() {
+        // TODO make it thread safe
+        if (connection.get() == null || connection.get().isClosed()) {
             TimerTask task = TimerTask.start(log, "Creating connection with database...");
-            connection = createConnection();
-            storage = createStorage(config.getType());
-            storage.setup();
-            safeAsync = new StorageDatabaseGetter(storage);
+            connection.set(createConnection());
+            storage.set(createStorage(config.getType()));
+            storage.get().setup();
+            safeAsync.set(new StorageDatabaseGetter(storage.get()));
             if (config.isCacheEnabled()) {
-                cache = new CacheStorageImpl(
-                        application,
-                        cacheConfig,
-                        this
+                cache.set(
+                        new CacheStorageImpl(
+                                application,
+                                cacheConfig,
+                                this
+                        )
                 );
-                safeSync = new CacheDatabaseGetter(cache);
-                safeSyncWithFuture = new CacheDatabaseGetter(cache.withFuture());
+                safeSync.set(new CacheDatabaseGetter(cache.get()));
+                safeSyncWithFuture.set(new CacheDatabaseGetter(cache.get().withFuture()));
             }
             else {
-                cache = new FakeCacheStorage(this);
-                safeSync = safeAsync;
-                safeSyncWithFuture = safeAsync;
+                cache.set(new FakeCacheStorage(this));
+                safeSync.set(safeAsync.get());
+                safeSyncWithFuture.set(safeAsync.get());
             }
             task.complete();
         }
@@ -113,8 +120,8 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements SQL
 
     @OnDisable
     public void disable() throws SQLException {
-        if (connection != null) {
-            connection.close();
+        if (connection.get() != null && !connection.get().isClosed()) {
+            connection.get().close();
         }
     }
 
@@ -157,18 +164,20 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements SQL
 
     @Override
     public DatabaseStorage storage() {
-        return storage;
+        validateConnection();
+        return storage.get();
     }
 
     @Override
     public CacheStorage cache() {
-        return cache;
+        validateConnection();
+        return cache.get();
     }
 
     @Override
     public Connection getConnection() {
         validateConnection();
-        return connection;
+        return connection.get();
     }
 
     private DatabaseStorage createStorage(String sqlType) {
@@ -193,17 +202,20 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements SQL
 
     @Override
     public DatabaseGetter safeSync() {
-        return safeSync;
+        validateConnection();
+        return safeSync.get();
     }
 
     @Override
     public DatabaseGetter safeSyncWithFuture() {
-        return safeSyncWithFuture;
+        validateConnection();
+        return safeSyncWithFuture.get();
     }
 
     @Override
     public DatabaseGetter safeAsync() {
-        return safeAsync;
+        validateConnection();
+        return safeAsync.get();
     }
 
     @Override
