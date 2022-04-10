@@ -205,13 +205,8 @@ public class FieldInjectionModuleImpl extends AbstractApplicationModule implemen
                     if (information.getIgnoredFields().contains(field.getName())) {
                         continue;
                     }
-                    boolean wasAccessible;
-                    if (Modifier.isStatic(field.getModifiers())) {
-                        wasAccessible = field.canAccess(null);
-                    }
-                    else {
-                        wasAccessible = field.canAccess(value);
-                    }
+                    boolean wasAccessible = field.canAccess(
+                            Modifier.isStatic(field.getModifiers()) ? null : value);
                     if (!wasAccessible) field.setAccessible(true);
                     Object currentValue = field.get(value);
                     mapper.getDefaultValueGetter().writeIfNotDefault(generator, currentValue, field, false);

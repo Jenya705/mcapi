@@ -31,7 +31,7 @@ public class BukkitServerEventHandler extends AbstractApplicationModule implemen
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void chat(AsyncChatEvent event) {
         eventLoop()
                 .invoke(
@@ -42,7 +42,7 @@ public class BukkitServerEventHandler extends AbstractApplicationModule implemen
                 );
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void join(PlayerJoinEvent event) {
         eventLoop()
                 .invoke(
@@ -52,7 +52,7 @@ public class BukkitServerEventHandler extends AbstractApplicationModule implemen
                 );
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void quit(PlayerQuitEvent event) {
         eventLoop()
                 .invoke(
@@ -62,7 +62,7 @@ public class BukkitServerEventHandler extends AbstractApplicationModule implemen
                 );
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void blockBreak(BlockBreakEvent event) {
         eventLoop()
                 .invoke(
@@ -73,7 +73,7 @@ public class BukkitServerEventHandler extends AbstractApplicationModule implemen
                 );
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void blockPlace(BlockPlaceEvent event) {
         eventLoop()
                 .invoke(
@@ -84,7 +84,7 @@ public class BukkitServerEventHandler extends AbstractApplicationModule implemen
                 );
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void entityClick(PlayerInteractAtEntityEvent event) {
         Entity entity = BukkitWrapper.entity(event.getRightClicked());
         if (!(entity instanceof CapturableEntity)) return;

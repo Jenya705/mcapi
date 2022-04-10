@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.server.module.database;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 
 /**
  *
@@ -9,6 +10,10 @@ import java.sql.Connection;
  * @author Jenya705
  */
 public interface SQLDatabaseModule extends DatabaseModule {
+
+    void update(String sql, Object... objects);
+
+    ResultSet query(String sql, Object... objects);
 
     Connection getConnection();
 

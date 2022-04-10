@@ -196,6 +196,6 @@ public class ContainerCommandExecutor extends AbstractApplicationModule implemen
     }
 
     private boolean isGhost(Object obj) {
-        return obj instanceof GhostBranch && ((GhostBranch) obj).isGhost();
+        return obj instanceof GhostableBranch && ((GhostableBranch) obj).isGhost();
     }
 }

@@ -35,7 +35,7 @@ public class ContainerCommandTree implements CommandTree {
     public CommandTree ghostBranch(String name, Consumer<CommandTree> treeConsumer) {
         ContainerCommandTree tree = new ContainerCommandTree();
         treeConsumer.accept(tree);
-        node.put(name.toLowerCase(Locale.ROOT), new ContainerGhostBranch(true, tree.getNode()));
+        node.put(name.toLowerCase(Locale.ROOT), new ContainerGhostableBranch(true, tree.getNode()));
         return this;
     }
 

@@ -68,8 +68,7 @@ public class ConfigModuleImpl implements ConfigModule {
         global = new GlobalConfig(config.required("global"));
     }
 
-    @OnDisable(priority = 4)
-    @OnStartup(priority = 4)
+    @OnStartup(priority = Integer.MAX_VALUE)
     public void save() throws IOException {
         core.saveConfig("config", config.primitiveRepresent());
     }

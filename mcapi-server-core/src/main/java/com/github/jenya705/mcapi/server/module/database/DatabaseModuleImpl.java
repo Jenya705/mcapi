@@ -36,9 +36,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class DatabaseModuleImpl extends AbstractApplicationModule implements SQLDatabaseModule {
 
     private final ServerApplication application;
-
     private final Map<String, DatabaseTypeInitializer> databaseTypeInitializers;
-
     private final DefaultDatabaseTypeInitializer defaultDatabaseTypeInitializer;
 
     private final DatabaseModuleConfig config;
@@ -91,7 +89,6 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements SQL
 
     @SneakyThrows
     protected synchronized void validateConnection() {
-        // TODO make it thread safe
         if (connection.get() == null || connection.get().isClosed()) {
             TimerTask task = TimerTask.start(log, "Creating connection with database...");
             connection.set(createConnection());
@@ -196,7 +193,7 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements SQL
 
     private void debugSql(String sql, Object... objects) {
         if (debug()) {
-            log.info("SQL: {}#{}", sql, Arrays.asList(objects));
+            log.info("SQL: {}#{}", sql, Arrays.toString(objects));
         }
     }
 

@@ -26,7 +26,7 @@ public class JoinedList<T> implements List<T> {
 
         @Override
         public boolean hasNext() {
-            return (currentIterator != null && currentIterator.hasNext()) || (joinedList.lists.size() > current && !joinedList.lists.get(current + 1).isEmpty());
+            return (currentIterator != null && currentIterator.hasNext()) || (joinedList.lists.size() - 1 > current && !joinedList.lists.get(current + 1).isEmpty());
         }
 
         @Override

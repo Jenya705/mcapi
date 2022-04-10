@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 public class DatabaseStorageImpl extends AbstractApplicationModule implements DatabaseStorage {
 
     private final StorageModule storageModule;
-    private final DatabaseModule databaseModule;
+    private final SQLDatabaseModule databaseModule;
     private final String sqlType;
 
     // Scripts

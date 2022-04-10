@@ -11,7 +11,7 @@ import java.util.Map;
  */
 @Getter
 @AllArgsConstructor
-public class ContainerGhostBranch implements GhostBranch, Map<String, Object> {
+public class ContainerGhostableBranch implements GhostableBranch, Map<String, Object> {
 
     private final boolean ghost;
     @Delegate

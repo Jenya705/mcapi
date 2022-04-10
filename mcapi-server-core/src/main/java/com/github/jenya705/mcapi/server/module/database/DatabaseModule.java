@@ -13,10 +13,6 @@ import java.sql.ResultSet;
 @ImplementedBy(DatabaseModuleImpl.class)
 public interface DatabaseModule {
 
-    void update(String sql, Object... objects);
-
-    ResultSet query(String sql, Object... objects);
-
     DatabaseStorage storage();
 
     CacheStorage cache();

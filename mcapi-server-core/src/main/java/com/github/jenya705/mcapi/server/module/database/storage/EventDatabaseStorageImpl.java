@@ -159,8 +159,9 @@ public class EventDatabaseStorageImpl implements EventDatabaseStorage {
             consumer.accept(entity);
             DatabaseUpdateDoneEvent doneEvent = new DatabaseUpdateDoneEvent(entity, result);
             eventLoop.invoke(doneEvent);
+            return true;
         }
-        return !event.isCancelled();
+        return false;
     }
 
 }

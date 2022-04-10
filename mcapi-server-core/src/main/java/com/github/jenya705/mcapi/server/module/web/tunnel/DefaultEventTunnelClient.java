@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author Jenya705
@@ -40,8 +41,7 @@ public class DefaultEventTunnelClient extends SimpleStatefulWebSocketConnection<
     @Getter
     private final Set<String> subscriptions = new CopyOnWriteArraySet<>();
 
-    @Getter
-    private AbstractBot owner;
+    private final AtomicReference<AbstractBot> owner = new AtomicReference<>();
 
     public DefaultEventTunnelClient(ServerApplication application, AuthorizationModule authorizationModule) {
         this.application = application;
@@ -69,14 +69,14 @@ public class DefaultEventTunnelClient extends SimpleStatefulWebSocketConnection<
 
     @Override
     public void authorization(String token) {
-        owner = authorizationModule.rawBot(token);
+        owner.set(authorizationModule.rawBot(token));
     }
 
     @Override
     public boolean subscribe(String subscription) {
         String gatewayPermission = String.format(permissionFormat, subscription);
-        return owner != null &&
-                owner.hasPermission(gatewayPermission) &&
+        return getOwner() != null &&
+                getOwner().hasPermission(gatewayPermission) &&
                 subscriptions.add(subscription);
     }
 
@@ -102,5 +102,8 @@ public class DefaultEventTunnelClient extends SimpleStatefulWebSocketConnection<
         }
     }
 
-
+    @Override
+    public AbstractBot getOwner() {
+        return owner.get();
+    }
 }
