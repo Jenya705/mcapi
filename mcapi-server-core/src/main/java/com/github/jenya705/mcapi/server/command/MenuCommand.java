@@ -14,9 +14,11 @@ import java.util.List;
 @Slf4j
 public abstract class MenuCommand implements CommandExecutor {
 
-    private ServerApplication application;
+    private final ServerApplication application;
 
-    public MenuCommand() {}
+    public MenuCommand() {
+        this(null);
+    }
 
     public MenuCommand(ServerApplication application) {
         this.application = application;
