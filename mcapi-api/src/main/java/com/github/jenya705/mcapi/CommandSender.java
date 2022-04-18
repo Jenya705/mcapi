@@ -7,7 +7,11 @@ import net.kyori.adventure.text.Component;
  */
 public interface CommandSender {
 
-    String getType();
+    NamespacedKey CONSOLE_TYPE = NamespacedKey.minecraft("console");
+
+    NamespacedKey UNDEFINED_TYPE = NamespacedKey.minecraft("undefined");
+
+    NamespacedKey getType();
 
     String getId();
 

@@ -29,8 +29,8 @@ public class BukkitEntityWrapper implements CapturableEntity {
     }
 
     @Override
-    public String getType() {
-        return entity.getType().getKey().toString();
+    public com.github.jenya705.mcapi.NamespacedKey getType() {
+        return BukkitWrapper.namespacedKey(entity.getType().getKey());
     }
 
     @Override

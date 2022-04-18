@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.bukkit;
 
 import com.github.jenya705.mcapi.CommandSender;
+import com.github.jenya705.mcapi.NamespacedKey;
 import lombok.AllArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -20,10 +21,10 @@ public class BukkitCommandSenderWrapper implements CommandSender {
     }
 
     @Override
-    public String getType() {
+    public NamespacedKey getType() {
         if (sender instanceof ConsoleCommandSender)
-            return "console";
-        return "undefined";
+            return CommandSender.CONSOLE_TYPE;
+        return CommandSender.UNDEFINED_TYPE;
     }
 
     @Override

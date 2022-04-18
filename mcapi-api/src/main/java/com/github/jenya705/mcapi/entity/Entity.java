@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.entity;
 
 import com.github.jenya705.mcapi.Location;
+import com.github.jenya705.mcapi.NamespacedKey;
 import com.github.jenya705.mcapi.UUIDHolder;
 import net.kyori.adventure.text.Component;
 
@@ -9,7 +10,7 @@ import net.kyori.adventure.text.Component;
  */
 public interface Entity extends UUIDHolder {
 
-    String getType();
+    NamespacedKey getType();
 
     Location getLocation();
 

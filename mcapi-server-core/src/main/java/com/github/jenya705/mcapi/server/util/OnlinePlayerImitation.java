@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.server.util;
 
 import com.github.jenya705.mcapi.Location;
+import com.github.jenya705.mcapi.NamespacedKey;
 import com.github.jenya705.mcapi.player.OfflinePlayer;
 import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.inventory.InventoryView;
@@ -56,8 +57,8 @@ public class OnlinePlayerImitation implements Player {
     }
 
     @Override
-    public String getType() {
-        return "minecraft:player";
+    public NamespacedKey getType() {
+        return NamespacedKey.minecraft("player");
     }
 
     @Override
