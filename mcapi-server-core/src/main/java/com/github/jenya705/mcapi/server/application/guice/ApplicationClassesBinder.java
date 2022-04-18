@@ -37,6 +37,7 @@ import com.github.jenya705.mcapi.server.module.menu.MenuModule;
 import com.github.jenya705.mcapi.server.module.message.MessageDeserializer;
 import com.github.jenya705.mcapi.server.module.object.ObjectStorage;
 import com.github.jenya705.mcapi.server.module.options.RawOptionsParser;
+import com.github.jenya705.mcapi.server.module.permission.PermissionManager;
 import com.github.jenya705.mcapi.server.module.rest.RestModule;
 import com.github.jenya705.mcapi.server.module.rest.route.SendMessageRouteHandler;
 import com.github.jenya705.mcapi.server.module.rest.route.block.*;
@@ -74,6 +75,7 @@ public class ApplicationClassesBinder extends AbstractModule {
             StorageModule.class,
             DatabaseModule.class,
             EventDatabaseStorage.class,
+            PermissionManager.class,
             BlockDataModule.class,
             AuthorizationModule.class,
             EventTunnel.class,

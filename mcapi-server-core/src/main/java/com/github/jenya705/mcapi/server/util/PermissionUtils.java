@@ -33,7 +33,7 @@ public class PermissionUtils {
     }
 
     public String getEntity(Entity entity) {
-        return getEntity(entity.getType());
+        return getEntity(entity.getType().toString());
     }
 
     public String captureEntity(String entityType) {
@@ -41,7 +41,7 @@ public class PermissionUtils {
     }
 
     public String captureEntity(Entity entity) {
-        return captureEntity(entity.getType());
+        return captureEntity(entity.getType().toString());
     }
 
     public String worldPermission(String permission, World world) {

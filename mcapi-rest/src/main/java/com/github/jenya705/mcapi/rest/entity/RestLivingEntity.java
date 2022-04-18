@@ -36,7 +36,7 @@ public class RestLivingEntity {
 
     public static RestLivingEntity from(LivingEntity livingEntity) {
         return new RestLivingEntity(
-                livingEntity.getType(),
+                livingEntity.getType().toString(),
                 RestLocation.from(
                         livingEntity.getLocation()
                 ),

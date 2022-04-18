@@ -47,7 +47,7 @@ public class RestPlayer {
         return new RestPlayer(
                 player.getName(),
                 player.getUuid(),
-                player.getType(),
+                player.getType().toString(),
                 RestLocation.from(player.getLocation()),
                 player.getGameMode().name(),
                 RestPlayerAbilities.from(player.getAbilities()),

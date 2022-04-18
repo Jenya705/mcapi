@@ -24,7 +24,7 @@ public class RestEntity {
 
     public static RestEntity from(Entity entity) {
         return new RestEntity(
-                entity.getType(),
+                entity.getType().toString(),
                 RestLocation.from(entity.getLocation()),
                 entity.customName()
         );

@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.entity;
 
 import com.github.jenya705.mcapi.CommandSender;
+import com.github.jenya705.mcapi.NamespacedKey;
 import com.github.jenya705.mcapi.rest.RestCommandSender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +17,7 @@ import net.kyori.adventure.text.Component;
 public class EntityCommandSender implements CommandSender {
 
     private String id;
-    private String type;
+    private NamespacedKey type;
 
     @Override
     public void sendMessage(String message) {

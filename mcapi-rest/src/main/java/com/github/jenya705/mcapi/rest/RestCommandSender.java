@@ -18,7 +18,7 @@ public class RestCommandSender {
 
     public static RestCommandSender from(CommandSender sender) {
         return new RestCommandSender(
-                sender.getType(),
+                sender.getType().toString(),
                 sender.getId()
         );
     }
