@@ -5,6 +5,7 @@
 Web / Rest api for server owners and players! Built on top of reactor-netty.
 
 * [wiki](https://jenyaszf.gitbook.io/mcapi) (not done, yet)
+* [discord](https://discord.gg/xzeJsHSmNY) (i will try to answer as fast as possible)
 
 ## Event listener testing
 
