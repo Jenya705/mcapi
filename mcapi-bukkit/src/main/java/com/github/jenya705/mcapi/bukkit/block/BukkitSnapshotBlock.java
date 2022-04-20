@@ -33,7 +33,7 @@ public class BukkitSnapshotBlock {
 
     }
 
-    public static BukkitBlockWrapper of(org.bukkit.block.Block block) {
+    public BukkitBlockWrapper of(org.bukkit.block.Block block) {
         return block == null ? null : BukkitBlockWrapper.of(new BlockSnapshot(block));
     }
 

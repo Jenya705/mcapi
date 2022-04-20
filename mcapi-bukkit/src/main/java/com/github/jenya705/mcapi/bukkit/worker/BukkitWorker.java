@@ -27,7 +27,7 @@ public class BukkitWorker implements Worker {
     @Override
     public <T> Future<T> invoke(Callable<T> supplier) {
         BukkitWorkerFuture<T> future = new BukkitWorkerFuture<>();
-        future.setTask(Bukkit.getScheduler().runTask(application, () -> {
+        future.setTask(Bukkit.getScheduler().runTaskAsynchronously(application, () -> {
             try {
                 future.setValue(supplier.call());
             } catch (Throwable e) {
@@ -39,6 +39,6 @@ public class BukkitWorker implements Worker {
 
     @Override
     public void invoke(Runnable runnable) {
-        Bukkit.getScheduler().runTask(application, runnable);
+        Bukkit.getScheduler().runTaskAsynchronously(application, runnable);
     }
 }

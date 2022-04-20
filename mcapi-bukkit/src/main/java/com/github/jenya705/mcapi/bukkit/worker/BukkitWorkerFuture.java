@@ -94,7 +94,7 @@ public class BukkitWorkerFuture<V> implements Future<V> {
 
     private void validateThread() {
         if (Bukkit.isPrimaryThread()) {
-            throw new BukkitThreadException("Infinite waiting");
+            throw new BukkitThreadException("Can not block main thread");
         }
     }
 
