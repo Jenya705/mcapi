@@ -39,6 +39,6 @@ public class BukkitWorker implements Worker {
 
     @Override
     public void invoke(Runnable runnable) {
-        BukkitUtils.notAsyncTask(runnable);
+        Bukkit.getScheduler().runTask(application, runnable);
     }
 }

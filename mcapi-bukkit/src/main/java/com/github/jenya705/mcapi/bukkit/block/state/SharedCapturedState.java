@@ -1,11 +1,10 @@
 package com.github.jenya705.mcapi.bukkit.block.state;
 
 import com.github.jenya705.mcapi.bukkit.BukkitUtils;
+import com.github.jenya705.mcapi.bukkit.block.BukkitSnapshotBlock;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.block.BlockState;
-
-import java.util.function.Consumer;
 
 /**
  * @author Jenya705
@@ -28,7 +27,12 @@ public class SharedCapturedState implements CapturedState {
 
     @Override
     public void reloadState() {
-        state = BukkitUtils.notAsyncSupplier(block::getState);
+        if (block instanceof BukkitSnapshotBlock.BlockSnapshot) {
+            state = block.getState();
+        }
+        else {
+            state = BukkitUtils.notAsyncSupplier(block::getState);
+        }
     }
 
     @Override

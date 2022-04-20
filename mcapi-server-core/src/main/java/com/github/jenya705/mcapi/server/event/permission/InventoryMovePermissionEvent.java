@@ -4,6 +4,9 @@ import com.github.jenya705.mcapi.event.InventoryMoveEvent;
 import lombok.Data;
 
 /**
+ *
+ * For asynchronous handling use: {@link InventoryMoveEvent}
+ *
  * @author Jenya705
  */
 @Data

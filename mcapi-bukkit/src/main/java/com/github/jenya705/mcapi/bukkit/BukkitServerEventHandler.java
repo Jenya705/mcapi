@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi.bukkit;
 
+import com.github.jenya705.mcapi.bukkit.block.BukkitSnapshotBlock;
 import com.github.jenya705.mcapi.bukkit.wrapper.BukkitWrapper;
 import com.github.jenya705.mcapi.entity.CapturableEntity;
 import com.github.jenya705.mcapi.entity.Entity;
@@ -68,7 +69,7 @@ public class BukkitServerEventHandler extends AbstractApplicationModule implemen
                 .invoke(
                         new EntityPlayerBlockBreakEvent(
                                 BukkitWrapper.player(event.getPlayer()),
-                                BukkitWrapper.block(event.getBlock())
+                                BukkitSnapshotBlock.of(event.getBlock())
                         )
                 );
     }
@@ -79,7 +80,7 @@ public class BukkitServerEventHandler extends AbstractApplicationModule implemen
                 .invoke(
                         new EntityPlayerBlockPlaceEvent(
                                 BukkitWrapper.player(event.getPlayer()),
-                                BukkitWrapper.block(event.getBlock())
+                                BukkitSnapshotBlock.of(event.getBlock())
                         )
                 );
     }

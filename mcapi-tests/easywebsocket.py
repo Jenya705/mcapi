@@ -6,16 +6,16 @@ from websockets import connect
 
 ALL_SUBSCRIPTIONS = [
     "inventory_move",
-    "join",
-    "link",
+    "player_join",
+    "player_link",
     "menu_click",
     "message",
-    "block_break",
-    "block_place",
-    "quit",
+    "player_block_break",
+    "player_block_place",
+    "player_quit",
     "subscribe",
     "command_interaction",
-    "unlink"
+    "player_unlink"
 ]
 
 async def send_object(websocket, obj):

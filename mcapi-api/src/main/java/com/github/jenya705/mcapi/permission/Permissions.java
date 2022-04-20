@@ -20,17 +20,17 @@ public class Permissions {
 
     public final String EVENT_TUNNEL_COMMAND_INTERACTION = "event_tunnel.command_interaction.listen";
 
-    public final String EVENT_TUNNEL_LINK = "event_tunnel.link.listen";
+    public final String EVENT_TUNNEL_LINK = "event_tunnel.player_link.listen";
 
-    public final String EVENT_TUNNEL_UNLINK = "event_tunnel.unlink.listen";
+    public final String EVENT_TUNNEL_UNLINK = "event_tunnel.player_unlink.listen";
 
-    public final String EVENT_TUNNEL_JOIN = "event_tunnel.join.listen";
+    public final String EVENT_TUNNEL_JOIN = "event_tunnel.player_join.listen";
 
-    public final String EVENT_TUNNEL_QUIT = "event_tunnel.quit.listen";
+    public final String EVENT_TUNNEL_QUIT = "event_tunnel.player_quit.listen";
 
-    public final String EVENT_TUNNEL_BLOCK_BREAK = "event_tunnel.block_break.listen";
+    public final String EVENT_TUNNEL_BLOCK_BREAK = "event_tunnel.player_block_break.listen";
 
-    public final String EVENT_TUNNEL_BLOCK_PLACE = "event_tunnel.block_place.listen";
+    public final String EVENT_TUNNEL_BLOCK_PLACE = "event_tunnel.player_block_place.listen";
 
     public final String EVENT_TUNNEL_CAPTURED_ENTITY_CLICK = "event_tunnel.captured_entity_click.listen";
 

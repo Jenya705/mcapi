@@ -12,10 +12,13 @@ import com.github.jenya705.mcapi.server.module.web.websocket.WebSocketRouteHandl
 import com.github.jenya705.mcapi.server.util.Pair;
 import com.github.jenya705.mcapi.server.util.ReactiveUtils;
 import com.github.jenya705.mcapi.server.util.ReactorUtils;
+import com.github.jenya705.mcapi.server.util.StringUtils;
 import com.github.jenya705.mcapi.utils.ZipUtils;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import reactor.core.publisher.Flux;
@@ -38,6 +41,7 @@ import java.util.function.BiFunction;
  */
 @Getter
 @Singleton
+@Setter(AccessLevel.PRIVATE)
 public class ReactorServer extends AbstractApplicationModule implements WebServer {
 
     private static final String jsonContentType = "application/json";
@@ -78,12 +82,14 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
                             webSocketRoute(webSocketRouteImplementation, routes)
                     );
                 });
-        nettyServer = server
-                .bind()
-                .doOnError(ReactiveUtils::throwRuntimeException)
-                .block();
+        server.bind()
+                .doOnError(e -> {
+                    log.error("Failed to start server:", e);
+                    app().stop();
+                })
+                .subscribe(this::setNettyServer);
         timerTask.complete();
-        log.info("Web server available on port {}", config.getPort());
+        log.info("Web server will be available soon on port {}", config.getPort());
     }
 
     @Override
@@ -223,7 +229,7 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
                                     .filter(it -> !it.isEmpty())
                                     .subscribe(sink::next);
                         })
-                        .map(String::getBytes)
+                        .map(StringUtils::getStandardBytes)
                         .map(ZipUtils::compressSneaky)
                         .doOnError(e -> handler.onError(connection, e))
                         .doOnError(e -> outbound.sendClose())

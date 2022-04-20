@@ -33,6 +33,9 @@ public class DefaultEventLoop implements EventLoop {
     @Override
     @SuppressWarnings("unchecked")
     public <T> EventLoop handler(Class<? extends T> clazz, Consumer<T> handler) {
+        if (clazz.getAnnotation(EventImpl.class) != null) {
+            throw new IllegalArgumentException("Can not listen to event implementation");
+        }
         handlers.computeIfAbsent(clazz, k -> new ArrayList<>());
         handlers.get(clazz).add(obj -> handler.accept((T) obj));
         return this;

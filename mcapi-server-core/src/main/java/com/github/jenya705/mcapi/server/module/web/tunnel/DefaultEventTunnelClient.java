@@ -82,6 +82,7 @@ public class DefaultEventTunnelClient extends SimpleStatefulWebSocketConnection<
 
     @Override
     public boolean isSubscribed(String subscription) {
+        System.out.println(subscriptions + " " + subscription);
         return subscriptions.contains(subscription);
     }
 
