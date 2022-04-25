@@ -1,5 +1,7 @@
 package com.github.jenya705.mcapi.server.module.database;
 
+import com.google.inject.ImplementedBy;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 
@@ -9,7 +11,10 @@ import java.sql.ResultSet;
  *
  * @author Jenya705
  */
+@ImplementedBy(DatabaseModuleImpl.class)
 public interface SQLDatabaseModule extends DatabaseModule {
+
+    void addTypeInitializer(String type, DatabaseTypeInitializer typeInitializer);
 
     void update(String sql, Object... objects);
 

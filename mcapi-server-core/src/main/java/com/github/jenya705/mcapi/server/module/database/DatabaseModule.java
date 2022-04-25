@@ -23,6 +23,4 @@ public interface DatabaseModule {
 
     DatabaseGetter safeAsync();
 
-    void addTypeInitializer(String type, DatabaseTypeInitializer typeInitializer);
-
 }

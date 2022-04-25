@@ -16,7 +16,7 @@ import java.sql.DriverManager;
 @AllArgsConstructor
 public class DefaultDatabaseTypeInitializer {
 
-    private static final String urlFormat = "jdbc:%s://%s/%s";
+    private static final String urlFormat = "jdbc:%s://%s/%s?autoReconnect=true";
 
     private final ServerApplication application;
     private final SQLDatabaseModule databaseModule;

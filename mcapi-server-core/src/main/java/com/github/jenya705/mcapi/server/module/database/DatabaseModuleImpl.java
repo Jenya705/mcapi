@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -36,13 +37,14 @@ import java.util.concurrent.atomic.AtomicReference;
 public class DatabaseModuleImpl extends AbstractApplicationModule implements SQLDatabaseModule {
 
     private final ServerApplication application;
-    private final Map<String, DatabaseTypeInitializer> databaseTypeInitializers;
     private final DefaultDatabaseTypeInitializer defaultDatabaseTypeInitializer;
 
     private final DatabaseModuleConfig config;
     private final CacheConfig cacheConfig;
 
     private final Logger log;
+
+    private final Map<String, DatabaseTypeInitializer> databaseTypeInitializers = new ConcurrentHashMap<>();
 
     private final AtomicReference<CacheStorage> cache = new AtomicReference<>();
     private final AtomicReference<DatabaseGetter> safeSync = new AtomicReference<>();
@@ -56,7 +58,6 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements SQL
         super(application);
         this.log = log;
         this.application = application;
-        databaseTypeInitializers = new HashMap<>();
         addTypeInitializer("mysql", new MySqlDatabaseInitializer(app(), this, storageModule));
         addTypeInitializer("sqlite", new SqliteDatabaseInitializer(app(), this, storageModule));
         defaultDatabaseTypeInitializer = new DefaultDatabaseTypeInitializer(app(), this, storageModule);
@@ -126,6 +127,7 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements SQL
     @SneakyThrows
     public void update(String sql, Object... objects) {
         debugSql(sql, objects);
+        validateConnection();
         synchronized (this) {
             if (objects.length == 0) {
                 Statement statement = getConnection().createStatement();
@@ -145,6 +147,7 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements SQL
     @SneakyThrows
     public ResultSet query(String sql, Object... objects) {
         debugSql(sql, objects);
+        validateConnection();
         synchronized (this) {
             if (objects.length == 0) {
                 return getConnection().createStatement().executeQuery(sql);
