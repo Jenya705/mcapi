@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -10,6 +11,7 @@ import java.util.function.Function;
  * @author Jenya705
  */
 @Getter
+@EqualsAndHashCode
 @ToString(includeFieldNames = false)
 public final class BoundingBox {
 
@@ -26,20 +28,6 @@ public final class BoundingBox {
 
         minCorner = Vector3.of(minX, minY, minZ);
         maxCorner = Vector3.of(maxX, maxY, maxZ);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (!(obj instanceof BoundingBox)) return false;
-        BoundingBox other = (BoundingBox) obj;
-        return Objects.equals(minCorner, other.minCorner) &&
-                Objects.equals(maxCorner, other.maxCorner);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(minCorner, maxCorner);
     }
 
     public BoundingBox minCorner(Vector3 minCorner) {
