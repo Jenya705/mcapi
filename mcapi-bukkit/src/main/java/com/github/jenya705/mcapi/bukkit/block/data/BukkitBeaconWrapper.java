@@ -4,8 +4,8 @@ import com.github.jenya705.mcapi.block.data.Beacon;
 import com.github.jenya705.mcapi.bukkit.block.AbstractBukkitBlockState;
 import com.github.jenya705.mcapi.bukkit.wrapper.BukkitWrapper;
 import com.github.jenya705.mcapi.entity.LivingEntity;
-import com.github.jenya705.mcapi.potion.PotionEffect;
 import com.github.jenya705.mcapi.potion.PotionEffectType;
+import com.github.jenya705.mcapi.server.util.ObjectUtils;
 import org.bukkit.block.Block;
 
 import java.util.Collection;
@@ -36,14 +36,20 @@ public class BukkitBeaconWrapper extends AbstractBukkitBlockState<org.bukkit.blo
 
     @Override
     public PotionEffectType getPrimaryEffect() {
-        return state().getPrimaryEffect() == null ?
-                null : BukkitWrapper.potionEffectType(state().getPrimaryEffect().getType());
+        return ObjectUtils.ifNotNullProcessOrElse(
+                state().getPrimaryEffect(),
+                it -> BukkitWrapper.potionEffectType(it.getType()),
+                null
+        );
     }
 
     @Override
     public PotionEffectType getSecondaryEffect() {
-        return state().getSecondaryEffect() == null ?
-                null : BukkitWrapper.potionEffectType(state().getSecondaryEffect().getType());
+        return ObjectUtils.ifNotNullProcessOrElse(
+                state().getSecondaryEffect(),
+                it -> BukkitWrapper.potionEffectType(it.getType()),
+                null
+        );
     }
 
     @Override

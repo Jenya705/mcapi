@@ -11,6 +11,7 @@ import com.github.jenya705.mcapi.server.entity.BotPermissionEntity;
 import com.github.jenya705.mcapi.server.module.link.LinkObject;
 import com.github.jenya705.mcapi.server.module.link.LinkingModule;
 import com.github.jenya705.mcapi.server.module.localization.LocalizationModule;
+import com.github.jenya705.mcapi.server.module.storage.StorageModule;
 import com.github.jenya705.mcapi.server.module.web.tunnel.EventTunnelClient;
 import com.github.jenya705.mcapi.server.util.Pair;
 import com.google.inject.Inject;
@@ -44,10 +45,12 @@ public class DefaultMessageContainer implements MessageContainer {
 
     private final MessageLoader loader;
     private final ServerCore core;
+    private final StorageModule storageModule;
 
     @Inject
-    public DefaultMessageContainer(ServerCore core) {
+    public DefaultMessageContainer(ServerCore core, StorageModule storageModule) {
         this.core = core;
+        this.storageModule = storageModule;
         loader = new MessageLoader();
         loader.load();
     }

@@ -5,8 +5,6 @@ import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.server.entity.BotPermissionEntity;
-import com.github.jenya705.mcapi.server.entity.PermissionEntity;
-import com.github.jenya705.mcapi.server.module.database.DatabaseModule;
 import com.github.jenya705.mcapi.server.module.database.SQLDatabaseModule;
 import com.github.jenya705.mcapi.server.module.database.cache.CacheStorage;
 import com.github.jenya705.mcapi.server.module.database.cache.FakeCacheStorage;
@@ -203,19 +201,18 @@ public class DatabaseStorageImpl extends AbstractApplicationModule implements Da
                                     realTarget.getLeastSignificantBits()
                             )
                     );
-            permissionEntity = chooseRightPermission(target, permissionEntities, ent -> true);
+            permissionEntity = Objects.requireNonNullElseGet(
+                    chooseRightPermission(target, permissionEntities, entity -> true),
+                    () -> new BotPermissionEntity(
+                            botId,
+                            permission,
+                            target,
+                            false,
+                            storageModule
+                    )
+            );
             if (!isCacheFake()) {
-                PermissionEntity storagePermission = storageModule.getPermission(permission);
-                if (permissionEntity == null && storagePermission == null) return null;
-                cache().cache(Objects.requireNonNullElseGet(permissionEntity, () ->
-                        new BotPermissionEntity(
-                                botId,
-                                permission,
-                                target,
-                                false,
-                                storagePermission.isEnabled()
-                        )
-                ));
+                cache().cache(permissionEntity);
             }
         }
         return permissionEntity;

@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.server.command.bot.permission.give;
 
 import com.github.jenya705.mcapi.CommandSender;
+import com.github.jenya705.mcapi.permission.PermissionFlag;
 import com.github.jenya705.mcapi.player.OfflinePlayer;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
@@ -108,7 +109,7 @@ public class PermissionGiveBotCommand extends AdvancedCommandExecutor<Permission
                                             BotPermissionEntity.toRegex(args.getPermission())
                                     )
                                     .regex(args.isRegex())
-                                    .toggled(args.isToggled())
+                                    .permissionFlag(PermissionFlag.of(args.isToggled()))
                                     .target(target)
                                     .build()
                             )

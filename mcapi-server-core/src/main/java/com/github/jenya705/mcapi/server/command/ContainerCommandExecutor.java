@@ -135,7 +135,7 @@ public class ContainerCommandExecutor extends AbstractApplicationModule implemen
     @Override
     public void setConfig(ConfigData config) {
         setConfig(config, nodes);
-        recalculatePermissions(permission, nodes);
+        recalculatePermissions();
     }
 
     @SuppressWarnings("unchecked")

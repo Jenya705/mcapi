@@ -23,14 +23,8 @@ public class BotObject implements AbstractBot {
     }
 
     @Override
-    public boolean hasPermission(String permission, UUID target) {
-        BotPermissionEntity permissionEntity =
-                scriptStorage.findPermission(entity.getId(), permission, target);
-        if (permissionEntity == null) {
-            PermissionEntity storagePermission = storage.getPermission(permission);
-            return storagePermission != null && storagePermission.isEnabled();
-        }
-        return permissionEntity.isToggled();
+    public BotPermissionEntity getPermissionEntity(String permission, UUID target) {
+        return scriptStorage.findPermission(entity.getId(), permission, target);
     }
 
     @Override

@@ -68,12 +68,12 @@ import java.util.*;
 public class ApplicationClassesBinder extends AbstractModule {
 
     public static final List<Class<?>> modules = Arrays.asList(
+            ConfigModule.class,
+            StorageModule.class,
             MessageContainer.class,
             EventLoop.class,
             Mapper.class,
             RawOptionsParser.class,
-            ConfigModule.class,
-            StorageModule.class,
             DatabaseModule.class,
             EventDatabaseStorage.class,
             PermissionManager.class,

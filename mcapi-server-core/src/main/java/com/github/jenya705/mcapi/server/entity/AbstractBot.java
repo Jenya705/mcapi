@@ -3,6 +3,7 @@ package com.github.jenya705.mcapi.server.entity;
 import com.github.jenya705.mcapi.UUIDHolder;
 import com.github.jenya705.mcapi.block.Block;
 import com.github.jenya705.mcapi.error.BotNotPermittedException;
+import com.github.jenya705.mcapi.permission.PermissionFlag;
 import com.github.jenya705.mcapi.server.util.PermissionUtils;
 import com.github.jenya705.mcapi.server.util.Selector;
 import reactor.core.publisher.Mono;
@@ -20,7 +21,34 @@ public interface AbstractBot {
 
     List<BotLinkEntity> getLinks();
 
-    boolean hasPermission(String permission, UUID target);
+    default boolean hasPermission(String permission, UUID target) {
+        return getPermissionEntity(permission, target).isToggled();
+    }
+
+    default PermissionFlag getPermissionFlag(String permission, UUID target) {
+        return getPermissionEntity(permission, target).getPermissionFlag();
+    }
+
+    BotPermissionEntity getPermissionEntity(String permission, UUID target);
+
+    default PermissionFlag getPermissionFlag(String permission) {
+        return getPermissionFlag(permission, BotPermissionEntity.identityTarget);
+    }
+
+    default PermissionFlag getPermissionFlag(String permission, UUIDHolder uuidHolder) {
+        if (uuidHolder instanceof Block) {
+            return getPermissionFlag(permission, (Block) uuidHolder);
+        }
+        return getPermissionFlag(permission, uuidHolder.getUuid());
+    }
+
+    default PermissionFlag getPermissionFlag(String permission, Block block) {
+        return getPermissionFlag(PermissionUtils.blockPermission(permission, block), block.getUuid());
+    }
+
+    default PermissionFlag getPermissionFlag(String permission, Selector<?> selector) {
+        return getPermissionFlag(permission + selector.getPermissionName(), selector.getTarget());
+    }
 
     default boolean hasPermission(String permission) {
         return hasPermission(permission, BotPermissionEntity.identityTarget);

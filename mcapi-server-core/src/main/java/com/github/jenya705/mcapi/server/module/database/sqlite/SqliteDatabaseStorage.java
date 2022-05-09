@@ -2,7 +2,6 @@ package com.github.jenya705.mcapi.server.module.database.sqlite;
 
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.entity.BotPermissionEntity;
-import com.github.jenya705.mcapi.server.entity.PermissionEntity;
 import com.github.jenya705.mcapi.server.module.database.SQLDatabaseModule;
 import com.github.jenya705.mcapi.server.module.database.storage.DatabaseStorageImpl;
 import com.github.jenya705.mcapi.server.module.storage.StorageModule;
@@ -38,19 +37,18 @@ public class SqliteDatabaseStorage extends DatabaseStorageImpl {
                                     realTarget.getLeastSignificantBits()
                             )
                     );
-            permissionEntity = chooseRightPermission(target, permissionEntities, entity -> permission.matches(entity.getPermission()));
+            permissionEntity = Objects.requireNonNullElseGet(
+                    chooseRightPermission(target, permissionEntities, entity -> permission.matches(entity.getPermission())),
+                    () -> new BotPermissionEntity(
+                            botId,
+                            permission,
+                            target,
+                            false,
+                            getStorageModule()
+                    )
+            );
             if (!isCacheFake()) {
-                PermissionEntity storagePermission = getStorageModule().getPermission(permission);
-                if (permissionEntity == null && storagePermission == null) return null;
-                cache().cache(Objects.requireNonNullElseGet(permissionEntity, () ->
-                        new BotPermissionEntity(
-                                botId,
-                                permission,
-                                target,
-                                false,
-                                storagePermission.isEnabled()
-                        )
-                ));
+                cache().cache(permissionEntity);
             }
         }
         return permissionEntity;

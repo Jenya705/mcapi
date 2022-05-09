@@ -14,6 +14,7 @@ public enum EasyPermissionManager implements PermissionManager {
     ;
 
     private final PermissionManager permissionManager;
+
     @Override
     public boolean hasPermission(String permission, UUID target) {
         return permissionManager.hasPermission(permission, target);
