@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 
 /**
@@ -65,6 +66,22 @@ public class ListUtils {
 
     public <T> List<T> join(List<List<T>> lists) {
         return new JoinedList<>(lists);
+    }
+
+    @SafeVarargs
+    public <T> T[] joinArray(IntFunction<T[]> creator, T[]... arrays) {
+        int size = 0;
+        for (T[] array: arrays) {
+            size += array.length;
+        }
+        T[] result = creator.apply(size);
+        int i = 0;
+        for (T[] array: arrays) {
+            for (T element: array) {
+                result[i++] = element;
+            }
+        }
+        return result;
     }
 
 }

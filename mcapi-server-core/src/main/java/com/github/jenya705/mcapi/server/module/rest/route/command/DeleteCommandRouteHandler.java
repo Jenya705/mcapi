@@ -8,6 +8,7 @@ import com.github.jenya705.mcapi.server.module.web.Request;
 import com.github.jenya705.mcapi.server.module.web.Response;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import reactor.core.publisher.Mono;
 
 /**
  * @author Jenya705
@@ -24,11 +25,11 @@ public class DeleteCommandRouteHandler extends AbstractRouteHandler {
     }
 
     @Override
-    public void handle(Request request, Response response) throws Exception {
+    public Mono<Response> handle(Request request) {
         commandModule.deleteCommand(
                 request.paramOrException("name"),
                 request.bot()
         );
-        response.noContent();
+        return Mono.just(Response.create().noContent());
     }
 }

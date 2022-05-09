@@ -1,6 +1,5 @@
 package com.github.jenya705.mcapi.server.module.web.reactor;
 
-import com.github.jenya705.mcapi.ApiError;
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
 import com.github.jenya705.mcapi.server.application.OnStartup;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
@@ -10,8 +9,6 @@ import com.github.jenya705.mcapi.server.module.mapper.Mapper;
 import com.github.jenya705.mcapi.server.module.web.*;
 import com.github.jenya705.mcapi.server.module.web.websocket.WebSocketRouteHandler;
 import com.github.jenya705.mcapi.server.util.Pair;
-import com.github.jenya705.mcapi.server.util.ReactiveUtils;
-import com.github.jenya705.mcapi.server.util.ReactorUtils;
 import com.github.jenya705.mcapi.server.util.StringUtils;
 import com.github.jenya705.mcapi.utils.ZipUtils;
 import com.google.inject.Inject;
@@ -137,44 +134,35 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
                                 .receive()
                                 .aggregate()
                                 .asString()
-                                .map(body -> executeHandler(request, response, handler, body, parameters))
+                                .flatMap(body -> executeHandler(request, response, handler, body, parameters))
                 );
     }
 
     private BiFunction<HttpServerRequest, HttpServerResponse, Publisher<Void>> routeWithoutBody(RouteHandler handler, RouteParameters parameters) {
         return (request, response) ->
                 response.sendString(
-                        ReactorUtils.mono(() ->
-                                executeHandler(request, response, handler, null, parameters)
-                        )
+                        executeHandler(request, response, handler, null, parameters)
                 );
     }
 
-    private String executeHandler(HttpServerRequest request, HttpServerResponse response, RouteHandler handler, String body, RouteParameters parameters) {
+    private Mono<String> executeHandler(HttpServerRequest request, HttpServerResponse response, RouteHandler handler, String body, RouteParameters parameters) {
         if (debug()) {
             log.info("Received request to uri {} with body {}", request.uri(), body);
         }
         ReactorRequest localRequest = new ReactorRequest(this, request, body, parameters);
-        ReactorResponse localResponse = new ReactorResponse(response);
-        localResponse.contentType(jsonContentType);
-        try {
-            handler.handle(localRequest, localResponse);
-        } catch (Throwable e) {
-            if (debug()) {
-                log.info("Exception on request: ", e);
-            }
-            ApiError error = mapper.asApiError(e);
-            localResponse
-                    .status(error.getStatusCode())
-                    .body(error);
-        }
-        String currentContentType = response
-                .responseHeaders()
-                .getAsString("Content-type");
-        if (jsonContentType.equals(currentContentType)) {
-            return mapper.asJson(localResponse.getBody());
-        }
-        return String.valueOf(localResponse.getBody());
+        return Mono.defer(() -> handler.handle(localRequest))
+                .onErrorResume(err -> Mono.just(
+                        Response.create().error(err)
+                ))
+                .map(handlerResponse -> {
+                    handlerResponse.getHeaders().putIfAbsent("Content-Type", jsonContentType);
+                    handlerResponse.getHeaders().forEach(response::header);
+                    response.status(handlerResponse.getStatus());
+                    if (handlerResponse.getHeaders().get("Content-Type").equals(jsonContentType)) {
+                        return mapper.asJson(handlerResponse.getBody());
+                    }
+                    return String.valueOf(handlerResponse.getBody());
+                });
     }
 
     private void webSocketRoute(Pair<String, WebSocketRouteHandler> webSocketRouteImplementation, HttpServerRoutes routes) {

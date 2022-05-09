@@ -12,6 +12,7 @@ import com.github.jenya705.mcapi.server.module.web.Response;
 import com.github.jenya705.mcapi.server.util.Selector;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import reactor.core.publisher.Mono;
 
 /**
  * @author Jenya705
@@ -28,17 +29,17 @@ public class SendMessageRouteHandler extends AbstractRouteHandler {
     }
 
     @Override
-    public void handle(Request request, Response response) {
+    public Mono<Response> handle(Request request) {
         AbstractBot bot = request.bot();
-        Selector<Player> players = selectorProvider
+        Message message = request
+                .bodyOrException(Message.class);
+        return selectorProvider
                 .players(
                         request.paramOrException("selector"),
                         bot
-                );
-        bot.needPermission(Permissions.PLAYER_SEND_MESSAGE, players);
-        Message message = request
-                .bodyOrException(Message.class);
-        players.forEach(message::send);
-        response.noContent();
+                )
+                .flatMap(bot.mapSelectorPermission(Permissions.PLAYER_SEND_MESSAGE))
+                .doOnNext(players -> players.all().forEach(message::send))
+                .map(players -> Response.create().noContent());
     }
 }

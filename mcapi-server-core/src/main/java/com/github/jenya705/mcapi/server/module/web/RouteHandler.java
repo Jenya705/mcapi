@@ -1,10 +1,13 @@
 package com.github.jenya705.mcapi.server.module.web;
 
+import reactor.core.publisher.Mono;
+
 /**
  * @author Jenya705
  */
 @FunctionalInterface
 public interface RouteHandler {
 
-    void handle(Request request, Response response) throws Exception;
+    Mono<Response> handle(Request request);
+
 }

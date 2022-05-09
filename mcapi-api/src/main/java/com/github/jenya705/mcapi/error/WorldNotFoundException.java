@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.error;
 
 import com.github.jenya705.mcapi.ApiError;
+import com.github.jenya705.mcapi.NamespacedKey;
 
 /**
  * @author Jenya705
@@ -17,6 +18,10 @@ public class WorldNotFoundException extends IllegalArgumentException implements 
 
     public static WorldNotFoundException create(String world) {
         return new WorldNotFoundException(String.format(format, world));
+    }
+
+    public static WorldNotFoundException create(NamespacedKey id) {
+        return create(id.toString());
     }
 
     @Override

@@ -51,7 +51,7 @@ public class BukkitFullWrapper {
                 return stateContainer.getState().state();
             }
             return (org.bukkit.inventory.InventoryHolder) BukkitUtils
-                    .notAsyncSupplier(() -> BukkitWrapper.block(data.getBlock()).getState());
+                    .blockingNotAsyncSupplier(() -> BukkitWrapper.block(data.getBlock()).getState());
         }
         return null;
     }

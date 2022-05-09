@@ -55,9 +55,9 @@ public class PermissionBlockBotCommand extends AdvancedCommandExecutor<Permissio
                 .tab(() -> Collections.singletonList("<z>"))
                 .tab(() -> core()
                         .getWorlds()
-                        .stream()
                         .map(world -> world.getId().toString())
                         .collect(Collectors.toList())
+                        .block()
                 )
                 .tab(() -> Arrays.asList("<is_token>", "true", "false"))
                 .tab(() -> Arrays.asList("<is_regex>", "true", "false"));
@@ -74,7 +74,7 @@ public class PermissionBlockBotCommand extends AdvancedCommandExecutor<Permissio
             world = ((Player) sender).getLocation().getWorld();
         }
         else {
-            world = core().getWorld(NamespacedKey.from(args.getWorld()));
+            world = core().getWorld(NamespacedKey.from(args.getWorld())).block();
         }
         if (world == null) {
             sendMessage(sender, messageContainer().worldNotFound(args.getWorld()));

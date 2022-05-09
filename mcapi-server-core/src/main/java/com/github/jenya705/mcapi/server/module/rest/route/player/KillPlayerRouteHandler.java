@@ -9,9 +9,9 @@ import com.github.jenya705.mcapi.server.module.rest.route.AbstractRouteHandler;
 import com.github.jenya705.mcapi.server.module.selector.SelectorProvider;
 import com.github.jenya705.mcapi.server.module.web.Request;
 import com.github.jenya705.mcapi.server.module.web.Response;
-import com.github.jenya705.mcapi.server.util.Selector;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import reactor.core.publisher.Mono;
 
 /**
  * @author Jenya705
@@ -28,15 +28,15 @@ public class KillPlayerRouteHandler extends AbstractRouteHandler {
     }
 
     @Override
-    public void handle(Request request, Response response) throws Exception {
+    public Mono<Response> handle(Request request) {
         AbstractBot bot = request.bot();
-        Selector<Player> players = selectorProvider
+        return selectorProvider
                 .players(
                         request.paramOrException("selector"),
                         bot
-                );
-        bot.needPermission(Permissions.PLAYER_KILL, players);
-        players.forEach(Player::kill);
-        response.noContent();
+                )
+                .flatMap(bot.mapSelectorPermission(Permissions.PLAYER_KILL))
+                .doOnNext(players -> players.all().forEach(Player::kill))
+                .map(players -> Response.create().noContent());
     }
 }

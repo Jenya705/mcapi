@@ -11,6 +11,7 @@ import com.github.jenya705.mcapi.server.module.web.Request;
 import com.github.jenya705.mcapi.server.module.web.Response;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import reactor.core.publisher.Mono;
 
 /**
  * @author Jenya705
@@ -27,12 +28,12 @@ public class CreateCommandRouteHandler extends AbstractRouteHandler {
     }
 
     @Override
-    public void handle(Request request, Response response) {
+    public Mono<Response> handle(Request request) {
         AbstractBot bot = request.bot();
         bot.needPermission(Permissions.COMMAND_CREATE);
         Command command = request
                 .bodyOrException(Command.class);
         commandModule.registerCommand(command, bot);
-        response.noContent();
+        return Mono.just(Response.create().noContent());
     }
 }

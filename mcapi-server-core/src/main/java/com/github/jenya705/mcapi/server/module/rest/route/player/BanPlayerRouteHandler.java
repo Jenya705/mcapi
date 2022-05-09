@@ -14,6 +14,7 @@ import com.github.jenya705.mcapi.server.module.web.Response;
 import com.github.jenya705.mcapi.server.util.Selector;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import reactor.core.publisher.Mono;
 
 /**
  * @author Jenya705
@@ -30,19 +31,21 @@ public class BanPlayerRouteHandler extends AbstractRouteHandler {
     }
 
     @Override
-    public void handle(Request request, Response response) {
+    public Mono<Response> handle(Request request) {
         AbstractBot bot = request.bot();
-        Selector<Player> players = selectorProvider
+        return selectorProvider
                 .players(
                         request.paramOrException("selector"),
                         bot
-                );
-        bot.needPermission(Permissions.PLAYER_BAN, players);
-        TypedMessage message = request
-                .bodyOrException(TypedMessage.class);
-        players.forEach(player ->
-                MessageUtils.ban(player, message)
-        );
-        response.noContent();
+                )
+                .flatMap(bot.mapSelectorPermission(Permissions.PLAYER_BAN))
+                .map(players -> {
+                    TypedMessage message = request
+                            .bodyOrException(TypedMessage.class);
+                    players.all().forEach(player ->
+                            MessageUtils.ban(player, message)
+                    );
+                    return Response.create().noContent();
+                });
     }
 }

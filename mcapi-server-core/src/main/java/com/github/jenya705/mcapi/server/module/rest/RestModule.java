@@ -86,25 +86,9 @@ public class RestModule extends AbstractApplicationModule {
         mapper
                 .rawDeserializer(NamespacedKey.class, NamespacedKey::from)
                 .rawDeserializer(AbstractBot.class, authorizationModule::bot)
-                .rawDeserializer(Player.class, id ->
-                        core()
-                                .getOptionalPlayerId(id)
-                                .orElseThrow(() -> PlayerNotFoundException.create(id))
-                )
-                .rawDeserializer(OfflinePlayer.class, id ->
-                        core()
-                                .getOptionalOfflinePlayerId(id)
-                                .orElseThrow(() -> PlayerNotFoundException.create(id))
-                )
                 .rawDeserializer(UUID.class, this::getUuid)
-                .rawDeserializer(Entity.class, this::getEntity)
-                .rawDeserializer(World.class, id -> core()
-                        .getOptionalWorld(NamespacedKey.from(id))
-                        .orElseThrow(() -> WorldNotFoundException.create(id))
-                )
                 .rawDeserializer(PotionEffectType.class, objectStorage::getPotionEffect)
                 .rawDeserializer(Material.class, objectStorage::getMaterial)
-                .rawDeserializer(CapturableEntity.class, this::getCapturableEntity)
                 .rawDeserializer(NamespacedKey.class, NamespacedKey::from)
                 .throwableParser(JsonProcessingException.class, e -> JsonDeserializeException.create())
                 .tunnelJsonDeserializer(NamespacedKey.class, String.class, NamespacedKey::from)
@@ -285,19 +269,6 @@ public class RestModule extends AbstractApplicationModule {
         return PlayerUtils
                 .optionalUuid(uuid)
                 .orElseThrow(() -> BadUuidFormatException.create(uuid));
-    }
-
-    private Entity getEntity(String uuid) {
-        UUID uuidObject = getUuid(uuid);
-        return core()
-                .getOptionalEntity(uuidObject)
-                .orElseThrow(() -> EntityNotFoundException.create(uuidObject));
-    }
-
-    private CapturableEntity getCapturableEntity(String uuid) {
-        Entity entity = getEntity(uuid);
-        if (entity instanceof CapturableEntity) return (CapturableEntity) entity;
-        throw EntityNotCapturableException.create(entity.getUuid());
     }
 
     private ItemStack[] buildInventory(IdentifiedInventoryItemStack[] items, int size) {

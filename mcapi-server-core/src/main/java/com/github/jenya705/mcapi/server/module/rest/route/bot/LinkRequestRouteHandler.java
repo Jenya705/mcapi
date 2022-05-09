@@ -2,16 +2,18 @@ package com.github.jenya705.mcapi.server.module.rest.route.bot;
 
 import com.github.jenya705.mcapi.LinkRequest;
 import com.github.jenya705.mcapi.Routes;
+import com.github.jenya705.mcapi.error.PlayerNotFoundException;
 import com.github.jenya705.mcapi.permission.Permissions;
-import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.module.link.LinkingModule;
 import com.github.jenya705.mcapi.server.module.rest.route.AbstractRouteHandler;
 import com.github.jenya705.mcapi.server.module.web.Request;
 import com.github.jenya705.mcapi.server.module.web.Response;
+import com.github.jenya705.mcapi.server.util.ReactorUtils;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import reactor.core.publisher.Mono;
 
 /**
  * @author Jenya705
@@ -28,16 +30,16 @@ public class LinkRequestRouteHandler extends AbstractRouteHandler {
     }
 
     @Override
-    public void handle(Request request, Response response) {
+    public Mono<Response> handle(Request request) {
         AbstractBot bot = request.bot();
-        Player player = request
-                .paramOrException("id", Player.class);
-        bot.needPermission(Permissions.LINK_REQUEST, player);
-        LinkRequest linkRequest = request
-                .bodyOrException(LinkRequest.class);
-        linkingModule.requestLink(
-                bot, player, linkRequest
-        );
-        response.noContent();
+        String playerId = request.paramOrException("id");
+        return core()
+                .getPlayerById(playerId)
+                .flatMap(player -> ReactorUtils.ifNullError(
+                        player, () -> PlayerNotFoundException.create(playerId)))
+                .flatMap(bot.mapUuidHolderPermission(Permissions.LINK_REQUEST))
+                .doOnNext(player -> linkingModule.requestLink(
+                        bot, player, request.bodyOrException(LinkRequest.class)))
+                .map(player -> Response.create().noContent());
     }
 }

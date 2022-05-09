@@ -3,6 +3,8 @@ package com.github.jenya705.mcapi.server.module.selector;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.entity.BotLinkEntity;
 import lombok.experimental.UtilityClass;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.*;
 import java.util.function.Function;
@@ -16,25 +18,26 @@ public class SelectorCreatorUtils {
 
     private final Random random = new Random();
 
-    public <T> Collection<T> botLinked(AbstractBot bot, Function<BotLinkEntity, T> function) {
+    public <T> Flux<T> botLinked(AbstractBot bot, Function<BotLinkEntity, Mono<T>> function) {
         return Optional
                 .ofNullable(bot)
                 .map(AbstractBot::getLinks)
-                .map(links -> links
-                        .stream()
-                        .map(function)
-                        .filter(Objects::nonNull)
-                        .collect(Collectors.toList())
-                )
-                .orElseGet(Collections::emptyList);
+                .map(links -> Flux.merge(
+                        links
+                                .stream()
+                                .map(function)
+                                .filter(Objects::nonNull)
+                                .collect(Collectors.toList())
+                ))
+                .orElseGet(Flux::empty);
     }
 
-    public <T> Collection<T> randomSingleton(List<? extends T> list) {
-        return Collections.singletonList(list.get(random.nextInt(list.size())));
+    public <T> T randomSingleton(List<T> list) {
+        return list.get(random.nextInt(list.size()));
     }
 
     @SuppressWarnings("unchecked")
-    public <T> Collection<T> randomSingleton(Collection<? extends T> collection) {
+    public <T> T randomSingleton(Collection<T> collection) {
         if (collection instanceof List) {
             return randomSingleton((List<T>) collection);
         }

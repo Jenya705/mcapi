@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.server.util;
 
 import lombok.experimental.UtilityClass;
+import reactor.core.publisher.Mono;
 
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -35,4 +36,5 @@ public class ReactiveUtils {
     public void throwRuntimeException(Throwable e) {
         throw runtimeException(e);
     }
+
 }

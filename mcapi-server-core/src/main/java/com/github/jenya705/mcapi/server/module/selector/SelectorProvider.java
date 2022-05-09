@@ -7,6 +7,7 @@ import com.github.jenya705.mcapi.server.util.Selector;
 import com.google.inject.ImplementedBy;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import reactor.core.publisher.Mono;
 
 /**
  * @author Jenya705
@@ -14,10 +15,10 @@ import org.jetbrains.annotations.Nullable;
 @ImplementedBy(ServerSelectorProvider.class)
 public interface SelectorProvider {
 
-    Selector<Player> players(@NotNull String selector, @Nullable AbstractBot bot);
+    Mono<Selector<Player>> players(@NotNull String selector, @Nullable AbstractBot bot);
 
-    Selector<AbstractBot> bots(@NotNull String selector, @Nullable AbstractBot bot);
+    Mono<Selector<AbstractBot>> bots(@NotNull String selector, @Nullable AbstractBot bot);
 
-    Selector<OfflinePlayer> offlinePlayers(@NotNull String selector, @Nullable AbstractBot bot);
+    Mono<Selector<OfflinePlayer>> offlinePlayers(@NotNull String selector, @Nullable AbstractBot bot);
 
 }

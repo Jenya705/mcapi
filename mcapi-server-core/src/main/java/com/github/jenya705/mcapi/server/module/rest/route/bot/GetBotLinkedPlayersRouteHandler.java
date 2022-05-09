@@ -10,9 +10,9 @@ import com.github.jenya705.mcapi.server.module.rest.route.AbstractRouteHandler;
 import com.github.jenya705.mcapi.server.module.selector.SelectorProvider;
 import com.github.jenya705.mcapi.server.module.web.Request;
 import com.github.jenya705.mcapi.server.module.web.Response;
-import com.github.jenya705.mcapi.server.util.Selector;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import reactor.core.publisher.Mono;
 
 import java.util.UUID;
 
@@ -31,20 +31,23 @@ public class GetBotLinkedPlayersRouteHandler extends AbstractRouteHandler {
     }
 
     @Override
-    public void handle(Request request, Response response) {
+    public Mono<Response> handle(Request request) {
         AbstractBot bot = request.bot();
-        Selector<AbstractBot> bots = selectorProvider
-                .bots(request.paramOrException("selector"), bot);
-        AbstractBot selectorBot = bots
-                .stream()
-                .findAny()
-                .orElseThrow(SelectorEmptyException::create);
-        response.ok(new RestPlayerList(
-                selectorBot
-                        .getLinks()
+        return selectorProvider
+                .bots(request.paramOrException("selector"), bot)
+                .map(bots -> bots
+                        .all()
                         .stream()
-                        .map(BotLinkEntity::getTarget)
-                        .toArray(UUID[]::new)
-        ));
+                        .findAny()
+                        .orElseThrow(SelectorEmptyException::create)
+                )
+                .map(selectorBot -> new RestPlayerList(
+                        selectorBot
+                                .getLinks()
+                                .stream()
+                                .map(BotLinkEntity::getTarget)
+                                .toArray(UUID[]::new)
+                ))
+                .map(list -> Response.create().ok(list));
     }
 }

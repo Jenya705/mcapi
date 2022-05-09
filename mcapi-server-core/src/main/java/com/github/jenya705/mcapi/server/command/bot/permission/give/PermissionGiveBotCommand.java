@@ -52,9 +52,9 @@ public class PermissionGiveBotCommand extends AdvancedCommandExecutor<Permission
                 .tab(() -> Arrays.asList("<is_toggled>", "true", "false"))
                 .tab(() -> core()
                         .getPlayers()
-                        .stream()
                         .map(OfflinePlayer::getName)
                         .collect(Collectors.toList())
+                        .block()
                 )
                 .tab(() -> Arrays.asList("<is_token>", "true", "false"))
                 .tab(() -> Arrays.asList("<is_regex>", "true", "false"))
@@ -70,7 +70,9 @@ public class PermissionGiveBotCommand extends AdvancedCommandExecutor<Permission
                         null :
                         core()
                                 .getOfflinePlayer(playerId.toString())
-                                .getUuid();
+                                .blockOptional()
+                                .map(OfflinePlayer::getUuid)
+                                .orElse(null);
         worker().invoke(() -> {
             BotEntity bot;
             UUID uuid = sender instanceof Player ? ((Player) sender).getUuid() : null;

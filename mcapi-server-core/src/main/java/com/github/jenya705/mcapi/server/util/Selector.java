@@ -1,33 +1,18 @@
 package com.github.jenya705.mcapi.server.util;
 
+import reactor.core.publisher.Flux;
+
+import java.util.Collection;
 import java.util.UUID;
-import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 /**
  * @author Jenya705
  */
 public interface Selector<T> {
 
-    Stream<T> stream();
-
-    void forEach(Consumer<T> consumer);
+    Collection<T> all();
 
     String getPermissionName();
 
     UUID getTarget();
-
-    int size();
-
-    default boolean isEmpty() {
-        return size() == 0;
-    }
-
-    default boolean isSingleton() {
-        return size() == 1;
-    }
-
-    default boolean isMulti() {
-        return size() > 1;
-    }
 }

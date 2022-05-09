@@ -1,18 +1,18 @@
 package com.github.jenya705.mcapi.server.module.rest.route.bot;
 
-import com.github.jenya705.mcapi.player.OfflinePlayer;
 import com.github.jenya705.mcapi.Routes;
 import com.github.jenya705.mcapi.entity.EntityPermission;
 import com.github.jenya705.mcapi.error.SelectorEmptyException;
+import com.github.jenya705.mcapi.player.OfflinePlayer;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.module.rest.route.AbstractRouteHandler;
 import com.github.jenya705.mcapi.server.module.selector.SelectorProvider;
 import com.github.jenya705.mcapi.server.module.web.Request;
 import com.github.jenya705.mcapi.server.module.web.Response;
-import com.github.jenya705.mcapi.server.util.Selector;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import reactor.core.publisher.Mono;
 
 /**
  * @author Jenya705
@@ -29,21 +29,26 @@ public class GetBotTargetPermissionRouteHandler extends AbstractRouteHandler {
     }
 
     @Override
-    public void handle(Request request, Response response) {
+    public Mono<Response> handle(Request request) {
         AbstractBot bot = request.bot();
-        Selector<AbstractBot> botSelector = selectorProvider
-                .bots(request.paramOrException("selector"), bot);
-        AbstractBot selectorBot = botSelector
-                .stream()
-                .findAny()
-                .orElseThrow(SelectorEmptyException::create);
+        String playerId = request.paramOrException("target");
         String permission = request.paramOrException("permission");
-        OfflinePlayer player = request
-                .paramOrException("target", OfflinePlayer.class);
-        response.ok(new EntityPermission(
-                selectorBot.hasPermission(permission, player),
-                permission,
-                player.getUuid()
-        ));
+        return selectorProvider
+                .bots(request.paramOrException("selector"), bot)
+                .map(selector -> selector
+                        .all()
+                        .stream()
+                        .findAny()
+                        .orElseThrow(SelectorEmptyException::create)
+                )
+                .flatMap(selectorBot -> core()
+                        .getOfflinePlayerById(playerId)
+                        .map(player -> new EntityPermission(
+                                selectorBot.hasPermission(permission, player),
+                                permission,
+                                player.getUuid()
+                        ))
+                )
+                .map(entityPermission -> Response.create().ok(entityPermission));
     }
 }

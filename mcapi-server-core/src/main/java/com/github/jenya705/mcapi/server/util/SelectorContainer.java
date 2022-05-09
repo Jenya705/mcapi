@@ -2,6 +2,8 @@ package com.github.jenya705.mcapi.server.util;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -18,7 +20,7 @@ public class SelectorContainer<T> implements Selector<T> {
 
     private static final SelectorContainer<?> empty = new SelectorContainer<>(Collections.emptyList(), "", null);
 
-    private final Collection<T> selectors;
+    private final Collection<T> all;
     private final String permissionName;
     private final UUID target;
 
@@ -32,17 +34,8 @@ public class SelectorContainer<T> implements Selector<T> {
     }
 
     @Override
-    public Stream<T> stream() {
-        return selectors.stream();
+    public Collection<T> all() {
+        return all;
     }
 
-    @Override
-    public int size() {
-        return selectors.size();
-    }
-
-    @Override
-    public void forEach(Consumer<T> consumer) {
-        selectors.forEach(consumer);
-    }
 }

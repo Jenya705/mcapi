@@ -1,10 +1,15 @@
 package com.github.jenya705.mcapi.bukkit;
 
+import com.github.jenya705.mcapi.server.util.MutableValueContainer;
+import com.github.jenya705.mcapi.server.util.ReactorUtils;
 import com.github.jenya705.mcapi.server.util.ValueContainer;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import reactor.core.publisher.Mono;
+import reactor.core.publisher.MonoSink;
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
@@ -53,7 +58,7 @@ public class BukkitUtils {
         }
     }
 
-    public <T> T notAsyncSupplier(Supplier<T> supplier) {
+    public <T> T blockingNotAsyncSupplier(Supplier<T> supplier) {
         if (Bukkit.isPrimaryThread()) {
             return supplier.get();
         }
@@ -64,6 +69,22 @@ public class BukkitUtils {
             throw new RuntimeException("Bukkit server is lagging");
         }
         return value.getValue();
+    }
+
+    public <T> Mono<T> notAsyncSupplier(Callable<T> supplier) {
+        if (Bukkit.isPrimaryThread()) {
+            return ReactorUtils.mono(supplier);
+        }
+        MutableValueContainer<MonoSink<T>> monoSink = new MutableValueContainer<>();
+        Mono<T> mono = Mono.create(monoSink::setValue);
+        notAsyncTask(() -> {
+            try {
+                monoSink.getValue().success(supplier.call());
+            } catch (Throwable e) {
+                monoSink.getValue().error(e);
+            }
+        });
+        return mono;
     }
 
 }

@@ -37,7 +37,7 @@ public final class NamespacedKey {
         }
         return new NamespacedKey(
                 from.substring(0, index),
-                from.substring(index)
+                from.substring(index + 1)
         );
     }
 

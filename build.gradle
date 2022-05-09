@@ -40,6 +40,7 @@ allprojects {
         annotationProcessor 'org.projectlombok:lombok:1.18.22'
         testCompileOnly 'org.projectlombok:lombok:1.18.22'
         testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+        implementation 'io.projectreactor:reactor-core:3.4.14'
     }
 
     processResources {

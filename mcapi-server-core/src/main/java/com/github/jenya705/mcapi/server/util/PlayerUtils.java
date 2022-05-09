@@ -5,6 +5,7 @@ import com.github.jenya705.mcapi.error.PlayerIdFormatException;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.server.ServerCore;
 import lombok.experimental.UtilityClass;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,31 +18,31 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class PlayerUtils {
 
-    public Optional<? extends Player> getPlayer(String name, ServerCore core) {
-        Pair<Player, Boolean> information = getPlayerWithFullInformation(name, core);
+    public Mono<Player> getPlayer(String name, ServerCore core) {
+        Pair<Mono<Player>, Boolean> information = getPlayerWithFullInformation(name, core);
         if (!information.getRight()) {
             throw PlayerIdFormatException.create(name);
         }
-        return Optional.ofNullable(information.getLeft());
+        return information.getLeft();
     }
 
-    public Optional<? extends Player> getPlayerWithoutException(String name, ServerCore core) {
-        return Optional.ofNullable(getPlayerWithFullInformation(name, core).getLeft());
+    public Mono<Player> getPlayerWithoutException(String name, ServerCore core) {
+        return getPlayerWithFullInformation(name, core).getLeft();
     }
 
-    public Optional<? extends OfflinePlayer> getOfflinePlayer(String name, ServerCore core) {
-        Pair<OfflinePlayer, Boolean> information = getOfflinePlayerWithFullInformation(name, core);
+    public Mono<OfflinePlayer> getOfflinePlayer(String name, ServerCore core) {
+        Pair<Mono<OfflinePlayer>, Boolean> information = getOfflinePlayerWithFullInformation(name, core);
         if (!information.getRight()) {
             throw PlayerIdFormatException.create(name);
         }
-        return Optional.ofNullable(information.getLeft());
+        return information.getLeft();
     }
 
-    public Optional<? extends OfflinePlayer> getOfflinePlayerWithoutException(String name, ServerCore core) {
-        return Optional.ofNullable(getOfflinePlayerWithFullInformation(name, core).getLeft());
+    public Mono<OfflinePlayer> getOfflinePlayerWithoutException(String name, ServerCore core) {
+        return getOfflinePlayerWithFullInformation(name, core).getLeft();
     }
 
-    private Pair<Player, Boolean> getPlayerWithFullInformation(String name, ServerCore core) {
+    private Pair<Mono<Player>, Boolean> getPlayerWithFullInformation(String name, ServerCore core) {
         Object id = parsePlayerId(name);
         if (id == null) return new Pair<>(null, false);
         if (id instanceof UUID) {
@@ -52,7 +53,7 @@ public class PlayerUtils {
         }
     }
 
-    private Pair<OfflinePlayer, Boolean> getOfflinePlayerWithFullInformation(String name, ServerCore core) {
+    private Pair<Mono<OfflinePlayer>, Boolean> getOfflinePlayerWithFullInformation(String name, ServerCore core) {
         Object id = parsePlayerId(name);
         if (id == null) return new Pair<>(null, false);
         if (id instanceof UUID) {
@@ -77,9 +78,9 @@ public class PlayerUtils {
     public List<String> playerTabs(ServerCore core) {
         return core
                 .getPlayers()
-                .stream()
                 .map(Player::getName)
-                .collect(Collectors.toList());
+                .collectList()
+                .block();
     }
 
     public UUID parseUuid(String uuid) {

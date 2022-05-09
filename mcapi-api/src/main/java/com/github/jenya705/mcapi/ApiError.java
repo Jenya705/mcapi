@@ -5,7 +5,7 @@ package com.github.jenya705.mcapi;
  */
 public interface ApiError {
 
-    static ApiError raw(Exception exception) {
+    static ApiError raw(Throwable exception) {
         return new ApiError() {
             @Override
             public int getStatusCode() {

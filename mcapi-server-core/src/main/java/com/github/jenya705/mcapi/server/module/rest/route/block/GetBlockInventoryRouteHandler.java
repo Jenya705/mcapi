@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi.server.module.rest.route.block;
 
+import com.github.jenya705.mcapi.NamespacedKey;
 import com.github.jenya705.mcapi.Routes;
 import com.github.jenya705.mcapi.block.Block;
 import com.github.jenya705.mcapi.error.BlockDataNotFoundException;
@@ -11,9 +12,10 @@ import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.module.rest.route.AbstractRouteHandler;
 import com.github.jenya705.mcapi.server.module.web.Request;
 import com.github.jenya705.mcapi.server.module.web.Response;
-import com.github.jenya705.mcapi.world.World;
+import com.github.jenya705.mcapi.server.util.ReactorUtils;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import reactor.core.publisher.Mono;
 
 import java.util.Optional;
 
@@ -29,24 +31,24 @@ public class GetBlockInventoryRouteHandler extends AbstractRouteHandler {
     }
 
     @Override
-    public void handle(Request request, Response response) throws Exception {
-        World world = request.paramOrException("id", World.class);
+    public Mono<Response> handle(Request request) {
+        NamespacedKey worldId = request.paramOrException("id", NamespacedKey.class);
         int x = request.paramOrException("x", int.class);
         int y = request.paramOrException("y", int.class);
         int z = request.paramOrException("z", int.class);
         request
                 .bot()
                 .needPermission(Permissions.BLOCK_INVENTORY_GET);
-        InventoryHolder inventoryHolderBlock =
-                Optional.ofNullable(
-                        Optional.ofNullable(world)
-                                .map(it -> it.getBlock(x, y, z))
-                                .orElseThrow(BlockNotFoundException::create)
-                )
-                        .map(Block::getBlockData)
-                        .filter(it -> it instanceof InventoryHolder)
-                        .map(it -> (InventoryHolder) it)
-                        .orElseThrow(BlockDataNotFoundException::create);
-        response.ok(inventoryHolderBlock.getInventory());
+        return core()
+                .getWorld(worldId)
+                .flatMap(world -> ReactorUtils.ifNullError(world, () -> WorldNotFoundException.create(worldId)))
+                .map(world -> world.getBlock(x, y, z))
+                .flatMap(block -> ReactorUtils.ifNullError(block, BlockNotFoundException::create))
+                .map(Block::getBlockData)
+                .flatMap(blockData -> ReactorUtils.ifFalseError(
+                        blockData, blockData instanceof InventoryHolder, BlockDataNotFoundException::create
+                ))
+                .map(blockData -> ((InventoryHolder) blockData).getInventory())
+                .map(inventory -> Response.create().ok(inventory));
     }
 }

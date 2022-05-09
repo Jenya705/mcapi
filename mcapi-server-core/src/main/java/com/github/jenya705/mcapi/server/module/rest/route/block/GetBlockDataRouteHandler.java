@@ -11,11 +11,10 @@ import com.github.jenya705.mcapi.server.module.rest.route.AbstractRouteHandler;
 import com.github.jenya705.mcapi.server.module.web.Request;
 import com.github.jenya705.mcapi.server.module.web.Response;
 import com.github.jenya705.mcapi.server.util.PermissionUtils;
-import com.github.jenya705.mcapi.world.World;
+import com.github.jenya705.mcapi.server.util.ReactorUtils;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-
-import java.util.Optional;
+import reactor.core.publisher.Mono;
 
 /**
  * @author Jenya705
@@ -29,21 +28,19 @@ public class GetBlockDataRouteHandler extends AbstractRouteHandler {
     }
 
     @Override
-    public void handle(Request request, Response response) throws Exception {
-        World world = request.paramOrException("id", World.class);
+    public Mono<Response> handle(Request request) {
+        NamespacedKey worldId = request.paramOrException("id", NamespacedKey.class);
         int x = request.paramOrException("x", int.class);
         int y = request.paramOrException("y", int.class);
         int z = request.paramOrException("z", int.class);
-        Block block = Optional.ofNullable(
-                world.getBlock(x, y, z)
-        ).orElseThrow(BlockNotFoundException::create);
-        request
-                .bot()
-                .needPermission(PermissionUtils.getData(block));
-        response.ok(
-                Optional
-                        .ofNullable(block.getBlockData())
-                        .orElseThrow(BlockDataNotFoundException::create)
-        );
+        return core()
+                .getWorld(worldId)
+                .flatMap(world -> ReactorUtils.ifNullError(world, () -> WorldNotFoundException.create(worldId)))
+                .map(world -> world.getBlock(x, y, z))
+                .flatMap(block -> ReactorUtils.ifNullError(block, BlockNotFoundException::create))
+                .doOnNext(block -> request.bot().needPermission(PermissionUtils.getData(block)))
+                .map(Block::getBlockData)
+                .flatMap(blockData -> ReactorUtils.ifNullError(blockData, BlockDataNotFoundException::create))
+                .map(blockData -> Response.create().ok(blockData));
     }
 }

@@ -29,13 +29,14 @@ public class EntityCaptureModuleImpl extends AbstractApplicationModule implement
     @Override
     public Collection<? extends CapturableEntity> getCapturedEntities(AbstractBot owner) {
         return core()
-                .getEntities(entity ->
+                .getEntities()
+                .filter(entity ->
                         entity instanceof CapturableEntity &&
                                 ((CapturableEntity) entity).getOwner() == owner.getEntity().getId()
                 )
-                .stream()
                 .map(it -> (CapturableEntity) it)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList())
+                .block();
     }
 
 }

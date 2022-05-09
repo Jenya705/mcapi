@@ -5,9 +5,11 @@ import com.github.jenya705.mcapi.block.Block;
 import com.github.jenya705.mcapi.error.BotNotPermittedException;
 import com.github.jenya705.mcapi.server.util.PermissionUtils;
 import com.github.jenya705.mcapi.server.util.Selector;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 
 /**
  * @author Jenya705
@@ -39,6 +41,19 @@ public interface AbstractBot {
         return hasPermission(permission + selector.getPermissionName(), selector.getTarget());
     }
 
+    default boolean hasPermission(String permission, Object obj) {
+        if (obj instanceof UUIDHolder) {
+            return hasPermission(permission, (UUIDHolder) obj);
+        }
+        if (obj instanceof Selector) {
+            return hasPermission(permission, (Selector<?>) obj);
+        }
+        if (obj instanceof UUID) {
+            return hasPermission(permission, (UUID) obj);
+        }
+        return false;
+    }
+
     default void needPermission(String permission) {
         if (!hasPermission(permission)) {
             throw BotNotPermittedException.create(permission);
@@ -67,4 +82,35 @@ public interface AbstractBot {
     default void needPermission(String permission, Selector<?> selector) {
         needPermission(permission + selector.getPermissionName(), selector.getTarget());
     }
+
+    default <T> Function<T, Mono<T>> mapGlobalPermission(String permission) {
+        return it -> hasPermission(permission) ?
+                Mono.just(it) : Mono.error(BotNotPermittedException.create(permission));
+    }
+
+    default <T> Function<T, Mono<T>> mapUuidPermission(String permission, UUID target) {
+        return it -> hasPermission(permission, target) ?
+                Mono.just(it) : Mono.error(BotNotPermittedException.create(permission));
+    }
+
+    default <T extends UUIDHolder> Function<T, Mono<T>> mapUuidHolderPermission(String permission) {
+        return it -> hasPermission(permission, it) ?
+                Mono.just(it) : Mono.error(BotNotPermittedException.create(permission));
+    }
+
+    default <T extends Block> Function<T, Mono<T>> mapBlockPermission(String permission) {
+        return it -> hasPermission(permission, it) ?
+                Mono.just(it) : Mono.error(BotNotPermittedException.create(permission));
+    }
+
+    default <T extends Selector<?>> Function<T, Mono<T>> mapSelectorPermission(String permission) {
+        return it -> hasPermission(permission, it) ?
+                Mono.just(it) : Mono.error(BotNotPermittedException.create(permission));
+    }
+
+    default <T> Function<T, Mono<T>> mapPermission(String permission) {
+        return it -> hasPermission(permission, it) ?
+                Mono.just(it) : Mono.error(BotNotPermittedException.create(permission));
+    }
+
 }

@@ -31,7 +31,7 @@ public class SharedCapturedState implements CapturedState {
             state = block.getState();
         }
         else {
-            state = BukkitUtils.notAsyncSupplier(block::getState);
+            state = BukkitUtils.blockingNotAsyncSupplier(block::getState);
         }
     }
 

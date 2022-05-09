@@ -2,7 +2,9 @@ package com.github.jenya705.mcapi.server;
 
 import com.github.jenya705.mcapi.Material;
 import com.github.jenya705.mcapi.NamespacedKey;
+import com.github.jenya705.mcapi.entity.CapturableEntity;
 import com.github.jenya705.mcapi.entity.Entity;
+import com.github.jenya705.mcapi.error.EntityNotCapturableException;
 import com.github.jenya705.mcapi.inventory.Inventory;
 import com.github.jenya705.mcapi.inventory.InventoryView;
 import com.github.jenya705.mcapi.menu.InventoryMenuView;
@@ -12,16 +14,15 @@ import com.github.jenya705.mcapi.server.application.FileType;
 import com.github.jenya705.mcapi.server.command.CommandExecutor;
 import com.github.jenya705.mcapi.server.util.PlayerUtils;
 import com.github.jenya705.mcapi.world.World;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * @author Jenya705
@@ -34,27 +35,43 @@ public interface ServerCore {
 
     void givePermission(Player player, boolean toggled, String... permissions);
 
-    Collection<? extends Player> getPlayers();
+    Flux<? extends Player> getPlayers();
 
-    Player getPlayer(String name);
+    Mono<Player> getPlayer(String name);
 
-    Player getPlayer(UUID uuid);
+    Mono<Player> getPlayer(UUID uuid);
 
-    OfflinePlayer getOfflinePlayer(String name);
+    Mono<OfflinePlayer> getOfflinePlayer(String name);
 
-    OfflinePlayer getOfflinePlayer(UUID uuid);
+    Mono<OfflinePlayer> getOfflinePlayer(UUID uuid);
 
-    Entity getEntity(UUID uuid);
+    Mono<Entity> getEntity(UUID uuid);
 
-    World getWorld(NamespacedKey id);
+    Mono<World> getWorld(NamespacedKey id);
 
-    Collection<? extends World> getWorlds();
+    Flux<? extends World> getWorlds();
 
-    Collection<? extends Entity> getEntities();
+    Flux<? extends Entity> getEntities();
 
     InventoryView createInventoryView(Inventory inventory, Material airMaterial, boolean unique);
 
     InventoryMenuView createInventoryMenuView(Inventory inventory, Material airMaterial, boolean unique);
+
+    default Mono<Player> getPlayerById(String id) {
+        return PlayerUtils.getPlayer(id, this);
+    }
+
+    default Mono<OfflinePlayer> getOfflinePlayerById(String id) {
+        return PlayerUtils.getOfflinePlayer(id, this);
+    }
+
+    default Mono<CapturableEntity> getCapturableEntity(UUID uuid) {
+        return getEntity(uuid)
+                .flatMap(entity -> entity instanceof CapturableEntity ?
+                        Mono.just((CapturableEntity) entity) :
+                        Mono.error(EntityNotCapturableException.create(uuid))
+                );
+    }
 
     default InventoryView createInventoryView(Inventory inventory) {
         return createInventoryView(inventory, null);
@@ -70,45 +87,6 @@ public interface ServerCore {
 
     default InventoryMenuView createInventoryMenuView(Inventory inventory, Material airMaterial) {
         return createInventoryMenuView(inventory, airMaterial, true);
-    }
-
-    default Collection<? extends Entity> getEntities(Predicate<Entity> filter) {
-        return getEntities()
-                .stream()
-                .filter(filter)
-                .collect(Collectors.toList());
-    }
-
-    default Optional<? extends Player> getOptionalPlayer(String name) {
-        return Optional.ofNullable(getPlayer(name));
-    }
-
-    default Optional<? extends Player> getOptionalPlayer(UUID uuid) {
-        return Optional.ofNullable(getPlayer(uuid));
-    }
-
-    default Optional<? extends Player> getOptionalPlayerId(String id) {
-        return PlayerUtils.getPlayer(id, this);
-    }
-
-    default Optional<? extends Entity> getOptionalEntity(UUID uuid) {
-        return Optional.ofNullable(getEntity(uuid));
-    }
-
-    default Optional<? extends OfflinePlayer> getOptionalOfflinePlayer(String name) {
-        return Optional.ofNullable(getOfflinePlayer(name));
-    }
-
-    default Optional<? extends OfflinePlayer> getOptionalOfflinePlayer(UUID uuid) {
-        return Optional.ofNullable(getOfflinePlayer(uuid));
-    }
-
-    default Optional<? extends OfflinePlayer> getOptionalOfflinePlayerId(String id) {
-        return PlayerUtils.getOfflinePlayer(id, this);
-    }
-
-    default Optional<? extends World> getOptionalWorld(NamespacedKey id) {
-        return Optional.ofNullable(getWorld(id));
     }
 
     default Object loadFile(String file, FileType type) throws IOException {

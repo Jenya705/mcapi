@@ -28,7 +28,7 @@ public class BukkitSnapshotBlock {
         public BlockSnapshot(org.bukkit.block.Block block) {
             this.block = block;
             blockData = this.block.getBlockData().clone();
-            state = BukkitUtils.notAsyncSupplier(() -> this.block.getState(true));
+            state = BukkitUtils.blockingNotAsyncSupplier(() -> this.block.getState(true));
         }
 
     }

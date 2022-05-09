@@ -9,6 +9,7 @@ import com.github.jenya705.mcapi.server.application.BaseCommon;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.util.PlayerUtils;
+import reactor.core.publisher.Mono;
 
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -35,9 +36,11 @@ public class PlayerOptionParser extends AbstractCommandValueOptionParser impleme
                                 .getLinks()
                                 .stream()
                                 .map(it -> core().getPlayer(it.getTarget()))
+                                .map(Mono::block)
                                 .filter(Objects::nonNull)
                                 .map(OfflinePlayer::getName)
-                                .collect(Collectors.toList());
+                                .collect(Collectors.toList())
+                                ;
                     }
                     return PlayerUtils.playerTabs(core());
                 });
@@ -57,7 +60,8 @@ public class PlayerOptionParser extends AbstractCommandValueOptionParser impleme
     @Override
     public Object serialize(CommandValueOption option, AbstractBot owner, String value) {
         return core()
-                .getOptionalPlayerId(value)
+                .getPlayerById(value)
+                .blockOptional()
                 .orElseThrow(() -> PlayerNotFoundException.create(value))
                 .getUuid();
     }

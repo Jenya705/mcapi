@@ -15,6 +15,7 @@ import com.github.jenya705.mcapi.server.module.web.Response;
 import com.github.jenya705.mcapi.server.util.Selector;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import reactor.core.publisher.Mono;
 
 /**
  * @author Jenya705
@@ -33,18 +34,20 @@ public class OpenInventoryRouteHandler extends AbstractRouteHandler {
     }
 
     @Override
-    public void handle(Request request, Response response) throws Exception {
+    public Mono<Response> handle(Request request) {
         AbstractBot bot = request.bot();
-        Selector<Player> players = selectorProvider
+        return selectorProvider
                 .players(
                         request.paramOrException("selector"),
                         bot
-                );
-        bot.needPermission(Permissions.PLAYER_OPEN_INVENTORY, players);
-        InventoryMenuView inventoryMenuView = request
-                .bodyOrException(InventoryMenuView.class);
-        menuModule.makeMenuItems(inventoryMenuView, bot.getEntity());
-        players.forEach(it -> it.openInventory((InventoryView) inventoryMenuView));
-        response.noContent();
+                )
+                .flatMap(bot.mapSelectorPermission(Permissions.PLAYER_OPEN_INVENTORY))
+                .map(players -> {
+                    InventoryMenuView inventoryMenuView = request
+                            .bodyOrException(InventoryMenuView.class);
+                    menuModule.makeMenuItems(inventoryMenuView, bot.getEntity());
+                    players.all().forEach(it -> it.openInventory((InventoryView) inventoryMenuView));
+                    return Response.create().noContent();
+                });
     }
 }

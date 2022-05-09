@@ -12,6 +12,7 @@ import com.github.jenya705.mcapi.server.module.web.Response;
 import com.github.jenya705.mcapi.server.util.Selector;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import reactor.core.publisher.Mono;
 
 /**
  * @author Jenya705
@@ -28,19 +29,22 @@ public class GetBotPermissionRouteHandler extends AbstractRouteHandler {
     }
 
     @Override
-    public void handle(Request request, Response response) {
+    public Mono<Response> handle(Request request) {
         AbstractBot bot = request.bot();
-        Selector<AbstractBot> botSelector = selectorProvider
-                .bots(request.paramOrException("selector"), bot);
-        AbstractBot selectorBot = botSelector
-                .stream()
-                .findAny()
-                .orElseThrow(SelectorEmptyException::create);
         String permission = request.paramOrException("permission");
-        response.ok(new EntityPermission(
-                selectorBot.hasPermission(permission),
-                permission,
-                null
-        ));
+        return selectorProvider
+                .bots(request.paramOrException("selector"), bot)
+                .map(selector -> selector
+                        .all()
+                        .stream()
+                        .findAny()
+                        .orElseThrow(SelectorEmptyException::create)
+                )
+                .map(selectorBot -> new EntityPermission(
+                        selectorBot.hasPermission(permission),
+                        permission,
+                        null
+                ))
+                .map(entityPermission -> Response.create().ok(entityPermission));
     }
 }

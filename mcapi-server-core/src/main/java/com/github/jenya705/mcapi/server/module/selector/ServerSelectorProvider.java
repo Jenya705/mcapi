@@ -9,6 +9,7 @@ import com.github.jenya705.mcapi.server.util.Selector;
 import com.google.inject.Inject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import reactor.core.publisher.Mono;
 
 /**
  * @author Jenya705
@@ -28,7 +29,7 @@ public class ServerSelectorProvider extends AbstractApplicationModule implements
     }
 
     @Override
-    public Selector<Player> players(@NotNull String selector, @Nullable AbstractBot bot) {
+    public Mono<Selector<Player>> players(@NotNull String selector, @Nullable AbstractBot bot) {
         return playerSelectorCreator.create(
                 selector,
                 new DefaultSelectorCreatorData(bot)
@@ -36,7 +37,7 @@ public class ServerSelectorProvider extends AbstractApplicationModule implements
     }
 
     @Override
-    public Selector<AbstractBot> bots(@NotNull String selector, @Nullable AbstractBot bot) {
+    public Mono<Selector<AbstractBot>> bots(@NotNull String selector, @Nullable AbstractBot bot) {
         return botSelectorCreator.create(
                 selector,
                 new DefaultSelectorCreatorData(bot)
@@ -44,7 +45,7 @@ public class ServerSelectorProvider extends AbstractApplicationModule implements
     }
 
     @Override
-    public Selector<OfflinePlayer> offlinePlayers(@NotNull String selector, @Nullable AbstractBot bot) {
+    public Mono<Selector<OfflinePlayer>> offlinePlayers(@NotNull String selector, @Nullable AbstractBot bot) {
         return offlinePlayerSelectorCreator.create(
                 selector,
                 new DefaultSelectorCreatorData(bot)

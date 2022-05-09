@@ -11,6 +11,9 @@ import com.github.jenya705.mcapi.server.module.web.Response;
 import com.github.jenya705.mcapi.server.util.PermissionUtils;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import reactor.core.publisher.Mono;
+
+import java.util.UUID;
 
 /**
  * @author Jenya705
@@ -27,12 +30,14 @@ public class CaptureEntityRouteHandler extends AbstractRouteHandler {
     }
 
     @Override
-    public void handle(Request request, Response response) throws Exception {
-        CapturableEntity capturableEntity = request
-                .paramOrException("id", CapturableEntity.class);
-        AbstractBot bot = request.bot();
-        bot.needPermission(PermissionUtils.captureEntity(capturableEntity));
-        entityCaptureModule.capture(capturableEntity, bot);
-        response.noContent();
+    public Mono<Response> handle(Request request) {
+        return core()
+                .getCapturableEntity(request.paramOrException("id", UUID.class))
+                .map(capturableEntity -> {
+                    AbstractBot bot = request.bot();
+                    bot.needPermission(PermissionUtils.captureEntity(capturableEntity));
+                    entityCaptureModule.capture(capturableEntity, bot);
+                    return Response.create().noContent();
+                });
     }
 }

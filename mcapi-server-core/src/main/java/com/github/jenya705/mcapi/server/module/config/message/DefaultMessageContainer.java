@@ -280,13 +280,14 @@ public class DefaultMessageContainer implements MessageContainer {
                                                                                 .append(Component
                                                                                         .translatable("mcapi.permission.target.uuid")
                                                                                         .args(core
-                                                                                                .getOptionalOfflinePlayer(it.getTarget())
+                                                                                                .getOfflinePlayer(it.getTarget())
                                                                                                 .map(OfflinePlayer::getName)
                                                                                                 .map(player -> (Component)
                                                                                                         Component
                                                                                                                 .translatable("mcapi.permission.target.player")
                                                                                                                 .args(Component.text(player))
                                                                                                 )
+                                                                                                .blockOptional()
                                                                                                 .orElse(Component.text(it.getTarget().toString()))
                                                                                         )
                                                                                 )

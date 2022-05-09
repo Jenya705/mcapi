@@ -19,10 +19,7 @@ import com.github.jenya705.mcapi.server.util.PlayerUtils;
 import lombok.extern.slf4j.Slf4j;
 import net.kyori.adventure.text.Component;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -112,7 +109,9 @@ public abstract class AdvancedCommandExecutor<T> extends AbstractApplicationModu
                     .filter(it -> it instanceof Player)
                     .map(it -> (Player) it);
         }
-        return PlayerUtils.getPlayerWithoutException(name, core());
+        return PlayerUtils
+                .getPlayerWithoutException(name, core())
+                .blockOptional();
     }
 
     public void requirePlayer(CommandSender sender, String name, Consumer<Player> handler) {
@@ -127,10 +126,14 @@ public abstract class AdvancedCommandExecutor<T> extends AbstractApplicationModu
         else {
             PlayerUtils
                     .getPlayerWithoutException(name, core())
-                    .ifPresentOrElse(
-                            handler,
-                            () -> sendMessage(sender, messageContainer.playerNotFound(name))
-                    );
+                    .subscribe(player -> {
+                        if (player == null) {
+                            sendMessage(sender, messageContainer.playerNotFound(name));
+                        }
+                        else {
+                            handler.accept(player);
+                        }
+                    });
         }
     }
 

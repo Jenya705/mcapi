@@ -4,8 +4,8 @@ import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.module.authorization.AuthorizationModule;
 import com.github.jenya705.mcapi.server.util.SelectorContainer;
-
-import java.util.Collections;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 /**
  * @author Jenya705
@@ -16,16 +16,15 @@ public class BotSelectorCreator extends MapSelectorCreator<AbstractBot, DefaultS
         AuthorizationModule authorizationModule =
                 application.getBean(AuthorizationModule.class);
         this
-                .direct(
-                        (data, token) ->
-                                new SelectorContainer<>(
-                                        authorizationModule.rawBot(token),
-                                        "", null
-                                )
-                )
+                .direct((data, token) -> Mono.just(
+                        new SelectorContainer<>(
+                                authorizationModule.rawBot(token),
+                                "", null
+                        )
+                ))
                 .defaultSelector(
                         "me",
-                        data -> Collections.singletonList(data.getBot())
+                        data -> Flux.just(data.getBot())
                 );
     }
 }

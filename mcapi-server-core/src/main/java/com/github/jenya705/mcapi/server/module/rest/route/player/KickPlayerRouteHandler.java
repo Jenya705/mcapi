@@ -14,6 +14,7 @@ import com.github.jenya705.mcapi.server.module.web.Response;
 import com.github.jenya705.mcapi.server.util.Selector;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import reactor.core.publisher.Mono;
 
 /**
  * @author Jenya705
@@ -30,19 +31,17 @@ public class KickPlayerRouteHandler extends AbstractRouteHandler {
     }
 
     @Override
-    public void handle(Request request, Response response) {
+    public Mono<Response> handle(Request request) {
         AbstractBot bot = request.bot();
-        Selector<Player> players = selectorProvider
+        TypedMessage message = request
+                .bodyOrException(TypedMessage.class);
+        return selectorProvider
                 .players(
                         request.paramOrException("selector"),
                         bot
-                );
-        bot.needPermission(Permissions.PLAYER_KICK, players);
-        TypedMessage message = request
-                .bodyOrException(TypedMessage.class);
-        players.forEach(player ->
-                MessageUtils.kick(player, message)
-        );
-        response.noContent();
+                )
+                .flatMap(bot.mapSelectorPermission(Permissions.PLAYER_KICK))
+                .doOnNext(players -> players.all().forEach(player -> MessageUtils.kick(player, message)))
+                .map(players -> Response.create().noContent());
     }
 }

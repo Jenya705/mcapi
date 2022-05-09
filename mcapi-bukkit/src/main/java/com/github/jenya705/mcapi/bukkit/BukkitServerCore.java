@@ -15,23 +15,22 @@ import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.server.ServerCore;
 import com.github.jenya705.mcapi.server.command.CommandExecutor;
 import com.github.jenya705.mcapi.server.util.ListUtils;
+import com.github.jenya705.mcapi.server.util.ReactorUtils;
 import com.github.jenya705.mcapi.world.World;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import lombok.experimental.Delegate;
 import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * @author Jenya705
@@ -106,64 +105,47 @@ public class BukkitServerCore implements ServerCore {
     }
 
     @Override
-    public Collection<Player> getPlayers() {
-        return Bukkit
+    public Flux<Player> getPlayers() {
+        return ReactorUtils.flux(() -> Bukkit
                 .getOnlinePlayers()
                 .stream()
                 .map(BukkitWrapper::player)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public Player getPlayer(String name) {
-        return BukkitWrapper.player(Bukkit.getPlayer(name));
-    }
-
-    @Override
-    public Player getPlayer(UUID uuid) {
-        return BukkitWrapper.player(Bukkit.getPlayer(uuid));
-    }
-
-    @Override
-    public OfflinePlayer getOfflinePlayer(String name) {
-        return BukkitWrapper.offlinePlayer(offlinePlayerStorage.getPlayer(name));
-    }
-
-    @Override
-    public OfflinePlayer getOfflinePlayer(UUID uuid) {
-        return BukkitWrapper.offlinePlayer(Bukkit.getOfflinePlayer(uuid));
-    }
-
-    @Override
-    public Entity getEntity(UUID uuid) {
-        return BukkitWrapper.entity(
-                BukkitUtils.notAsyncSupplier(() -> Bukkit.getEntity(uuid))
+                .toArray(Player[]::new)
         );
     }
 
     @Override
-    public Collection<? extends World> getWorlds() {
-        return Bukkit
-                .getWorlds()
-                .stream()
-                .map(BukkitWrapper::world)
-                .collect(Collectors.toList());
+    public Mono<Player> getPlayer(String name) {
+        return ReactorUtils.mono(() -> BukkitWrapper.player(Bukkit.getPlayer(name)));
     }
 
     @Override
-    public Collection<? extends Entity> getEntities(Predicate<Entity> predicate) {
-        return ListUtils.join(
-                Bukkit
-                        .getWorlds()
-                        .stream()
-                        .map(org.bukkit.World::getEntities)
-                        .map(entities -> entities
-                                .stream()
-                                .map(BukkitWrapper::entity)
-                                .filter(predicate)
-                                .collect(Collectors.toList())
-                        )
-                        .collect(Collectors.toList())
+    public Mono<Player> getPlayer(UUID uuid) {
+        return ReactorUtils.mono(() -> BukkitWrapper.player(Bukkit.getPlayer(uuid)));
+    }
+
+    @Override
+    public Mono<OfflinePlayer> getOfflinePlayer(String name) {
+        return ReactorUtils.mono(() -> BukkitWrapper.offlinePlayer(offlinePlayerStorage.getPlayer(name)));
+    }
+
+    @Override
+    public Mono<OfflinePlayer> getOfflinePlayer(UUID uuid) {
+        return ReactorUtils.mono(() -> BukkitWrapper.offlinePlayer(Bukkit.getOfflinePlayer(uuid)));
+    }
+
+    @Override
+    public Mono<Entity> getEntity(UUID uuid) {
+        return BukkitUtils.notAsyncSupplier(() -> BukkitWrapper.entity(Bukkit.getEntity(uuid)));
+    }
+
+    @Override
+    public Flux<? extends World> getWorlds() {
+        return ReactorUtils.flux(() -> Bukkit
+                .getWorlds()
+                .stream()
+                .map(BukkitWrapper::world)
+                .toArray(World[]::new)
         );
     }
 
@@ -182,13 +164,25 @@ public class BukkitServerCore implements ServerCore {
     }
 
     @Override
-    public Collection<? extends Entity> getEntities() {
-        return getEntities(it -> true);
+    public Flux<? extends Entity> getEntities() {
+        return Flux.just(ListUtils.joinArray(
+                Entity[]::new,
+                Bukkit
+                        .getWorlds()
+                        .stream()
+                        .map(world -> world
+                                .getEntities()
+                                .stream()
+                                .map(BukkitWrapper::entity)
+                                .toArray(Entity[]::new)
+                        )
+                        .toArray(Entity[][]::new)
+        ));
     }
 
     @Override
-    public World getWorld(com.github.jenya705.mcapi.NamespacedKey id) {
-        return BukkitWrapper.world(Bukkit.getWorld(BukkitWrapper.namespacedKey(id)));
+    public Mono<World> getWorld(com.github.jenya705.mcapi.NamespacedKey id) {
+        return Mono.just(BukkitWrapper.world(Bukkit.getWorld(BukkitWrapper.namespacedKey(id))));
     }
 
 }
