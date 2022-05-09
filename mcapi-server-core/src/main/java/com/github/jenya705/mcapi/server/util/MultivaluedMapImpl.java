@@ -3,10 +3,9 @@ package com.github.jenya705.mcapi.server.util;
 import lombok.AllArgsConstructor;
 import lombok.experimental.Delegate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Supplier;
 
 /**
  * @author Jenya705
@@ -16,16 +15,19 @@ public class MultivaluedMapImpl<T, V> implements MultivaluedMap<T, V> {
 
     @Delegate
     private final Map<T, List<V>> map;
+    private final Supplier<List<V>> listSupplier;
 
     public MultivaluedMapImpl() {
-        this(new HashMap<>());
+        this(new HashMap<>(), ArrayList::new);
     }
 
     @Override
     public void add(T key, V value) {
-        List<V> list;
-        if (map.containsKey(key)) list = map.get(key);
-        else map.put(key, list = new ArrayList<>());
-        list.add(value);
+        map.computeIfAbsent(key, it -> listSupplier.get()).add(value);
+    }
+
+    @Override
+    public boolean removeElement(T key, V value) {
+        return map.getOrDefault(key, Collections.emptyList()).remove(value);
     }
 }

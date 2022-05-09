@@ -1,5 +1,7 @@
 package com.github.jenya705.mcapi.server.module.permission;
 
+import com.github.jenya705.mcapi.event.EntityDespawnEvent;
+import com.github.jenya705.mcapi.event.EntitySpawnEvent;
 import com.github.jenya705.mcapi.event.InventoryMoveEvent;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.google.inject.ImplementedBy;
@@ -14,5 +16,9 @@ import com.google.inject.ImplementedBy;
 public interface PermissionManager {
 
     boolean hasPermissionInventoryMove(AbstractBot bot, InventoryMoveEvent event);
+
+    boolean hasPermissionSpawnEntity(AbstractBot bot, EntitySpawnEvent event);
+
+    boolean hasPermissionDespawnEntity(AbstractBot bot, EntityDespawnEvent event);
 
 }

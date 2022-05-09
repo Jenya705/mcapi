@@ -70,6 +70,9 @@ public class DefaultEventTunnel extends WebSocketRouteContainerImpl<DefaultEvent
     @Override
     public void broadcast(Object obj, String type, Predicate<EventTunnelClient> predicate) {
         String json = mapper.asJson(obj);
+        if (debug()) {
+            log.info("Broadcasting: {}", json);
+        }
         getClients()
                 .stream()
                 .filter(client -> client.isSubscribed(type) && predicate.test(client))

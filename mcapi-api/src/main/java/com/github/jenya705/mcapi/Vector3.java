@@ -109,6 +109,14 @@ public final class Vector3 {
         return new Vector3(x, y, z);
     }
 
+    public double squaredLength() {
+        return x * x + y * y + z * z;
+    }
+
+    public double length() {
+        return Math.sqrt(squaredLength());
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;

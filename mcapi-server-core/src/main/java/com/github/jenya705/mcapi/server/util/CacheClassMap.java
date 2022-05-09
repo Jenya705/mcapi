@@ -19,7 +19,7 @@ public class CacheClassMap<T> implements Map<Class<?>, T> {
     }
 
     @UtilityClass
-    private static final class NullClass {}
+    private static class NullClass {}
 
     private final Map<Class<?>, T> map;
     private final Map<Class<?>, Class<?>> cache;

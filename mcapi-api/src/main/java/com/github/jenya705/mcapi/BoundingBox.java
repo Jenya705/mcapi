@@ -62,6 +62,14 @@ public final class BoundingBox {
         return getWidthX() * getWidthZ() * getHeight();
     }
 
+    public double getDiagonalSquaredLength() {
+        return size().squaredLength();
+    }
+
+    public double getDiagonalLength(){
+        return size().length();
+    }
+
     public Vector3 size() {
         return Vector3.of(
                 getWidthX(),

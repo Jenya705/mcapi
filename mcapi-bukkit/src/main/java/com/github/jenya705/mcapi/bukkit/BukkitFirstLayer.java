@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.bukkit;
 
 import com.github.jenya705.mcapi.bukkit.block.BukkitBlockDataRegistry;
+import com.github.jenya705.mcapi.bukkit.entity.BukkitSpawningListener;
 import com.github.jenya705.mcapi.bukkit.menu.BukkitMenuManager;
 import com.github.jenya705.mcapi.bukkit.permission.LuckPermsHook;
 import com.github.jenya705.mcapi.bukkit.permission.PermissionManagerHook;
@@ -27,6 +28,7 @@ public class BukkitFirstLayer extends AbstractModule {
         bind(BukkitFileCore.class);
         bind(BukkitOfflinePlayerStorage.class);
         bind(BukkitMenuManager.class);
+        bind(BukkitSpawningListener.class);
         bind(Worker.class).to(BukkitWorker.class);
         permissionManager();
         bind(ServerCore.class).to(BukkitServerCore.class);

@@ -3,9 +3,7 @@ package com.github.jenya705.mcapi.server.module.web;
 import com.github.jenya705.mcapi.ApiError;
 import lombok.Getter;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  *
@@ -50,17 +48,21 @@ public final class Response {
         return body(error).status(error.getStatusCode());
     }
 
+    public Map<String, String> getHeaders() {
+        return Collections.unmodifiableMap(headers);
+    }
+
     public Response status(int status) {
         this.status = status;
         return this;
     }
 
     public Response contentType(String value) {
-        return header("Content-Type", value);
+        return header("content-type", value);
     }
 
     public Response header(String name, String value) {
-        headers.put(name, value);
+        headers.put(name.toLowerCase(Locale.ROOT), value);
         return this;
     }
 

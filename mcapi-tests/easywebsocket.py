@@ -15,7 +15,9 @@ ALL_SUBSCRIPTIONS = [
     "player_quit",
     "subscribe",
     "command_interaction",
-    "player_unlink"
+    "player_unlink",
+    "entity_spawn",
+    "entity_despawn"
 ]
 
 async def send_object(websocket, obj):

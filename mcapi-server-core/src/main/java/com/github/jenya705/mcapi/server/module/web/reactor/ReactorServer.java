@@ -155,10 +155,12 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
                         Response.create().error(err)
                 ))
                 .map(handlerResponse -> {
-                    handlerResponse.getHeaders().putIfAbsent("Content-Type", jsonContentType);
+                    if(!handlerResponse.getHeaders().containsKey("content-type")) {
+                        handlerResponse.header("content-type", jsonContentType);
+                    }
                     handlerResponse.getHeaders().forEach(response::header);
                     response.status(handlerResponse.getStatus());
-                    if (handlerResponse.getHeaders().get("Content-Type").equals(jsonContentType)) {
+                    if (handlerResponse.getHeaders().get("content-type").equals(jsonContentType)) {
                         return mapper.asJson(handlerResponse.getBody());
                     }
                     return String.valueOf(handlerResponse.getBody());

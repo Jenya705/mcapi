@@ -33,7 +33,7 @@ public class RawOptionsParserImpl implements RawOptionsParser {
     public static MultivaluedMap<String, RawOptionsElement> parse(String message, Mapper mapper) {
         Matcher patternMatcher = parsePattern.matcher(message);
         int currentIndex = 0;
-        MultivaluedMap<String, RawOptionsElement> result = MultivaluedMap.of(new HashMap<>());
+        MultivaluedMap<String, RawOptionsElement> result = MultivaluedMap.create();
         while (patternMatcher.find()) {
             if (currentIndex != patternMatcher.start()) {
                 throw new IllegalArgumentException(String.format("Failed to parse %s at %d", message, currentIndex));

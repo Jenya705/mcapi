@@ -157,7 +157,9 @@ public class FieldInjectionModuleImpl extends AbstractApplicationModule implemen
                 RestWorld.class,
                 RestLivingEntity.class,
                 RestBeacon.class,
-                RestPotionEffect.class
+                RestPotionEffect.class,
+                RestEntitySpawnEvent.class,
+                RestEntityDespawnEvent.class
         );
         //</editor-fold>
     }

@@ -11,6 +11,7 @@ import com.google.common.cache.CacheBuilder;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 /**
@@ -130,7 +131,7 @@ public class CacheStorageImpl extends AbstractApplicationModule implements Cache
 
     private static <T> List<T> getAddedList(List<T> list, T toAdd) {
         if (list == null) {
-            List<T> newList = new ArrayList<>();
+            List<T> newList = new CopyOnWriteArrayList<>();
             newList.add(toAdd);
             return newList;
         }

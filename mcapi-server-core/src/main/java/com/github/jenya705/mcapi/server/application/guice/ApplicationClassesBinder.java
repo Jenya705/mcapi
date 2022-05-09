@@ -58,6 +58,7 @@ import com.github.jenya705.mcapi.server.module.rest.route.world.GetWorldRouteHan
 import com.github.jenya705.mcapi.server.module.selector.SelectorProvider;
 import com.github.jenya705.mcapi.server.module.storage.StorageModule;
 import com.github.jenya705.mcapi.server.module.web.WebServer;
+import com.github.jenya705.mcapi.server.module.web.listener.EntitySpawningListener;
 import com.github.jenya705.mcapi.server.module.web.tunnel.EventTunnel;
 import com.github.jenya705.mcapi.server.worker.Worker;
 import com.google.inject.AbstractModule;
@@ -96,6 +97,7 @@ public class ApplicationClassesBinder extends AbstractModule {
             ComponentMapParser.class,
             EventBroadcaster.class,
             InventoryMoveEventHandler.class,
+            EntitySpawningListener.class,
             Worker.class
     );
 

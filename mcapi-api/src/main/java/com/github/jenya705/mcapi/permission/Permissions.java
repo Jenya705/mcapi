@@ -36,7 +36,23 @@ public class Permissions {
 
     public final String EVENT_TUNNEL_MENU_CLICK = "event_tunnel.menu_click.listen";
 
-    public final String EVENT_TUNNEL_INVENTORY_MOVE = "event_tunnel.inventory_move.listen";
+    private final String EVENT_TUNNEL_ENTITY_SPAWN = "event_tunnel.entity_spawn";
+
+    public final String EVENT_TUNNEL_ENTITY_SPAWN_LISTEN = EVENT_TUNNEL_ENTITY_SPAWN + ".listen";
+
+    public final String EVENT_TUNNEL_ENTITY_SPAWN_CAPTURED_ENTITY = EVENT_TUNNEL_ENTITY_SPAWN + ".captured_entity";
+
+    public final String EVENT_TUNNEL_ENTITY_SPAWN_ENTITY = EVENT_TUNNEL_ENTITY_SPAWN + ".entity";
+
+    private final String EVENT_TUNNEL_ENTITY_DESPAWN = "event_tunnel.entity_despawn";
+
+    public final String EVENT_TUNNEL_ENTITY_DESPAWN_LISTEN = EVENT_TUNNEL_ENTITY_DESPAWN + ".listen";
+
+    public final String EVENT_TUNNEL_ENTITY_DESPAWN_CAPTURED_ENTITY = EVENT_TUNNEL_ENTITY_DESPAWN + ".captured_entity";
+
+    public final String EVENT_TUNNEL_ENTITY_DESPAWN_ENTITY = EVENT_TUNNEL_ENTITY_DESPAWN + ".entity";
+
+    private final String EVENT_TUNNEL_INVENTORY_MOVE = "event_tunnel.inventory_move.listen";
 
     public final String EVENT_TUNNEL_INVENTORY_MOVE_LISTEN = EVENT_TUNNEL_INVENTORY_MOVE + ".listen";
 

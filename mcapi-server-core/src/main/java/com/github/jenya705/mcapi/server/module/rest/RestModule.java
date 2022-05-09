@@ -140,6 +140,8 @@ public class RestModule extends AbstractApplicationModule {
                 .tunnelJsonSerializer(LivingEntity.class, RestLivingEntity::from)
                 .tunnelJsonSerializer(Player.class, RestPlayer::from)
                 .tunnelJsonSerializer(PlayerAbilities.class, RestPlayerAbilities::from)
+                .tunnelJsonSerializer(EntitySpawnEvent.class, RestEntitySpawnEvent::from)
+                .tunnelJsonSerializer(EntityDespawnEvent.class, RestEntityDespawnEvent::from)
                 .jsonSerializer(Component.class, new ComponentSerializer())
                 .tunnelJsonDeserializer(
                         InventoryViewModel.class,
