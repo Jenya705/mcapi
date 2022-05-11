@@ -2,13 +2,14 @@ package com.github.jenya705.mcapi.server.module.database.sqlite;
 
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.module.database.DatabaseTypeInitializer;
-import com.github.jenya705.mcapi.server.module.database.SQLDatabaseModule;
+import com.github.jenya705.mcapi.server.module.database.sql.SQLConnectionManager;
+import com.github.jenya705.mcapi.server.module.database.sql.SQLDatabaseModule;
+import com.github.jenya705.mcapi.server.module.database.sql.SingleSQLConnectionManager;
 import com.github.jenya705.mcapi.server.module.database.storage.DatabaseStorage;
 import com.github.jenya705.mcapi.server.module.storage.StorageModule;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 
-import java.sql.Connection;
 import java.sql.DriverManager;
 
 /**
@@ -25,14 +26,16 @@ public class SqliteDatabaseInitializer implements DatabaseTypeInitializer {
 
     @Override
     @SneakyThrows
-    public Connection connection(String host, String user, String password, String database) {
+    public SQLConnectionManager connection(String host, String user, String password, String database) {
         Class.forName("org.sqlite.jdbc4.JDBC4Connection");
-        return DriverManager.getConnection(
-                String.format(
-                        sqliteUrlFormat,
-                        application
-                                .getCore()
-                                .getAbsolutePath("database.db")
+        return new SingleSQLConnectionManager(
+                DriverManager.getConnection(
+                        String.format(
+                                sqliteUrlFormat,
+                                application
+                                        .getCore()
+                                        .getAbsolutePath("database.db")
+                        )
                 )
         );
     }

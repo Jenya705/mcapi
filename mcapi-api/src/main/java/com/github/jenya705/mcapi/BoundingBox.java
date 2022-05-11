@@ -4,8 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.util.Objects;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 /**
  * @author Jenya705
@@ -38,11 +37,11 @@ public final class BoundingBox {
         return new BoundingBox(minCorner, maxCorner);
     }
 
-    public BoundingBox minCorner(Function<Vector3, Vector3> function) {
+    public BoundingBox minCorner(UnaryOperator<Vector3> function) {
         return minCorner(function.apply(minCorner));
     }
 
-    public BoundingBox maxCorner(Function<Vector3, Vector3> function) {
+    public BoundingBox maxCorner(UnaryOperator<Vector3> function) {
         return maxCorner(function.apply(maxCorner));
     }
 

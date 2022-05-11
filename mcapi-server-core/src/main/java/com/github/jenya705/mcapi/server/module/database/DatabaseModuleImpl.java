@@ -1,7 +1,6 @@
 package com.github.jenya705.mcapi.server.module.database;
 
 import com.github.jenya705.mcapi.server.application.AbstractApplicationModule;
-import com.github.jenya705.mcapi.server.application.OnDisable;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.data.ConfigData;
 import com.github.jenya705.mcapi.server.log.TimerTask;
@@ -14,27 +13,42 @@ import com.github.jenya705.mcapi.server.module.database.mysql.MySqlDatabaseIniti
 import com.github.jenya705.mcapi.server.module.database.safe.CacheDatabaseGetter;
 import com.github.jenya705.mcapi.server.module.database.safe.DatabaseGetter;
 import com.github.jenya705.mcapi.server.module.database.safe.StorageDatabaseGetter;
+import com.github.jenya705.mcapi.server.module.database.sql.SQLConnectionManager;
+import com.github.jenya705.mcapi.server.module.database.sql.SQLDatabaseModule;
 import com.github.jenya705.mcapi.server.module.database.sqlite.SqliteDatabaseInitializer;
 import com.github.jenya705.mcapi.server.module.database.storage.DatabaseStorage;
 import com.github.jenya705.mcapi.server.module.storage.StorageModule;
+import com.github.jenya705.mcapi.server.util.LazyInitializer;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import lombok.Data;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Supplier;
 
 /**
  * @author Jenya705
  */
 @Singleton
 public class DatabaseModuleImpl extends AbstractApplicationModule implements SQLDatabaseModule {
+
+    @Data
+    private static class Late {
+        private CacheStorage cache;
+        private DatabaseGetter safeSync;
+        private DatabaseGetter safeSyncWithFuture;
+        private DatabaseGetter safeAsync;
+        private DatabaseStorage storage;
+        private SQLConnectionManager connectionManager;
+    }
 
     private final ServerApplication application;
     private final DefaultDatabaseTypeInitializer defaultDatabaseTypeInitializer;
@@ -45,13 +59,33 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements SQL
     private final Logger log;
 
     private final Map<String, DatabaseTypeInitializer> databaseTypeInitializers = new ConcurrentHashMap<>();
+    private final Supplier<Late> lateSupplier = new LazyInitializer<>(this::createLate, late -> late.getStorage().setup());
 
-    private final AtomicReference<CacheStorage> cache = new AtomicReference<>();
-    private final AtomicReference<DatabaseGetter> safeSync = new AtomicReference<>();
-    private final AtomicReference<DatabaseGetter> safeSyncWithFuture = new AtomicReference<>();
-    private final AtomicReference<DatabaseGetter> safeAsync = new AtomicReference<>();
-    private final AtomicReference<DatabaseStorage> storage = new AtomicReference<>();
-    private final AtomicReference<Connection> connection = new AtomicReference<>();
+    private Late createLate() {
+        Late result = new Late();
+        TimerTask task = TimerTask.start(log, "Creating connection with database...");
+        result.setConnectionManager(createConnectionManager());
+        result.setStorage(createStorage(config.getType()));
+        result.setSafeAsync(new StorageDatabaseGetter(result.getStorage()));
+        if (config.isCacheEnabled()) {
+            result.setCache(
+                    new CacheStorageImpl(
+                            application,
+                            cacheConfig,
+                            this
+                    )
+            );
+            result.setSafeSync(new CacheDatabaseGetter(result.getCache()));
+            result.setSafeSyncWithFuture(new CacheDatabaseGetter(result.getCache().withFuture()));
+        }
+        else {
+            result.setCache(new FakeCacheStorage(this));
+            result.setSafeSync(result.getSafeAsync());
+            result.setSafeSyncWithFuture(result.getSafeSync());
+        }
+        task.complete();
+        return result;
+    }
 
     @Inject
     public DatabaseModuleImpl(ServerApplication application, ConfigModule configModule, StorageModule storageModule, Logger log) {
@@ -68,8 +102,8 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements SQL
         cacheConfig = new CacheConfig(configData.required("cache"));
     }
 
-    protected Connection createConnection() {
-        Connection connection = null;
+    protected SQLConnectionManager createConnectionManager() {
+        SQLConnectionManager connection = null;
         String loweredType = config.getType().toLowerCase(Locale.ROOT);
         if (databaseTypeInitializers.containsKey(loweredType)) {
             connection = databaseTypeInitializers
@@ -88,96 +122,50 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements SQL
         return connection;
     }
 
-    @SneakyThrows
-    protected synchronized void validateConnection() {
-        if (connection.get() == null || connection.get().isClosed()) {
-            TimerTask task = TimerTask.start(log, "Creating connection with database...");
-            connection.set(createConnection());
-            storage.set(createStorage(config.getType()));
-            storage.get().setup();
-            safeAsync.set(new StorageDatabaseGetter(storage.get()));
-            if (config.isCacheEnabled()) {
-                cache.set(
-                        new CacheStorageImpl(
-                                application,
-                                cacheConfig,
-                                this
-                        )
-                );
-                safeSync.set(new CacheDatabaseGetter(cache.get()));
-                safeSyncWithFuture.set(new CacheDatabaseGetter(cache.get().withFuture()));
-            }
-            else {
-                cache.set(new FakeCacheStorage(this));
-                safeSync.set(safeAsync.get());
-                safeSyncWithFuture.set(safeAsync.get());
-            }
-            task.complete();
-        }
-    }
-
-    @OnDisable
-    public void disable() throws SQLException {
-        if (connection.get() != null && !connection.get().isClosed()) {
-            connection.get().close();
-        }
-    }
-
     @Override
     @SneakyThrows
     public void update(String sql, Object... objects) {
         debugSql(sql, objects);
-        validateConnection();
-        synchronized (this) {
+        doWithConnection(connection -> {
             if (objects.length == 0) {
-                Statement statement = getConnection().createStatement();
-                statement.executeUpdate(sql);
+                return connection.createStatement().executeUpdate(sql);
             }
             else {
-                PreparedStatement statement = getConnection().prepareStatement(sql);
+                PreparedStatement statement = connection.prepareStatement(sql);
                 for (int i = 0; i < objects.length; ++i) {
                     statement.setObject(i + 1, objects[i]);
                 }
-                statement.executeUpdate();
+                return statement.executeUpdate();
             }
-        }
+        });
     }
 
     @Override
     @SneakyThrows
     public ResultSet query(String sql, Object... objects) {
         debugSql(sql, objects);
-        validateConnection();
-        synchronized (this) {
+        return doWithConnection(connection -> {
             if (objects.length == 0) {
-                return getConnection().createStatement().executeQuery(sql);
+                return connection.createStatement().executeQuery(sql);
             }
             else {
-                PreparedStatement statement = getConnection().prepareStatement(sql);
+                PreparedStatement statement = connection.prepareStatement(sql);
                 for (int i = 0; i < objects.length; ++i) {
                     statement.setObject(i + 1, objects[i]);
                 }
                 return statement.executeQuery();
             }
-        }
+        });
     }
 
     @Override
     public DatabaseStorage storage() {
-        validateConnection();
-        return storage.get();
+        return lateSupplier.get().getStorage();
     }
 
     @Override
     public CacheStorage cache() {
-        validateConnection();
-        return cache.get();
-    }
-
-    @Override
-    public Connection getConnection() {
-        validateConnection();
-        return connection.get();
+        return lateSupplier.get().getCache();
     }
 
     private DatabaseStorage createStorage(String sqlType) {
@@ -202,20 +190,27 @@ public class DatabaseModuleImpl extends AbstractApplicationModule implements SQL
 
     @Override
     public DatabaseGetter safeSync() {
-        validateConnection();
-        return safeSync.get();
+        return lateSupplier.get().getSafeSync();
     }
 
     @Override
     public DatabaseGetter safeSyncWithFuture() {
-        validateConnection();
-        return safeSyncWithFuture.get();
+        return lateSupplier.get().getSafeSyncWithFuture();
     }
 
     @Override
     public DatabaseGetter safeAsync() {
-        validateConnection();
-        return safeAsync.get();
+        return lateSupplier.get().getSafeAsync();
+    }
+
+    @Override
+    public void doWithConnection(ConnectionConsumer connectionConsumer) throws SQLException {
+        lateSupplier.get().getConnectionManager().doWithConnection(connectionConsumer);
+    }
+
+    @Override
+    public <T> T doWithConnection(ConnectionFunction<T> connectionFunction) throws SQLException {
+        return lateSupplier.get().getConnectionManager().doWithConnection(connectionFunction);
     }
 
     @Override

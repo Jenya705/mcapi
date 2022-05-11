@@ -5,7 +5,7 @@ import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.entity.BotEntity;
 import com.github.jenya705.mcapi.server.entity.BotLinkEntity;
 import com.github.jenya705.mcapi.server.entity.BotPermissionEntity;
-import com.github.jenya705.mcapi.server.module.database.SQLDatabaseModule;
+import com.github.jenya705.mcapi.server.module.database.sql.SQLDatabaseModule;
 import com.github.jenya705.mcapi.server.module.database.cache.CacheStorage;
 import com.github.jenya705.mcapi.server.module.database.cache.FakeCacheStorage;
 import com.github.jenya705.mcapi.server.module.storage.StorageModule;

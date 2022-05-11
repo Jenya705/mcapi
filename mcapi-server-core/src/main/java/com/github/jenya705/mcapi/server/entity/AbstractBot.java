@@ -31,6 +31,25 @@ public interface AbstractBot {
 
     BotPermissionEntity getPermissionEntity(String permission, UUID target);
 
+    default BotPermissionEntity getPermissionEntity(String permission) {
+        return getPermissionEntity(permission, BotPermissionEntity.identityTarget);
+    }
+
+    default BotPermissionEntity getPermissionEntity(String permission, UUIDHolder uuidHolder) {
+        if (uuidHolder instanceof Block) {
+            return getPermissionEntity(permission, (Block) uuidHolder);
+        }
+        return getPermissionEntity(permission, uuidHolder.getUuid());
+    }
+
+    default BotPermissionEntity getPermissionEntity(String permission, Block block) {
+        return getPermissionEntity(PermissionUtils.blockPermission(permission, block), block.getUuid());
+    }
+
+    default BotPermissionEntity getPermissionEntity(String permission, Selector<?> selector) {
+        return getPermissionEntity(permission + selector.getPermissionName(), selector.getTarget());
+    }
+
     default PermissionFlag getPermissionFlag(String permission) {
         return getPermissionFlag(permission, BotPermissionEntity.identityTarget);
     }

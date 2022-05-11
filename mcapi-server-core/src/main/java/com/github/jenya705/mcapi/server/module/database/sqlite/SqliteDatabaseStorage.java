@@ -2,7 +2,7 @@ package com.github.jenya705.mcapi.server.module.database.sqlite;
 
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.entity.BotPermissionEntity;
-import com.github.jenya705.mcapi.server.module.database.SQLDatabaseModule;
+import com.github.jenya705.mcapi.server.module.database.sql.SQLDatabaseModule;
 import com.github.jenya705.mcapi.server.module.database.storage.DatabaseStorageImpl;
 import com.github.jenya705.mcapi.server.module.storage.StorageModule;
 import lombok.SneakyThrows;

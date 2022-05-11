@@ -5,12 +5,13 @@ import lombok.AllArgsConstructor;
 import java.util.AbstractList;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.RandomAccess;
 
 /**
  * @author Jenya705
  */
 @AllArgsConstructor
-public class MutableSingletonList<T> extends AbstractList<T> {
+public class MutableSingletonList<T> extends AbstractList<T> implements RandomAccess {
 
     private T obj;
 

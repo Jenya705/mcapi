@@ -78,11 +78,11 @@ public class ServerApplication {
                 true
         );
         if (isDebug()) {
-            log.info("!!!!!!!!!!!WARNING!!!!!!!!!!!");
-            log.info("Debug mode enabled");
-            log.info("Debug mode gives access to hackers to login as bot with all permissions!");
-            log.info("Don't use it in production");
-            log.info("!!!!!!!!!!!WARNING!!!!!!!!!!!");
+            log.warn("!!!!!!!!!!!WARNING!!!!!!!!!!!");
+            log.warn("Debug mode enabled");
+            log.warn("Debug mode gives access to hackers to login as bot with all permissions!");
+            log.warn("Don't use it in production");
+            log.warn("!!!!!!!!!!!WARNING!!!!!!!!!!!");
         }
         startTask.complete();
     }
