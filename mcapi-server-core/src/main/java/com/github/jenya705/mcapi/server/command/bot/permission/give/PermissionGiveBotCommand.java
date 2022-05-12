@@ -4,6 +4,7 @@ import com.github.jenya705.mcapi.CommandSender;
 import com.github.jenya705.mcapi.permission.PermissionFlag;
 import com.github.jenya705.mcapi.player.OfflinePlayer;
 import com.github.jenya705.mcapi.player.Player;
+import com.github.jenya705.mcapi.player.PlayerID;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.command.AdditionalPermissions;
 import com.github.jenya705.mcapi.server.command.CommandTab;
@@ -64,16 +65,15 @@ public class PermissionGiveBotCommand extends AdvancedCommandExecutor<Permission
 
     @Override
     public void onCommand(CommandSender sender, PermissionGiveBotArguments args, String permission) {
-        Object playerId = PlayerUtils.parsePlayerId(args.getTarget());
-        UUID target = playerId instanceof UUID ?
-                (UUID) playerId :
-                playerId == null ?
-                        null :
+        PlayerID playerId = PlayerUtils.parsePlayerId(args.getTarget());
+        UUID target = playerId.isUUID() ?
+                playerId.getUuid() :
+                playerId.isNickname() ?
                         core()
                                 .getOfflinePlayer(playerId.toString())
                                 .blockOptional()
                                 .map(OfflinePlayer::getUuid)
-                                .orElse(null);
+                                .orElse(null) : null;
         worker().invoke(() -> {
             BotEntity bot;
             UUID uuid = sender instanceof Player ? ((Player) sender).getUuid() : null;

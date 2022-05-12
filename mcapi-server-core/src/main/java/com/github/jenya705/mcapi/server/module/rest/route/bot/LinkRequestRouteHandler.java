@@ -35,8 +35,7 @@ public class LinkRequestRouteHandler extends AbstractRouteHandler {
         String playerId = request.paramOrException("id");
         return core()
                 .getPlayerById(playerId)
-                .flatMap(player -> ReactorUtils.ifNullError(
-                        player, () -> PlayerNotFoundException.create(playerId)))
+                .switchIfEmpty(Mono.error(() -> PlayerNotFoundException.create(playerId)))
                 .flatMap(bot.mapUuidHolderPermission(Permissions.LINK_REQUEST))
                 .doOnNext(player -> linkingModule.requestLink(
                         bot, player, request.bodyOrException(LinkRequest.class)))

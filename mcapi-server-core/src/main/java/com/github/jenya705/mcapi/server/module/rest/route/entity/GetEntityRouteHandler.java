@@ -1,6 +1,7 @@
 package com.github.jenya705.mcapi.server.module.rest.route.entity;
 
 import com.github.jenya705.mcapi.Routes;
+import com.github.jenya705.mcapi.error.EntityNotFoundException;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.module.rest.route.AbstractRouteHandler;
 import com.github.jenya705.mcapi.server.module.web.Request;
@@ -28,6 +29,7 @@ public class GetEntityRouteHandler extends AbstractRouteHandler {
         UUID entityUuid = request.paramOrException("id", UUID.class);
         return core()
                 .getEntity(entityUuid)
+                .switchIfEmpty(Mono.error(() -> EntityNotFoundException.create(entityUuid)))
                 .map(entity -> {
                     request.bot().needPermission(PermissionUtils.getEntity(entity));
                     return Response.create().ok(entity);

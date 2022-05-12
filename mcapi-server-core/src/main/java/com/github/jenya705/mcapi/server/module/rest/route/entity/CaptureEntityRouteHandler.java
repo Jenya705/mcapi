@@ -2,6 +2,7 @@ package com.github.jenya705.mcapi.server.module.rest.route.entity;
 
 import com.github.jenya705.mcapi.Routes;
 import com.github.jenya705.mcapi.entity.CapturableEntity;
+import com.github.jenya705.mcapi.error.EntityNotFoundException;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.module.entity.capture.EntityCaptureModule;
@@ -31,8 +32,10 @@ public class CaptureEntityRouteHandler extends AbstractRouteHandler {
 
     @Override
     public Mono<Response> handle(Request request) {
+        UUID uuid = request.paramOrException("id", UUID.class);
         return core()
-                .getCapturableEntity(request.paramOrException("id", UUID.class))
+                .getCapturableEntity(uuid)
+                .switchIfEmpty(Mono.error(() -> EntityNotFoundException.create(uuid)))
                 .map(capturableEntity -> {
                     AbstractBot bot = request.bot();
                     bot.needPermission(PermissionUtils.captureEntity(capturableEntity));

@@ -29,8 +29,7 @@ public class GetPlayerInventoryRouteHandler extends AbstractRouteHandler {
         String playerId = request.paramOrException("id");
         return core()
                 .getPlayerById(playerId)
-                .flatMap(player -> ReactorUtils.ifNullError(
-                        player, () -> PlayerNotFoundException.create(playerId)))
+                .switchIfEmpty(Mono.error(() -> PlayerNotFoundException.create(playerId)))
                 .flatMap(request.bot().mapUuidHolderPermission(Permissions.PLAYER_INVENTORY_GET))
                 .map(Player::getInventory)
                 .map(inventory -> Response.create().ok(inventory));

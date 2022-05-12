@@ -32,8 +32,7 @@ public class GetPlayerEnderChestItemRouteHandler extends AbstractRouteHandler {
         int itemId = request.paramOrException("item", int.class);
         return core()
                 .getPlayerById(playerId)
-                .flatMap(player -> ReactorUtils.ifNullError(
-                        player, () -> PlayerNotFoundException.create(playerId)))
+                .switchIfEmpty(Mono.error(() -> PlayerNotFoundException.create(playerId)))
                 .flatMap(request.bot().mapUuidHolderPermission(Permissions.PLAYER_ENDER_CHEST_ITEM_GET))
                 .map(player -> player.getEnderChest().getItem(itemId))
                 .map(item -> Response.create().ok(item));

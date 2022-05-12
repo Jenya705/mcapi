@@ -30,8 +30,7 @@ public class PlayerPermissionRouteHandler extends AbstractRouteHandler {
         String permissionName = request.paramOrException("permission");
         return core()
                 .getPlayerById(playerId)
-                .flatMap(player -> ReactorUtils.ifNullError(
-                        player, () -> PlayerNotFoundException.create(playerId)))
+                .switchIfEmpty(Mono.error(() -> PlayerNotFoundException.create(playerId)))
                 .flatMap(request.bot().mapUuidHolderPermission(Permissions.PLAYER_HAS_PERMISSION))
                 .map(player -> new EntityPermission(
                         player.hasPermission(permissionName),

@@ -28,8 +28,7 @@ public class GetPlayerRouteHandler extends AbstractRouteHandler {
         String playerId = request.paramOrException("id");
         return core()
                 .getPlayerById(playerId)
-                .flatMap(player -> ReactorUtils.ifNullError(
-                        player, () -> PlayerNotFoundException.create(playerId)))
+                .switchIfEmpty(Mono.error(() -> PlayerNotFoundException.create(playerId)))
                 .flatMap(request.bot().mapUuidHolderPermission(Permissions.PLAYER_GET))
                 .map(player -> Response.create().ok(player));
     }

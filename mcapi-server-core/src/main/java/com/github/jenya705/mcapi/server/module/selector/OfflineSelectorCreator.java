@@ -26,10 +26,7 @@ public class OfflineSelectorCreator extends MapSelectorCreator<OfflinePlayer, De
                 .uuidDirect((data, id) ->
                         core()
                                 .getOfflinePlayer(id)
-                                .flatMap(it -> Objects.isNull(it) ?
-                                        Mono.error(PlayerNotFoundException.create(id)) :
-                                        Mono.just(it)
-                                )
+                                .switchIfEmpty(Mono.error(() -> PlayerNotFoundException.create(id)))
                 )
                 .defaultSelector("l", data ->
                         SelectorCreatorUtils.botLinked(data.getBot(), it -> core().getOfflinePlayer(it.getTarget()))

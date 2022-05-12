@@ -19,6 +19,7 @@ import com.github.jenya705.mcapi.menu.InventoryMenuView;
 import com.github.jenya705.mcapi.player.OfflinePlayer;
 import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.player.PlayerAbilities;
+import com.github.jenya705.mcapi.player.PlayerID;
 import com.github.jenya705.mcapi.potion.PotionEffect;
 import com.github.jenya705.mcapi.potion.PotionEffectType;
 import com.github.jenya705.mcapi.rest.*;
@@ -90,8 +91,11 @@ public class RestModule extends AbstractApplicationModule {
                 .rawDeserializer(PotionEffectType.class, objectStorage::getPotionEffect)
                 .rawDeserializer(Material.class, objectStorage::getMaterial)
                 .rawDeserializer(NamespacedKey.class, NamespacedKey::from)
+                .rawDeserializer(PlayerID.class, PlayerUtils::parsePlayerId)
                 .throwableParser(JsonProcessingException.class, e -> JsonDeserializeException.create())
                 .tunnelJsonDeserializer(NamespacedKey.class, String.class, NamespacedKey::from)
+                .tunnelJsonDeserializer(PlayerID.class, String.class, PlayerUtils::parsePlayerId)
+                .tunnelJsonSerializer(PlayerID.class, PlayerID::toString)
                 .tunnelJsonSerializer(PotionEffect.class, RestPotionEffect::from)
                 .tunnelJsonSerializer(NamespacedKey.class, Object::toString)
                 .tunnelJsonSerializer(CommandInteractionValue.class, RestCommandInteractionValue::from)

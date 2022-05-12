@@ -12,6 +12,7 @@ import com.github.jenya705.mcapi.server.util.PlayerUtils;
 import reactor.core.publisher.Mono;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -36,8 +37,9 @@ public class PlayerOptionParser extends AbstractCommandValueOptionParser impleme
                                 .getLinks()
                                 .stream()
                                 .map(it -> core().getPlayer(it.getTarget()))
-                                .map(Mono::block)
-                                .filter(Objects::nonNull)
+                                .map(Mono::blockOptional)
+                                .filter(Optional::isEmpty)
+                                .map(Optional::get)
                                 .map(OfflinePlayer::getName)
                                 .collect(Collectors.toList())
                                 ;

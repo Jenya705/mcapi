@@ -32,8 +32,7 @@ public class GetPlayerLocationRouteHandler extends AbstractRouteHandler {
                 .needPermission(Permissions.PLAYER_GET_LOCATION);
         return core()
                 .getPlayerById(playerId)
-                .flatMap(player -> ReactorUtils.ifNullError(
-                        player, () -> PlayerNotFoundException.create(playerId)))
+                .switchIfEmpty(Mono.error(() -> PlayerNotFoundException.create(playerId)))
                 .map(Player::getLocation)
                 .map(location -> Response.create().ok(location));
     }

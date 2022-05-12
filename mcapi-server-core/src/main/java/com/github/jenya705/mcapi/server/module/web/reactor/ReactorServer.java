@@ -151,6 +151,7 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
         }
         ReactorRequest localRequest = new ReactorRequest(this, request, body, parameters);
         return Mono.defer(() -> handler.handle(localRequest))
+                .doOnError(err -> log.warn("Caught exception:", err))
                 .onErrorResume(err -> Mono.just(
                         Response.create().error(err)
                 ))

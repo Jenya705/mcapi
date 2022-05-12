@@ -29,8 +29,7 @@ public class GetPlayerEnderChestRouteHandler extends AbstractRouteHandler {
         String playerId = request.paramOrException("id");
         return core()
                 .getPlayerById(playerId)
-                .flatMap(player -> ReactorUtils.ifNullError(
-                        player, () -> PlayerNotFoundException.create(playerId)))
+                .switchIfEmpty(Mono.error(() -> PlayerNotFoundException.create(playerId)))
                 .flatMap(request.bot().mapUuidHolderPermission(Permissions.PLAYER_ENDER_CHEST_GET))
                 .map(Player::getEnderChest)
                 .map(enderChest -> Response.create().ok(enderChest));

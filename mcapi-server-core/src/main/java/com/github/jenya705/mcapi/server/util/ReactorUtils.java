@@ -17,7 +17,7 @@ public class ReactorUtils {
 
     public <T> Mono<T> mono(Callable<T> from) {
         try {
-            return Mono.just(from.call());
+            return Mono.justOrEmpty(from.call());
         } catch (Throwable e) {
             return Mono.error(e);
         }

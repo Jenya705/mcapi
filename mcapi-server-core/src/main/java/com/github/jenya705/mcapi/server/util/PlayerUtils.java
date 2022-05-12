@@ -1,8 +1,9 @@
 package com.github.jenya705.mcapi.server.util;
 
-import com.github.jenya705.mcapi.player.OfflinePlayer;
 import com.github.jenya705.mcapi.error.PlayerIdFormatException;
+import com.github.jenya705.mcapi.player.OfflinePlayer;
 import com.github.jenya705.mcapi.player.Player;
+import com.github.jenya705.mcapi.player.PlayerID;
 import com.github.jenya705.mcapi.server.ServerCore;
 import lombok.experimental.UtilityClass;
 import reactor.core.publisher.Mono;
@@ -10,7 +11,6 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * @author Jenya705
@@ -43,36 +43,36 @@ public class PlayerUtils {
     }
 
     private Pair<Mono<Player>, Boolean> getPlayerWithFullInformation(String name, ServerCore core) {
-        Object id = parsePlayerId(name);
-        if (id == null) return new Pair<>(null, false);
-        if (id instanceof UUID) {
-            return new Pair<>(core.getPlayer((UUID) id), true);
+        PlayerID id = parsePlayerId(name);
+        if (id.isUUID()) {
+            return new Pair<>(core.getPlayer(id.getUuid()), true);
         }
-        else {
-            return new Pair<>(core.getPlayer(id.toString()), true);
+        else if (id.isNickname()) {
+            return new Pair<>(core.getPlayer(id.getNickname()), true);
         }
+        return new Pair<>(null, false);
     }
 
     private Pair<Mono<OfflinePlayer>, Boolean> getOfflinePlayerWithFullInformation(String name, ServerCore core) {
-        Object id = parsePlayerId(name);
-        if (id == null) return new Pair<>(null, false);
-        if (id instanceof UUID) {
-            return new Pair<>(core.getOfflinePlayer((UUID) id), true);
+        PlayerID id = parsePlayerId(name);
+        if (id.isUUID()) {
+            return new Pair<>(core.getOfflinePlayer(id.getUuid()), true);
         }
-        else {
-            return new Pair<>(core.getOfflinePlayer(id.toString()), true);
+        else if (id.isNickname()) {
+            return new Pair<>(core.getOfflinePlayer(id.getNickname()), true);
         }
+        return new Pair<>(null, null);
     }
 
-    public Object parsePlayerId(String name) {
-        if (name == null) return null;
+    public PlayerID parsePlayerId(String name) {
+        if (name == null) return PlayerID.empty();
         if (name.length() < 17) {
             if (name.length() < 3) {
-                return null;
+                return PlayerID.empty();
             }
-            return name;
+            return PlayerID.nickname(name);
         }
-        return parseUuid(name);
+        return PlayerID.uuid(parseUuid(name));
     }
 
     public List<String> playerTabs(ServerCore core) {

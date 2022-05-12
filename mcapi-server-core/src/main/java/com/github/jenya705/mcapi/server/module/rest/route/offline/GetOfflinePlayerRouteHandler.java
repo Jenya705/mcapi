@@ -30,8 +30,7 @@ public class GetOfflinePlayerRouteHandler extends AbstractRouteHandler {
         String offlinePlayerId = request.paramOrException("id");
         return core()
                 .getOfflinePlayerById(offlinePlayerId)
-                .flatMap(player -> ReactorUtils.ifNullError(
-                        player, () -> PlayerNotFoundException.create(offlinePlayerId)))
+                .switchIfEmpty(Mono.error(() -> PlayerNotFoundException.create(offlinePlayerId)))
                 .flatMap(bot.mapUuidHolderPermission(Permissions.PLAYER_GET))
                 .map(player -> Response.create().ok(player));
     }
