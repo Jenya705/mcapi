@@ -1,8 +1,14 @@
 package com.github.jenya705.mcapi.server.ss.model;
 
+import com.github.jenya705.mcapi.NamespacedKey;
 import com.github.jenya705.mcapi.player.PlayerID;
+import com.github.jenya705.mcapi.server.module.message.TypedMessage;
 import lombok.experimental.UtilityClass;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.util.UUID;
 
@@ -12,14 +18,32 @@ import java.util.UUID;
 @UtilityClass
 public class ProxyModels {
 
-    public final Class<?> GET_PLAYER = PlayerID.class;
+    @Target(ElementType.FIELD)
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface ModelClass {
+        Class<?> value();
+    }
 
-    public final Class<?> GET_ENTITY = UUID.class;
+    @ModelClass(String.class)
+    public final String AUTHENTICATION = "authentication";
+
+    @ModelClass(PlayerID.class)
+    public final String GET_PLAYER = "get_player";
+
+    @ModelClass(NamespacedKey.class)
+    public final String GET_WORLD = "get_world";
+
+    @ModelClass(UUID.class)
+    public final String GET_ENTITY = "get_entity";
+
+    @ModelClass(TypedMessage.class)
+    public final String SEND_MESSAGE = "send_message";
 
     public void registerModels(ProxyModelMapper modelMapper) throws Exception {
         for (Field field: ProxyModels.class.getFields()) {
-            if (field.getType() != Class.class) continue;
-            modelMapper.addModel(field.getName(), (Class<?>) field.get(null));
+            ModelClass modelClassAnnotation = field.getAnnotation(ModelClass.class);
+            if (modelClassAnnotation == null || field.getType() != String.class) continue;
+            modelMapper.addModel(field.get(null).toString(), modelClassAnnotation.value());
         }
     }
 

@@ -15,8 +15,6 @@
  *
  * There is client (ProxyServer) and server (BackEndServer).
  *
- * Authorization: client sends password as string to server, closes connection if password is not right.
- *
  * Client sends a json packet with information which server need to return.
  * {
  *     "type": model-type,
@@ -36,7 +34,7 @@
  *
  * and so on.
  *
- * Server returns another json with information about object
+ * Server can return another json with information about object
  * {
  *     "type": model-type,
  *     "data": model-data
