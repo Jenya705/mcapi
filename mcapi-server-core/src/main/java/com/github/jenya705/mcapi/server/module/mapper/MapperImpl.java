@@ -12,8 +12,6 @@ import com.github.jenya705.mcapi.Vector3;
 import com.github.jenya705.mcapi.entity.EntityError;
 import com.github.jenya705.mcapi.server.defaults.DefaultValueGetter;
 import com.github.jenya705.mcapi.server.defaults.DefaultValueGetterImpl;
-import com.github.jenya705.mcapi.server.module.mapper.json.JsonFinal;
-import com.github.jenya705.mcapi.server.module.mapper.json.JsonRepresented;
 import com.github.jenya705.mcapi.server.util.CacheClassMap;
 import com.google.inject.Singleton;
 import lombok.Getter;
@@ -104,24 +102,13 @@ public class MapperImpl implements Mapper, JacksonProvider {
     @Override
     @SneakyThrows
     public String asJson(Object obj) {
-        if (obj instanceof JsonRepresented) {
-            return ((JsonRepresented) obj).asJson();
-        }
-        String result = json.writeValueAsString(obj);
-        if (obj instanceof JsonFinal) {
-            ((JsonFinal) obj).parsedJson(result);
-        }
-        return result;
+        return json.writeValueAsString(obj);
     }
 
     @Override
     @SneakyThrows
     public <T> T fromJson(String jsonContent, Class<? extends T> clazz) {
-        T value = json.readValue(jsonContent, clazz);
-        if (value instanceof JsonFinal) {
-            ((JsonFinal) value).parsedJson(jsonContent);
-        }
-        return value;
+        return json.readValue(jsonContent, clazz);
     }
 
     @Override

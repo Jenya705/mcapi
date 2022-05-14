@@ -1,5 +1,6 @@
 package com.github.jenya705.mcapi.server.ss.proxy;
 
+import com.github.jenya705.mcapi.server.ss.SSConnection;
 import com.github.jenya705.mcapi.server.ss.model.ProxyModel;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -10,7 +11,7 @@ import reactor.netty.Connection;
  * @author Jenya705
  */
 @Data
-public class BackEndServerConnection {
+public class BackServerConnection implements SSConnection {
 
     private final String name;
     @Getter(AccessLevel.PRIVATE)
@@ -19,10 +20,6 @@ public class BackEndServerConnection {
 
     public void sendModel(ProxyModel model) {
         proxyServer.sendModel(connection, model);
-    }
-
-    public void sendModel(String type, Object obj) {
-        sendModel(new ProxyModel(type, obj));
     }
 
 }

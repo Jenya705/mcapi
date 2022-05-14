@@ -29,7 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Singleton
 public class ProxyServerModule extends AbstractApplicationModule {
 
-    private final Map<String, BackEndServerConnection> backEndServers = new ConcurrentHashMap<>();
+    private final Map<String, BackServerConnection> backEndServers = new ConcurrentHashMap<>();
     private final Mapper mapper;
     private final EventLoop eventLoop;
 
@@ -71,25 +71,23 @@ public class ProxyServerModule extends AbstractApplicationModule {
                         )
                 )
                 .connect()
-                .doOnNext(connection -> backEndServers.put(
-                        name,
-                        new BackEndServerConnection(
-                                name, connection, this
-                        )
-                ))
-                .doOnNext(connection -> connection
-                        .inbound()
-                        .receive()
-                        .asString()
-                        .map(json -> mapper.fromJson(json, ProxyModel.class))
-                        .subscribe(model -> eventLoop.invoke(
-                                ProxyModelReceivedEvent.fromBack(model, this)
-                        ))
-                )
-                .subscribe();
+                .subscribe(connection -> handleConnection(name, connection));
     }
 
-    public BackEndServerConnection getServerConnection(String name) {
+    private void handleConnection(String name, Connection connection) {
+        BackServerConnection backServerConnection = new BackServerConnection(name, connection, this);
+        backEndServers.put(name, new BackServerConnection(name, connection, this));
+        connection
+                .inbound()
+                .receive()
+                .asString()
+                .map(json -> mapper.fromJson(json, ProxyModel.class))
+                .subscribe(model -> eventLoop.invoke(ProxyModelReceivedEvent.fromBack(
+                        model, new ProxyModelReceivedEvent.ProxyData(this, backServerConnection)
+                )));
+    }
+
+    public BackServerConnection getServerConnection(String name) {
         return backEndServers.get(name);
     }
 

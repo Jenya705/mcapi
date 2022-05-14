@@ -23,8 +23,10 @@ import com.github.jenya705.mcapi.server.application.OnDisable;
 import com.github.jenya705.mcapi.server.application.OnStartup;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.log.TimerTask;
+import com.github.jenya705.mcapi.server.module.inject.InjectJoining;
 import com.github.jenya705.mcapi.server.module.mapper.Mapper;
 import com.github.jenya705.mcapi.server.util.CacheClassMap;
+import com.github.jenya705.mcapi.server.util.Pair;
 import com.google.inject.Inject;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -201,8 +203,9 @@ public class FieldInjectionModuleImpl extends AbstractApplicationModule implemen
     private void registerClassSerializer(Class<?> clazz) {
         mapper.jsonSerializer(clazz, (value, generator, serializers) -> {
             InjectedClassInformation<?> information = injectableClasses.get(clazz);
+            Set<String> added = new HashSet<>();
+            generator.writeStartObject();
             try {
-                generator.writeStartObject();
                 for (Field field : clazz.getDeclaredFields()) {
                     if (information.getIgnoredFields().contains(field.getName())) {
                         continue;
@@ -213,8 +216,8 @@ public class FieldInjectionModuleImpl extends AbstractApplicationModule implemen
                     Object currentValue = field.get(value);
                     mapper.getDefaultValueGetter().writeIfNotDefault(generator, currentValue, field, false);
                     if (!wasAccessible) field.setAccessible(false);
+                    added.add(field.getName());
                 }
-                generator.writeEndObject();
             } catch (IllegalAccessException e) {
                 throw new IOException(e);
             }
@@ -223,7 +226,18 @@ public class FieldInjectionModuleImpl extends AbstractApplicationModule implemen
                     continue;
                 }
                 generator.writeObjectField(entry.getKey(), entry.getValue().apply(value));
+                added.add(entry.getKey());
             }
+            if (value instanceof InjectJoining) {
+                for (Pair<String, Object> field: ((InjectJoining) value).join()) {
+                    if (added.contains(field.getLeft()) ||
+                            information.getIgnoredFields().contains(field.getLeft())) {
+                        continue;
+                    }
+                    generator.writeObjectField(field.getLeft(), field.getRight());
+                }
+            }
+            generator.writeEndObject();
         });
     }
 

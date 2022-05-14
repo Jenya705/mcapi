@@ -38,11 +38,11 @@ public class MessageDeserializerImpl extends StdDeserializer<TypedMessage> imple
                 .jsonDeserializer(TypedMessage.class, this)
                 .jsonDeserializer(Message.class, this);
         this.jacksonProvider = jacksonProvider;
-        addMessageType("default", node -> new DefaultMessage(node.asText()));
-        addMessageType("form", node -> new FormMessage(
+        addMessageType(DefaultMessage.type, node -> new DefaultMessage(node.asText()));
+        addMessageType(FormMessage.type, node -> new FormMessage(
                 jacksonProvider.getMapper().treeToValue(node, Form.class), formProvider
         ));
-        addMessageType("component", obj -> new ComponentMessage(
+        addMessageType(ComponentMessage.type, obj -> new ComponentMessage(
                 GsonComponentSerializer.gson().deserialize(obj.toString())
         ));
     }

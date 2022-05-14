@@ -18,4 +18,8 @@ public interface Message {
     default boolean kick(Player player) {
         return false;
     }
+
+    default TypedMessage type() {
+        return null;
+    }
 }

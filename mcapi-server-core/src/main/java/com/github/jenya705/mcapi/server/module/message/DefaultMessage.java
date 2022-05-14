@@ -15,6 +15,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DefaultMessage implements Message {
 
+    public static final String type = "default";
+
     private String message;
 
     @Override
@@ -32,5 +34,10 @@ public class DefaultMessage implements Message {
     public boolean kick(Player player) {
         player.kick(message);
         return true;
+    }
+
+    @Override
+    public TypedMessage type() {
+        return new TypedMessageImpl(type, this);
     }
 }

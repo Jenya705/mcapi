@@ -1,7 +1,9 @@
 package com.github.jenya705.mcapi.server.ss.model.event;
 
-import com.github.jenya705.mcapi.server.ss.back.BackEndServerModule;
+import com.github.jenya705.mcapi.server.ss.back.BackServerModule;
+import com.github.jenya705.mcapi.server.ss.back.ProxyServerConnection;
 import com.github.jenya705.mcapi.server.ss.model.ProxyModel;
+import com.github.jenya705.mcapi.server.ss.proxy.BackServerConnection;
 import com.github.jenya705.mcapi.server.ss.proxy.ProxyServerModule;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -16,33 +18,45 @@ import java.util.Optional;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class ProxyModelReceivedEvent {
 
-    public static ProxyModelReceivedEvent fromProxy(ProxyModel model, BackEndServerModule backEndServer) {
-        return new ProxyModelReceivedEvent(model, backEndServer, null);
+    @Data
+    public static class ProxyData {
+        private final ProxyServerModule module;
+        private final BackServerConnection connection;
     }
 
-    public static ProxyModelReceivedEvent fromBack(ProxyModel model, ProxyServerModule proxyServer) {
-        return new ProxyModelReceivedEvent(model, null, proxyServer);
+    @Data
+    public static class BackData {
+        private final BackServerModule module;
+        private final ProxyServerConnection connection;
+    }
+
+    public static ProxyModelReceivedEvent fromProxy(ProxyModel model, BackData backData) {
+        return new ProxyModelReceivedEvent(model, backData, null);
+    }
+
+    public static ProxyModelReceivedEvent fromBack(ProxyModel model, ProxyData proxyData) {
+        return new ProxyModelReceivedEvent(model, null, proxyData);
     }
 
     private final ProxyModel model;
 
-    private final BackEndServerModule backEndServer;
-    private final ProxyServerModule proxyServer;
+    private final BackData back;
+    private final ProxyData proxy;
 
-    public Optional<BackEndServerModule> getBackEndServer() {
-        return Optional.ofNullable(backEndServer);
+    public Optional<BackData> getBack() {
+        return Optional.ofNullable(back);
     }
 
-    public Optional<ProxyServerModule> getProxyServer() {
-        return Optional.ofNullable(proxyServer);
+    public Optional<ProxyData> getProxy() {
+        return Optional.ofNullable(proxy);
     }
 
     public boolean fromBack() {
-        return proxyServer != null;
+        return proxy != null;
     }
 
     public boolean fromProxy() {
-        return backEndServer != null;
+        return back != null;
     }
 
 }

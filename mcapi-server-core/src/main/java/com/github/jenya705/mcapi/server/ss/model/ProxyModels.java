@@ -39,6 +39,18 @@ public class ProxyModels {
     @ModelClass(TypedMessage.class)
     public final String SEND_MESSAGE = "send_message";
 
+    @ModelClass(TypedMessage.class)
+    public final String KICK = "kick";
+
+    @ModelClass(ModelEmpty.class)
+    public final String KILL = "kill";
+
+    @ModelClass(String.class)
+    public final String CHAT = "chat";
+
+    @ModelClass(String.class)
+    public final String RUN_COMMAND = "run_command";
+
     public void registerModels(ProxyModelMapper modelMapper) throws Exception {
         for (Field field: ProxyModels.class.getFields()) {
             ModelClass modelClassAnnotation = field.getAnnotation(ModelClass.class);

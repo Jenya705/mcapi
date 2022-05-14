@@ -42,6 +42,7 @@ public class RestPlayer {
     private RestInventory inventory;
     @DefaultNull
     private List<RestPotionEffect> effects;
+    private String locale;
 
     public static RestPlayer from(Player player) {
         return new RestPlayer(
@@ -61,7 +62,8 @@ public class RestPlayer {
                                 .getEffects()
                                 .stream()
                                 .map(RestPotionEffect::from)
-                                .collect(Collectors.toList())
+                                .collect(Collectors.toList()),
+                player.getLocale().toLanguageTag()
         );
     }
 

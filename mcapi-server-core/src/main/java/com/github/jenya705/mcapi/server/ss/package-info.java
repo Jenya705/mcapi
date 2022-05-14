@@ -4,7 +4,7 @@
  *
  * <strong>There is two module classes:</strong>
  *
- * - {@link com.github.jenya705.mcapi.server.ss.back.BackEndServerModule}
+ * - {@link com.github.jenya705.mcapi.server.ss.back.BackServerModule}
  * This module class opens the tcpserver to communicate with proxy server and share information about objects.
  *
  * - {@link com.github.jenya705.mcapi.server.ss.proxy.ProxyServerModule}

@@ -25,6 +25,7 @@ public class ProxyModelMapperImpl implements ProxyModelMapper {
     @Inject
     public ProxyModelMapperImpl(Mapper mapper) throws Exception {
         if (mapper instanceof JacksonProvider) {
+            mapper.jsonDeserializer(ModelEmpty.class, (parser, ctxt) -> new ModelEmpty());
             ProxyModels.registerModels(this);
             this.objectMapper = ((JacksonProvider) mapper).getMapper();
             mapper.jsonDeserializer(ProxyModel.class, this::deserialize);
