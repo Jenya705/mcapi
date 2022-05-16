@@ -11,31 +11,25 @@ import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.server.ServerCore;
 import com.github.jenya705.mcapi.server.command.CommandExecutor;
 import com.github.jenya705.mcapi.world.World;
-import lombok.Getter;
+import com.google.inject.Provider;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.netty.Connection;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Map;
 import java.util.UUID;
 
 /**
- *
- * It is server core for back end server. It is not implementing IO operations and some others.
- *
  * @author Jenya705
  */
-public class ProxyBackEndServerCore implements ServerCore {
+public abstract class ProxyServerCore implements ServerCore {
 
-    @Getter
-    private final Connection connection;
-    private final ProxyServerModule proxyModule;
+    private final Provider<ProxyServerModule> proxyServerProvider;
 
-    public ProxyBackEndServerCore(ProxyServerModule proxyModule, Connection connection) {
-        this.proxyModule = proxyModule;
-        this.connection = connection;
+    public ProxyServerCore(Provider<ProxyServerModule> proxyServerProvider) {
+        this.proxyServerProvider = proxyServerProvider;
+    }
+
+    protected ProxyServerModule getProxyServer() {
+        return proxyServerProvider.get();
     }
 
     @Override
@@ -108,48 +102,4 @@ public class ProxyBackEndServerCore implements ServerCore {
         return null;
     }
 
-    @Override
-    public Map<String, Object> loadConfig(String file) throws IOException {
-        return proxyModule.core().loadConfig(file);
-    }
-
-    @Override
-    public byte[] loadSpecific(String file) throws IOException {
-        return proxyModule.core().loadSpecific(file);
-    }
-
-    @Override
-    public void saveConfig(String file, Map<String, Object> config) throws IOException {
-        proxyModule.core().saveConfig(file, config);
-    }
-
-    @Override
-    public void saveSpecific(String file, byte[] bytes) throws IOException {
-        proxyModule.core().saveSpecific(file, bytes);
-    }
-
-    @Override
-    public Collection<String> getFilesInDirectory(String directory) {
-        return proxyModule.core().getFilesInDirectory(directory);
-    }
-
-    @Override
-    public boolean isExistsFile(String file) {
-        return proxyModule.core().isExistsFile(file);
-    }
-
-    @Override
-    public String getAbsolutePath(String file) {
-        return proxyModule.core().getAbsolutePath(file);
-    }
-
-    @Override
-    public void mkdirs(String file) {
-        proxyModule.core().mkdirs(file);
-    }
-
-    @Override
-    public void disable() {
-        proxyModule.core().disable();
-    }
 }

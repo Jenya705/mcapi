@@ -39,7 +39,7 @@ public class ProxyModels {
     @ModelClass(TypedMessage.class)
     public final String SEND_MESSAGE = "send_message";
 
-    @ModelClass(TypedMessage.class)
+    @ModelClass(String.class)
     public final String KICK = "kick";
 
     @ModelClass(ModelEmpty.class)

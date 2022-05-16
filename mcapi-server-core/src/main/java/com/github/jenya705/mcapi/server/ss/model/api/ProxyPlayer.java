@@ -49,7 +49,7 @@ public class ProxyPlayer extends ProxyJsonModel implements Player {
 
     @Override
     public void kick(String reason) {
-        connection.sendModel(ProxyModels.KICK, new DefaultMessage(reason).type());
+        connection.sendModel(ProxyModels.KICK, reason);
     }
 
     private Collection<PotionEffect> updateEffects() {

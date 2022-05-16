@@ -1,0 +1,4 @@
+dependencies {
+    implementation project(":mcapi-api")
+    implementation project(":mcapi-server-core")
+}
