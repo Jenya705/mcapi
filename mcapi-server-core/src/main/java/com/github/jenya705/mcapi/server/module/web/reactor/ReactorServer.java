@@ -147,7 +147,7 @@ public class ReactorServer extends AbstractApplicationModule implements WebServe
 
     private Mono<String> executeHandler(HttpServerRequest request, HttpServerResponse response, RouteHandler handler, String body, RouteParameters parameters) {
         if (debug()) {
-            log.info("Received request to uri {} with body {}", request.uri(), body);
+            log.info("Received request with handler {} to uri {} with body {}", handler, request.uri(), body);
         }
         ReactorRequest localRequest = new ReactorRequest(this, request, body, parameters);
         return Mono.defer(() -> handler.handle(localRequest))

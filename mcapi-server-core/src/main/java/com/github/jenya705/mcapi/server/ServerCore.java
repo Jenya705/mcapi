@@ -53,9 +53,9 @@ public interface ServerCore {
 
     Flux<? extends Entity> getEntities();
 
-    InventoryView createInventoryView(Inventory inventory, Material airMaterial, boolean unique);
+    Mono<InventoryView> createInventoryView(Inventory inventory, Material airMaterial, boolean unique);
 
-    InventoryMenuView createInventoryMenuView(Inventory inventory, Material airMaterial, boolean unique);
+    Mono<InventoryMenuView> createInventoryMenuView(Inventory inventory, Material airMaterial, boolean unique);
 
     default Mono<Player> getPlayerById(String id) {
         return PlayerUtils.getPlayer(id, this);
@@ -73,19 +73,19 @@ public interface ServerCore {
                 );
     }
 
-    default InventoryView createInventoryView(Inventory inventory) {
+    default Mono<InventoryView> createInventoryView(Inventory inventory) {
         return createInventoryView(inventory, null);
     }
 
-    default InventoryMenuView createInventoryMenuView(Inventory inventory) {
+    default Mono<InventoryMenuView> createInventoryMenuView(Inventory inventory) {
         return createInventoryMenuView(inventory, null);
     }
 
-    default InventoryView createInventoryView(Inventory inventory, Material airMaterial) {
+    default Mono<InventoryView> createInventoryView(Inventory inventory, Material airMaterial) {
         return createInventoryView(inventory, airMaterial, true);
     }
 
-    default InventoryMenuView createInventoryMenuView(Inventory inventory, Material airMaterial) {
+    default Mono<InventoryMenuView> createInventoryMenuView(Inventory inventory, Material airMaterial) {
         return createInventoryMenuView(inventory, airMaterial, true);
     }
 

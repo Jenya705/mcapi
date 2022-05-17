@@ -2,6 +2,7 @@ package com.github.jenya705.mcapi.server.form.component;
 
 import com.github.jenya705.mcapi.server.form.FormBuilder;
 import com.github.jenya705.mcapi.server.form.FormComponent;
+import com.github.jenya705.mcapi.server.util.ListUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
@@ -18,16 +19,7 @@ public class ListComponent implements FormComponent {
     }
 
     public static ListComponent joining(FormComponent[]... components) {
-        int len = 0;
-        for (FormComponent[] array : components) len += array.length;
-        FormComponent[] newArray = new FormComponent[len];
-        int i = 0;
-        for (FormComponent[] array : components) {
-            for (FormComponent component : array) {
-                newArray[i++] = component;
-            }
-        }
-        return new ListComponent(newArray);
+        return new ListComponent(ListUtils.joinArray(FormComponent[]::new, components));
     }
 
     @Override

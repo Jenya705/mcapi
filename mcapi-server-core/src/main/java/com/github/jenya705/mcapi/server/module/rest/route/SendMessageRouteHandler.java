@@ -2,7 +2,6 @@ package com.github.jenya705.mcapi.server.module.rest.route;
 
 import com.github.jenya705.mcapi.Routes;
 import com.github.jenya705.mcapi.permission.Permissions;
-import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.module.message.Message;
@@ -30,14 +29,13 @@ public class SendMessageRouteHandler extends AbstractRouteHandler {
 
     @Override
     public Mono<Response> handle(Request request) {
-        AbstractBot bot = request.bot();
+        String selectorValue = request.paramOrException("selector");
         Message message = request
                 .bodyOrException(Message.class);
+        AbstractBot bot = request.bot();
         return selectorProvider
-                .players(
-                        request.paramOrException("selector"),
-                        bot
-                )
+                .players(selectorValue, bot)
+                .flatMap(Selector::errorIfEmpty)
                 .flatMap(bot.mapSelectorPermission(Permissions.PLAYER_SEND_MESSAGE))
                 .doOnNext(players -> players.all().forEach(message::send))
                 .map(players -> Response.create().noContent());

@@ -9,6 +9,7 @@ import com.github.jenya705.mcapi.bukkit.player.BukkitOfflinePlayerStorage;
 import com.github.jenya705.mcapi.bukkit.wrapper.BukkitWrapper;
 import com.github.jenya705.mcapi.entity.Entity;
 import com.github.jenya705.mcapi.inventory.Inventory;
+import com.github.jenya705.mcapi.inventory.InventoryView;
 import com.github.jenya705.mcapi.menu.InventoryMenuView;
 import com.github.jenya705.mcapi.player.OfflinePlayer;
 import com.github.jenya705.mcapi.player.Player;
@@ -150,17 +151,21 @@ public class BukkitServerCore implements ServerCore {
     }
 
     @Override
-    public BukkitInventoryViewWrapper createInventoryView(Inventory inventory, Material airMaterial, boolean unique) {
+    public Mono<InventoryView> createInventoryView(Inventory inventory, Material airMaterial, boolean unique) {
+        return ReactorUtils.mono(() -> createInventoryViewRaw(inventory, airMaterial, unique));
+    }
+
+    private BukkitInventoryViewWrapper createInventoryViewRaw(Inventory inventory, Material airMaterial, boolean unique) {
         return BukkitWrapper.inventoryView(inventory, airMaterial, unique);
     }
 
     @Override
-    public InventoryMenuView createInventoryMenuView(Inventory inventory, Material airMaterial, boolean unique) {
-        return new BukkitInventoryMenuImpl(
+    public Mono<InventoryMenuView> createInventoryMenuView(Inventory inventory, Material airMaterial, boolean unique) {
+        return ReactorUtils.mono(() -> new BukkitInventoryMenuImpl(
                 menuManager,
-                createInventoryView(inventory, airMaterial, unique),
+                createInventoryViewRaw(inventory, airMaterial, unique),
                 inventory
-        );
+        ));
     }
 
     @Override

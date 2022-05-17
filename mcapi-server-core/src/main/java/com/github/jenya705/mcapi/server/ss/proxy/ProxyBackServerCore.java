@@ -99,12 +99,12 @@ public class ProxyBackServerCore implements ServerCore {
     }
 
     @Override
-    public InventoryView createInventoryView(Inventory inventory, Material airMaterial, boolean unique) {
+    public Mono<InventoryView> createInventoryView(Inventory inventory, Material airMaterial, boolean unique) {
         return null;
     }
 
     @Override
-    public InventoryMenuView createInventoryMenuView(Inventory inventory, Material airMaterial, boolean unique) {
+    public Mono<InventoryMenuView> createInventoryMenuView(Inventory inventory, Material airMaterial, boolean unique) {
         return null;
     }
 

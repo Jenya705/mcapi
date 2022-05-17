@@ -2,7 +2,6 @@ package com.github.jenya705.mcapi.server.module.rest.route.player;
 
 import com.github.jenya705.mcapi.Routes;
 import com.github.jenya705.mcapi.permission.Permissions;
-import com.github.jenya705.mcapi.player.Player;
 import com.github.jenya705.mcapi.server.application.ServerApplication;
 import com.github.jenya705.mcapi.server.entity.AbstractBot;
 import com.github.jenya705.mcapi.server.module.message.MessageUtils;
@@ -32,12 +31,11 @@ public class BanPlayerRouteHandler extends AbstractRouteHandler {
 
     @Override
     public Mono<Response> handle(Request request) {
+        String selectorValue = request.paramOrException("selector");
         AbstractBot bot = request.bot();
         return selectorProvider
-                .players(
-                        request.paramOrException("selector"),
-                        bot
-                )
+                .players(selectorValue, bot)
+                .flatMap(Selector::errorIfEmpty)
                 .flatMap(bot.mapSelectorPermission(Permissions.PLAYER_BAN))
                 .map(players -> {
                     TypedMessage message = request

@@ -10,6 +10,7 @@ import com.github.jenya705.mcapi.server.module.rest.route.AbstractRouteHandler;
 import com.github.jenya705.mcapi.server.module.selector.SelectorProvider;
 import com.github.jenya705.mcapi.server.module.web.Request;
 import com.github.jenya705.mcapi.server.module.web.Response;
+import com.github.jenya705.mcapi.server.util.Selector;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import reactor.core.publisher.Mono;
@@ -35,6 +36,7 @@ public class GetBotLinkedPlayersRouteHandler extends AbstractRouteHandler {
         AbstractBot bot = request.bot();
         return selectorProvider
                 .bots(request.paramOrException("selector"), bot)
+                .flatMap(Selector::errorIfEmpty)
                 .map(bots -> bots
                         .all()
                         .stream()

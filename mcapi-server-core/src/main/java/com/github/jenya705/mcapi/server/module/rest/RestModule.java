@@ -161,24 +161,6 @@ public class RestModule extends AbstractApplicationModule {
                                 )
                         )
                 )
-                .tunnelJsonDeserializer(
-                        InventoryView.class,
-                        InventoryViewModel.class,
-                        model -> core()
-                                .createInventoryView(
-                                        new InventoryContainer(model.getItems()),
-                                        model.getAirMaterial()
-                                )
-                )
-                .tunnelJsonDeserializer(
-                        InventoryMenuView.class,
-                        InventoryViewModel.class,
-                        model -> core()
-                                .createInventoryMenuView(
-                                        new InventoryContainer(model.getItems()),
-                                        model.getAirMaterial()
-                                )
-                )
                 .tunnelJsonDeserializer(ItemStack.class, RestItemStack.class, this::parseItemStack)
                 .tunnelJsonDeserializer(
                         InventoryItemStack.class,

@@ -30,12 +30,11 @@ public class CloseInventoryRouteHandler extends AbstractRouteHandler {
 
     @Override
     public Mono<Response> handle(Request request) {
+        String selectorValue = request.paramOrException("selector");
         AbstractBot bot = request.bot();
         return selectorProvider
-                .players(
-                        request.paramOrException("selector"),
-                        bot
-                )
+                .players(selectorValue, bot)
+                .flatMap(Selector::errorIfEmpty)
                 .flatMap(bot.mapSelectorPermission(Permissions.PLAYER_CLOSE_INVENTORY))
                 .map(players -> {
                     players.all().forEach(Player::closeInventory);

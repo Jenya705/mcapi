@@ -157,7 +157,7 @@ public class BukkitWrapper {
     }
 
     public org.bukkit.Material material(Material material) {
-        return material == null && material.getKey().getDomain().equals("minecraft") ?
+        return material == null || !material.getKey().getDomain().equals("minecraft") ?
                 org.bukkit.Material.AIR :
                 org.bukkit.Material.valueOf(
                         material.getKey().getKey().toUpperCase(Locale.ROOT)
