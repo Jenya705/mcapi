@@ -23,7 +23,7 @@ public interface Selector<T> {
     }
 
     default Mono<Selector<T>> errorIfEmpty() {
-        return all().isEmpty() ? Mono.error(SelectorEmptyException::create) : Mono.just(this);
+        return errorIfEmpty(SelectorEmptyException::create);
     }
 
 }
