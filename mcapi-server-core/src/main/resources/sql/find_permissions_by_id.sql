@@ -1,1 +1,0 @@
-select * from mcapi_permission where bot_id = ?;

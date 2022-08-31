@@ -1,9 +1,0 @@
-name: mcapi
-description: WebAPI for minecraft
-version: @version@
-api-version: 1.17
-softdepend:
-  - LuckPerms
-  - Vault
-main: com.github.jenya705.mcapi.bukkit.BukkitApplication
-authors: [ Jenya705 ]

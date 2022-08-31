@@ -1,7 +1,3 @@
 rootProject.name = 'mcapi'
-include 'mcapi-bukkit'
-include 'mcapi-api'
-include 'mcapi-server-core'
-include 'mcapi-rest'
-include 'mcapi-standalone'
+include 'mcapi-common'
 
