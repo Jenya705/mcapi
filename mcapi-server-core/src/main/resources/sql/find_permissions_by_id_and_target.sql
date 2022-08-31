@@ -1,1 +1,0 @@
-select * from mcapi_permissions where bot_id = ? and target_most = ? and target_least = ?;

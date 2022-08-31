@@ -1,1 +1,0 @@
-delete from mcapi_links where bot_id = ?;

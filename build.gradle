@@ -1,7 +1,7 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
-    id "com.github.johnrengelman.shadow" version "7.0.0"
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
     id 'maven-publish'
     id 'java'
 }
@@ -11,16 +11,19 @@ allprojects {
     apply plugin: 'java'
     apply plugin: 'com.github.johnrengelman.shadow'
 
-    group 'com.github.jenya705'
-    version '0.0.8-alpha'
+    group 'dev.mcapi'
+    version '0.1.0-alpha'
+
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 
     java {
         withSourcesJar()
     }
 
     shadowJar {
-        if (project.hasProperty("dir")) {
-            destinationDir(new File((String) project.getProperties().get("dir")))
+        if (project.hasProperty('dir')) {
+            destinationDir(new File((String) project.getProperties().get('dir')))
         }
     }
 
@@ -33,14 +36,19 @@ allprojects {
     }
 
     dependencies {
-        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
-        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
-        compileOnly 'org.jetbrains:annotations:22.0.0'
-        compileOnly 'org.projectlombok:lombok:1.18.22'
-        annotationProcessor 'org.projectlombok:lombok:1.18.22'
-        testCompileOnly 'org.projectlombok:lombok:1.18.22'
-        testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
-        implementation 'io.projectreactor:reactor-core:3.4.14'
+        compileOnly 'org.jetbrains:annotations:23.0.0'
+        compileOnly 'org.projectlombok:lombok:1.18.24'
+        annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+        implementation 'io.projectreactor:reactor-core:3.4.22'
+        implementation 'net.kyori:adventure-api:4.11.0'
+        implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
+        implementation 'com.google.inject:guice:5.1.0'
+
+        testCompileOnly 'org.projectlombok:lombok:1.18.24'
+        testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
     }
 
     processResources {
@@ -69,18 +77,18 @@ subprojects {
         }
         repositories {
             maven {
-                def snapshotUrl = "https://repo.codemc.io/repository/maven-snapshots/"
-                def releaseUrl = "https://repo.codemc.io/repository/maven-releases/"
+                def snapshotUrl = 'https://repo.codemc.io/repository/maven-snapshots/'
+                def releaseUrl = 'https://repo.codemc.io/repository/maven-releases/'
 
                 // You can use any other check here to set what URL should be used.
-                url = project.version.endsWith("alpha") || project.version.endsWith("beta") ? snapshotUrl : releaseUrl
+                url = project.version.endsWith('alpha') || project.version.endsWith('beta') ? snapshotUrl : releaseUrl
 
                 // ORG_GRADLE_PROJECT_mavenUsername and ORG_GRADLE_PROJECT_mavenPassword are the environments you defined before.
-                def mavenUsername = System.getenv("CODEMC_mavenUsername")
-                def mavenPassword = System.getenv("CODEMC_mavenPassword")
+                def mavenUsername = System.getenv('CODEMC_mavenUsername')
+                def mavenPassword = System.getenv('CODEMC_mavenPassword')
 
                 if (mavenUsername != null && mavenPassword != null) {
-                    System.out.println("Setting credentials")
+                    System.out.println('Setting credentials')
                     credentials {
                         username mavenUsername
                         password mavenPassword
