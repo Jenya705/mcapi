@@ -9,25 +9,10 @@ public interface ErrorData {
         return ImmutableErrorData.builder();
     }
 
-    /**
-     * Returns namespace of this error. It could be: mcapi, internal (or java error) and so on
-     *
-     * @return Namespace
-     */
-    String namespace();
+    String getNamespace();
 
-    /**
-     * Returns name of this error
-     *
-     * @return Name
-     */
-    String name();
+    String getName();
 
-    /**
-     * Returns message of this error
-     *
-     * @return Message
-     */
-    String message();
+    String getReason();
 
 }
