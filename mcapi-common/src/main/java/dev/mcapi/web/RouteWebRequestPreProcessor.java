@@ -1,24 +1,31 @@
 package dev.mcapi.web;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@ToString(includeFieldNames = false)
+@EqualsAndHashCode
 public class RouteWebRequestPreProcessor implements WebRequestPreProcessor {
 
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private final UriPathTemplate pathTemplate;
-    private final Route.Type method;
+    private final Route route;
 
     public RouteWebRequestPreProcessor(Route route) {
         this.pathTemplate = new UriPathTemplate(route.getPath());
-        this.method = route.getType();
+        this.route = route;
     }
 
     @Override
     public boolean isPassed(WebRequest request) {
-        return request.getRoute().getType() == method && pathTemplate.matches(request.getRoute().getPath());
+        return request.getRoute().getType() == route.getType() && pathTemplate.matches(request.getRoute().getPath());
     }
 
     @Override
