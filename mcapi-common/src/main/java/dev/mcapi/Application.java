@@ -1,7 +1,13 @@
 package dev.mcapi;
 
+import com.google.inject.Injector;
+
 public interface Application {
 
-    <T> T getObject(Class<T> clazz);
+    Injector getInjector();
+
+    default <T> T getInstance(Class<T> clazz) {
+        return getInjector().getInstance(clazz);
+    }
 
 }
