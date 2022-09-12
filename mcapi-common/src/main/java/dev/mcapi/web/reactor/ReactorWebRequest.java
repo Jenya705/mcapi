@@ -1,10 +1,9 @@
 package dev.mcapi.web.reactor;
 
-import dev.mcapi.mapper.ObjectMapper;
+import dev.mcapi.mapper.Mapper;
 import dev.mcapi.web.Route;
 import dev.mcapi.web.WebRequest;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.server.HttpServerRequest;
 
@@ -14,7 +13,7 @@ import java.util.Map;
 public class ReactorWebRequest implements WebRequest {
 
     private final HttpServerRequest request;
-    private final ObjectMapper objectMapper;
+    private final Mapper mapper;
 
     @Getter
     private final Route route;
@@ -22,9 +21,9 @@ public class ReactorWebRequest implements WebRequest {
     @Getter
     private final Map<String, String> parameters = new HashMap<>();
 
-    public ReactorWebRequest(HttpServerRequest request, ObjectMapper mapper) {
+    public ReactorWebRequest(HttpServerRequest request, Mapper mapper) {
         this.request = request;
-        this.objectMapper = mapper;
+        this.mapper = mapper;
         route = Route.of(
                 Route.Type.valueOf(request.method().name()),
                 request.uri()
@@ -38,7 +37,7 @@ public class ReactorWebRequest implements WebRequest {
 
     @Override
     public <T> T getParameter(String name, Class<T> clazz) {
-        return objectMapper.fromRaw(getParameter(name), clazz);
+        return mapper.fromRaw(getParameter(name), clazz);
     }
 
     @Override
@@ -50,6 +49,6 @@ public class ReactorWebRequest implements WebRequest {
 
     @Override
     public <T> Mono<T> getBody(Class<T> clazz) {
-        return getBody().map(json -> objectMapper.fromJson(json, clazz));
+        return getBody().map(json -> mapper.fromJson(json, clazz));
     }
 }

@@ -1,6 +1,6 @@
 package dev.mcapi.web;
 
-import dev.mcapi.mapper.ObjectMapper;
+import dev.mcapi.mapper.Mapper;
 
 import java.util.Map;
 
@@ -20,7 +20,7 @@ public interface WebResponse {
 
     int status();
 
-    String  buildBody(ObjectMapper mapper);
+    String  buildBody(Mapper mapper);
 
     Map<String, String> headers();
 

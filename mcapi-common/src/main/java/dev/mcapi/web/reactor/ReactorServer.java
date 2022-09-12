@@ -3,7 +3,7 @@ package dev.mcapi.web.reactor;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import dev.mcapi.config.ConfigStorage;
-import dev.mcapi.mapper.ObjectMapper;
+import dev.mcapi.mapper.Mapper;
 import dev.mcapi.web.*;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Mono;
@@ -20,12 +20,12 @@ public class ReactorServer implements WebServer {
 
     private final HttpServer httpServer;
     private final DisposableServer disposableServer;
-    private final ObjectMapper objectMapper;
+    private final Mapper mapper;
     private final List<ReactorResponder> responders = new CopyOnWriteArrayList<>();
 
     @Inject
-    public ReactorServer(ConfigStorage configStorage, ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
+    public ReactorServer(ConfigStorage configStorage, Mapper mapper) {
+        this.mapper = mapper;
         httpServer = HttpServer.create()
                 .handle(this::httpRequestHandler)
                 .port(configStorage.getGlobalConfig().get("http.port"));
@@ -33,7 +33,7 @@ public class ReactorServer implements WebServer {
     }
 
     private Publisher<Void> httpRequestHandler(HttpServerRequest request, HttpServerResponse response) {
-        ReactorWebRequest webRequest = new ReactorWebRequest(request, objectMapper);
+        ReactorWebRequest webRequest = new ReactorWebRequest(request, mapper);
         return response.sendString(
                 responders.stream()
                         .filter(responder -> responder.getPreProcessor().isPassed(webRequest))
@@ -47,9 +47,9 @@ public class ReactorServer implements WebServer {
                         .orElseGet(() -> Mono.just(WebResponse.create().status(404)))
                         .doOnNext(webResponse -> response.status(webResponse.status()))
                         .doOnNext(webResponse -> webResponse.headers().forEach(response::header))
-                        .map(webResponse -> webResponse.buildBody(objectMapper))
+                        .map(webResponse -> webResponse.buildBody(mapper))
                         .onErrorResume(throwable -> Mono.just(
-                                objectMapper.toJson(objectMapper.fromThrowable(throwable))
+                                mapper.toJson(mapper.fromThrowable(throwable))
                         ))
         );
     }
