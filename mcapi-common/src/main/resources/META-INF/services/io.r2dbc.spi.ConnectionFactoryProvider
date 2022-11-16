@@ -1,0 +1,2 @@
+io.r2dbc.pool.PoolingConnectionFactoryProvider
+dev.miku.r2dbc.mysql.MySqlConnectionFactoryProvider

@@ -1,9 +1,6 @@
 package dev.mcapi;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.BindingAnnotation;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
+import com.google.inject.*;
 import dev.mcapi.config.ConfigType;
 import lombok.Getter;
 import org.slf4j.Logger;
@@ -15,7 +12,7 @@ import java.lang.annotation.Target;
 import java.nio.file.Path;
 
 @Getter
-public class Application {
+public class Application implements AutoCloseable {
 
     @Target(ElementType.PARAMETER)
     @Retention(RetentionPolicy.RUNTIME)
@@ -41,4 +38,17 @@ public class Application {
         });
     }
 
+    @Override
+    public void close() {
+        for (Binding<?> binding: injector.getAllBindings().values()) {
+            try {
+                Object obj = binding.getProvider().get();
+                if (obj != this && obj instanceof AutoCloseable) {
+                    ((AutoCloseable) obj).close();
+                }
+            } catch (Exception e) {
+                bootstrap.getLogger().error("Failed to close a binding:", e);
+            }
+        }
+    }
 }
